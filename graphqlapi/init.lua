@@ -8,6 +8,16 @@ local schema = require('graphql.schema')
 local execute = require('graphql.execute')
 local validate = require('graphql.validate')
 
+for _, module in ipairs({
+    'graphqlapi.funcall',
+    'graphqlapi.models',
+    'graphqlapi.spaces',
+    'graphqlapi.types',
+    'graphqlapi.vars',
+}) do
+    package.loaded[module] = nil
+end
+
 local funcall = require('graphqlapi.funcall')
 local vars = require('graphqlapi.vars').new('graphqlapi.graphql')
 local types = require('graphqlapi.types')
@@ -391,11 +401,13 @@ local function execute_graphql(req)
 end
 
 local function init(httpd, middleware, endpoint, dir_name)
-    checks('?', 'table', 'string', '?string')
+    checks('table', 'table', 'string', '?string')
+    log.info(type(httpd))
     assert(middleware.render_response and middleware.render_response ~= nil,
     'http middleware render_response() function must be provided')
     assert(middleware.authorize_request and middleware.authorize_request ~= nil,
     'http middleware authorize_request() function must be provided')
+
     auth_middleware = middleware
     vars.dir_name = dir_name or 'models'
     models.init(vars.dir_name)
@@ -411,24 +423,15 @@ local function init(httpd, middleware, endpoint, dir_name)
 end
 
 local function stop(httpd, endpoint)
-    spaces.stop()
-    models.remove_all()
     httpd.routes[endpoint] = nil
     httpd.iroutes[endpoint] = nil
+    spaces.stop()
+    models.remove_all()
     vars.graphql_schema = nil
     vars.model = nil
     vars.on_resolve_triggers = nil
     vars.callbacks = nil
     vars.mutations = nil
-    for _, module in ipairs({
-        'graphqlapi.funcall',
-        'graphqlapi.vars',
-        'graphqlapi.types',
-        'graphqlapi.spaces',
-        'graphqlapi.models',
-    }) do
-        package.loaded[module] = nil
-    end
 end
 
 local function reload()

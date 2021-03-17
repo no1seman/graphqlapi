@@ -7,7 +7,10 @@ local vars = require('graphqlapi.vars').new('graphqlapi.models')
 
 vars:new('models', {})
 
+local e_model_load = errors.new_class('Model load failed', { capture_stack = false })
+local e_model_assert = errors.new_class('Model check failed', { capture_stack = false })
 local e_model_execute = errors.new_class('Model execute failed', { capture_stack = false })
+
 
 local function full_path(dir_name)
     return fio.pathjoin(package.searchroot(), dir_name)
@@ -24,19 +27,21 @@ end
 
 local function load_model(dir_name, filename)
     checks('string', 'string')
-    local ok, res = pcall(dofile, fio.pathjoin(full_path(dir_name), filename))
-    if ok then
-        local model = require(dir_name ..'.'.. string.split(filename, '.lua')[1])
-        local res, err = pcall(assert_model, model)
+
+    local model_function, err = e_model_load:pcall(loadfile, fio.pathjoin(full_path(dir_name), filename))
+
+    if model_function then
+        local model = model_function()
+        local res = e_model_assert:pcall(assert_model, model)
         if res then
             model.filename = filename
             log.info('loaded GraphQL model: "%s"', filename)
             return model
         else
-            log.error('Incorrect model format %s: %s', filename, err)
+            log.error('incorrect model format %s: %s', filename, res)
         end
     else
-        log.error('load model "%s" failed: %s', filename, res)
+        log.error('model load "%s" failed: %s', filename, err)
     end
     return nil
 end

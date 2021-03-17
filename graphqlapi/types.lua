@@ -97,7 +97,7 @@ end
 
 types.remove_type = function (type_name)
     checks('string')
-    log.info('Remove type: %s', type_name)
+    log.debug('Removing type: %s', type_name)
 
     if not internal_types[type_name] then
         -- TODO: remove callbacks, mutations and other types that is used by removed type
