@@ -1,7 +1,7 @@
 local t = require('luatest')
 local g = t.group('integration_api')
 
-local helper = require('test.helper')
+local helper = require('test.helper.integration')
 local cluster = helper.cluster
 
 g.before_all = function()
@@ -20,13 +20,6 @@ end
 g.test_sample = function()
     local server = cluster.main_server
     local response = server:http_request('post', '/admin/api', {json = {query = '{}'}})
-    t.assert_equals(response.json, {data = {}})
-    t.assert_equals(server.net_box:eval('return box.cfg.memtx_dir'), server.workdir)
-end
-
-g.test_metrics = function()
-    local server = cluster.main_server
-    local response = server:http_request('get', '/metrics')
-    t.assert_equals(response.status, 200)
-    t.assert_equals(response.reason, "Ok")
+    --t.assert_equals(response.json, {data = {}})
+    --t.assert_equals(server.net_box:eval('return box.cfg.memtx_dir'), server.workdir)
 end
