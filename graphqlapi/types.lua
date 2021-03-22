@@ -5,6 +5,7 @@ local log = require('log')
 
 local types = require('graphql.types')
 
+local utils = require('graphqlapi.utils')
 local vars = require('graphqlapi.vars').new('graphqlapi.types')
 
 vars:new('type_space', {})
@@ -46,7 +47,7 @@ local internal_types = {
     union = true,
 }
 
-local type_mapper = {
+types.mapper = {
     ['unsigned'] = types.long, -- OK
     ['integer'] = types.int, -- OK
     ['number'] = types.float, -- OK
@@ -74,9 +75,9 @@ local function space_fields(space)
     local fields = {}
     for _, field in ipairs(ddl_schema.spaces[space].format) do
         if field.is_nullable then
-            fields[field.name] = type_mapper[field.type]
+            fields[field.name] = types.mapper[field.type]
         else
-            fields[field.name] = type_mapper[field.type].nonNull
+            fields[field.name] = types.mapper[field.type].nonNull
         end
     end
     return fields
@@ -128,20 +129,6 @@ types.remove_all = function()
     vars.type_space = nil
 end
 
-local function merge(...)
-    local ret = {}
-
-    for i = 1, select('#', ...) do
-        local tbl = select(i, ...)
-        assert(type(tbl) == 'table')
-        for k, v in pairs(tbl) do
-            ret[k] = v
-        end
-    end
-
-    return ret
-end
-
 types.add_object = function(opts)
     checks({
         name = 'string',
@@ -157,7 +144,7 @@ types.add_object = function(opts)
     local new_type = types.object({
         name = opts.name,
         description = opts.description,
-        fields = opts.fields and merge(space_fields(opts.space), opts.fields) or space_fields(opts.space)
+        fields = opts.fields and utils.merge(space_fields(opts.space), opts.fields) or space_fields(opts.space)
     })
     types.add_type(opts.name, new_type)
     vars.type_space[opts.name] = opts.space
@@ -179,7 +166,7 @@ types.add_inputObject = function(opts)
     local new_type = types.inputObject({
         name = opts.name,
         description = opts.description,
-        fields = opts.fields and merge(space_fields(opts.space), opts.fields) or space_fields(opts.space)
+        fields = opts.fields and utils.merge(space_fields(opts.space), opts.fields) or space_fields(opts.space)
     })
     types.add_type(opts.name, new_type)
     vars.type_space[opts.name] = opts.space

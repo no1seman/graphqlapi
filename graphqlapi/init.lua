@@ -1,5 +1,6 @@
 local log = require('log')
 local json = require('json')
+local fio = require('fio')
 local checks = require('checks')
 local errors = require('errors')
 
@@ -8,23 +9,30 @@ local schema = require('graphql.schema')
 local execute = require('graphql.execute')
 local validate = require('graphql.validate')
 
+local VERSION = '0.0.1-1'
+local DEFAULT_DIR_NAME = 'models'
+local DEFAULT_ENDPOINT = '/admin/graphql'
+
 for _, module in ipairs({
     'graphqlapi.funcall',
+    'graphqlapi.helpers',
+    'graphqlapi.middleware',
     'graphqlapi.models',
+    'graphqlapi.spaceapi',
     'graphqlapi.spaces',
     'graphqlapi.types',
+    'graphqlapi.utils',
     'graphqlapi.vars',
 }) do
     package.loaded[module] = nil
 end
 
 local funcall = require('graphqlapi.funcall')
-local vars = require('graphqlapi.vars').new('graphqlapi.graphql')
-local types = require('graphqlapi.types')
-local spaces = require('graphqlapi.spaces')
+local helpers = require('graphqlapi.helpers')
 local models = require('graphqlapi.models')
-
-local auth_middleware = nil
+local spaces = require('graphqlapi.spaces')
+local types = require('graphqlapi.types')
+local vars = require('graphqlapi.vars').new('graphqlapi.graphql')
 
 vars:new('graphql_schema', nil)
 vars:new('model', {})
@@ -32,6 +40,8 @@ vars:new('on_resolve_triggers', {})
 vars:new('callbacks', {})
 vars:new('mutations', {})
 vars:new('dir_name', nil)
+vars:new('endpoint', nil)
+vars:new('auth_middleware', nil)
 
 local e_graphql_internal = errors.new_class('GraphQL internal error')
 local e_graphql_parse = errors.new_class('GraphQL parsing failed')
@@ -213,6 +223,7 @@ local function add_mutation(opts)
             description = opts.doc,
         }
     end
+    -- invalidate cached schema
     vars.graphql_schema = nil
 end
 
@@ -272,7 +283,7 @@ end
 
 local function http_finalize(obj)
     checks('table')
-    return auth_middleware.render_response({
+    return vars.auth_middleware.render_response({
         status = 200,
         headers = {['content-type'] = "application/json; charset=utf-8"},
         body = json.encode(obj),
@@ -280,7 +291,7 @@ local function http_finalize(obj)
 end
 
 local function _execute_graphql(req)
-    if not auth_middleware.authorize_request(req) then
+    if not vars.auth_middleware.authorize_request(req) then
         return http_finalize({
             errors = {{message = "Unauthorized"}},
         })
@@ -400,38 +411,88 @@ local function execute_graphql(req)
     return resp
 end
 
-local function init(httpd, middleware, endpoint, dir_name)
-    checks('table', 'table', 'string', '?string')
-    log.info(type(httpd))
-    assert(middleware.render_response and middleware.render_response ~= nil,
-    'http middleware render_response() function must be provided')
-    assert(middleware.authorize_request and middleware.authorize_request ~= nil,
-    'http middleware authorize_request() function must be provided')
-
-    auth_middleware = middleware
-    vars.dir_name = dir_name or 'models'
-    models.init(vars.dir_name)
-    spaces.init()
-    httpd:route(
-        {
-            method = 'POST',
-            path = endpoint,
-            public = true,
-        },
-        execute_graphql
-    )
+local function delete_route(httpd, name)
+    if httpd.routes and httpd.routes[name] then
+        httpd.routes[name] = nil
+    end
+    if httpd.iroutes and httpd.iroutes[name] then
+        httpd.iroutes[name] = nil
+    end
 end
 
-local function stop(httpd, endpoint)
-    httpd.routes[endpoint] = nil
-    httpd.iroutes[endpoint] = nil
+local function remove_side_slashes(path)
+    if path:startswith('/') then
+        path = path:sub(2)
+    end
+    if path:endswith('/') then
+        path = path:sub(1, -2)
+    end
+    return path
+end
+
+local function set_endpoint(httpd, endpoint, opts)
+    checks('table', 'string', '?table')
+    delete_route(httpd, vars.endpoint)
+    vars.endpoint = remove_side_slashes(endpoint)
+    opts = opts or {}
+    opts.path = vars.endpoint
+    opts.method = opts.method or 'POST'
+    opts.public = opts.public or true
+    httpd:route(opts, execute_graphql)
+end
+
+local function get_endpoint()
+    return vars.endpoint
+end
+
+local function _init()
+    if fio.path.is_dir(vars.dir_name) then
+        models.init(vars.dir_name)
+        spaces.init()
+        return true
+    else
+        vars.dir_name = nil
+        local err = ('Path is not valid: %s'):format(tostring(vars.dir_name))
+        log.warn(err)
+        return nil, err
+    end
+end
+
+local function init(httpd, middleware, endpoint, dir_name, opts)
+    checks('table', '?table', '?string', '?string', '?table')
+
+    if not middleware or not middleware.render_response or not middleware.authorize_request then
+        middleware = require('graphql.middleware')
+    end
+
+    vars.auth_middleware = middleware
+    dir_name = dir_name or DEFAULT_DIR_NAME
+    endpoint = endpoint or DEFAULT_ENDPOINT
+    vars.dir_name = fio.pathjoin(package.searchroot(), dir_name)
+
+    local ok, err = _init()
+    if not ok then
+        return err
+    end
+
+    set_endpoint(httpd, endpoint, opts)
+
+    --require('graphqlapi.printer').print_types(types)
+end
+
+local function stop(httpd)
+    httpd.routes[vars.endpoint] = nil
+    httpd.iroutes[vars.endpoint] = nil
     spaces.stop()
-    models.remove_all()
+    helpers.stop()
+    models.stop()
     vars.graphql_schema = nil
     vars.model = nil
     vars.on_resolve_triggers = nil
     vars.callbacks = nil
     vars.mutations = nil
+    vars.dir_name = nil
+    vars.endpoint = nil
 end
 
 local function reload()
@@ -439,10 +500,24 @@ local function reload()
     vars.model = nil
     vars.callbacks = nil
     vars.mutations = nil
+    helpers.stop()
     types.remove_all()
-    models.remove_all()
-    models.init(vars.dir_name)
-    spaces.init()
+    models.stop()
+    local ok, err = _init()
+    if not ok then
+        return err
+    end
+end
+
+local function set_models_dir(dir_name)
+    if fio.path.is_dir(dir_name) then
+        vars.dir_name = dir_name
+        reload()
+    end
+end
+
+local function get_models_dir()
+    return vars.dir_name
 end
 
 local function on_resolve(trigger_new, trigger_old)
@@ -457,9 +532,16 @@ local function on_resolve(trigger_new, trigger_old)
 end
 
 return {
+    -- Common methods
     init = init,
     stop = stop,
     reload = reload,
+    set_models_dir = set_models_dir,
+    get_models_dir = get_models_dir,
+    set_endpoint = set_endpoint,
+    get_endpoint = get_endpoint,
+
+    -- Types
     set_model = set_model,
     types = types,
 
@@ -486,4 +568,7 @@ return {
 
     -- Resolve trigger
     on_resolve = on_resolve,
+
+    -- version
+    VERSION = VERSION,
 }

@@ -2,19 +2,17 @@ local fio = require('fio')
 local checks = require('checks')
 local errors = require('errors')
 local log = require('log')
+local json = require('json')
 
+local utils = require('graphqlapi.utils')
 local vars = require('graphqlapi.vars').new('graphqlapi.models')
 
 vars:new('models', {})
+vars:new('loaded', {})
 
 local e_model_load = errors.new_class('Model load failed', { capture_stack = false })
 local e_model_assert = errors.new_class('Model check failed', { capture_stack = false })
 local e_model_execute = errors.new_class('Model execute failed', { capture_stack = false })
-
-
-local function full_path(dir_name)
-    return fio.pathjoin(package.searchroot(), dir_name)
-end
 
 local function assert_model(model)
     assert(type(model.spaces) == 'table', 'model.spaces must be a table')
@@ -25,23 +23,35 @@ local function assert_model(model)
     return model
 end
 
+local function modules_list()
+    local _list = {}
+    for key in pairs(package.loaded) do
+        _list[key] = true
+    end
+    return _list
+end
+
 local function load_model(dir_name, filename)
     checks('string', 'string')
-
-    local model_function, err = e_model_load:pcall(loadfile, fio.pathjoin(full_path(dir_name), filename))
+    local modules_before = modules_list()
+    local model_function, err = e_model_load:pcall(loadfile, fio.pathjoin(dir_name, filename))
 
     if model_function then
         local model = model_function()
-        local res = e_model_assert:pcall(assert_model, model)
+        local res, assert_err = e_model_assert:pcall(assert_model, model)
         if res then
             model.filename = filename
-            log.info('loaded GraphQL model: "%s"', filename)
+            model.name = string.split(filename, '.lua')[1]
+            log.info('GraphQL model loaded: "%s"', filename)
+            log.info('Loaded modules before: '..json.encode(vars.loaded))
+            local modules_after = modules_list()
+            utils.diff(modules_before, modules_after, vars.loaded)
             return model
         else
-            log.error('incorrect model format %s: %s', filename, res)
+            log.error('incorrect GraphQL model format %s: %s', filename, assert_err)
         end
     else
-        log.error('model load "%s" failed: %s', filename, err)
+        log.error('GraphQL model "%s" load failed: %s', filename, err)
     end
     return nil
 end
@@ -49,9 +59,7 @@ end
 local function load_models(dir_name)
     checks('string')
     local models = {}
-    local search_folder = full_path(dir_name)
-    if not fio.path.is_dir(search_folder) then error(('Path %s is not valid'):format(search_folder)) end
-    local files = fio.listdir(search_folder) or {}
+    local files = fio.listdir(dir_name) or {}
     table.sort(files)
     for _, filename in ipairs(files) do
         local model = load_model(dir_name, filename)
@@ -64,6 +72,7 @@ local function apply_model(model)
     local _, err = e_model_execute:pcall(model.model)
     if err ~= nil then
         log.error('Model %s not applied: %s', model.name, err)
+        return nil, err
     end
 end
 
@@ -99,6 +108,19 @@ local function remove_all()
     vars.models = nil
 end
 
+local function get_func(mod_name, fun_name)
+    for _, model in ipairs(vars.models) do
+        if model.name == mod_name then
+            if model[fun_name] and type(model[fun_name]) then
+                return model[fun_name]
+            else
+                return nil
+            end
+        end
+    end
+    return nil
+end
+
 local function init(dir_name)
     vars.models = load_models(dir_name)
     for _, model in ipairs(vars.models) do
@@ -106,12 +128,22 @@ local function init(dir_name)
     end
 end
 
+local function stop()
+    remove_all()
+    for _, v in pairs(vars.loaded) do
+        package.loaded[v] = nil
+    end
+    vars.loaded = nil
+end
+
 return {
     init = init,
+    stop = stop,
     update_space_models = update_space_models,
     apply_model = apply_model,
     load_model = load_model,
     remove_model = remove_model,
     remove_model_by_space_name = remove_model_by_space_name,
     remove_all = remove_all,
+    get_func = get_func,
 }

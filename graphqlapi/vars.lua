@@ -1,5 +1,3 @@
--- luacheck: globals box
-
 local checks = require('checks')
 
 if rawget(_G, "_graphql_api_defaults") == nil then

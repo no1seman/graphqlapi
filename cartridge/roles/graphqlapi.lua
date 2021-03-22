@@ -3,9 +3,8 @@ local graphqlapi = require('graphqlapi')
 local auth = require('cartridge.auth')
 
 local function init()
-    local endpoint = '/admin/graphql'
     local httpd = cartridge.service_get('httpd')
-    graphqlapi.init(httpd, auth, endpoint)
+    graphqlapi.init(httpd, auth)
 end
 
 local function stop()
