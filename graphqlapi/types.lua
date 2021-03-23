@@ -9,11 +9,9 @@ local utils = require('graphqlapi.utils')
 local vars = require('graphqlapi.vars').new('graphqlapi.types')
 
 vars:new('type_space', {})
-vars:new('invalid', nil)
+vars:new('schema_invalid', nil)
 
 local e_remove_type = errors.new_class('GraphQL type remove failed', { capture_stack = false })
-local e_object_add = errors.new_class('Add GraphQL object failed', { capture_stack = false })
-local e_inputObject_add = errors.new_class('Add GraphQL input object failed', { capture_stack = false })
 
 local internal_types = {
     add_inputObject = true,
@@ -32,6 +30,7 @@ local internal_types = {
     interface = true,
     is_invalid = true,
     list = true,
+    list_types = true,
     long = true,
     nonNull = true,
     nullable = true,
@@ -41,7 +40,7 @@ local internal_types = {
     remove_type_by_space_name = true,
     resolve = true,
     scalar = true,
-    set_valid = true,
+    mapper = true,
     skip = true,
     string = true,
     union = true,
@@ -84,16 +83,12 @@ local function space_fields(space)
 end
 
 types.is_invalid = function()
-    return not vars.invalid
+    return vars.schema_invalid
 end
 
-types.set_valid = function()
-    vars.invalid = false
-end
-
-types.add_type = function(type_name, _type)
-    checks('string', 'table')
-    types[type_name] = _type
+types.add_type = function(_type, type_name)
+    checks('table', '?string')
+    types[type_name or _type.name] = _type
 end
 
 types.remove_type = function (type_name)
@@ -104,7 +99,7 @@ types.remove_type = function (type_name)
         -- TODO: remove callbacks, mutations and other types that is used by removed type
         types[type_name] = nil
         vars.type_space[type_name] = nil
-        vars.invalid = true
+        vars.schema_invalid = true
         return type_name
     else
         return nil, e_remove_type:new("Can't remove internal type")
@@ -138,7 +133,7 @@ types.add_object = function(opts)
     })
 
     if not is_space_exists(opts.space) then
-        return nil, e_object_add:new(string.format("Space \"%s\"doesn't exists", opts.space))
+        error(string.format("space '%s' doesn't exists", opts.space))
     end
 
     local new_type = types.object({
@@ -146,7 +141,7 @@ types.add_object = function(opts)
         description = opts.description,
         fields = opts.fields and utils.merge(space_fields(opts.space), opts.fields) or space_fields(opts.space)
     })
-    types.add_type(opts.name, new_type)
+    types.add_type(new_type, opts.name)
     vars.type_space[opts.name] = opts.space
     return opts.name, new_type
 end
@@ -160,7 +155,7 @@ types.add_inputObject = function(opts)
     })
 
     if not is_space_exists(opts.space) then
-        return nil, e_inputObject_add:new(string.format("Space \"%s\"doesn't exists", opts.space))
+        error(string.format("Space \"%s\"doesn't exists", opts.space))
     end
 
     local new_type = types.inputObject({
@@ -168,9 +163,17 @@ types.add_inputObject = function(opts)
         description = opts.description,
         fields = opts.fields and utils.merge(space_fields(opts.space), opts.fields) or space_fields(opts.space)
     })
-    types.add_type(opts.name, new_type)
+    types.add_type(new_type, opts.name)
     vars.type_space[opts.name] = opts.space
     return opts.name, new_type
+end
+
+types.list_types = function()
+    local type_list = {}
+    for _type in pairs(types) do
+        table.insert(type_list, _type)
+    end
+    return type_list
 end
 
 return types

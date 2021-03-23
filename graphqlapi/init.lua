@@ -18,6 +18,7 @@ for _, module in ipairs({
     'graphqlapi.helpers',
     'graphqlapi.middleware',
     'graphqlapi.models',
+    'graphqlapi.operations',
     'graphqlapi.spaceapi',
     'graphqlapi.spaces',
     'graphqlapi.types',
@@ -27,21 +28,19 @@ for _, module in ipairs({
     package.loaded[module] = nil
 end
 
-local funcall = require('graphqlapi.funcall')
 local helpers = require('graphqlapi.helpers')
 local models = require('graphqlapi.models')
+local operations = require('graphqlapi.operations')
 local spaces = require('graphqlapi.spaces')
 local types = require('graphqlapi.types')
 local vars = require('graphqlapi.vars').new('graphqlapi.graphql')
 
 vars:new('graphql_schema', nil)
 vars:new('model', {})
-vars:new('on_resolve_triggers', {})
-vars:new('callbacks', {})
-vars:new('mutations', {})
 vars:new('dir_name', nil)
 vars:new('endpoint', nil)
 vars:new('auth_middleware', nil)
+vars:new('httpd', nil)
 
 local e_graphql_internal = errors.new_class('GraphQL internal error')
 local e_graphql_parse = errors.new_class('GraphQL parsing failed')
@@ -52,197 +51,11 @@ local function set_model(model_entrypoints)
     vars.model = model_entrypoints
 end
 
-local function funcall_wrap(fun_name, operation, field_name)
-    checks('string', 'string', 'string')
-    return function(...)
-        for trigger, _ in pairs(vars.on_resolve_triggers) do
-            local ok, err = trigger(operation, field_name)
-            if not ok then return nil, err end
-        end
-
-        local res, err = funcall.call(fun_name, ...)
-
-        if err ~= nil then
-            error(err, 0)
-        end
-
-        return res
-    end
-end
-
-local function add_callback_prefix(prefix, doc)
-    checks("string", "?string")
-
-    local kind = types.object{
-        name = 'Api'..prefix,
-        fields = {},
-        description = doc,
-    }
-    local obj = {
-        kind = kind,
-        arguments = {},
-        resolve = function()
-            return {}
-        end,
-        description = doc,
-    }
-    vars.callbacks[prefix] = obj
-    vars.graphql_schema = nil
-    return obj
-end
-
-local function remove_callback_prefix(prefix)
-    checks('string')
-    vars.callbacks[prefix] = nil
-    vars.graphql_schema = nil
-end
-
-local function add_mutation_prefix(prefix, doc)
-    checks("string", "?string")
-
-    local kind = types.object({
-        name = 'MutationApi'..prefix,
-        fields = {},
-        description = doc,
-    })
-    local obj = {
-        kind = kind,
-        arguments = {},
-        resolve = function()
-            return {}
-        end,
-        description = doc,
-    }
-    vars.mutations[prefix] = obj
-    vars.graphql_schema = nil
-    return obj
-end
-
-local function remove_mutation_prefix(prefix)
-    checks('string')
-    vars.mutation[prefix] = nil
-    vars.graphql_schema = nil
-end
-
-local function add_callback(opts)
-    checks({
-        prefix = '?string',
-        name = 'string',
-        doc = '?string',
-        args = '?table',
-        kind = 'table',
-        callback = 'string',
-    })
-
-    if opts.prefix then
-        local obj = vars.callbacks[opts.prefix]
-        if obj == nil then
-            error('No such callback prefix ' .. opts.prefix, 0)
-        end
-
-        local oldkind = obj.kind
-        oldkind.fields[opts.name] = {
-            kind = opts.kind,
-            arguments = opts.args,
-            resolve = funcall_wrap(opts.callback,
-                'query', opts.prefix .. '.' .. opts.name
-            ),
-            description = opts.doc,
-        }
-
-        obj.kind = types.object{
-            name = oldkind.name,
-            fields = oldkind.fields,
-            description = oldkind.description,
-        }
-    else
-        vars.callbacks[opts.name] = {
-            kind = opts.kind,
-            arguments = opts.args,
-            resolve = funcall_wrap(opts.callback,
-                'query', opts.name
-            ),
-            description = opts.doc,
-        }
-    end
-    vars.graphql_schema = nil
-end
-
-local function remove_callback(name)
-    checks('string')
-    vars.callbacks[name] = nil
-    vars.graphql_schema = nil
-end
-
-local function list_callbacks()
-    local _callbacks = {}
-    for _callback in pairs(vars.callbacks) do
-        table.insert(_callbacks, _callback)
-    end
-    return _callbacks
-end
-
-local function add_mutation(opts)
-    checks({
-        prefix = '?string',
-        name = 'string',
-        doc = '?string',
-        args = '?table',
-        kind = 'table',
-        callback = 'string',
-    })
-
-    if opts.prefix then
-        local obj = vars.mutations[opts.prefix]
-        if obj == nil then
-            error('No such mutation prefix ' .. opts.prefix, 0)
-        end
-
-        local oldkind = obj.kind
-        oldkind.fields[opts.name] = {
-            kind = opts.kind,
-            arguments = opts.args,
-            resolve = funcall_wrap(opts.callback,
-                'mutation', opts.prefix .. '.' .. opts.name
-            ),
-            description = opts.doc
-        }
-
-        obj.kind = types.object{
-            name = oldkind.name,
-            fields = oldkind.fields,
-            description = oldkind.description,
-        }
-    else
-        vars.mutations[opts.name] = {
-            kind = opts.kind,
-            arguments = opts.args,
-            resolve = funcall_wrap(opts.callback,
-                'mutation', opts.name
-            ),
-            description = opts.doc,
-        }
-    end
-    -- invalidate cached schema
-    vars.graphql_schema = nil
-end
-
-local function remove_mutation(name)
-    checks('string')
-    vars.mutations[name] = nil
-    vars.graphql_schema = nil
-end
-
-local function list_mutations()
-    local _mutations = {}
-    for _mutation in pairs(vars.mutations) do
-        table.insert(_mutations, _mutation)
-    end
-    return _mutations
-end
-
 local function get_schema()
     if types.is_invalid then
+        vars.graphql_schema = nil
+    end
+    if operations.is_invalid then
         vars.graphql_schema = nil
     end
     if vars.graphql_schema ~= nil then
@@ -251,7 +64,7 @@ local function get_schema()
 
     local fields = {}
 
-    for name, fun in pairs(vars.callbacks) do
+    for name, fun in pairs(operations.queries) do
         fields[name] = fun
     end
 
@@ -267,7 +80,7 @@ local function get_schema()
     end
 
     local mutations = {}
-    for name, fun in pairs(vars.mutations) do
+    for name, fun in pairs(operations.mutations) do
         mutations[name] = fun
     end
 
@@ -430,15 +243,15 @@ local function remove_side_slashes(path)
     return path
 end
 
-local function set_endpoint(httpd, endpoint, opts)
-    checks('table', 'string', '?table')
-    delete_route(httpd, vars.endpoint)
+local function set_endpoint(endpoint, opts)
+    checks('string', '?table')
+    delete_route(vars.httpd, vars.endpoint)
     vars.endpoint = remove_side_slashes(endpoint)
     opts = opts or {}
     opts.path = vars.endpoint
     opts.method = opts.method or 'POST'
     opts.public = opts.public or true
-    httpd:route(opts, execute_graphql)
+    vars.httpd:route(opts, execute_graphql)
 end
 
 local function get_endpoint()
@@ -462,7 +275,7 @@ local function init(httpd, middleware, endpoint, dir_name, opts)
     checks('table', '?table', '?string', '?string', '?table')
 
     if not middleware or not middleware.render_response or not middleware.authorize_request then
-        middleware = require('graphql.middleware')
+        middleware = require('graphqlapi.middleware')
     end
 
     vars.auth_middleware = middleware
@@ -475,38 +288,66 @@ local function init(httpd, middleware, endpoint, dir_name, opts)
         return err
     end
 
-    set_endpoint(httpd, endpoint, opts)
-
+    vars.httpd = httpd
+    set_endpoint(endpoint, opts)
+    
     --require('graphqlapi.printer').print_types(types)
 end
 
-local function stop(httpd)
-    httpd.routes[vars.endpoint] = nil
-    httpd.iroutes[vars.endpoint] = nil
+local function stop()
+    vars.httpd.routes[vars.endpoint] = nil
+    vars.httpd.iroutes[vars.endpoint] = nil
+    vars.httpd = nil
     spaces.stop()
     helpers.stop()
     models.stop()
     vars.graphql_schema = nil
     vars.model = nil
-    vars.on_resolve_triggers = nil
-    vars.callbacks = nil
-    vars.mutations = nil
+    operations.stop()
     vars.dir_name = nil
     vars.endpoint = nil
 end
 
 local function reload()
+    log.info('Global schema: '..json.encode(types.get_env(), {
+        encode_use_tostring = true,
+        encode_deep_as_nil = true,
+        encode_max_depth = 3,
+        encode_invalid_as_nil = true,
+    }))
+    log.info('Types: ' .. json.encode(types.list_types()))
+    log.info('Mutations: ' .. json.encode(operations.list_mutations()))
+    log.info('Queries: ' ..json.encode(operations.list_queries()))
+    log.info('Models: '..json.encode(models.list_models()))
+    log.info('Loaded: '..json.encode(models.list_loaded()))
+    log.info('Modules: '..json.encode(models.list_modules()))
+
     vars.graphql_schema = nil
     vars.model = nil
-    vars.callbacks = nil
-    vars.mutations = nil
+    operations.remove_all()
     helpers.stop()
     types.remove_all()
     models.stop()
+
+    types.get_env()
+
     local ok, err = _init()
     if not ok then
         return err
     end
+
+    log.info('Global schema: '..json.encode(types.get_env(), {
+        encode_use_tostring = true,
+        encode_deep_as_nil = true,
+        encode_max_depth = 3,
+        encode_invalid_as_nil = true,
+    }))
+    log.info('Types: ' .. json.encode(types.list_types()))
+    log.info('Mutations: ' .. json.encode(operations.list_mutations()))
+    log.info('Queries: ' ..json.encode(operations.list_queries()))
+    log.info('Models: '..json.encode(models.list_models()))
+    log.info('Loaded: '..json.encode(models.list_loaded()))
+    log.info('Modules: '..json.encode(models.list_modules()))
 end
 
 local function set_models_dir(dir_name)
@@ -518,17 +359,6 @@ end
 
 local function get_models_dir()
     return vars.dir_name
-end
-
-local function on_resolve(trigger_new, trigger_old)
-    checks('?function', '?function')
-    if trigger_old ~= nil then
-        vars.on_resolve_triggers[trigger_old] = nil
-    end
-    if trigger_new ~= nil then
-        vars.on_resolve_triggers[trigger_new] = true
-    end
-    return trigger_new
 end
 
 return {
@@ -545,29 +375,11 @@ return {
     set_model = set_model,
     types = types,
 
-    -- Callbacks prefixes
-    add_callback_prefix = add_callback_prefix,
-    remove_callback_prefix = remove_callback_prefix,
-
-    -- Mutations prefixes
-    add_mutation_prefix = add_mutation_prefix,
-    remove_mutation_prefix = remove_mutation_prefix,
-
-    -- Callbacks
-    add_callback = add_callback,
-    remove_callback = remove_callback,
-    list_callbacks = list_callbacks,
-
-    -- Mutations
-    add_mutation = add_mutation,
-    remove_mutation = remove_mutation,
-    list_mutations = list_mutations,
+    -- Operations
+    operations = operations,
 
     -- Execute GraphQL
     execute_graphql = execute_graphql,
-
-    -- Resolve trigger
-    on_resolve = on_resolve,
 
     -- version
     VERSION = VERSION,

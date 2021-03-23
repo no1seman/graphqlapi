@@ -26,6 +26,7 @@ build = {
         ['graphqlapi.helpers'] = 'graphqlapi/helpers.lua',
         ['graphqlapi.middleware'] = 'graphqlapi/middleware.lua',
         ['graphqlapi.models'] = 'graphqlapi/models.lua',
+        ['graphqlapi.operations'] = 'graphqlapi/operations.lua',
         --['graphqlapi.printer'] = 'graphqlapi/printer.lua',
         ['graphqlapi.spaceapi'] = 'graphqlapi/spaceapi.lua',
         ['graphqlapi.spaces'] = 'graphqlapi/spaces.lua',

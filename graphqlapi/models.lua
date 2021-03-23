@@ -18,12 +18,12 @@ local function assert_model(model)
     assert(type(model.spaces) == 'table', 'model.spaces must be a table')
     assert(type(model.model) == 'function', 'model.model must be function' )
     for _, space in pairs(model.spaces) do
-        assert(type(space) == 'string', string.format('model.spaces item "%s" must be a string', tostring(space)))
+        assert(type(space) == 'string', string.format("model.spaces item '%s' must be a string", tostring(space)))
     end
     return model
 end
 
-local function modules_list()
+local function list_modules()
     local _list = {}
     for key in pairs(package.loaded) do
         _list[key] = true
@@ -33,7 +33,7 @@ end
 
 local function load_model(dir_name, filename)
     checks('string', 'string')
-    local modules_before = modules_list()
+    local modules_before = list_modules()
     local model_function, err = e_model_load:pcall(loadfile, fio.pathjoin(dir_name, filename))
 
     if model_function then
@@ -42,16 +42,14 @@ local function load_model(dir_name, filename)
         if res then
             model.filename = filename
             model.name = string.split(filename, '.lua')[1]
-            log.info('GraphQL model loaded: "%s"', filename)
-            log.info('Loaded modules before: '..json.encode(vars.loaded))
-            local modules_after = modules_list()
+            local modules_after = list_modules()
             utils.diff(modules_before, modules_after, vars.loaded)
             return model
         else
-            log.error('incorrect GraphQL model format %s: %s', filename, assert_err)
+            log.error("incorrect GraphQL model format '%s': %s", filename, assert_err)
         end
     else
-        log.error('GraphQL model "%s" load failed: %s', filename, err)
+        log.error("GraphQL model '%s' load failed: %s", filename, err)
     end
     return nil
 end
@@ -71,8 +69,10 @@ end
 local function apply_model(model)
     local _, err = e_model_execute:pcall(model.model)
     if err ~= nil then
-        log.error('Model %s not applied: %s', model.name, err)
+        log.error("model '%s' not applied: %s", model.name, err)
         return nil, err
+    else
+        log.info("model applied: '%s'", model.name)
     end
 end
 
@@ -131,10 +131,28 @@ end
 local function stop()
     remove_all()
     for _, v in pairs(vars.loaded) do
+        print(v)
         package.loaded[v] = nil
     end
     vars.loaded = nil
 end
+
+local function list_models()
+    local models = {}
+    for model in pairs(vars.models) do
+        table.insert(models, model)
+    end
+    return models
+end
+
+local function list_loaded()
+    local loaded = {}
+    for module in pairs(vars.loaded) do
+        table.insert(loaded, module)
+    end
+    return loaded
+end
+
 
 return {
     init = init,
@@ -146,4 +164,7 @@ return {
     remove_model_by_space_name = remove_model_by_space_name,
     remove_all = remove_all,
     get_func = get_func,
+    list_models = list_models,
+    list_loaded = list_loaded,
+    list_modules = list_modules,
 }
