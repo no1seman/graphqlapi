@@ -4,7 +4,7 @@ local function render_response(resp)
     return resp
 end
 
-local function authorize_request(req)
+local function authorize_request(req) -- luacheck: no unused args
     checks('table')
     return true
 end

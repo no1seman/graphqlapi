@@ -2,7 +2,7 @@ local fio = require('fio')
 local checks = require('checks')
 local errors = require('errors')
 local log = require('log')
-local json = require('json')
+-- local json = require('json')
 
 local utils = require('graphqlapi.utils')
 local vars = require('graphqlapi.vars').new('graphqlapi.models')
@@ -88,18 +88,18 @@ local function update_space_models(space_name)
 end
 
 local function remove_model(filename)
-    for _, model in ipairs(vars.models) do
+    for key, model in ipairs(vars.models) do
         if model.filename == filename then
-            model = nil
+            vars.models[key] = nil
         end
     end
 end
 
 local function remove_model_by_space_name(space_name)
-    for _, model in ipairs(vars.models) do
+    for key, model in ipairs(vars.models) do
         for space in pairs(model.spaces) do
             if space == space_name then
-                model = nil
+                vars.models[key] = nil
             end
         end
     end

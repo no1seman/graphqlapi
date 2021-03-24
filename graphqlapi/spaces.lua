@@ -21,7 +21,7 @@ local function remove_trigger(trigger)
     box.space._space:on_replace(nil, trigger)
 end
 
-local function space_trigger(old, new, sp, op)
+local function space_trigger(old, new, sp, op) -- luacheck: no unused args
     if new ~= nil then
         -- Insert, Update, Upsert, Replace space
         local new_space = new:tomap({names_only = true})

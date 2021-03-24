@@ -166,7 +166,7 @@ local function _execute_graphql(req)
     end
 
     local schema_obj = get_schema()
-    local _, err = e_graphql_validate:pcall(validate.validate, schema_obj, ast)
+    err = select(2,e_graphql_validate:pcall(validate.validate, schema_obj, ast))
 
     if err then
         log.error('%s', err)
@@ -176,8 +176,8 @@ local function _execute_graphql(req)
     end
 
     local rootValue = {}
-
-    local data, err = e_graphql_execute:pcall(execute.execute,
+    local data
+    data, err = e_graphql_execute:pcall(execute.execute,
         schema_obj, ast, rootValue, variables, operationName
     )
 
@@ -290,7 +290,7 @@ local function init(httpd, middleware, endpoint, dir_name, opts)
 
     vars.httpd = httpd
     set_endpoint(endpoint, opts)
-    
+
     --require('graphqlapi.printer').print_types(types)
 end
 

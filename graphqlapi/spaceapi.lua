@@ -1,10 +1,10 @@
 local checks = require('checks')
 local ddl = require('ddl')
-local errors = require('errors')
+--local errors = require('errors')
 local fiber = require('fiber')
-local log = require('log')
+--local json = require('json')
+--local log = require('log')
 local vshard = require('vshard')
-local json = require('json')
 
 --local e_space_api = errors.new_class('space API error', { capture_stack = false })
 
@@ -29,7 +29,7 @@ local function get_space_size(spaces)
 
     for uid, replica in pairs(shards) do
         local f = fiber.new(function()
-            local ok, res, err = pcall(function()
+            local ok, res, eval_err = pcall(function()
                 return replica.master.conn:eval([[
                     local log = require('log')
                     local fiber = require('fiber')
@@ -46,7 +46,7 @@ local function get_space_size(spaces)
 
                             counters[space_name].index = {}
                             for i = 0, #space.index do
-                                local index = space.index[i]                           
+                                local index = space.index[i]
                                 if index ~= nil then
                                     counters[space_name].index[i] = {}
                                     counters[space_name].index[i].len = index:len() or 0
@@ -54,8 +54,14 @@ local function get_space_size(spaces)
                                 end
                             end
                         else
-                            log.error(string.format('Error: space "%s" not found on instance "%s"', space_name, box.info.uuid))
-                            table.insert(errors, string.format('Error: space "%s" not found on instance "%s"', space_name, box.info.uuid))
+                            log.error(string.format(
+                                    'Error: space "%s" not found on instance "%s"',
+                                    space_name,
+                                    box.info.uuid))
+                            table.insert(errors, string.format(
+                                    'Error: space "%s" not found on instance "%s"',
+                                    space_name,
+                                    box.info.uuid))
                         end
                         fiber.yield()
                     end
@@ -73,16 +79,18 @@ local function get_space_size(spaces)
                         counters[space_name].index =  counters[space_name].index or {}
                         for i = 0, #box.space[space_name].index do
                             counters[space_name].index[i] = counters[space_name].index[i] or {}
-                            counters[space_name].index[i].len = (counters[space_name].index[i].len or 0) + (res[space_name].index[i].len or 0)
-                            counters[space_name].index[i].size = (counters[space_name].index[i].size or 0) + (res[space_name].index[i].size or 0)
+                            counters[space_name].index[i].len =
+                            (counters[space_name].index[i].len or 0) + (res[space_name].index[i].len or 0)
+                            counters[space_name].index[i].size =
+                            (counters[space_name].index[i].size or 0) + (res[space_name].index[i].size or 0)
                         end
 
                     end
                 end
             end
 
-            if next(err) then
-                table.insert(remote_errors, res)
+            if next(eval_err) then
+                table.insert(remote_errors, eval_err)
             end
 
             return true
@@ -131,8 +139,10 @@ local function space_get(_, args, _)
 
         space.index = {}
         for i = 0, #box.space[space_name].index do
-            local index = box.space[space_name].index
-            if index ~= nil and spaces_size[space_name].index and spaces_size[space_name].index[i] then
+            local index = {}
+            if box.space[space_name].index[i] ~= nil and
+               spaces_size[space_name].index and
+               spaces_size[space_name].index[i] then
                 index.id = i
                 index.len = spaces_size[space_name].index[i].len or 0
                 index.size = spaces_size[space_name].index[i].size or 0
