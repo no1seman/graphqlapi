@@ -184,7 +184,6 @@ local function add_mutation(opts)
             description = opts.doc,
         }
     end
-    -- invalidate cached schema
     vars.schema_invalid = true
 end
 
@@ -224,11 +223,19 @@ local function on_resolve(trigger_new, trigger_old)
     return trigger_new
 end
 
+local function get_queries()
+    return vars.queries
+end
+
+local function get_mutations()
+    return vars.mutations
+end
+
 return {
     stop = stop,
     remove_all = remove_all,
-    queries = vars.queries,
-    mutations = vars.mutations,
+    get_queries = get_queries,
+    get_mutations = get_mutations,
 
     -- Queries prefixes
     add_query_prefix = add_query_prefix,

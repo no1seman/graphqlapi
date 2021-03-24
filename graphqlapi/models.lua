@@ -140,7 +140,7 @@ end
 
 local function list_models()
     local models = {}
-    for model in pairs(vars.models) do
+    for _, model in pairs(vars.models) do
         table.insert(models, model.filename)
     end
     return models

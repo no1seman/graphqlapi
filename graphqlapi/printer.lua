@@ -52,6 +52,19 @@ local function print_types(types)
     utils.file_write('./types.json', json.encode(types, json_cfg))
     log.info('Get ALL types:')
     getTypeName(types['cd_offer_cc'])
+    -- log.info('Begin reload():')
+    -- log.info('Global schema: '..json.encode(types.get_env(), {
+    --     encode_use_tostring = true,
+    --     encode_deep_as_nil = true,
+    --     encode_max_depth = 3,
+    --     encode_invalid_as_nil = true,
+    -- }))
+    -- log.info('Types: ' .. json.encode(types.list_types()))
+    -- log.info('Mutations: ' .. json.encode(operations.list_mutations()))
+    -- log.info('Queries: ' ..json.encode(operations.list_queries()))
+    -- log.info('Models: '..json.encode(models.list_models()))
+    -- log.info('Loaded: '..json.encode(models.list_loaded()))
+    -- log.info('Modules: '..json.encode(models.list_modules()))
 end
 
 return {

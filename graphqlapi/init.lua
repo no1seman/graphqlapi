@@ -52,10 +52,10 @@ local function set_model(model_entrypoints)
 end
 
 local function get_schema()
-    if types.is_invalid then
+    if types.is_invalid() then
         vars.graphql_schema = nil
     end
-    if operations.is_invalid then
+    if operations.is_invalid() then
         vars.graphql_schema = nil
     end
     if vars.graphql_schema ~= nil then
@@ -64,7 +64,7 @@ local function get_schema()
 
     local fields = {}
 
-    for name, fun in pairs(operations.queries) do
+    for name, fun in pairs(operations.get_queries()) do
         fields[name] = fun
     end
 
@@ -80,7 +80,7 @@ local function get_schema()
     end
 
     local mutations = {}
-    for name, fun in pairs(operations.mutations) do
+    for name, fun in pairs(operations.get_mutations()) do
         mutations[name] = fun
     end
 
@@ -208,7 +208,6 @@ local function _execute_graphql(req)
     return http_finalize({
         data = data,
     })
-
 end
 
 local function execute_graphql(req)
@@ -220,7 +219,6 @@ local function execute_graphql(req)
             body = tostring(err),
         }
     end
-
     return resp
 end
 
@@ -290,7 +288,6 @@ local function init(httpd, middleware, endpoint, dir_name, opts)
 
     vars.httpd = httpd
     set_endpoint(endpoint, opts)
-
     --require('graphqlapi.printer').print_types(types)
 end
 
@@ -309,19 +306,6 @@ local function stop()
 end
 
 local function reload()
-    log.info('Global schema: '..json.encode(types.get_env(), {
-        encode_use_tostring = true,
-        encode_deep_as_nil = true,
-        encode_max_depth = 3,
-        encode_invalid_as_nil = true,
-    }))
-    log.info('Types: ' .. json.encode(types.list_types()))
-    log.info('Mutations: ' .. json.encode(operations.list_mutations()))
-    log.info('Queries: ' ..json.encode(operations.list_queries()))
-    log.info('Models: '..json.encode(models.list_models()))
-    log.info('Loaded: '..json.encode(models.list_loaded()))
-    log.info('Modules: '..json.encode(models.list_modules()))
-
     vars.graphql_schema = nil
     vars.model = nil
     operations.remove_all()
@@ -329,25 +313,10 @@ local function reload()
     types.remove_all()
     models.stop()
 
-    types.get_env()
-
     local ok, err = _init()
     if not ok then
         return err
     end
-
-    log.info('Global schema: '..json.encode(types.get_env(), {
-        encode_use_tostring = true,
-        encode_deep_as_nil = true,
-        encode_max_depth = 3,
-        encode_invalid_as_nil = true,
-    }))
-    log.info('Types: ' .. json.encode(types.list_types()))
-    log.info('Mutations: ' .. json.encode(operations.list_mutations()))
-    log.info('Queries: ' ..json.encode(operations.list_queries()))
-    log.info('Models: '..json.encode(models.list_models()))
-    log.info('Loaded: '..json.encode(models.list_loaded()))
-    log.info('Modules: '..json.encode(models.list_modules()))
 end
 
 local function set_models_dir(dir_name)
