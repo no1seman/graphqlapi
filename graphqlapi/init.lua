@@ -259,7 +259,6 @@ end
 local function _init()
     if fio.path.is_dir(vars.dir_name) then
         models.init(vars.dir_name)
-        spaces.init()
         return true
     else
         vars.dir_name = nil
@@ -288,6 +287,7 @@ local function init(httpd, middleware, endpoint, dir_name, opts)
 
     vars.httpd = httpd
     set_endpoint(endpoint, opts)
+    spaces.init()
     --require('graphqlapi.printer').print_types(types)
 end
 
