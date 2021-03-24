@@ -46,10 +46,10 @@ local function load_model(dir_name, filename)
             utils.diff(modules_before, modules_after, vars.loaded)
             return model
         else
-            log.error("incorrect GraphQL model format '%s': %s", filename, assert_err)
+            log.error("graphQL model '%s' incorrect format: %s", filename, assert_err)
         end
     else
-        log.error("GraphQL model '%s' load failed: %s", filename, err)
+        log.error("graphQL model '%s' load failed: %s", filename, err)
     end
     return nil
 end
@@ -57,6 +57,7 @@ end
 local function load_models(dir_name)
     checks('string')
     local models = {}
+    -- TODO use fio.glob instead of listdir
     local files = fio.listdir(dir_name) or {}
     table.sort(files)
     for _, filename in ipairs(files) do
@@ -69,10 +70,10 @@ end
 local function apply_model(model)
     local _, err = e_model_execute:pcall(model.model)
     if err ~= nil then
-        log.error("model '%s' not applied: %s", model.name, err)
+        log.error("graphQL model '%s' not applied: %s", model.name, err)
         return nil, err
     else
-        log.info("model applied: '%s'", model.name)
+        log.info("graphQL model '%s' applied", model.name)
     end
 end
 
@@ -140,7 +141,7 @@ end
 local function list_models()
     local models = {}
     for model in pairs(vars.models) do
-        table.insert(models, model)
+        table.insert(models, model.filename)
     end
     return models
 end
