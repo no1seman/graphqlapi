@@ -15,4 +15,5 @@ return setmetatable({
     role_name = 'graphqlapi',
     init = init,
     stop = stop,
+    reloadable = true,
 }, { __index = graphqlapi })
