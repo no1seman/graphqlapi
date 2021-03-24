@@ -57,12 +57,13 @@ end
 local function load_models(dir_name)
     checks('string')
     local models = {}
-    -- TODO use fio.glob instead of listdir
     local files = fio.listdir(dir_name) or {}
     table.sort(files)
     for _, filename in ipairs(files) do
-        local model = load_model(dir_name, filename)
-        table.insert(models, model)
+        if filename:match("^.+(%..+)$") == '.lua' then
+            local model = load_model(dir_name, filename)
+            table.insert(models, model)
+        end
     end
     return models
 end
