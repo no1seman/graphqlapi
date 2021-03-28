@@ -23,11 +23,11 @@ local function funcall_wrap(fun_name, operation, field_name)
 
         local res, err = funcall.call(fun_name, ...)
 
-        if err ~= nil then
+        if res == nil and err ~= nil then
             error(err, 0)
         end
 
-        return res
+        return res, err
     end
 end
 

@@ -205,9 +205,16 @@ local function _execute_graphql(req)
         })
     end
 
-    return http_finalize({
-        data = data,
-    })
+    if next(err) then
+        return http_finalize({
+            data = data,
+            errors = err,
+        })
+    else
+        return http_finalize({
+            data = data,
+        })
+    end
 end
 
 local function execute_graphql(req)
@@ -276,9 +283,8 @@ local function init(httpd, middleware, endpoint, dir_name, opts)
     end
 
     vars.auth_middleware = middleware
-    dir_name = dir_name or DEFAULT_DIR_NAME
     endpoint = endpoint or DEFAULT_ENDPOINT
-    vars.dir_name = fio.pathjoin(package.searchroot(), dir_name)
+    vars.dir_name = dir_name or DEFAULT_DIR_NAME
 
     local ok, err = _init()
     if not ok then

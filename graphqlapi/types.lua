@@ -96,6 +96,19 @@ types.remove_type = function (type_name)
     log.debug('Removing type: %s', type_name)
 
     if not internal_types[type_name] then
+        types[type_name] = nil
+        vars.schema_invalid = true
+        return type_name
+    else
+        return nil, e_remove_type:new("Can't remove internal type")
+    end
+end
+
+types.remove_type_recursive = function (type_name)
+    checks('string')
+    log.debug('Removing type: %s', type_name)
+
+    if not internal_types[type_name] then
         -- TODO: remove callbacks, mutations and other types that is used by removed type
         types[type_name] = nil
         vars.type_space[type_name] = nil

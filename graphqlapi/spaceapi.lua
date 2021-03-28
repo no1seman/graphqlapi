@@ -1,12 +1,12 @@
 local checks = require('checks')
 local ddl = require('ddl')
---local errors = require('errors')
+local errors = require('errors')
 local fiber = require('fiber')
 --local json = require('json')
---local log = require('log')
+local log = require('log')
 local vshard = require('vshard')
 
---local e_space_api = errors.new_class('space API error', { capture_stack = false })
+local e_space_api = errors.new_class('space API error', { capture_stack = false })
 
 local function list_spaces(schema)
     local spaces = {}
@@ -17,7 +17,7 @@ local function list_spaces(schema)
     return spaces
 end
 
-local function get_space_size(spaces)
+local function _get_space_size(spaces)
     local counters = {}
     local fibers = {}
     local remote_errors = {}
@@ -42,7 +42,7 @@ local function get_space_size(spaces)
                         if space then
                             counters[space_name] = {}
                             counters[space_name].len = space:len() or 0
-                            counters[space_name].size = space:bsize() or 0
+                            counters[space_name].bsize = space:bsize() or 0
 
                             counters[space_name].index = {}
                             for i = 0, #space.index do
@@ -50,7 +50,7 @@ local function get_space_size(spaces)
                                 if index ~= nil then
                                     counters[space_name].index[i] = {}
                                     counters[space_name].index[i].len = index:len() or 0
-                                    counters[space_name].index[i].size = index:bsize() or 0
+                                    counters[space_name].index[i].bsize = index:bsize() or 0
                                 end
                             end
                         else
@@ -74,15 +74,15 @@ local function get_space_size(spaces)
                     if res[space_name] then
                         counters[space_name] = counters[space_name] or {}
                         counters[space_name].len = (counters[space_name].len or 0) + (res[space_name].len or 0)
-                        counters[space_name].size = (counters[space_name].size or 0) + (res[space_name].size or 0)
+                        counters[space_name].bsize = (counters[space_name].bsize or 0) + (res[space_name].bsize or 0)
 
                         counters[space_name].index =  counters[space_name].index or {}
                         for i = 0, #box.space[space_name].index do
                             counters[space_name].index[i] = counters[space_name].index[i] or {}
                             counters[space_name].index[i].len =
                             (counters[space_name].index[i].len or 0) + (res[space_name].index[i].len or 0)
-                            counters[space_name].index[i].size =
-                            (counters[space_name].index[i].size or 0) + (res[space_name].index[i].size or 0)
+                            counters[space_name].index[i].bsize =
+                            (counters[space_name].index[i].bsize or 0) + (res[space_name].index[i].bsize or 0)
                         end
 
                     end
@@ -96,7 +96,7 @@ local function get_space_size(spaces)
             return true
         end)
         f:set_joinable(true)
-        f:name(uid, {truncate=true})
+        f:name(uid, { truncate=true })
         table.insert(fibers, f)
         fiber.yield()
     end
@@ -112,8 +112,8 @@ local function get_space_size(spaces)
     end
 end
 
-local function space_get(_, args, _)
-    checks('?', {name = 'table'}, '?')
+local function space_info(_, args)
+    checks('?', { name = 'table' })
     local spaces = args.name
     local schema = ddl.get_schema()
 
@@ -123,7 +123,7 @@ local function space_get(_, args, _)
         spaces = list_spaces(schema)
     end
 
-    local spaces_size = get_space_size(spaces)
+    local spaces_size, remote_errors = _get_space_size(spaces)
 
     for _,space_name in pairs(spaces) do
         local space = {}
@@ -133,7 +133,7 @@ local function space_get(_, args, _)
         end
 
         space.format = box.space[space_name]:format()
-        space.size = spaces_size[space_name].size or 0
+        space.bsize = spaces_size[space_name].bsize or 0
         space.len = spaces_size[space_name].len or 0
         space.field_count = #space.format
 
@@ -145,7 +145,7 @@ local function space_get(_, args, _)
                spaces_size[space_name].index[i] then
                 index.id = i
                 index.len = spaces_size[space_name].index[i].len or 0
-                index.size = spaces_size[space_name].index[i].size or 0
+                index.bsize = spaces_size[space_name].index[i].bsize or 0
                 table.insert(space.index, index)
             end
         end
@@ -156,87 +156,104 @@ local function space_get(_, args, _)
                 table.insert(space.ck_constraint, v)
             end
         end
+
         table.insert(res, space)
     end
 
-    return res
+    return res, remote_errors
 end
 
--- local function _space_get(space_name)
---     local space = {}
+local function space_drop(_, args)
+    checks('?', { name = 'string' }, '?')
+    local space = args.name
+    local fibers = {}
+    local remote_errors = {}
 
---     for k, v in pairs(box.space[space_name]) do
---         if type(v) ~= 'table' then space[k] = v end
---     end
+    local shards, err = vshard.router.routeall()
+    if err ~= nil then
+        error(err)
+    end
 
---     space.format = box.space[space_name]:format()
+    for uid, replica in pairs(shards) do
+        local f = fiber.new(function()
+            local ok, res, eval_err = pcall(function()
+                return replica.master.conn:eval([[
+                    local space = box.space[...]
+                    if space then
+                        return box.space[space]:drop()
+                    end
+                ]], {space}, {timeout = 30})
+            end)
 
---     space.index = {}
---     for i = 0, #box.space[space_name].index do
---         local index = box.space[space_name].index[i]
---         if index ~= nil then
---             index.id = i
---             table.insert(space.index, index)
---         end
---     end
+            if next(eval_err) then
+                table.insert(remote_errors, eval_err)
+            end
 
---     space.ck_constraint = {}
---     if box.space[space_name].ck_constraint then
---         for _, v in pairs(box.space[space_name].ck_constraint) do
---             table.insert(space.ck_constraint, v)
---         end
---     end
+            return true
+        end)
+        f:set_joinable(true)
+        f:name(uid, { truncate=true })
+        table.insert(fibers, f)
+        fiber.yield()
+    end
 
---     return space
--- end
+    for _, f in pairs(fibers) do
+        f:join()
+    end
 
--- local function _space_remove_by_id(space_id)
---     checks('number')
+    if next(remote_errors) then
+        return nil, remote_errors
+    else
+        return true
+    end
+end
 
---     local space = _space_get(box.space['_space']:select(space_id)[1][3])
+local function space_truncate(_, args)
+    checks('?', { name = 'string' })
+    local space = args.name
+    local fibers = {}
+    local remote_errors = {}
 
---     log.info(space)
---     local ok, err = pcall(box.schema.space.drop, space_id)
+    local shards, err = vshard.router.routeall()
+    if err ~= nil then
+        error(err)
+    end
 
---     if ok then
---         return space
---     else
---         return nil,
---                e_space_api:new('space id=%s delete error: %s', space_id, err)
---     end
--- end
+    for uid, replica in pairs(shards) do
+        local f = fiber.new(function()
+            local ok, res, eval_err = pcall(function()
+                return replica.master.conn:eval([[
+                    local space = box.space[...]
+                    if space then
+                        space:truncate()
+                        -- counters[space_name].len = space:len() or 0
+                        -- counters[space_name].bsize = space:bsize() or 0
+                    end
+                ]], {space}, {timeout = 30})
+            end)
 
--- local function _space_remove_by_name(space_name)
---     checks('string')
+            if next(eval_err) then
+                table.insert(remote_errors, eval_err)
+            end
 
---     if box.space[space_name] then
---         local space_id = box.space[space_name].id
---         return _space_remove_by_id(space_id)
---     else
---         return nil, e_space_api:new("space %s doesn't exist", space_name)
---     end
--- end
+            return true
+        end)
+        f:set_joinable(true)
+        f:name(uid, { truncate=true })
+        table.insert(fibers, f)
+        fiber.yield()
+    end
 
--- local function space_remove(args)
---     local space_name = args.name
---     local space_id = tonumber(args.id)
+    for _, f in pairs(fibers) do
+        f:join()
+    end
 
---     -- if both space name and space id is provided - return an error
---     if (space_name and space_id) then
---         local err = e_space_api:new('Both space name and space id is provided in request')
---         return nil, err
---     end
-
---     if space_name and space_name ~= '' then
---         return _space_remove_by_name(space_name)
---     end
-
---     if space_id and space_id ~= '' then
---         return _space_remove_by_id(space_id)
---     end
---     local err = e_space_api:new('No space name nor space id is provided in request')
---     return nil, err
--- end
+    if next(remote_errors) then
+        return nil, remote_errors
+    else
+        return true
+    end
+end
 
 -- local function space_add(args)
 --     local space_name = args.name
@@ -320,8 +337,9 @@ end
 -- end
 
 return {
-    space_get = space_get,
-    -- space_remove = space_remove,
+    space_info = space_info,
+    space_drop = space_drop,
+    space_truncate = space_truncate,
     -- space_add = space_add,
     list_spaces = list_spaces,
 }

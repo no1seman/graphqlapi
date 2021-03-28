@@ -1,119 +1,577 @@
+local checks = require('checks')
 local operations = require('graphqlapi.operations')
 local types = require('graphqlapi.types')
 local spaceapi = require('graphqlapi.spaceapi')
+local utils = require('graphqlapi.utils')
 
-local function space_query_types_init()
+local vars = require('graphqlapi.vars').new('graphqlapi.helpers')
+
+vars:new('helpers', {
+    ['space_info'] = {
+        types = {
+            'SpaceFieldType',
+            'SpaceEngine',
+            'SpaceIndexType',
+            'SpaceIndexDimension',
+            'SpaceField',
+            'SpaceIndexPart',
+            'SpaceIndex',
+            'SpaceCkConstraint',
+            'SpaceInfo',
+        },
+    },
+    ['space_truncate'] = {
+        types = {},
+    },
+    ['space_drop'] = {
+        types = {},
+    },
+    ['space_count'] = {
+        types = {},
+    },
+    ['space_add'] = {
+        types = {
+            'SpaceFieldType',
+            'SpaceEngine',
+            'SpaceIndexType',
+            'SpaceInfo',
+            'SpaceFieldInput',
+            'SpaceIndexPartInput',
+            'SpaceIndexInput',
+            'SpaceCkConstraintInput',
+        },
+    },
+    ['space_update'] = {
+        types = {
+            'SpaceFieldType',
+            'SpaceEngine',
+            'SpaceIndexType',
+            'SpaceInfo',
+            'SpaceFieldInput',
+            'SpaceIndexPartInput',
+            'SpaceIndexInput',
+            'SpaceCkConstraintInput',
+        },
+    }
+})
+
+local function space_types()
+    local type_list = {}
+
+    for _, value in pairs(vars.helpers) do
+        if value.enabled then
+            type_list = utils.merge(type_list, value.types)
+        end
+    end
+
+    if #type_list == 0 then return end
+
+    if utils.value_in('SpaceFieldType', type_list) then
+        if not types.SpaceFieldType then
+            types.add_type(types.enum({
+                name = 'SpaceFieldType',
+                description = 'Space field type enum',
+                values = {
+                    unsigned = 'unsigned',
+                    string = 'string',
+                    varbinary = 'varbinary',
+                    integer = 'integer',
+                    number = 'number',
+                    double = 'double',
+                    boolean = 'boolean',
+                    decimal = 'decimal',
+                    map = 'map',
+                    array = 'array',
+                    scalar = 'scalar'
+                }
+            }), 'SpaceFieldType')
+        end
+    else
+        types.remove_type('SpaceFieldType')
+    end
+
+    if utils.value_in('SpaceEngine', type_list) then
+        if not types.SpaceEngine then
+            types.add_type(types.enum({
+                name = 'SpaceEngine',
+                description = 'Space engine',
+                values = {
+                    memtx = 'memtx',
+                    vinyl = 'vinyl',
+                    blackhole = 'blackhole',
+                    sysview = 'sysview',
+                    service = 'service'
+                }
+            }), 'SpaceEngine')
+        end
+    else
+        types.remove_type('SpaceEngine')
+    end
+
+    if utils.value_in('SpaceIndexType', type_list) then
+        if not types.SpaceIndexType then
+            types.add_type(types.enum({
+                name = 'SpaceIndexType',
+                description = 'Space index type',
+                values = {
+                    tree = 'TREE',
+                    hash = 'HASH',
+                    bitset = 'BITSET',
+                    rtree = 'RTREE'
+                }
+            }), 'SpaceIndexType')
+        end
+    else
+        types.remove_type('SpaceIndexType')
+    end
+
+    if utils.value_in('SpaceIndexDimension', type_list) then
+        if not types.SpaceIndexDimension then
+            types.add_type(types.enum({
+                name = 'SpaceIndexDimension',
+                description = 'Space index dimension',
+                values = {euclid = 'euclid', manhattan = 'manhattan'}
+            }), 'SpaceIndexDimension')
+        end
+    else
+        types.remove_type('SpaceIndexDimension')
+    end
+
+    if utils.value_in('SpaceField', type_list) then
+        if not types.SpaceField then
+            types.add_type(types.object({
+                name = 'SpaceField',
+                description = 'Space field',
+                fields = {
+                    name = types.string,
+                    type = types.SpaceFieldType,
+                    is_nullable = types.boolean
+                }
+            }), 'SpaceField')
+        end
+    else
+        types.remove_type('SpaceField')
+    end
+
+    if utils.value_in('SpaceIndexPart', type_list) then
+        if not types.SpaceIndexPart then
+            types.add_type(types.object({
+                name = 'SpaceIndexPart',
+                description = 'Space index part',
+                fields = {
+                    type = types.SpaceFieldType,
+                    fieldno = types.int,
+                    is_nullable = types.boolean
+                }
+            }), 'SpaceIndexPart')
+        end
+    else
+        types.remove_type('SpaceIndexPart')
+    end
+
+    if utils.value_in('SpaceIndex', type_list) then
+        if not types.SpaceIndex then
+            types.add_type(types.object({
+                name = 'SpaceIndex',
+                description = 'Space Index',
+                fields = {
+                    name = types.string,
+                    type = types.SpaceIndexType,
+                    id = types.int,
+                    unique = types.boolean,
+                    if_not_exists = types.boolean,
+                    parts = types.list(types.SpaceIndexPart),
+                    dimension = types.int,
+                    distance = types.SpaceIndexDimension,
+                    bloom_fpr = types.float,
+                    page_size = types.int,
+                    range_size = types.int,
+                    run_count_per_level = types.int,
+                    run_size_ratio = types.float,
+                    bsize = types.long,
+                    len = types.long
+                }
+            }), 'SpaceIndex')
+        end
+    else
+        types.remove_type('SpaceIndex')
+    end
+
+    if utils.value_in('SpaceCkConstraint', type_list) then
+        if not types.SpaceCkConstraint then
+            types.add_type(types.object({
+                name = 'SpaceCkConstraint',
+                description = 'Space check constraint',
+                fields = {
+                    name = types.string,
+                    is_enabled = types.boolean,
+                    space_id = types.int,
+                    expr = types.string
+                }
+            }), 'SpaceCkConstraint')
+        end
+    else
+        types.remove_type('SpaceCkConstraint')
+    end
+
+    if utils.value_in('SpaceInfo', type_list) then
+        if not types.SpaceInfo then
+            types.add_type(types.object({
+                name = 'SpaceInfo',
+                description = 'Space info',
+                fields = {
+                    format = types.list(types.SpaceField),
+                    id = types.int,
+                    name = types.string,
+                    engine = types.SpaceEngine,
+                    field_count = types.int,
+                    temporary = types.boolean,
+                    is_local = types.boolean,
+                    enabled = types.boolean,
+                    bsize = types.long,
+                    len = types.long,
+                    user = types.string,
+                    index = types.list(types.SpaceIndex),
+                    ck_constraint = types.list(types.SpaceCkConstraint),
+                }
+            }), 'SpaceInfo')
+        end
+    else
+        types.remove_type('SpaceInfo')
+    end
+
+    if utils.value_in('SpaceFieldInput', type_list) then
+        if not types.SpaceFieldInput then
+            types.add_type(types.inputObject({
+                name = 'SpaceFieldInput',
+                description = 'Space field',
+                fields = {
+                    name = types.string,
+                    type = types.SpaceFieldType,
+                    is_nullable = types.boolean
+                }
+            }), 'SpaceFieldInput')
+        end
+    else
+        types.remove_type('SpaceFieldInput')
+    end
+
+    if utils.value_in('SpaceIndexPartInput', type_list) then
+        if not types.SpaceIndexPartInput then
+            types.add_type(types.inputObject({
+                name = 'SpaceIndexPartInput',
+                description = 'Space index part',
+                fields = {
+                    type = types.SpaceFieldInput,
+                    fieldno = types.int,
+                    is_nullable = types.boolean
+                }
+            }), 'SpaceIndexPartInput')
+        end
+    else
+        types.remove_type('SpaceIndexPartInput')
+    end
+
+    if utils.value_in('SpaceIndexInput', type_list) then
+        if not types.SpaceIndexInput then
+        types.add_type(types.inputObject({
+            name = 'SpaceIndexInput',
+            description = 'Space Index',
+            fields = {
+                name = types.string,
+                type = types.SpaceIndexType,
+                id = types.int,
+                unique = types.boolean,
+                if_not_exists = types.boolean,
+                parts = types.list(types.SpaceIndexPartInput),
+                dimension = types.int,
+                distance = types.SpaceIndexDimension,
+                bloom_fpr = types.float,
+                page_size = types.int,
+                range_size = types.int,
+                run_count_per_level = types.int,
+                run_size_ratio = types.float
+            }
+        }), 'SpaceIndexInput')
+        end
+    else
+        types.remove_type('SpaceIndexInput')
+    end
+
+    if utils.value_in('SpaceCkConstraintInput', type_list) then
+        if not types.SpaceCkConstraintInput then
+        types.add_type(types.inputObject({
+            name = 'SpaceCkConstraintInput',
+            description = 'Space check constraint',
+            fields = {
+                name = types.string,
+                is_enabled = types.boolean,
+                space_id = types.int,
+                expr = types.string
+            }
+        }), 'SpaceCkConstraintInput')
+        end
+    else
+        types.remove_type('SpaceCkConstraintInput')
+    end
+end
+
+-- space_info section
+local function space_info_list_remove()
+    if types.SpaceInfoNames then
+        types.remove_type('SpaceInfoNames')
+    end
+end
+
+local function space_info_list()
+    local exist = spaceapi.list_spaces()
+
+    local list_spaces = {}
+    for _, space in pairs(exist) do
+        if (utils.value_in(space, vars.helpers.space_info.include) or #vars.helpers.space_info.include == 0) and
+            not utils.value_in(space, vars.helpers.space_info.exclude) then
+            list_spaces[space]=space
+        end
+    end
+
+    space_info_list_remove()
+
     types.add_type(types.enum({
-        name = 'SpaceFieldType',
-        description = 'Space field type enum',
-        values = {
-            unsigned = 'unsigned',
-            string = 'string',
-            varbinary = 'varbinary',
-            integer = 'integer',
-            number = 'number',
-            double = 'double',
-            boolean = 'boolean',
-            decimal = 'decimal',
-            map = 'map',
-            array = 'array',
-            scalar = 'scalar'
-        }
-    }), 'SpaceFieldType')
+        name = 'SpaceInfoNames',
+        description = 'Spaces info name list enum',
+        values = list_spaces
+    }), 'SpaceInfoNames')
+end
+
+local function space_info_init(include, exclude)
+    checks('?table', '?table')
+    include = include or {}
+    exclude = exclude or {}
+    assert(utils.is_string_array(include))
+    assert(utils.is_string_array(exclude))
+
+    vars.helpers.space_info.include = include
+    vars.helpers.space_info.exclude = exclude
+
+    vars.helpers.space_info.enabled = true
+    space_types()
+    space_info_list()
+
+    operations.add_query({
+        name = 'space_info',
+        doc = 'Get space(s) definition',
+        args = {
+            name = types.list(types.SpaceInfoNames)
+        },
+        kind = types.list(types.SpaceInfo),
+        callback = 'graphqlapi.spaceapi.space_info'
+    })
+end
+
+local function space_info_remove()
+    operations.remove_query('space_info')
+    space_info_list_remove()
+    vars.helpers.space_info.enabled = false
+    space_types()
+end
+
+-- space_drop section
+local function space_drop_list_remove()
+    if types.SpaceDropNames then
+        types.remove_type('SpaceDropNames')
+    end
+end
+
+local function space_drop_list()
+    local exist = spaceapi.list_spaces()
+
+    local list_spaces = {}
+    for _, space in pairs(exist) do
+        if (utils.value_in(space, vars.helpers.space_drop.include) or #vars.helpers.space_drop.include == 0) and
+            not utils.value_in(space, vars.helpers.space_drop.exclude) then
+            list_spaces[space]=space
+        end
+    end
+
+    space_drop_list_remove()
 
     types.add_type(types.enum({
-        name = 'SpaceEngine',
-        description = 'Space engine',
-        values = {
-            memtx = 'memtx',
-            vinyl = 'vinyl',
-            blackhole = 'blackhole',
-            sysview = 'sysview',
-            service = 'service'
-        }
-    }), 'SpaceEngine')
+        name = 'SpaceDropNames',
+        description = 'Spaces drop name list enum',
+        values = list_spaces
+    }), 'SpaceDropNames')
+end
+
+local function space_drop_init(include, exclude)
+    checks('?table', '?table')
+    include = include or {}
+    exclude = exclude or {}
+    assert(utils.is_string_array(include))
+    assert(utils.is_string_array(exclude))
+
+    vars.helpers.space_drop.include = include
+    vars.helpers.space_drop.exclude = exclude
+
+    vars.helpers.space_drop.enabled = true
+    space_types()
+    space_drop_list()
+    operations.add_mutation({
+        name = 'space_drop',
+        doc = 'Drop space',
+        args = {
+            name = types.SpaceDropNames,
+        },
+        kind = types.SpaceInfo,
+        callback = 'graphqlapi.spaceapi.space_drop'
+    })
+end
+
+local function space_drop_remove()
+    operations.remove_query('space_drop')
+    space_drop_list_remove()
+    vars.helpers.space_drop.enabled = false
+    space_types()
+end
+
+-- space_truncate section
+local function space_truncate_list_remove()
+    if types.SpaceTruncateNames then
+        types.remove_type('SpaceTruncateNames')
+    end
+end
+
+local function space_truncate_list()
+    local exist = spaceapi.list_spaces()
+
+    local list_spaces = {}
+    for _, space in pairs(exist) do
+        if (utils.value_in(space, vars.helpers.space_truncate.include) or #vars.helpers.space_truncate.include == 0) and
+            not utils.value_in(space, vars.helpers.space_truncate.exclude) then
+            list_spaces[space]=space
+        end
+    end
+
+    space_truncate_list_remove()
 
     types.add_type(types.enum({
-        name = 'SpaceIndexType',
-        description = 'Space index type',
-        values = {
-            tree = 'TREE',
-            hash = 'HASH',
-            bitset = 'BITSET',
-            rtree = 'RTREE'
-        }
-    }), 'SpaceIndexType')
+        name = 'SpaceTruncateNames',
+        description = 'Spaces truncate name list enum',
+        values = list_spaces
+    }), 'SpaceTruncateNames')
+end
+
+local function space_truncate_init(include, exclude)
+    checks('?table', '?table')
+    include = include or {}
+    exclude = exclude or {}
+    assert(utils.is_string_array(include))
+    assert(utils.is_string_array(exclude))
+
+    vars.helpers.space_truncate.include = include
+    vars.helpers.space_truncate.exclude = exclude
+
+    vars.helpers.space_truncate.enabled = true
+    space_types()
+    space_truncate_list()
+
+    operations.add_mutation({
+        name = 'space_truncate',
+        doc = 'Truncate space',
+        args = {
+            name = types.SpaceTruncateNames,
+        },
+        kind = types.SpaceInfo,
+        callback = 'graphqlapi.spaceapi.space_truncate'
+    })
+end
+
+local function space_truncate_remove()
+    operations.remove_query('space_truncate')
+    space_truncate_list_remove()
+    vars.helpers.space_truncate.enabled = false
+    space_types()
+end
+
+-- space_update
+local function space_update_list_remove()
+    if types.SpaceUpdateNames then
+        types.remove_type('SpaceUpdateNames')
+    end
+end
+
+local function space_update_list()
+    local exist = spaceapi.list_spaces()
+
+    local list_spaces = {}
+    for _, space in pairs(exist) do
+        if (utils.value_in(space, vars.helpers.space_update.include) or #vars.helpers.space_update.include == 0) and
+            not utils.value_in(space, vars.helpers.space_update.exclude) then
+            list_spaces[space]=space
+        end
+    end
+
+    space_update_list_remove()
 
     types.add_type(types.enum({
-        name = 'SpaceIndexDimension',
-        description = 'Space index dimension',
-        values = {euclid = 'euclid', manhattan = 'manhattan'}
-    }), 'SpaceIndexDimension')
+        name = 'SpaceUpdateNames',
+        description = 'Spaces update name list enum',
+        values = list_spaces
+    }), 'SpaceUpdateNames')
+end
 
-    types.add_type(types.object({
-        name = 'SpaceField',
-        description = 'Space field',
-        fields = {
-            name = types.string,
-            type = types.SpaceFieldType,
-            is_nullable = types.boolean
-        }
-    }), 'SpaceField')
+local function space_update_init(include, exclude)
+    checks('?table', '?table')
+    include = include or {}
+    exclude = exclude or {}
+    assert(utils.is_string_array(include))
+    assert(utils.is_string_array(exclude))
 
-    types.add_type(types.object({
-        name = 'SpaceIndexPart',
-        description = 'Space index part',
-        fields = {
-            type = types.SpaceFieldType,
-            fieldno = types.int,
-            is_nullable = types.boolean
-        }
-    }), 'SpaceIndexPart')
+    vars.helpers.space_update.include = include
+    vars.helpers.space_update.exclude = exclude
 
-    types.add_type(types.object({
-        name = 'SpaceIndex',
-        description = 'Space Index',
-        fields = {
-            name = types.string,
-            type = types.SpaceIndexType,
+    vars.helpers.space_update.enabled = true
+    space_types()
+    space_update_list()
+
+    operations.add_mutation({
+        name = 'space_update',
+        doc = 'Update existing space',
+        args = {
+            format = types.list(types.SpaceFieldInput),
             id = types.int,
-            unique = types.boolean,
-            if_not_exists = types.boolean,
-            parts = types.list(types.SpaceIndexPart),
-            dimension = types.int,
-            distance = types.SpaceIndexDimension,
-            bloom_fpr = types.float,
-            page_size = types.int,
-            range_size = types.int,
-            run_count_per_level = types.int,
-            run_size_ratio = types.float,
-            size = types.long,
-            len = types.long
-        }
-    }), 'SpaceIndex')
+            name = types.SpaceUpdateNames,
+            engine = types.SpaceEngine,
+            field_count = types.int,
+            temporary = types.boolean,
+            is_local = types.boolean,
+            enabled = types.boolean,
+            bsize = types.int,
+            user = types.string,
+            index = types.list(types.SpaceIndexInput),
+            ck_constraint = types.list(types.SpaceCkConstraintInput)
+        },
+        kind = types.SpaceInfo,
+        callback = 'graphqlapi.spaceapi.space_update'
+    })
+end
 
-    types.add_type(types.object({
-        name = 'SpaceCkConstraint',
-        description = 'Space check constraint',
-        fields = {
-            name = types.string,
-            is_enabled = types.boolean,
-            space_id = types.int,
-            expr = types.string
-        }
-    }), 'SpaceCkConstraint')
+local function space_update_remove()
+    operations.remove_query('space_update')
+    space_update_list_remove()
+    vars.helpers.space_update.enabled = false
+    space_types()
+end
 
-    types.add_type(types.enum({
-        name = 'SpaceName',
-        description = 'Spaces name enum',
-        values = spaceapi.list_spaces()
-    }), 'SpaceName')
+-- space_add section
+local function space_add_init()
+    vars.helpers.space_add.enabled = true
+    space_types()
 
-    types.add_type(types.object({
-        name = 'Space',
-        description = 'Space',
-        fields = {
-            format = types.list(types.SpaceField),
+    operations.add_mutation({
+        name = 'space_add',
+        doc = 'Add new space',
+        args = {
+            format = types.list(types.SpaceFieldInput),
             id = types.int,
             name = types.string,
             engine = types.SpaceEngine,
@@ -121,167 +579,64 @@ local function space_query_types_init()
             temporary = types.boolean,
             is_local = types.boolean,
             enabled = types.boolean,
-            size = types.long,
-            len = types.long,
+            bsize = types.int,
             user = types.string,
-            index = types.list(types.SpaceIndex),
-            ck_constraint = types.list(types.SpaceCkConstraint)
-        }
-    }), 'Space')
-end
-
-local function space_mutation_types_init()
-    types.add_type(types.inputObject({
-        name = 'SpaceFieldInput',
-        description = 'Space field',
-        fields = {
-            name = types.string,
-            type = types.SpaceFieldType,
-            is_nullable = types.boolean
-        }
-    }), 'SpaceFieldInput')
-
-    types.add_type(types.inputObject({
-        name = 'SpaceIndexPartInput',
-        description = 'Space index part',
-        fields = {
-            type = types.SpaceFieldInput,
-            fieldno = types.int,
-            is_nullable = types.boolean
-        }
-    }), 'SpaceIndexPartInput')
-
-    types.add_type(types.inputObject({
-        name = 'SpaceIndexInput',
-        description = 'Space Index',
-        fields = {
-            name = types.string,
-            type = types.SpaceIndexType,
-            id = types.int,
-            unique = types.boolean,
-            if_not_exists = types.boolean,
-            parts = types.list(types.SpaceIndexPartInput),
-            dimension = types.int,
-            distance = types.SpaceIndexDimension,
-            bloom_fpr = types.float,
-            page_size = types.int,
-            range_size = types.int,
-            run_count_per_level = types.int,
-            run_size_ratio = types.float
-        }
-    }), 'SpaceIndexInput')
-
-    types.add_type(types.inputObject({
-        name = 'SpaceCkConstraintInput',
-        description = 'Space check constraint',
-        fields = {
-            name = types.string,
-            is_enabled = types.boolean,
-            space_id = types.int,
-            expr = types.string
-        }
-    }), 'SpaceCkConstraintInput')
-
-end
-
-local function space_query_init()
-    --checks('?string')
-    operations.add_query({
-        name = 'space',
-        doc = 'Get space(s) definition',
-        args = {
-            name = types.list(types.SpaceName)
+            index = types.list(types.SpaceIndexInput),
+            ck_constraint = types.list(types.SpaceCkConstraintInput)
         },
-        kind = types.list(types.Space),
-        callback = 'graphqlapi.spaceapi.space_get'
+        kind = types.SpaceInfo,
+        callback = 'graphqlapi.spaceapi.space_add'
     })
-    -- if prefix then
-    --     vars.space_callbacks[prefix..'.space'] = prefix..'.space'
-    -- else
-    --     vars.space_callbacks['space'] = 'space'
-    -- end
-    --require('log').info(require('json').encode(types._list()))
 end
 
-local function space_mutation_types_remove()
-    types.remove_type('SpaceFieldInput')
-    types.remove_type('SpaceIndexPartInput')
-    types.remove_type('SpaceIndexInput')
-    types.remove_type('SpaceCkConstraintInput')
+local function space_add_remove()
+    operations.remove_query('space_add')
+    vars.helpers.space_add.enabled = false
+    space_types()
 end
-
-local function space_query_types_remove()
-    types.remove_type('SpaceFieldType')
-    types.remove_type('SpaceEngine')
-    types.remove_type('SpaceIndexType')
-    types.remove_type('SpaceIndexDimension')
-    types.remove_type('SpaceField')
-    types.remove_type('SpaceIndexPart')
-    types.remove_type('SpaceIndex')
-    types.remove_type('SpaceCkConstraint')
-    types.remove_type('SpaceName')
-    types.remove_type('Space')
-end
-
-local function space_query_remove()
-    operations.remove_query('space')
-end
-
--- local function space_remove(_, args, _) return spaceapi:space_remove(args) end
-
--- local function space_add(_, args) return spaceapi:space_add(args) end
 
 local function init()
-    -- space_remove - remove space
-    -- space_truncate - truncate space data
-    -- space_count - count by indexed fields
-    -- space_add - add_new space
-    -- space_update - update existing space
-
-    -- graphqlapi.add_mutation({
-    --     name = 'space_remove',
-    --     doc = 'Remove space',
-    --     args = {
-    --         name = types.string,
-    --     },
-    --     kind = space,
-    --     callback = module_name .. '.space_remove'
-    -- })
-
-    -- graphqlapi.add_mutation({
-    --     name = 'space_add',
-    --     doc = 'Add new space',
-    --     args = {
-    --         format = types.list(space_field_input),
-    --         id = types.int,
-    --         name = types.string,
-    --         engine = space_engine,
-    --         field_count = types.int,
-    --         temporary = types.boolean,
-    --         is_local = types.boolean,
-    --         enabled = types.boolean,
-    --         size = types.int,
-    --         user = types.string,
-    --         index = types.list(space_index_input),
-    --         ck_constraint = types.list(space_ck_constraint_input)
-    --     },
-    --     kind = space,
-    --     callback = module_name .. '.space_add'
-    -- })
+    space_info_init()
+    space_drop_init()
+    space_truncate_init()
+    space_update_init()
+    space_add_init()
 end
 
 local function stop()
-    space_query_types_remove()
-    space_query_remove()
+    space_info_remove()
+    space_drop_remove()
+    space_truncate_remove()
+    space_update_remove()
+    space_add_remove()
+    vars.helpers = nil
 end
 
 return {
     init = init,
     stop = stop,
-    space_query_types_init = space_query_types_init,
-    space_query_types_remove = space_query_types_remove,
-    space_mutation_types_init = space_mutation_types_init,
-    space_mutation_types_remove = space_mutation_types_remove,
-    space_query_init = space_query_init,
-    space_query_remove = space_query_remove,
+
+    -- space_info
+    space_info_init = space_info_init,
+    space_info_list = space_info_list,
+    space_info_remove = space_info_remove,
+
+    -- space_drop
+    space_drop_init = space_drop_init,
+    space_drop_list = space_drop_list,
+    space_drop_remove = space_drop_remove,
+
+    -- space_truncate
+    space_truncate_init = space_truncate_init,
+    space_truncate_list = space_truncate_list,
+    space_truncate_remove = space_truncate_remove,
+
+    -- space_update
+    space_update_init = space_update_init,
+    space_update_list = space_update_list,
+    space_update_remove = space_update_remove,
+
+    -- space_add
+    space_add_init = space_add_init,
+    space_add_remove = space_add_remove,
 }
