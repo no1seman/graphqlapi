@@ -4,6 +4,8 @@ local types = require('graphqlapi.types')
 local spaceapi = require('graphqlapi.spaceapi')
 local utils = require('graphqlapi.utils')
 
+local log = require('log')
+
 local vars = require('graphqlapi.vars').new('graphqlapi.helpers')
 
 vars:new('helpers', {
@@ -325,7 +327,6 @@ end
 
 local function space_info_list()
     local exist = spaceapi.list_spaces()
-
     local list_spaces = {}
     for _, space in pairs(exist) do
         if (utils.value_in(space, vars.helpers.space_info.include) or #vars.helpers.space_info.include == 0) and
@@ -333,9 +334,7 @@ local function space_info_list()
             list_spaces[space]=space
         end
     end
-
     space_info_list_remove()
-
     types.add_type(types.enum({
         name = 'SpaceInfoNames',
         description = 'Spaces info name list enum',
@@ -441,6 +440,7 @@ local function space_truncate_list_remove()
 end
 
 local function space_truncate_list()
+    log.info('space_truncate_list():enter')
     local exist = spaceapi.list_spaces()
 
     local list_spaces = {}
@@ -458,6 +458,7 @@ local function space_truncate_list()
         description = 'Spaces truncate name list enum',
         values = list_spaces
     }), 'SpaceTruncateNames')
+    log.info('space_truncate_list():exit')
 end
 
 local function space_truncate_init(include, exclude)
@@ -500,6 +501,7 @@ local function space_update_list_remove()
 end
 
 local function space_update_list()
+    log.info('space_update_list():enter')
     local exist = spaceapi.list_spaces()
 
     local list_spaces = {}
@@ -517,6 +519,7 @@ local function space_update_list()
         description = 'Spaces update name list enum',
         values = list_spaces
     }), 'SpaceUpdateNames')
+    log.info('space_update_list():exit')
 end
 
 local function space_update_init(include, exclude)
@@ -595,6 +598,13 @@ local function space_add_remove()
     space_types()
 end
 
+local function update_lists()
+    space_info_list()
+    space_drop_list()
+    space_truncate_list()
+    space_update_list()
+end
+
 local function init()
     space_info_init()
     space_drop_init()
@@ -615,6 +625,7 @@ end
 return {
     init = init,
     stop = stop,
+    update_lists = update_lists,
 
     -- space_info
     space_info_init = space_info_init,

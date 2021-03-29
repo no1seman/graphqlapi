@@ -43,6 +43,7 @@ local function load_model(filename)
         if res then
             model.filename = filename
             model.name = filename:match("^(.+)%.lua$")
+            model.spaces = model.spaces or {}
             local modules_after = list_modules()
             utils.diff(modules_before, modules_after, vars.loaded)
             return model

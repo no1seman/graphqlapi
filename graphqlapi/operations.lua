@@ -18,7 +18,7 @@ local function funcall_wrap(fun_name, operation, field_name)
     return function(...)
         for trigger, _ in pairs(vars.on_resolve_triggers) do
             local ok, err = trigger(operation, field_name)
-            if not ok then return nil, err end
+            if ok == false then return nil, err end
         end
 
         local res, err = funcall.call(fun_name, ...)

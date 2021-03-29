@@ -89,7 +89,7 @@ local function _get_space_size(spaces)
                 end
             end
 
-            if next(eval_err) then
+            if eval_err and #eval_err > 0 then
                 table.insert(remote_errors, eval_err)
             end
 
@@ -105,7 +105,7 @@ local function _get_space_size(spaces)
         f:join()
     end
 
-    if next(remote_errors) then
+    if remote_errors and #remote_errors > 0 then
         return counters, remote_errors
     else
         return counters
@@ -119,7 +119,7 @@ local function space_info(_, args)
 
     local res = {}
 
-    if not next(spaces) then
+    if not next(spaces or {}) then
         spaces = list_spaces(schema)
     end
 
@@ -185,7 +185,7 @@ local function space_drop(_, args)
                 ]], {space}, {timeout = 30})
             end)
 
-            if next(eval_err) then
+            if eval_err and #eval_err > 0 then
                 table.insert(remote_errors, eval_err)
             end
 
@@ -201,7 +201,7 @@ local function space_drop(_, args)
         f:join()
     end
 
-    if next(remote_errors) then
+    if remote_errors and #remote_errors > 0 then
         return nil, remote_errors
     else
         return true
@@ -232,7 +232,7 @@ local function space_truncate(_, args)
                 ]], {space}, {timeout = 30})
             end)
 
-            if next(eval_err) then
+            if eval_err and #eval_err > 0 then
                 table.insert(remote_errors, eval_err)
             end
 
@@ -248,7 +248,7 @@ local function space_truncate(_, args)
         f:join()
     end
 
-    if next(remote_errors) then
+    if remote_errors and #remote_errors > 0 then
         return nil, remote_errors
     else
         return true

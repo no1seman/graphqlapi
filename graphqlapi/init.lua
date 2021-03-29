@@ -205,7 +205,7 @@ local function _execute_graphql(req)
         })
     end
 
-    if next(err) then
+    if err and #err > 0 then
         return http_finalize({
             data = data,
             errors = err,

@@ -2,6 +2,7 @@ local checks = require('checks')
 local log = require('log')
 
 local models = require('graphqlapi.models')
+local helpers = require('graphqlapi.helpers')
 
 local function set_trigger(trigger)
     checks('function')
@@ -22,16 +23,24 @@ local function remove_trigger(trigger)
 end
 
 local function space_trigger(old, new, sp, op) -- luacheck: no unused args
+    -- box.on_commit(function(iter)
+    --     log.info(require('json').encode(iter))
+    --     --require('ddl').get_schema()
+    -- end)
+
     if new ~= nil then
         -- Insert, Update, Upsert, Replace space
         local new_space = new:tomap({names_only = true})
+        log.info(require('json').encode(new_space))
         if next(new_space.format) and new_space.name then
             models.update_space_models(new_space.name)
         end
+        --helpers.update_lists()
     else
         -- Delete space
         local old_space = old:tomap({names_only = true})
         models.remove_model_by_space_name(old_space)
+        --helpers.update_lists()
     end
 end
 

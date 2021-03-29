@@ -88,7 +88,11 @@ end
 
 types.add_type = function(_type, type_name)
     checks('table', '?string')
-    types[type_name or _type.name] = _type
+    if type_name and type_name ~='' then
+        types[type_name] = _type
+    else
+        types[_type.name] = _type
+    end
 end
 
 types.remove_type = function (type_name)
