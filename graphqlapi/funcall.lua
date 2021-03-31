@@ -1,6 +1,8 @@
 local checks = require('checks')
 local errors = require('errors')
 local models = require('graphqlapi.models')
+local log = require('log')
+local json = require('json')
 
 local e_funcall = errors.new_class("Funcall failed")
 
@@ -32,7 +34,7 @@ local function call(function_name, ...)
         )
     end
 
-    local fun = models.get_func(mod_name, fun_name)
+    local fun = models.get_func(mod_path, mod_name, fun_name)
 
     if fun == nil then
         local mod

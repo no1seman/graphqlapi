@@ -1,8 +1,44 @@
 local checks = require('checks')
+local fiber = require('fiber')
 local log = require('log')
 
 local models = require('graphqlapi.models')
 local helpers = require('graphqlapi.helpers')
+local vars = require('graphqlapi.vars').new('graphqlapi.spaces')
+
+local CHANNEL_CAPACITY = 1000
+local UPDATE_TIMEOUT = 3
+
+vars:new('updater', nil)
+
+local function updater_init()
+    local channel = fiber.channel(CHANNEL_CAPACITY)
+    local updater_fiber = fiber.create(function()
+        while true do
+            fiber.testcancel()
+
+            local message = channel:get(UPDATE_TIMEOUT)
+
+            if message ~= nil and message.space and message.space.name then
+                if message.op == 'DELETE' then
+                    log.info('Updater fiber: delete space %s', message.space.name)
+                    helpers.update_lists()
+                    models.remove_model_by_space_name(message.space.name)
+                else
+                    log.info('Updater fiber: update space %s', message.space.name)
+                    helpers.update_lists()
+                    models.update_space_models(message.space.name)
+                end
+            end
+        end
+    end)
+
+    updater_fiber:name('gql_updater', {truncate = true})
+    vars.updater = {
+        fiber = updater_fiber,
+        channel = channel,
+    }
+end
 
 local function set_trigger(trigger)
     checks('function')
@@ -23,33 +59,42 @@ local function remove_trigger(trigger)
 end
 
 local function space_trigger(old, new, sp, op) -- luacheck: no unused args
-    -- box.on_commit(function(iter)
-    --     log.info(require('json').encode(iter))
-    --     --require('ddl').get_schema()
-    -- end)
-
     if new ~= nil then
         -- Insert, Update, Upsert, Replace space
         local new_space = new:tomap({names_only = true})
-        log.info(require('json').encode(new_space))
-        if next(new_space.format) and new_space.name then
-            models.update_space_models(new_space.name)
-        end
+        --log.info(require('json').encode(new_space))
+        -- if next(new_space.format) and new_space.name then
+        --     models.update_space_models(new_space.name)
+        -- end
         --helpers.update_lists()
+        if vars.updater and next(new_space.format) and new_space.name then
+            vars.updater.channel:put({space = new_space}, 0)
+        end
     else
         -- Delete space
         local old_space = old:tomap({names_only = true})
-        models.remove_model_by_space_name(old_space)
+        --models.remove_model_by_space_name(old_space)
         --helpers.update_lists()
+        if vars.updater then
+            vars.updater.channel:put({space = old_space, op = 'DELETE'}, 0)
+        end
     end
 end
 
 local function init()
+    updater_init()
     set_trigger(space_trigger)
 end
 
 local function stop()
     remove_trigger(space_trigger)
+    if vars.updater then
+        if vars.updater.fiber:status() ~= 'dead' then
+            vars.updater.fiber:cancel()
+        end
+        vars.updater.channel:close()
+        vars.updater = nil
+    end
 end
 
 return {

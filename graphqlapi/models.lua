@@ -8,6 +8,7 @@ local vars = require('graphqlapi.vars').new('graphqlapi.models')
 
 vars:new('models', {})
 vars:new('loaded', {})
+vars:new('dir_name', nil)
 
 local e_model_load = errors.new_class('Model load failed', { capture_stack = false })
 local e_model_assert = errors.new_class('Model check failed', { capture_stack = false })
@@ -42,7 +43,7 @@ local function load_model(filename)
         local res, assert_err = e_model_assert:pcall(assert_model, model)
         if res then
             model.filename = filename
-            model.name = filename:match("^(.+)%.lua$")
+            model.name = filename:match("^(.+)%.lua$"):gsub('/', '%.')
             model.spaces = model.spaces or {}
             local modules_after = list_modules()
             utils.diff(modules_before, modules_after, vars.loaded)
@@ -105,6 +106,7 @@ local function apply_model(model)
 end
 
 local function update_space_models(space_name)
+    log.info('update_space_models(%s)', space_name)
     for _, model in ipairs(vars.models) do
         for _, space in pairs(model.spaces) do
             if space == space_name and model.model ~= nil then
@@ -136,9 +138,22 @@ local function remove_all()
     vars.models = nil
 end
 
-local function get_func(mod_name, fun_name)
+local function get_func(mod_path, mod_name, fun_name)
     for _, model in ipairs(vars.models) do
-        if model.name == mod_name then
+        local parts = model.name:split('.')
+        local _mod_name
+        local _mod_path
+        for index, value in ipairs(parts) do
+            if index <= #parts-1 then
+                _mod_path = (_mod_path or '')..value
+                if index < #parts-1 then
+                    _mod_path = _mod_path .. '.'
+                end
+            else
+                _mod_name = value
+            end
+        end
+        if mod_path == _mod_path and _mod_name == mod_name then
             if model[fun_name] and type(model[fun_name]) then
                 return model[fun_name]
             else
@@ -150,6 +165,7 @@ local function get_func(mod_name, fun_name)
 end
 
 local function init(dir_name)
+    vars.dir_name = dir_name
     vars.models = load_models(dir_name)
     for _, model in ipairs(vars.models) do
         apply_model(model)
@@ -162,13 +178,14 @@ local function stop()
         print(v)
         package.loaded[v] = nil
     end
+    vars.dir_name = nil
     vars.loaded = nil
 end
 
 local function list_models()
     local models = {}
     for _, model in pairs(vars.models) do
-        table.insert(models, model.filename)
+        table.insert(models, model.name)
     end
     return models
 end

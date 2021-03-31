@@ -93,6 +93,7 @@ types.add_type = function(_type, type_name)
     else
         types[_type.name] = _type
     end
+    vars.schema_invalid = true
 end
 
 types.remove_type = function (type_name)
@@ -191,6 +192,15 @@ types.list_types = function()
         table.insert(type_list, _type)
     end
     return type_list
+end
+
+types.print = function(type_name, filename)
+    require('cartridge.utils').file_write(filename, require('json').encode(types[type_name], {
+        encode_use_tostring = true,
+        encode_deep_as_nil = true,
+        encode_max_depth = 5,
+        encode_invalid_as_nil = true,
+    }))
 end
 
 return types

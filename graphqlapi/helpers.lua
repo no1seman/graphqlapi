@@ -5,6 +5,7 @@ local spaceapi = require('graphqlapi.spaceapi')
 local utils = require('graphqlapi.utils')
 
 local log = require('log')
+local json = require('json')
 
 local vars = require('graphqlapi.vars').new('graphqlapi.helpers')
 
@@ -327,6 +328,7 @@ end
 
 local function space_info_list()
     local exist = spaceapi.list_spaces()
+    log.info('space_info_list() spaces: %s', json.encode(exist))
     local list_spaces = {}
     for _, space in pairs(exist) do
         if (utils.value_in(space, vars.helpers.space_info.include) or #vars.helpers.space_info.include == 0) and
@@ -334,12 +336,21 @@ local function space_info_list()
             list_spaces[space]=space
         end
     end
+    log.info('space_info_list():before_enum_update')
+    types.print('SpaceInfoNames', 'before.json')
     space_info_list_remove()
+
+    log.info('space_info_list():before_enum_update')
+    types.print('SpaceInfoNames', 'after_remove.json')
+    space_info_list_remove()
+
     types.add_type(types.enum({
         name = 'SpaceInfoNames',
         description = 'Spaces info name list enum',
         values = list_spaces
     }), 'SpaceInfoNames')
+    log.info('space_info_list():after_enum_update')
+    types.print('SpaceInfoNames', 'after.json')
 end
 
 local function space_info_init(include, exclude)
@@ -392,8 +403,7 @@ local function space_drop_list()
         end
     end
 
-    space_drop_list_remove()
-
+    --space_drop_list_remove()
     types.add_type(types.enum({
         name = 'SpaceDropNames',
         description = 'Spaces drop name list enum',
@@ -440,7 +450,6 @@ local function space_truncate_list_remove()
 end
 
 local function space_truncate_list()
-    log.info('space_truncate_list():enter')
     local exist = spaceapi.list_spaces()
 
     local list_spaces = {}
@@ -451,14 +460,13 @@ local function space_truncate_list()
         end
     end
 
-    space_truncate_list_remove()
+    --space_truncate_list_remove()
 
     types.add_type(types.enum({
         name = 'SpaceTruncateNames',
         description = 'Spaces truncate name list enum',
         values = list_spaces
     }), 'SpaceTruncateNames')
-    log.info('space_truncate_list():exit')
 end
 
 local function space_truncate_init(include, exclude)
@@ -501,7 +509,6 @@ local function space_update_list_remove()
 end
 
 local function space_update_list()
-    log.info('space_update_list():enter')
     local exist = spaceapi.list_spaces()
 
     local list_spaces = {}
@@ -512,14 +519,13 @@ local function space_update_list()
         end
     end
 
-    space_update_list_remove()
+    --space_update_list_remove()
 
     types.add_type(types.enum({
         name = 'SpaceUpdateNames',
         description = 'Spaces update name list enum',
         values = list_spaces
     }), 'SpaceUpdateNames')
-    log.info('space_update_list():exit')
 end
 
 local function space_update_init(include, exclude)

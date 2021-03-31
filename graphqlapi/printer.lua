@@ -51,7 +51,7 @@ end
 local function print_types(types)
     utils.file_write('./types.json', json.encode(types, json_cfg))
     log.info('Get ALL types:')
-    getTypeName(types['cd_offer_cc'])
+    --getTypeName(types['cd_offer_cc'])
     -- log.info('Begin reload():')
     -- log.info('Global schema: '..json.encode(types.get_env(), {
     --     encode_use_tostring = true,

@@ -52,6 +52,7 @@ local function set_model(model_entrypoints)
 end
 
 local function get_schema()
+    --log.info('get_schema():types: %s', json.encode(types.list_types()))
     if types.is_invalid() then
         vars.graphql_schema = nil
     end
@@ -59,9 +60,11 @@ local function get_schema()
         vars.graphql_schema = nil
     end
     if vars.graphql_schema ~= nil then
+        log.info('Cached schema')
         return vars.graphql_schema
     end
 
+    log.info('Refreshed schema')
     local fields = {}
 
     for name, fun in pairs(operations.get_queries()) do
@@ -285,7 +288,7 @@ local function init(httpd, middleware, endpoint, dir_name, opts)
     vars.auth_middleware = middleware
     endpoint = endpoint or DEFAULT_ENDPOINT
     vars.dir_name = dir_name or DEFAULT_DIR_NAME
-
+    log.info('vars.dir_name: %s', vars.dir_name)
     local ok, err = _init()
     if not ok then
         return err
@@ -294,6 +297,7 @@ local function init(httpd, middleware, endpoint, dir_name, opts)
     vars.httpd = httpd
     set_endpoint(endpoint, opts)
     spaces.init()
+    log.info('modela list: %s', json.encode(models.list_models()))
     --require('graphqlapi.printer').print_types(types)
 end
 
