@@ -7,7 +7,7 @@ local utils = require('graphqlapi.utils')
 local vars = require('graphqlapi.vars').new('graphqlapi.helpers')
 
 vars:new('helpers', {
-    ['space_info'] = {
+    ['info'] = {
         types = {
             'SpaceFieldType',
             'SpaceEngine',
@@ -20,16 +20,16 @@ vars:new('helpers', {
             'SpaceInfo',
         },
     },
-    ['space_truncate'] = {
+    ['truncate'] = {
         types = {},
     },
-    ['space_drop'] = {
+    ['drop'] = {
         types = {},
     },
-    ['space_count'] = {
+    ['count'] = {
         types = {},
     },
-    ['space_add'] = {
+    ['add'] = {
         types = {
             'SpaceFieldType',
             'SpaceEngine',
@@ -41,7 +41,7 @@ vars:new('helpers', {
             'SpaceCkConstraintInput',
         },
     },
-    ['space_update'] = {
+    ['update'] = {
         types = {
             'SpaceFieldType',
             'SpaceEngine',
@@ -343,8 +343,8 @@ local function space_info_list()
 
     local list_spaces = {}
     for _, space in pairs(exist) do
-        if (utils.value_in(space, vars.helpers.space_info.include) or #vars.helpers.space_info.include == 0) and
-            not utils.value_in(space, vars.helpers.space_info.exclude) then
+        if (utils.value_in(space, vars.helpers.info.include) or #vars.helpers.info.include == 0) and
+            not utils.value_in(space, vars.helpers.info.exclude) then
             list_spaces[space]=space
         end
     end
@@ -367,10 +367,10 @@ local function space_info_init(include, exclude)
     assert(utils.is_string_array(include))
     assert(utils.is_string_array(exclude))
 
-    vars.helpers.space_info.include = include
-    vars.helpers.space_info.exclude = exclude
+    vars.helpers.info.include = include
+    vars.helpers.info.exclude = exclude
 
-    vars.helpers.space_info.enabled = true
+    vars.helpers.info.enabled = true
     space_types()
     space_info_list()
 end
@@ -378,7 +378,7 @@ end
 local function space_info_remove()
     space_info_query_remove()
     space_info_list_remove()
-    vars.helpers.space_info.enabled = false
+    vars.helpers.info.enabled = false
     space_types()
 end
 
@@ -409,8 +409,8 @@ local function space_drop_list()
 
     local list_spaces = {}
     for _, space in pairs(exist) do
-        if (utils.value_in(space, vars.helpers.space_drop.include) or #vars.helpers.space_drop.include == 0) and
-            not utils.value_in(space, vars.helpers.space_drop.exclude) then
+        if (utils.value_in(space, vars.helpers.drop.include) or #vars.helpers.drop.include == 0) and
+            not utils.value_in(space, vars.helpers.drop.exclude) then
             list_spaces[space]=space
         end
     end
@@ -433,10 +433,10 @@ local function space_drop_init(include, exclude)
     assert(utils.is_string_array(include))
     assert(utils.is_string_array(exclude))
 
-    vars.helpers.space_drop.include = include
-    vars.helpers.space_drop.exclude = exclude
+    vars.helpers.drop.include = include
+    vars.helpers.drop.exclude = exclude
 
-    vars.helpers.space_drop.enabled = true
+    vars.helpers.drop.enabled = true
     space_types()
     space_drop_list()
 end
@@ -444,7 +444,7 @@ end
 local function space_drop_remove()
     space_drop_mutation_remove()
     space_drop_list_remove()
-    vars.helpers.space_drop.enabled = false
+    vars.helpers.drop.enabled = false
     space_types()
 end
 
@@ -475,8 +475,8 @@ local function space_truncate_list()
 
     local list_spaces = {}
     for _, space in pairs(exist) do
-        if (utils.value_in(space, vars.helpers.space_truncate.include) or #vars.helpers.space_truncate.include == 0) and
-            not utils.value_in(space, vars.helpers.space_truncate.exclude) then
+        if (utils.value_in(space, vars.helpers.truncate.include) or #vars.helpers.truncate.include == 0) and
+            not utils.value_in(space, vars.helpers.truncate.exclude) then
             list_spaces[space]=space
         end
     end
@@ -499,10 +499,10 @@ local function space_truncate_init(include, exclude)
     assert(utils.is_string_array(include))
     assert(utils.is_string_array(exclude))
 
-    vars.helpers.space_truncate.include = include
-    vars.helpers.space_truncate.exclude = exclude
+    vars.helpers.truncate.include = include
+    vars.helpers.truncate.exclude = exclude
 
-    vars.helpers.space_truncate.enabled = true
+    vars.helpers.truncate.enabled = true
     space_types()
     space_truncate_list()
 end
@@ -510,7 +510,7 @@ end
 local function space_truncate_remove()
     space_truncate_mutation_remove()
     space_truncate_list_remove()
-    vars.helpers.space_truncate.enabled = false
+    vars.helpers.truncate.enabled = false
     space_types()
 end
 
@@ -552,8 +552,8 @@ local function space_update_list()
 
     local list_spaces = {}
     for _, space in pairs(exist) do
-        if (utils.value_in(space, vars.helpers.space_update.include) or #vars.helpers.space_update.include == 0) and
-            not utils.value_in(space, vars.helpers.space_update.exclude) then
+        if (utils.value_in(space, vars.helpers.update.include) or #vars.helpers.update.include == 0) and
+            not utils.value_in(space, vars.helpers.update.exclude) then
             list_spaces[space]=space
         end
     end
@@ -576,10 +576,10 @@ local function space_update_init(include, exclude)
     assert(utils.is_string_array(include))
     assert(utils.is_string_array(exclude))
 
-    vars.helpers.space_update.include = include
-    vars.helpers.space_update.exclude = exclude
+    vars.helpers.update.include = include
+    vars.helpers.update.exclude = exclude
 
-    vars.helpers.space_update.enabled = true
+    vars.helpers.update.enabled = true
     space_types()
     space_update_list()
 end
@@ -587,13 +587,13 @@ end
 local function space_update_remove()
     space_update_mutation_remove()
     space_update_list_remove()
-    vars.helpers.space_update.enabled = false
+    vars.helpers.update.enabled = false
     space_types()
 end
 
 -- space_add section
 local function space_add_init()
-    vars.helpers.space_add.enabled = true
+    vars.helpers.add.enabled = true
     space_types()
 
     operations.add_mutation({
@@ -620,57 +620,74 @@ end
 
 local function space_add_remove()
     operations.remove_query('space_add')
-    vars.helpers.space_add.enabled = false
+    vars.helpers.add.enabled = false
     space_types()
 end
 
-local function update_lists()
-    space_info_list()
-    space_drop_list()
-    space_truncate_list()
-    space_update_list()
-end
-
-local function init()
-    space_info_init()
-    space_drop_init()
-    space_truncate_init()
-    space_update_init()
-    space_add_init()
+local function init(opts)
+    if not opts then
+        space_info_init()
+        space_drop_init()
+        space_truncate_init()
+        space_update_init()
+        space_add_init()
+    else
+        opts = opts or {}
+        if opts.info and opts.info.enabled == true then
+            space_info_init(opts.info.include, opts.info.exclude)
+        end
+        if opts.drop and opts.drop.enabled == true then
+            space_drop_init(opts.drop.include, opts.drop.exclude)
+        end
+        if opts.truncate and opts.truncate.enabled == true then
+            space_truncate_init(opts.truncate.include, opts.truncate.exclude)
+        end
+        if opts.update and opts.update.enabled == true then
+            space_update_init(opts.update.include, opts.update.exclude)
+        end
+        if opts.add and opts.add.enabled == true then
+            space_add_init()
+        end
+    end
 end
 
 local function stop()
-    space_info_remove()
-    space_drop_remove()
-    space_truncate_remove()
-    space_update_remove()
-    space_add_remove()
+    if vars.helpers.info.enabled == true then
+        space_info_remove()
+    end
+    if vars.helpers.drop.enabled == true then
+        space_drop_remove()
+    end
+    if vars.helpers.truncate.enabled == true then
+        space_truncate_remove()
+    end
+    if vars.helpers.update.enabled == true then
+        space_update_remove()
+    end
+    if vars.helpers.add.enabled == true then
+        space_add_remove()
+    end
     vars.helpers = nil
 end
 
 return {
     init = init,
     stop = stop,
-    update_lists = update_lists,
 
     -- space_info
     space_info_init = space_info_init,
-    space_info_list = space_info_list,
     space_info_remove = space_info_remove,
 
     -- space_drop
     space_drop_init = space_drop_init,
-    space_drop_list = space_drop_list,
     space_drop_remove = space_drop_remove,
 
     -- space_truncate
     space_truncate_init = space_truncate_init,
-    space_truncate_list = space_truncate_list,
     space_truncate_remove = space_truncate_remove,
 
     -- space_update
     space_update_init = space_update_init,
-    space_update_list = space_update_list,
     space_update_remove = space_update_remove,
 
     -- space_add
