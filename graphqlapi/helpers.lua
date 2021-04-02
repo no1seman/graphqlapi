@@ -4,9 +4,6 @@ local types = require('graphqlapi.types')
 local spaceapi = require('graphqlapi.spaceapi')
 local utils = require('graphqlapi.utils')
 
-local log = require('log')
-local json = require('json')
-
 local vars = require('graphqlapi.vars').new('graphqlapi.helpers')
 
 vars:new('helpers', {
@@ -320,15 +317,30 @@ local function space_types()
 end
 
 -- space_info section
+local function space_info_query_remove()
+    operations.remove_query('space_info')
+end
+
+local function space_info_query()
+    space_info_query_remove()
+    operations.add_query({
+        name = 'space_info',
+        doc = 'Get space(s) definition',
+        args = {
+            name = types.list(types.SpaceInfoNames)
+        },
+        kind = types.list(types.SpaceInfo),
+        callback = 'graphqlapi.spaceapi.space_info'
+    })
+end
+
 local function space_info_list_remove()
-    if types.SpaceInfoNames then
-        types.remove_type('SpaceInfoNames')
-    end
+    types.remove_type('SpaceInfoNames')
 end
 
 local function space_info_list()
     local exist = spaceapi.list_spaces()
-    log.info('space_info_list() spaces: %s', json.encode(exist))
+
     local list_spaces = {}
     for _, space in pairs(exist) do
         if (utils.value_in(space, vars.helpers.space_info.include) or #vars.helpers.space_info.include == 0) and
@@ -336,12 +348,7 @@ local function space_info_list()
             list_spaces[space]=space
         end
     end
-    log.info('space_info_list():before_enum_update')
-    types.print('SpaceInfoNames', 'before.json')
-    space_info_list_remove()
 
-    log.info('space_info_list():before_enum_update')
-    types.print('SpaceInfoNames', 'after_remove.json')
     space_info_list_remove()
 
     types.add_type(types.enum({
@@ -349,8 +356,8 @@ local function space_info_list()
         description = 'Spaces info name list enum',
         values = list_spaces
     }), 'SpaceInfoNames')
-    log.info('space_info_list():after_enum_update')
-    types.print('SpaceInfoNames', 'after.json')
+
+    space_info_query()
 end
 
 local function space_info_init(include, exclude)
@@ -366,30 +373,35 @@ local function space_info_init(include, exclude)
     vars.helpers.space_info.enabled = true
     space_types()
     space_info_list()
-
-    operations.add_query({
-        name = 'space_info',
-        doc = 'Get space(s) definition',
-        args = {
-            name = types.list(types.SpaceInfoNames)
-        },
-        kind = types.list(types.SpaceInfo),
-        callback = 'graphqlapi.spaceapi.space_info'
-    })
 end
 
 local function space_info_remove()
-    operations.remove_query('space_info')
+    space_info_query_remove()
     space_info_list_remove()
     vars.helpers.space_info.enabled = false
     space_types()
 end
 
 -- space_drop section
+local function space_drop_mutation_remove()
+    operations.remove_mutation('space_drop')
+end
+
+local function space_drop_mutation()
+    space_drop_mutation_remove()
+    operations.add_mutation({
+        name = 'space_drop',
+        doc = 'Drop space',
+        args = {
+            name = types.SpaceDropNames,
+        },
+        kind = types.SpaceInfo,
+        callback = 'graphqlapi.spaceapi.space_drop'
+    })
+end
+
 local function space_drop_list_remove()
-    if types.SpaceDropNames then
-        types.remove_type('SpaceDropNames')
-    end
+    types.remove_type('SpaceDropNames')
 end
 
 local function space_drop_list()
@@ -403,12 +415,15 @@ local function space_drop_list()
         end
     end
 
-    --space_drop_list_remove()
+    space_drop_list_remove()
+
     types.add_type(types.enum({
         name = 'SpaceDropNames',
         description = 'Spaces drop name list enum',
         values = list_spaces
     }), 'SpaceDropNames')
+
+    space_drop_mutation()
 end
 
 local function space_drop_init(include, exclude)
@@ -424,29 +439,35 @@ local function space_drop_init(include, exclude)
     vars.helpers.space_drop.enabled = true
     space_types()
     space_drop_list()
-    operations.add_mutation({
-        name = 'space_drop',
-        doc = 'Drop space',
-        args = {
-            name = types.SpaceDropNames,
-        },
-        kind = types.SpaceInfo,
-        callback = 'graphqlapi.spaceapi.space_drop'
-    })
 end
 
 local function space_drop_remove()
-    operations.remove_query('space_drop')
+    space_drop_mutation_remove()
     space_drop_list_remove()
     vars.helpers.space_drop.enabled = false
     space_types()
 end
 
 -- space_truncate section
+local function space_truncate_mutation_remove()
+    operations.remove_mutation('space_truncate')
+end
+
+local function space_truncate_mutation()
+    space_truncate_mutation_remove()
+    operations.add_mutation({
+        name = 'space_truncate',
+        doc = 'Truncate space',
+        args = {
+            name = types.SpaceTruncateNames,
+        },
+        kind = types.SpaceInfo,
+        callback = 'graphqlapi.spaceapi.space_truncate'
+    })
+end
+
 local function space_truncate_list_remove()
-    if types.SpaceTruncateNames then
-        types.remove_type('SpaceTruncateNames')
-    end
+    types.remove_type('SpaceTruncateNames')
 end
 
 local function space_truncate_list()
@@ -460,13 +481,15 @@ local function space_truncate_list()
         end
     end
 
-    --space_truncate_list_remove()
+    space_truncate_list_remove()
 
     types.add_type(types.enum({
         name = 'SpaceTruncateNames',
         description = 'Spaces truncate name list enum',
         values = list_spaces
     }), 'SpaceTruncateNames')
+
+    space_truncate_mutation()
 end
 
 local function space_truncate_init(include, exclude)
@@ -482,66 +505,22 @@ local function space_truncate_init(include, exclude)
     vars.helpers.space_truncate.enabled = true
     space_types()
     space_truncate_list()
-
-    operations.add_mutation({
-        name = 'space_truncate',
-        doc = 'Truncate space',
-        args = {
-            name = types.SpaceTruncateNames,
-        },
-        kind = types.SpaceInfo,
-        callback = 'graphqlapi.spaceapi.space_truncate'
-    })
 end
 
 local function space_truncate_remove()
-    operations.remove_query('space_truncate')
+    space_truncate_mutation_remove()
     space_truncate_list_remove()
     vars.helpers.space_truncate.enabled = false
     space_types()
 end
 
 -- space_update
-local function space_update_list_remove()
-    if types.SpaceUpdateNames then
-        types.remove_type('SpaceUpdateNames')
-    end
+local function space_update_mutation_remove()
+    operations.remove_mutation('space_update')
 end
 
-local function space_update_list()
-    local exist = spaceapi.list_spaces()
-
-    local list_spaces = {}
-    for _, space in pairs(exist) do
-        if (utils.value_in(space, vars.helpers.space_update.include) or #vars.helpers.space_update.include == 0) and
-            not utils.value_in(space, vars.helpers.space_update.exclude) then
-            list_spaces[space]=space
-        end
-    end
-
-    --space_update_list_remove()
-
-    types.add_type(types.enum({
-        name = 'SpaceUpdateNames',
-        description = 'Spaces update name list enum',
-        values = list_spaces
-    }), 'SpaceUpdateNames')
-end
-
-local function space_update_init(include, exclude)
-    checks('?table', '?table')
-    include = include or {}
-    exclude = exclude or {}
-    assert(utils.is_string_array(include))
-    assert(utils.is_string_array(exclude))
-
-    vars.helpers.space_update.include = include
-    vars.helpers.space_update.exclude = exclude
-
-    vars.helpers.space_update.enabled = true
-    space_types()
-    space_update_list()
-
+local function space_update_mutation()
+    space_update_mutation_remove()
     operations.add_mutation({
         name = 'space_update',
         doc = 'Update existing space',
@@ -564,8 +543,49 @@ local function space_update_init(include, exclude)
     })
 end
 
+local function space_update_list_remove()
+    types.remove_type('SpaceUpdateNames')
+end
+
+local function space_update_list()
+    local exist = spaceapi.list_spaces()
+
+    local list_spaces = {}
+    for _, space in pairs(exist) do
+        if (utils.value_in(space, vars.helpers.space_update.include) or #vars.helpers.space_update.include == 0) and
+            not utils.value_in(space, vars.helpers.space_update.exclude) then
+            list_spaces[space]=space
+        end
+    end
+
+    space_update_list_remove()
+
+    types.add_type(types.enum({
+        name = 'SpaceUpdateNames',
+        description = 'Spaces update name list enum',
+        values = list_spaces
+    }), 'SpaceUpdateNames')
+
+    space_update_mutation()
+end
+
+local function space_update_init(include, exclude)
+    checks('?table', '?table')
+    include = include or {}
+    exclude = exclude or {}
+    assert(utils.is_string_array(include))
+    assert(utils.is_string_array(exclude))
+
+    vars.helpers.space_update.include = include
+    vars.helpers.space_update.exclude = exclude
+
+    vars.helpers.space_update.enabled = true
+    space_types()
+    space_update_list()
+end
+
 local function space_update_remove()
-    operations.remove_query('space_update')
+    space_update_mutation_remove()
     space_update_list_remove()
     vars.helpers.space_update.enabled = false
     space_types()

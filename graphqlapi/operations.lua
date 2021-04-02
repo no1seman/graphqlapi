@@ -13,6 +13,10 @@ local function is_invalid()
     return vars.schema_invalid
 end
 
+local function reset_invalid()
+    vars.schema_invalid = false
+end
+
 local function funcall_wrap(fun_name, operation, field_name)
     checks('string', 'string', 'string')
     return function(...)
@@ -257,6 +261,7 @@ return {
 
     -- Schema invalidation flag
     is_invalid = is_invalid,
+    reset_invalid = reset_invalid,
 
     -- Resolve trigger
     on_resolve = on_resolve,

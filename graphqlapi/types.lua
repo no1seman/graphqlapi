@@ -35,9 +35,11 @@ local internal_types = {
     nonNull = true,
     nullable = true,
     object = true,
+    print = true,
     remove_all = true,
     remove_type = true,
     remove_type_by_space_name = true,
+    reset_invalid = true,
     resolve = true,
     scalar = true,
     mapper = true,
@@ -84,6 +86,10 @@ end
 
 types.is_invalid = function()
     return vars.schema_invalid
+end
+
+types.reset_invalid = function()
+    vars.schema_invalid = false
 end
 
 types.add_type = function(_type, type_name)

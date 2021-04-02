@@ -106,7 +106,7 @@ local function apply_model(model)
 end
 
 local function update_space_models(space_name)
-    log.info('update_space_models(%s)', space_name)
+    --log.info('update_space_models(%s)', space_name)
     for _, model in ipairs(vars.models) do
         for _, space in pairs(model.spaces) do
             if space == space_name and model.model ~= nil then

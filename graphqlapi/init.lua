@@ -4,9 +4,9 @@ local fio = require('fio')
 local checks = require('checks')
 local errors = require('errors')
 
+local execute = require('graphql.execute')
 local parse = require('graphql.parse')
 local schema = require('graphql.schema')
-local execute = require('graphql.execute')
 local validate = require('graphql.validate')
 
 local VERSION = '0.0.1-1'
@@ -52,19 +52,15 @@ local function set_model(model_entrypoints)
 end
 
 local function get_schema()
-    --log.info('get_schema():types: %s', json.encode(types.list_types()))
-    if types.is_invalid() then
+    if types.is_invalid() or operations.is_invalid() then
         vars.graphql_schema = nil
-    end
-    if operations.is_invalid() then
-        vars.graphql_schema = nil
+        types.reset_invalid()
+        operations.reset_invalid()
     end
     if vars.graphql_schema ~= nil then
-        log.info('Cached schema')
         return vars.graphql_schema
     end
 
-    log.info('Refreshed schema')
     local fields = {}
 
     for name, fun in pairs(operations.get_queries()) do
@@ -273,7 +269,7 @@ local function _init()
     else
         vars.dir_name = nil
         local err = ('Path is not valid: %s'):format(tostring(vars.dir_name))
-        log.warn(err)
+        log.err(err)
         return nil, err
     end
 end
@@ -288,7 +284,7 @@ local function init(httpd, middleware, endpoint, dir_name, opts)
     vars.auth_middleware = middleware
     endpoint = endpoint or DEFAULT_ENDPOINT
     vars.dir_name = dir_name or DEFAULT_DIR_NAME
-    log.info('vars.dir_name: %s', vars.dir_name)
+
     local ok, err = _init()
     if not ok then
         return err
@@ -297,7 +293,7 @@ local function init(httpd, middleware, endpoint, dir_name, opts)
     vars.httpd = httpd
     set_endpoint(endpoint, opts)
     spaces.init()
-    log.info('modela list: %s', json.encode(models.list_models()))
+    --log.info('models list: %s', json.encode(models.list_models()))
     --require('graphqlapi.printer').print_types(types)
 end
 
@@ -308,6 +304,7 @@ local function stop()
     spaces.stop()
     helpers.stop()
     models.stop()
+    --types.remove_all()
     vars.graphql_schema = nil
     vars.model = nil
     operations.stop()

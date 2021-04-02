@@ -1,8 +1,6 @@
 local checks = require('checks')
 local errors = require('errors')
 local models = require('graphqlapi.models')
-local log = require('log')
-local json = require('json')
 
 local e_funcall = errors.new_class("Funcall failed")
 
