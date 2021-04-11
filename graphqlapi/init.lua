@@ -268,8 +268,8 @@ local function _init()
         return true
     else
         vars.dir_name = nil
-        local err = ('Path is not valid: %s'):format(tostring(vars.dir_name))
-        log.err(err)
+        local err = string.format('Path is not valid: %s', tostring(vars.dir_name))
+        log.error('%s', err)
         return nil, err
     end
 end

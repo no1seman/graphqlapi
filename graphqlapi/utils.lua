@@ -1,9 +1,19 @@
+local function value_in(val, arr)
+    for i, elem in ipairs(arr) do
+        if val == elem then
+            return true, i
+        end
+    end
+    return false
+end
+
 local function diff(t1, t2, ret)
     for k in pairs(t2) do
-        if not t1[k] then
+        if not t1[k] and not value_in(k, ret) then
             table.insert(ret, k)
         end
     end
+    return ret
 end
 
 local function merge(...)
@@ -18,15 +28,6 @@ local function merge(...)
     end
 
     return ret
-end
-
-local function value_in(val, arr)
-    for i, elem in ipairs(arr) do
-        if val == elem then
-            return true, i
-        end
-    end
-    return false
 end
 
 local function is_string_array(data)

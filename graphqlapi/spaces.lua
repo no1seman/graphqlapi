@@ -59,7 +59,12 @@ end
 
 local function remove_trigger(trigger)
     checks('function')
-    box.space._space:on_replace(nil, trigger)
+    local triggers = box.space._space:on_replace()
+    for _, func in pairs(triggers) do
+        if func == trigger then
+            box.space._space:on_replace(nil, trigger)
+        end
+    end
 end
 
 local function space_trigger(old, new, sp, op) -- luacheck: no unused args

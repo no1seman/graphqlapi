@@ -26,11 +26,11 @@ local function assert_model(model)
 end
 
 local function list_modules()
-    local _list = {}
+    local list = {}
     for key in pairs(package.loaded) do
-        _list[key] = true
+        list[key] = true
     end
-    return _list
+    return list
 end
 
 local function load_model(filename)

@@ -68,7 +68,7 @@ local function space_types()
 
     if utils.value_in('SpaceFieldType', type_list) then
         if not types.SpaceFieldType then
-            types.add_type(types.enum({
+            types.add(types.enum({
                 name = 'SpaceFieldType',
                 description = 'Space field type enum',
                 values = {
@@ -87,12 +87,12 @@ local function space_types()
             }), 'SpaceFieldType')
         end
     else
-        types.remove_type('SpaceFieldType')
+        types.remove('SpaceFieldType')
     end
 
     if utils.value_in('SpaceEngine', type_list) then
         if not types.SpaceEngine then
-            types.add_type(types.enum({
+            types.add(types.enum({
                 name = 'SpaceEngine',
                 description = 'Space engine',
                 values = {
@@ -105,12 +105,12 @@ local function space_types()
             }), 'SpaceEngine')
         end
     else
-        types.remove_type('SpaceEngine')
+        types.remove('SpaceEngine')
     end
 
     if utils.value_in('SpaceIndexType', type_list) then
         if not types.SpaceIndexType then
-            types.add_type(types.enum({
+            types.add(types.enum({
                 name = 'SpaceIndexType',
                 description = 'Space index type',
                 values = {
@@ -122,24 +122,24 @@ local function space_types()
             }), 'SpaceIndexType')
         end
     else
-        types.remove_type('SpaceIndexType')
+        types.remove('SpaceIndexType')
     end
 
     if utils.value_in('SpaceIndexDimension', type_list) then
         if not types.SpaceIndexDimension then
-            types.add_type(types.enum({
+            types.add(types.enum({
                 name = 'SpaceIndexDimension',
                 description = 'Space index dimension',
                 values = {euclid = 'euclid', manhattan = 'manhattan'}
             }), 'SpaceIndexDimension')
         end
     else
-        types.remove_type('SpaceIndexDimension')
+        types.remove('SpaceIndexDimension')
     end
 
     if utils.value_in('SpaceField', type_list) then
         if not types.SpaceField then
-            types.add_type(types.object({
+            types.add(types.object({
                 name = 'SpaceField',
                 description = 'Space field',
                 fields = {
@@ -150,12 +150,12 @@ local function space_types()
             }), 'SpaceField')
         end
     else
-        types.remove_type('SpaceField')
+        types.remove('SpaceField')
     end
 
     if utils.value_in('SpaceIndexPart', type_list) then
         if not types.SpaceIndexPart then
-            types.add_type(types.object({
+            types.add(types.object({
                 name = 'SpaceIndexPart',
                 description = 'Space index part',
                 fields = {
@@ -166,12 +166,12 @@ local function space_types()
             }), 'SpaceIndexPart')
         end
     else
-        types.remove_type('SpaceIndexPart')
+        types.remove('SpaceIndexPart')
     end
 
     if utils.value_in('SpaceIndex', type_list) then
         if not types.SpaceIndex then
-            types.add_type(types.object({
+            types.add(types.object({
                 name = 'SpaceIndex',
                 description = 'Space Index',
                 fields = {
@@ -194,12 +194,12 @@ local function space_types()
             }), 'SpaceIndex')
         end
     else
-        types.remove_type('SpaceIndex')
+        types.remove('SpaceIndex')
     end
 
     if utils.value_in('SpaceCkConstraint', type_list) then
         if not types.SpaceCkConstraint then
-            types.add_type(types.object({
+            types.add(types.object({
                 name = 'SpaceCkConstraint',
                 description = 'Space check constraint',
                 fields = {
@@ -211,12 +211,12 @@ local function space_types()
             }), 'SpaceCkConstraint')
         end
     else
-        types.remove_type('SpaceCkConstraint')
+        types.remove('SpaceCkConstraint')
     end
 
     if utils.value_in('SpaceInfo', type_list) then
         if not types.SpaceInfo then
-            types.add_type(types.object({
+            types.add(types.object({
                 name = 'SpaceInfo',
                 description = 'Space info',
                 fields = {
@@ -237,12 +237,12 @@ local function space_types()
             }), 'SpaceInfo')
         end
     else
-        types.remove_type('SpaceInfo')
+        types.remove('SpaceInfo')
     end
 
     if utils.value_in('SpaceFieldInput', type_list) then
         if not types.SpaceFieldInput then
-            types.add_type(types.inputObject({
+            types.add(types.inputObject({
                 name = 'SpaceFieldInput',
                 description = 'Space field',
                 fields = {
@@ -253,12 +253,12 @@ local function space_types()
             }), 'SpaceFieldInput')
         end
     else
-        types.remove_type('SpaceFieldInput')
+        types.remove('SpaceFieldInput')
     end
 
     if utils.value_in('SpaceIndexPartInput', type_list) then
         if not types.SpaceIndexPartInput then
-            types.add_type(types.inputObject({
+            types.add(types.inputObject({
                 name = 'SpaceIndexPartInput',
                 description = 'Space index part',
                 fields = {
@@ -269,12 +269,12 @@ local function space_types()
             }), 'SpaceIndexPartInput')
         end
     else
-        types.remove_type('SpaceIndexPartInput')
+        types.remove('SpaceIndexPartInput')
     end
 
     if utils.value_in('SpaceIndexInput', type_list) then
         if not types.SpaceIndexInput then
-        types.add_type(types.inputObject({
+        types.add(types.inputObject({
             name = 'SpaceIndexInput',
             description = 'Space Index',
             fields = {
@@ -295,12 +295,12 @@ local function space_types()
         }), 'SpaceIndexInput')
         end
     else
-        types.remove_type('SpaceIndexInput')
+        types.remove('SpaceIndexInput')
     end
 
     if utils.value_in('SpaceCkConstraintInput', type_list) then
         if not types.SpaceCkConstraintInput then
-        types.add_type(types.inputObject({
+        types.add(types.inputObject({
             name = 'SpaceCkConstraintInput',
             description = 'Space check constraint',
             fields = {
@@ -312,7 +312,7 @@ local function space_types()
         }), 'SpaceCkConstraintInput')
         end
     else
-        types.remove_type('SpaceCkConstraintInput')
+        types.remove('SpaceCkConstraintInput')
     end
 end
 
@@ -335,7 +335,7 @@ local function space_info_query()
 end
 
 local function space_info_list_remove()
-    types.remove_type('SpaceInfoNames')
+    types.remove('SpaceInfoNames')
 end
 
 local function space_info_list()
@@ -351,7 +351,7 @@ local function space_info_list()
 
     space_info_list_remove()
 
-    types.add_type(types.enum({
+    types.add(types.enum({
         name = 'SpaceInfoNames',
         description = 'Spaces info name list enum',
         values = list_spaces
@@ -401,7 +401,7 @@ local function space_drop_mutation()
 end
 
 local function space_drop_list_remove()
-    types.remove_type('SpaceDropNames')
+    types.remove('SpaceDropNames')
 end
 
 local function space_drop_list()
@@ -417,7 +417,7 @@ local function space_drop_list()
 
     space_drop_list_remove()
 
-    types.add_type(types.enum({
+    types.add(types.enum({
         name = 'SpaceDropNames',
         description = 'Spaces drop name list enum',
         values = list_spaces
@@ -467,7 +467,7 @@ local function space_truncate_mutation()
 end
 
 local function space_truncate_list_remove()
-    types.remove_type('SpaceTruncateNames')
+    types.remove('SpaceTruncateNames')
 end
 
 local function space_truncate_list()
@@ -483,7 +483,7 @@ local function space_truncate_list()
 
     space_truncate_list_remove()
 
-    types.add_type(types.enum({
+    types.add(types.enum({
         name = 'SpaceTruncateNames',
         description = 'Spaces truncate name list enum',
         values = list_spaces
@@ -544,7 +544,7 @@ local function space_update_mutation()
 end
 
 local function space_update_list_remove()
-    types.remove_type('SpaceUpdateNames')
+    types.remove('SpaceUpdateNames')
 end
 
 local function space_update_list()
@@ -560,7 +560,7 @@ local function space_update_list()
 
     space_update_list_remove()
 
-    types.add_type(types.enum({
+    types.add(types.enum({
         name = 'SpaceUpdateNames',
         description = 'Spaces update name list enum',
         values = list_spaces

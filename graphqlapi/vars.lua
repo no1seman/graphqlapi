@@ -79,10 +79,6 @@ local function new(module_name)
     })
 end
 
-local function list()
-end
-
 return {
     new = new,
-    list = list,
 }

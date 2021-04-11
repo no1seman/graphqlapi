@@ -1,12 +1,12 @@
 local checks = require('checks')
 local ddl = require('ddl')
-local errors = require('errors')
+--local errors = require('errors')
 local fiber = require('fiber')
 --local json = require('json')
-local log = require('log')
+--local log = require('log')
 local vshard = require('vshard')
 
-local e_space_api = errors.new_class('space API error', { capture_stack = false })
+--local e_space_api = errors.new_class('space API error', { capture_stack = false })
 
 local function list_spaces(schema)
     local spaces = {}
@@ -176,7 +176,7 @@ local function space_drop(_, args)
 
     for uid, replica in pairs(shards) do
         local f = fiber.new(function()
-            local ok, res, eval_err = pcall(function()
+            local _, _, eval_err = pcall(function()
                 return replica.master.conn:eval([[
                     local space = box.space[...]
                     if space then
@@ -221,7 +221,7 @@ local function space_truncate(_, args)
 
     for uid, replica in pairs(shards) do
         local f = fiber.new(function()
-            local ok, res, eval_err = pcall(function()
+            local _, _, eval_err = pcall(function()
                 return replica.master.conn:eval([[
                     local space = box.space[...]
                     if space then

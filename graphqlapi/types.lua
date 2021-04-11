@@ -11,12 +11,12 @@ local vars = require('graphqlapi.vars').new('graphqlapi.types')
 vars:new('type_space', {})
 vars:new('schema_invalid', nil)
 
-local e_remove_type = errors.new_class('GraphQL type remove failed', { capture_stack = false })
+local e_graphqlapi = errors.new_class('GraphQL API error', { capture_stack = false })
 
 local internal_types = {
-    add_inputObject = true,
-    add_object = true,
-    add_type = true,
+    add = true,
+    add_space_input_object = true,
+    add_space_object = true,
     bare = true,
     boolean = true,
     directive = true,
@@ -32,17 +32,17 @@ local internal_types = {
     list = true,
     list_types = true,
     long = true,
+    mapper = true,
     nonNull = true,
     nullable = true,
     object = true,
-    print = true,
+    remove = true,
     remove_all = true,
-    remove_type = true,
-    remove_type_by_space_name = true,
+    remove_by_space_name = true,
+    remove_recursive = true,
     reset_invalid = true,
     resolve = true,
     scalar = true,
-    mapper = true,
     skip = true,
     string = true,
     union = true,
@@ -84,15 +84,7 @@ local function space_fields(space)
     return fields
 end
 
-types.is_invalid = function()
-    return vars.schema_invalid
-end
-
-types.reset_invalid = function()
-    vars.schema_invalid = false
-end
-
-types.add_type = function(_type, type_name)
+types.add = function(_type, type_name)
     checks('table', '?string')
     if type_name and type_name ~='' then
         types[type_name] = _type
@@ -102,20 +94,27 @@ types.add_type = function(_type, type_name)
     vars.schema_invalid = true
 end
 
-types.remove_type = function (type_name)
+types.is_invalid = function()
+    return vars.schema_invalid
+end
+
+types.reset_invalid = function()
+    vars.schema_invalid = false
+end
+
+types.remove = function (type_name)
     checks('string')
-    log.debug('Removing type: %s', type_name)
 
     if not internal_types[type_name] then
         types[type_name] = nil
         vars.schema_invalid = true
         return type_name
     else
-        return nil, e_remove_type:new("Can't remove internal type")
+        return nil, e_graphqlapi:new("can't remove internal type")
     end
 end
 
-types.remove_type_recursive = function (type_name)
+types.remove_recursive = function (type_name)
     checks('string')
     log.debug('Removing type: %s', type_name)
 
@@ -126,15 +125,16 @@ types.remove_type_recursive = function (type_name)
         vars.schema_invalid = true
         return type_name
     else
-        return nil, e_remove_type:new("Can't remove internal type")
+        return nil, e_graphqlapi:new("can't remove internal type")
     end
 end
 
-types.remove_type_by_space_name = function(space_name)
+types.remove_by_space_name = function(space_name)
     for type_name, space in pairs(vars.type_space) do
         if space == space_name then
-            types[type_name] = nil
+            types.remove(type_name)
             vars.type_space[type_name] = nil
+            vars.schema_invalid = true
         end
     end
 end
@@ -148,7 +148,7 @@ types.remove_all = function()
     vars.type_space = nil
 end
 
-types.add_object = function(opts)
+types.add_space_object = function(opts)
     checks({
         name = 'string',
         description = '?string',
@@ -157,7 +157,7 @@ types.add_object = function(opts)
     })
 
     if not is_space_exists(opts.space) then
-        error(string.format("space '%s' doesn't exists", opts.space))
+        return nil, nil, e_graphqlapi:new(string.format("space '%s' doesn't exists", opts.space))
     end
 
     local new_type = types.object({
@@ -165,12 +165,12 @@ types.add_object = function(opts)
         description = opts.description,
         fields = opts.fields and utils.merge(space_fields(opts.space), opts.fields) or space_fields(opts.space)
     })
-    types.add_type(new_type, opts.name)
+    types.add(new_type, opts.name)
     vars.type_space[opts.name] = opts.space
     return opts.name, new_type
 end
 
-types.add_inputObject = function(opts)
+types.add_space_input_object = function(opts)
     checks({
         name = 'string',
         description = '?string',
@@ -179,7 +179,7 @@ types.add_inputObject = function(opts)
     })
 
     if not is_space_exists(opts.space) then
-        error(string.format("Space \"%s\"doesn't exists", opts.space))
+        return nil, nil, e_graphqlapi:new(string.format("space '%s' doesn't exists", opts.space))
     end
 
     local new_type = types.inputObject({
@@ -187,7 +187,7 @@ types.add_inputObject = function(opts)
         description = opts.description,
         fields = opts.fields and utils.merge(space_fields(opts.space), opts.fields) or space_fields(opts.space)
     })
-    types.add_type(new_type, opts.name)
+    types.add(new_type, opts.name)
     vars.type_space[opts.name] = opts.space
     return opts.name, new_type
 end
@@ -200,13 +200,13 @@ types.list_types = function()
     return type_list
 end
 
-types.print = function(type_name, filename)
-    require('cartridge.utils').file_write(filename, require('json').encode(types[type_name], {
-        encode_use_tostring = true,
-        encode_deep_as_nil = true,
-        encode_max_depth = 5,
-        encode_invalid_as_nil = true,
-    }))
-end
+-- types.print = function(type_name, filename)
+--     require('cartridge.utils').file_write(filename, require('json').encode(types[type_name], {
+--         encode_use_tostring = true,
+--         encode_deep_as_nil = true,
+--         encode_max_depth = 5,
+--         encode_invalid_as_nil = true,
+--     }))
+-- end
 
 return types

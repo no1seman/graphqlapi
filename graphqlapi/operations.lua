@@ -58,8 +58,10 @@ end
 
 local function remove_query_prefix(prefix)
     checks('string')
-    vars.queries[prefix] = nil
-    vars.schema_invalid = true
+    if vars.queries ~= nil and type(vars.queries) == 'table' then
+        vars.queries[prefix] = nil
+        vars.schema_invalid = true
+    end
 end
 
 local function add_mutation_prefix(prefix, doc)
@@ -85,8 +87,10 @@ end
 
 local function remove_mutation_prefix(prefix)
     checks('string')
-    vars.mutation[prefix] = nil
-    vars.schema_invalid = true
+    if vars.mutations then
+        vars.mutations[prefix] = nil
+        vars.schema_invalid = true
+    end
 end
 
 local function add_query(opts)
@@ -95,7 +99,7 @@ local function add_query(opts)
         name = 'string',
         doc = '?string',
         args = '?table',
-        kind = 'table',
+        kind = 'table|string',
         callback = 'string',
     })
 
@@ -133,16 +137,29 @@ local function add_query(opts)
     vars.schema_invalid = true
 end
 
-local function remove_query(name)
-    checks('string')
-    vars.queries[name] = nil
+local function remove_query(name, prefix)
+    checks('string', '?string')
+    if prefix == nil then
+        vars.queries[name] = nil
+    else
+        vars.queries[prefix].kind.fields[name] = nil
+    end
     vars.schema_invalid = true
 end
 
 local function list_queries()
     local queries = {}
     for query in pairs(vars.queries) do
-        table.insert(queries, query)
+        if vars.queries[query].kind and type(vars.queries[query].kind) == 'table' and
+            vars.queries[query].kind.__type == 'Object' then
+            if vars.queries[query].kind.fields then
+                for prefixed_query in pairs(vars.queries[query].kind.fields) do
+                    table.insert(queries, tostring(query)..'.'..tostring(prefixed_query))
+                end
+            end
+        else
+            table.insert(queries, query)
+        end
     end
     return queries
 end
@@ -191,16 +208,29 @@ local function add_mutation(opts)
     vars.schema_invalid = true
 end
 
-local function remove_mutation(name)
-    checks('string')
-    vars.mutations[name] = nil
+local function remove_mutation(name, prefix)
+    checks('string', '?string')
+    if prefix == nil then
+        vars.mutations[name] = nil
+    else
+        vars.mutations[prefix].kind.fields[name] = nil
+    end
     vars.schema_invalid = true
 end
 
 local function list_mutations()
     local mutations = {}
     for mutation in pairs(vars.mutations) do
-        table.insert(mutations, mutation)
+        if vars.mutations[mutation].kind and type(vars.mutations[mutation].kind) == 'table' and
+            vars.mutations[mutation].kind.__type == 'Object' then
+            if vars.mutations[mutation].kind.fields then
+                for prefixed_mutation in pairs(vars.mutations[mutation].kind.fields) do
+                    table.insert(mutations, tostring(mutation)..'.'..tostring(prefixed_mutation))
+                end
+            end
+        else
+            table.insert(mutations, mutation)
+        end
     end
     return mutations
 end

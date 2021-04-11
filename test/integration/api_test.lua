@@ -10,16 +10,16 @@ g.before_all = function()
 end
 
 g.after_all = function()
-    helper.stop_cluster(g.cluster)
+    g.cluster:stop()
 end
 
 g.before_each = function()
-    -- helper.truncate_space_on_cluster(g.cluster, 'Set your space name here')
+    helper.truncate_space_on_cluster(g.cluster, 'Set your space name here')
 end
 
-g.test_sample = function()
+g.test_init = function()
     local server = cluster.main_server
-    local response = server:http_request('post', '/admin/api', {json = {query = '{}'}})
-    t.assert_equals(response.json, {data = {}})
+    --local response = server:http_request('post', '/admin/graphql', {json = {query = '{}'}})
+    --t.assert_equals(response.json, {data = {}})
     t.assert_equals(server.net_box:eval('return box.cfg.memtx_dir'), server.workdir)
 end
