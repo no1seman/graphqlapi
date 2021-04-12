@@ -11,15 +11,41 @@ g.test_diff = function()
     t.assert_items_equals(res, {'a', 'd', 'b'})
 end
 
-g.test_merge = function()
-    local res = utils.merge({}, {a = 'a', b = 'b'})
+g.test_merge_maps = function()
+    local res = utils.merge_maps({}, {})
+    t.assert_items_equals(res, {})
+
+    res = utils.merge_maps({a = 'a', b = 'b'}, {})
     t.assert_items_equals(res, {a = 'a', b = 'b'})
 
-    res = utils.merge({a = 'a', b = 'b'}, {})
+    res = utils.merge_maps({}, {a = 'a', b = 'b'})
     t.assert_items_equals(res, {a = 'a', b = 'b'})
 
-    res = utils.merge({a = 'a', b = 'b'}, {c = 'c', d = 'd'})
+    res = utils.merge_maps({a = 'a', b = 'b'}, {})
+    t.assert_items_equals(res, {a = 'a', b = 'b'})
+
+    res = utils.merge_maps({a = 'a', b = 'b'}, {c = 'c', d = 'd'})
     t.assert_items_equals(res, {a = 'a', b = 'b', c = 'c', d = 'd'})
+
+    res = utils.merge_maps({a = 'a', b = 'b1', c = 'c2'}, {b = 'b2', c = 'c1', d = 'd'})
+    t.assert_items_equals(res, {a = 'a', b = 'b2', c = 'c1', d = 'd'})
+end
+
+g.test_merge_arrays = function()
+    local res = utils.merge_arrays({}, {})
+    t.assert_items_equals(res, {})
+
+    res = utils.merge_arrays({1}, {})
+    t.assert_items_equals(res, {1})
+
+    res = utils.merge_arrays({}, {1})
+    t.assert_items_equals(res, {1})
+
+    res = utils.merge_arrays({1}, {1})
+    t.assert_items_equals(res, {1})
+
+    res = utils.merge_arrays({1, 9, 3, 4, 5}, {6, 3, 5, 9, 10})
+    t.assert_items_equals(res, {1, 9, 3, 4, 5, 6, 10})
 end
 
 g.test_value_in = function()

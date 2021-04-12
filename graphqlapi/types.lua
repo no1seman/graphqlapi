@@ -163,7 +163,7 @@ types.add_space_object = function(opts)
     local new_type = types.object({
         name = opts.name,
         description = opts.description,
-        fields = opts.fields and utils.merge(space_fields(opts.space), opts.fields) or space_fields(opts.space)
+        fields = opts.fields and utils.merge_maps(space_fields(opts.space), opts.fields) or space_fields(opts.space)
     })
     types.add(new_type, opts.name)
     vars.type_space[opts.name] = opts.space
@@ -185,7 +185,7 @@ types.add_space_input_object = function(opts)
     local new_type = types.inputObject({
         name = opts.name,
         description = opts.description,
-        fields = opts.fields and utils.merge(space_fields(opts.space), opts.fields) or space_fields(opts.space)
+        fields = opts.fields and utils.merge_maps(space_fields(opts.space), opts.fields) or space_fields(opts.space)
     })
     types.add(new_type, opts.name)
     vars.type_space[opts.name] = opts.space

@@ -5,6 +5,16 @@ require('test.helper.unit')
 local operations = require('graphqlapi.operations')
 local types = require('graphqlapi.types')
 
+g.before_each = function()
+    types.remove_all()
+    operations.remove_all()
+end
+
+g.after_each = function()
+    types.remove_all()
+    operations.remove_all()
+end
+
 g.test_add_remove_query = function()
     operations.remove_all()
     operations.add_query({
@@ -265,8 +275,6 @@ g.test_on_resolve_trigger = function()
 
     operations.on_resolve(on_resolve_trigger, nil)
     t.assert_error_msg_contains('query entity', operations.get_queries()['entity'].resolve)
-
-    operations.remove_all()
 end
 
 local function stub()

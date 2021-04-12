@@ -17,7 +17,7 @@ helper.cluster = cartridge_helpers.Cluster:new({
         {
             alias = 'api',
             uuid = cartridge_helpers.uuid('a'),
-            roles = { 'vshard-router', 'test.entrypoint.app.roles.api'  },
+            roles = { 'vshard-router', 'test.entrypoint.app.roles.api' },
             servers = {
                 {
                     instance_uuid = cartridge_helpers.uuid('a', 1),

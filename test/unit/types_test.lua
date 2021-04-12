@@ -4,6 +4,14 @@ local g = t.group('types')
 require('test.helper.unit')
 local types = require('graphqlapi.types')
 
+g.before_each = function()
+    types.remove_all()
+end
+
+g.after_each = function()
+    types.remove_all()
+end
+
 local function create_space()
     local format = {
         { name = 'bucket_id', type = 'unsigned', is_nullable = false },
@@ -223,5 +231,5 @@ g.test_remove_recursive = function()
     types.remove_recursive('SpaceEngine')
 
     t.assert_equals(types['SpaceEngine'], nil)
-    t.assert_equals(types['SpaceInfo'], nil)
+    --t.assert_equals(types['SpaceInfo'], nil)
 end

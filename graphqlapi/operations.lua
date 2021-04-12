@@ -151,7 +151,8 @@ local function list_queries()
     local queries = {}
     for query in pairs(vars.queries) do
         if vars.queries[query].kind and type(vars.queries[query].kind) == 'table' and
-            vars.queries[query].kind.__type == 'Object' then
+            vars.queries[query].kind.__type == 'Object' and
+            vars.queries[query].kind.name:sub(1, 3) == 'Api' then
             if vars.queries[query].kind.fields then
                 for prefixed_query in pairs(vars.queries[query].kind.fields) do
                     table.insert(queries, tostring(query)..'.'..tostring(prefixed_query))
@@ -222,7 +223,8 @@ local function list_mutations()
     local mutations = {}
     for mutation in pairs(vars.mutations) do
         if vars.mutations[mutation].kind and type(vars.mutations[mutation].kind) == 'table' and
-            vars.mutations[mutation].kind.__type == 'Object' then
+            vars.mutations[mutation].kind.__type == 'Object' and
+            vars.mutations[mutation].kind.name:sub(1, 11) == 'MutationApi' then
             if vars.mutations[mutation].kind.fields then
                 for prefixed_mutation in pairs(vars.mutations[mutation].kind.fields) do
                     table.insert(mutations, tostring(mutation)..'.'..tostring(prefixed_mutation))

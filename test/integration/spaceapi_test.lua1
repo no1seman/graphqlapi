@@ -1,5 +1,5 @@
 local t = require('luatest')
-local g = t.group('integration_api')
+local g = t.group('spaceapi')
 
 local helper = require('test.helper.integration')
 local cluster = helper.cluster

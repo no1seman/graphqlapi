@@ -12,32 +12,6 @@ local tmpdir = fio.pathjoin(helper.root, 'tmp')
 helper.datadir = fio.pathjoin(tmpdir, 'db_test')
 helper.server_command = fio.pathjoin(helper.root, 'test', 'entrypoint', 'init.lua')
 
-function helper.truncate_space_on_cluster(cluster, space_name)
-    assert(cluster ~= nil)
-    for _, server in ipairs(cluster.servers) do
-        server.net_box:eval([[
-            local space_name = ...
-            local space = box.space[space_name]
-            if space ~= nil and not box.cfg.read_only then
-                space:truncate()
-            end
-        ]], {space_name})
-    end
-end
-
-function helper.drop_space_on_cluster(cluster, space_name)
-    assert(cluster ~= nil)
-    for _, server in ipairs(cluster.servers) do
-        server.net_box:eval([[
-            local space_name = ...
-            local space = box.space[space_name]
-            if space ~= nil and not box.cfg.read_only then
-                space:drop()
-            end
-        ]], {space_name})
-    end
-end
-
 function helper.stop_cluster(cluster)
     assert(cluster ~= nil)
     cluster:stop()

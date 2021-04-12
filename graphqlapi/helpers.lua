@@ -9,62 +9,91 @@ local vars = require('graphqlapi.vars').new('graphqlapi.helpers')
 vars:new('helpers', {
     ['info'] = {
         types = {
-            'SpaceFieldType',
-            'SpaceEngine',
-            'SpaceIndexType',
-            'SpaceIndexDimension',
-            'SpaceField',
-            'SpaceIndexPart',
-            'SpaceIndex',
             'SpaceCkConstraint',
+            'SpaceEngine',
+            'SpaceField',
+            'SpaceFieldType',
+            'SpaceIndex',
+            'SpaceIndexDimension',
+            'SpaceIndexPart',
+            'SpaceIndexType',
+            'SpaceInfo',
+        },
+    },
+    ['drop'] = {
+        types = {
+            'SpaceCkConstraint',
+            'SpaceEngine',
+            'SpaceField',
+            'SpaceFieldType',
+            'SpaceIndex',
+            'SpaceIndexDimension',
+            'SpaceIndexPart',
+            'SpaceIndexType',
             'SpaceInfo',
         },
     },
     ['truncate'] = {
-        types = {},
-    },
-    ['drop'] = {
-        types = {},
+        types = {
+            'SpaceCkConstraint',
+            'SpaceEngine',
+            'SpaceField',
+            'SpaceFieldType',
+            'SpaceIndex',
+            'SpaceIndexDimension',
+            'SpaceIndexPart',
+            'SpaceIndexType',
+            'SpaceInfo',
+        },
     },
     ['count'] = {
         types = {},
     },
-    ['add'] = {
-        types = {
-            'SpaceFieldType',
-            'SpaceEngine',
-            'SpaceIndexType',
-            'SpaceInfo',
-            'SpaceFieldInput',
-            'SpaceIndexPartInput',
-            'SpaceIndexInput',
-            'SpaceCkConstraintInput',
-        },
-    },
     ['update'] = {
         types = {
-            'SpaceFieldType',
+            'SpaceCkConstraint',
+            'SpaceCkConstraintInput',
             'SpaceEngine',
+            'SpaceField',
+            'SpaceFieldInput',
+            'SpaceFieldType',
+            'SpaceIndex',
+            'SpaceIndexDimension',
+            'SpaceIndexInput',
+            'SpaceIndexPart',
+            'SpaceIndexPartInput',
             'SpaceIndexType',
             'SpaceInfo',
-            'SpaceFieldInput',
-            'SpaceIndexPartInput',
-            'SpaceIndexInput',
-            'SpaceCkConstraintInput',
         },
-    }
+    },
+    ['add'] = {
+        types = {
+            'SpaceCkConstraint',
+            'SpaceCkConstraintInput',
+            'SpaceEngine',
+            'SpaceField',
+            'SpaceFieldInput',
+            'SpaceFieldType',
+            'SpaceIndex',
+            'SpaceIndexInput',
+            'SpaceIndexPart',
+            'SpaceIndexPartInput',
+            'SpaceIndexType',
+            'SpaceInfo',
+        },
+    },
 })
 
 local function space_types()
     local type_list = {}
 
     for _, value in pairs(vars.helpers) do
-        if value.enabled then
-            type_list = utils.merge(type_list, value.types)
+        if value.enabled == true then
+            type_list = utils.merge_arrays(type_list, value.types)
         end
     end
 
-    if #type_list == 0 then return end
+    --print(require('json').encode(type_list))
 
     if utils.value_in('SpaceFieldType', type_list) then
         if not types.SpaceFieldType then
@@ -220,7 +249,7 @@ local function space_types()
                 name = 'SpaceInfo',
                 description = 'Space info',
                 fields = {
-                    format = types.list(types.SpaceField),
+                    format = types.list(types.SpaceField),-- !!!
                     id = types.int,
                     name = types.string,
                     engine = types.SpaceEngine,
@@ -367,11 +396,11 @@ local function space_info_init(include, exclude)
     assert(utils.is_string_array(include))
     assert(utils.is_string_array(exclude))
 
-    vars.helpers.info.include = include
-    vars.helpers.info.exclude = exclude
-
     vars.helpers.info.enabled = true
     space_types()
+
+    vars.helpers.info.include = include
+    vars.helpers.info.exclude = exclude
     space_info_list()
 end
 
@@ -380,6 +409,8 @@ local function space_info_remove()
     space_info_list_remove()
     vars.helpers.info.enabled = false
     space_types()
+    vars.helpers.info.include = nil
+    vars.helpers.info.exclude = nil
 end
 
 -- space_drop section
@@ -433,11 +464,12 @@ local function space_drop_init(include, exclude)
     assert(utils.is_string_array(include))
     assert(utils.is_string_array(exclude))
 
+    vars.helpers.drop.enabled = true
+    space_types()
+
     vars.helpers.drop.include = include
     vars.helpers.drop.exclude = exclude
 
-    vars.helpers.drop.enabled = true
-    space_types()
     space_drop_list()
 end
 
@@ -446,6 +478,8 @@ local function space_drop_remove()
     space_drop_list_remove()
     vars.helpers.drop.enabled = false
     space_types()
+    vars.helpers.info.include = nil
+    vars.helpers.info.exclude = nil
 end
 
 -- space_truncate section
@@ -499,11 +533,12 @@ local function space_truncate_init(include, exclude)
     assert(utils.is_string_array(include))
     assert(utils.is_string_array(exclude))
 
+    vars.helpers.truncate.enabled = true
+    space_types()
+
     vars.helpers.truncate.include = include
     vars.helpers.truncate.exclude = exclude
 
-    vars.helpers.truncate.enabled = true
-    space_types()
     space_truncate_list()
 end
 
@@ -512,6 +547,8 @@ local function space_truncate_remove()
     space_truncate_list_remove()
     vars.helpers.truncate.enabled = false
     space_types()
+    vars.helpers.info.include = nil
+    vars.helpers.info.exclude = nil
 end
 
 -- space_update
@@ -576,11 +613,12 @@ local function space_update_init(include, exclude)
     assert(utils.is_string_array(include))
     assert(utils.is_string_array(exclude))
 
+    vars.helpers.update.enabled = true
+    space_types()
+
     vars.helpers.update.include = include
     vars.helpers.update.exclude = exclude
 
-    vars.helpers.update.enabled = true
-    space_types()
     space_update_list()
 end
 
@@ -589,6 +627,8 @@ local function space_update_remove()
     space_update_list_remove()
     vars.helpers.update.enabled = false
     space_types()
+    vars.helpers.info.include = nil
+    vars.helpers.info.exclude = nil
 end
 
 -- space_add section
@@ -619,9 +659,24 @@ local function space_add_init()
 end
 
 local function space_add_remove()
-    operations.remove_query('space_add')
+    operations.remove_mutation('space_add')
     vars.helpers.add.enabled = false
     space_types()
+end
+
+local function update_lists()
+    if vars.helpers.info and vars.helpers.info.enabled == true then
+        space_info_list()
+    end
+    if vars.helpers.drop and vars.helpers.drop.enabled == true then
+        space_drop_list()
+    end
+    if vars.helpers.truncate and vars.helpers.truncate.enabled == true then
+        space_truncate_list()
+    end
+    if vars.helpers.update and vars.helpers.update.enabled == true then
+        space_update_list()
+    end
 end
 
 local function init(opts)
@@ -673,6 +728,7 @@ end
 return {
     init = init,
     stop = stop,
+    update_lists = update_lists,
 
     -- space_info
     space_info_init = space_info_init,
