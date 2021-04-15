@@ -171,7 +171,7 @@ local function add_mutation(opts)
         name = 'string',
         doc = '?string',
         args = '?table',
-        kind = 'table',
+        kind = 'table|string',
         callback = 'string',
     })
 
@@ -241,6 +241,7 @@ local function stop()
     vars.queries = nil
     vars.mutations = nil
     vars.on_resolve_triggers = nil
+    vars.schema_invalid = nil
 end
 
 local function remove_all()

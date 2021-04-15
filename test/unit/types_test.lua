@@ -96,6 +96,28 @@ g.test_add_remove_space_object = function ()
     t.assert_equals(types.is_invalid(), false)
     t.assert_equals(types['entity'], nil)
     space:drop()
+
+    space = create_space()
+
+    types.add_space_object({
+        name = 'entity',
+        description = 'Entity object',
+        space = 'entity',
+        fields = {
+            bucket_id = box.NULL,
+            instance_alias = types.string,
+        }
+    })
+
+    t.assert_items_include(types.list_types(), {'entity'})
+
+    t.assert_equals(type(types['entity'].fields.entity), 'table')
+    t.assert_equals(type(types['entity'].fields.instance_alias), 'table')
+    t.assert_equals(type(types['entity'].fields.entity_id), 'table')
+    t.assert_equals(types['entity'].fields.bucket_id, nil)
+
+    types.remove('entity')
+    space:drop()
 end
 
 g.test_add_remove_space_input_object = function ()
@@ -126,6 +148,27 @@ g.test_add_remove_space_input_object = function ()
     types.reset_invalid()
     t.assert_equals(types.is_invalid(), false)
     t.assert_equals(types['input_entity'], nil)
+    space:drop()
+
+    space = create_space()
+    types.add_space_input_object({
+        name = 'entity',
+        description = 'Entity object',
+        space = 'entity',
+        fields = {
+            bucket_id = box.NULL,
+            instance_alias = types.string,
+        }
+    })
+
+    t.assert_items_include(types.list_types(), {'entity'})
+
+    t.assert_equals(type(types['entity'].fields.entity), 'table')
+    t.assert_equals(type(types['entity'].fields.instance_alias), 'table')
+    t.assert_equals(type(types['entity'].fields.entity_id), 'table')
+    t.assert_equals(types['entity'].fields.bucket_id, nil)
+
+    types.remove('entity')
     space:drop()
 end
 

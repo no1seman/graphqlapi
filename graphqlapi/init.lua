@@ -304,7 +304,7 @@ local function stop()
     spaces.stop()
     helpers.stop()
     models.stop()
-    --types.remove_all()
+    types.remove_all()
     vars.graphql_schema = nil
     vars.model = nil
     operations.stop()

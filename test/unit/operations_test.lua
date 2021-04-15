@@ -16,7 +16,6 @@ g.after_each = function()
 end
 
 g.test_add_remove_query = function()
-    operations.remove_all()
     operations.add_query({
         name = 'entity',
         doc = 'Get entity',
@@ -46,8 +45,9 @@ g.test_add_remove_query = function()
 end
 
 g.test_add_remove_query_with_prefix = function()
-    operations.remove_all()
     operations.add_query_prefix('test', 'Simple prefix test')
+
+    t.assert_items_equals(operations.get_queries()['test'].resolve(), {})
 
     t.assert_equals(type(operations.get_queries()['test']), 'table')
     t.assert_equals(operations.get_queries()['test'].description, 'Simple prefix test')
@@ -109,7 +109,6 @@ g.test_add_remove_query_with_prefix = function()
 end
 
 g.test_add_remove_mutation = function()
-    operations.remove_all()
     operations.add_mutation({
         name = 'entity',
         doc = 'Mutate entity',
@@ -137,7 +136,6 @@ g.test_add_remove_mutation = function()
 end
 
 g.test_add_remove_mutation_with_prefix = function()
-    operations.remove_all()
     operations.add_mutation_prefix('test', 'Simple prefix test')
 
     t.assert_equals(type(operations.get_mutations()['test']), 'table')
@@ -200,7 +198,6 @@ g.test_add_remove_mutation_with_prefix = function()
 end
 
 g.test_operations_safety = function()
-    operations.remove_all()
     operations.add_query({
         name = 'entity',
         doc = 'Get entity',
@@ -255,7 +252,6 @@ g.test_operations_safety = function()
 end
 
 g.test_on_resolve_trigger = function()
-    operations.remove_all()
     operations.add_query({
         name = 'entity',
         doc = 'Get entity',
@@ -263,24 +259,52 @@ g.test_on_resolve_trigger = function()
             entity_id = types.long
         },
         kind = types.string,
-        callback = 'test.unit.operations_test.stub'
+        callback = 'test.unit.operations_test.stub1'
     })
 
     local res = operations.get_queries()['entity'].resolve()
     t.assert_equals(res, "Operations test")
 
-    local on_resolve_trigger = function(operation, field_name)
+    local on_resolve_trigger1 = function(operation, field_name)
         error(operation ..' '.. field_name, 0)
     end
 
-    operations.on_resolve(on_resolve_trigger, nil)
+    operations.on_resolve(on_resolve_trigger1, nil)
     t.assert_error_msg_contains('query entity', operations.get_queries()['entity'].resolve)
+
+    operations.stop()
+
+    operations.add_query({
+        name = 'entity',
+        doc = 'Get entity',
+        args = {
+            entity_id = types.long
+        },
+        kind = types.string,
+        callback = 'test.unit.operations_test.stub2'
+    })
+
+    local on_resolve_trigger2 = function(_, field_name)
+        return field_name
+    end
+
+    operations.on_resolve(on_resolve_trigger2, nil)
+
+    t.assert_error_msg_contains('callback error', operations.get_queries()['entity'].resolve)
+
+    operations.stop()
+
 end
 
-local function stub()
+local function stub1()
     return 'Operations test'
 end
 
+local function stub2()
+    return nil, 'callback error'
+end
+
 return {
-    stub = stub,
+    stub1 = stub1,
+    stub2 = stub2,
 }

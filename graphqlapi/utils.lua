@@ -24,7 +24,11 @@ local function merge_maps(...)
         local tbl = select(i, ...)
         assert(type(tbl) == 'table')
         for k, v in pairs(tbl) do
-            ret[k] = v
+            if v == box.NULL then
+                ret[k] = nil
+            else
+                ret[k] = v
+            end
         end
     end
 
