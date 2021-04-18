@@ -37,7 +37,7 @@ local vars = require('graphqlapi.vars').new('graphqlapi.graphql')
 
 vars:new('graphql_schema', nil)
 vars:new('model', {})
-vars:new('dir_name', nil)
+vars:new('models_dir', nil)
 vars:new('endpoint', nil)
 vars:new('auth_middleware', nil)
 vars:new('httpd', nil)
@@ -47,9 +47,9 @@ local e_graphql_parse = errors.new_class('GraphQL parsing failed')
 local e_graphql_validate = errors.new_class('GraphQL validation failed')
 local e_graphql_execute = errors.new_class('GraphQL execution failed')
 
-local function set_model(model_entrypoints)
-    vars.model = model_entrypoints
-end
+-- local function set_model(model_entrypoints)
+--     vars.model = model_entrypoints
+-- end
 
 local function get_schema()
     if types.is_invalid() or operations.is_invalid() then
@@ -229,11 +229,13 @@ local function execute_graphql(req)
 end
 
 local function delete_route(httpd, name)
-    if httpd.routes and httpd.routes[name] then
-        httpd.routes[name] = nil
-    end
-    if httpd.iroutes and httpd.iroutes[name] then
-        httpd.iroutes[name] = nil
+    if httpd then
+        if httpd.routes and httpd.routes[name] then
+            httpd.routes[name] = nil
+        end
+        if httpd.iroutes and httpd.iroutes[name] then
+            httpd.iroutes[name] = nil
+        end
     end
 end
 
@@ -254,7 +256,7 @@ local function set_endpoint(endpoint, opts)
     opts = opts or {}
     opts.path = vars.endpoint
     opts.method = opts.method or 'POST'
-    opts.public = opts.public or true
+    opts.public = opts.public or false
     vars.httpd:route(opts, execute_graphql)
 end
 
@@ -263,18 +265,18 @@ local function get_endpoint()
 end
 
 local function _init()
-    if fio.path.is_dir(vars.dir_name) then
-        models.init(vars.dir_name)
+    if fio.path.is_dir(vars.models_dir) then
+        models.init(vars.models_dir)
         return true
     else
-        vars.dir_name = nil
-        local err = string.format('Path is not valid: %s', tostring(vars.dir_name))
+        vars.models_dir = nil
+        local err = string.format('Path is not valid: %s', tostring(vars.models_dir))
         log.error('%s', err)
         return nil, err
     end
 end
 
-local function init(httpd, middleware, endpoint, dir_name, opts)
+local function init(httpd, middleware, endpoint, models_dir, opts)
     checks('table', '?table', '?string', '?string', '?table')
 
     if not middleware or not middleware.render_response or not middleware.authorize_request then
@@ -283,7 +285,7 @@ local function init(httpd, middleware, endpoint, dir_name, opts)
 
     vars.auth_middleware = middleware
     endpoint = endpoint or DEFAULT_ENDPOINT
-    vars.dir_name = dir_name or DEFAULT_DIR_NAME
+    vars.models_dir = models_dir or DEFAULT_DIR_NAME
 
     local ok, err = _init()
     if not ok then
@@ -291,6 +293,7 @@ local function init(httpd, middleware, endpoint, dir_name, opts)
     end
 
     vars.httpd = httpd
+    --log.info('httpd', httpd)
     set_endpoint(endpoint, opts)
     spaces.init()
     --log.info('models list: %s', json.encode(models.list_models()))
@@ -298,8 +301,7 @@ local function init(httpd, middleware, endpoint, dir_name, opts)
 end
 
 local function stop()
-    vars.httpd.routes[vars.endpoint] = nil
-    vars.httpd.iroutes[vars.endpoint] = nil
+    delete_route(vars.httpd, vars.endpoint)
     vars.httpd = nil
     spaces.stop()
     helpers.stop()
@@ -308,9 +310,9 @@ local function stop()
     vars.graphql_schema = nil
     vars.model = nil
     operations.stop()
-    vars.dir_name = nil
+    vars.models_dir = nil
     vars.endpoint = nil
-    require('graphqlapi.vars').stop()
+    --require('graphqlapi.vars').stop()
 end
 
 local function reload()
@@ -320,7 +322,6 @@ local function reload()
     helpers.stop()
     types.remove_all()
     models.stop()
-    require('graphqlapi.vars').stop()
 
     local ok, err = _init()
     if not ok then
@@ -328,15 +329,16 @@ local function reload()
     end
 end
 
-local function set_models_dir(dir_name)
-    if fio.path.is_dir(dir_name) then
-        vars.dir_name = dir_name
+local function set_models_dir(models_dir)
+    checks('string')
+    if fio.path.is_dir(models_dir) then
+        vars.models_dir = models_dir
         reload()
     end
 end
 
 local function get_models_dir()
-    return vars.dir_name
+    return vars.models_dir
 end
 
 return {
@@ -350,14 +352,14 @@ return {
     get_endpoint = get_endpoint,
 
     -- Types
-    set_model = set_model,
-    types = types,
+    --set_model = set_model,
+    --types = types,
 
     -- Operations
-    operations = operations,
+    --operations = operations,
 
     -- Execute GraphQL
-    execute_graphql = execute_graphql,
+    --execute_graphql = execute_graphql,
 
     -- version
     VERSION = VERSION,

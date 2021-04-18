@@ -24,8 +24,8 @@ end
 
 local function list_models()
     local models = {}
-    for _, model in pairs(vars.models) do
-        table.insert(models, model.name)
+    for key in pairs(vars.models) do
+        table.insert(models, key)
     end
     return models
 end
@@ -62,6 +62,7 @@ local function load_model(filename)
             model.spaces = model.spaces or {}
             local modules_after = list_modules()
             utils.diff(modules_before, modules_after, vars.loaded)
+            vars.models[model.name] = model
             return model
         else
             log.error(assert_err.err)
@@ -75,7 +76,6 @@ end
 
 local function load_models(dir_name)
     checks('string')
-    local models = {}
     local files = {}
 
     local function scandir(directory)
@@ -85,8 +85,14 @@ local function load_models(dir_name)
         pfile:close()
 
         for filename in string.gmatch(list, '[^%z]+') do
-            if fio.path.is_dir(fio.cwd() .. '/' .. directory..'/'.. filename) then
-                scandir(directory..'/'..filename)
+            local abs_path
+            if directory:startswith('/') then
+                abs_path = fio.pathjoin(directory, filename)
+            else
+                abs_path = fio.pathjoin(fio.cwd(), directory, filename)
+            end
+            if fio.path.is_dir(abs_path) then
+                scandir(abs_path)
             else
                 if filename:match("^.+(%..+)$") == '.lua' then
                     local path = fio.pathjoin(directory, filename)
@@ -104,14 +110,13 @@ local function load_models(dir_name)
     table.sort(files)
     for _, filename in ipairs(files) do
         if filename:match("^.+(%..+)$") == '.lua' then
-            local model = load_model(filename)
-            table.insert(models, model)
+            load_model(filename)
         end
     end
-    return models
 end
 
 local function apply_model(model)
+
     local _, err = e_model_execute:pcall(model.model)
     if err ~= nil then
         log.error("graphQL model '%s' not applied: %s", model.filename or 'unknown', err)
@@ -124,7 +129,7 @@ end
 
 local function update_space_models(space_name)
     --log.info('update_space_models(%s)', space_name)
-    for _, model in ipairs(vars.models) do
+    for _, model in pairs(vars.models) do
         for _, space in pairs(model.spaces) do
             if space == space_name and model.model ~= nil then
                 apply_model(model)
@@ -134,14 +139,19 @@ local function update_space_models(space_name)
 end
 
 local function remove_model(filename)
-    for key, model in ipairs(vars.models) do
-        if model.filename == filename then
-            vars.models[key] = nil
+    checks('string')
+    if type(vars.models) == 'table' then
+        local model = filename:match("^(.+)%.lua$")
+        if model then
+            vars.models[model:gsub('/', '%.'):lstrip('.')] = nil
+        else
+            vars.models[filename] = nil
         end
     end
 end
 
 local function remove_model_by_space_name(space_name)
+    checks('string')
     for key, model in pairs(vars.models) do
         for _,space in pairs(model.spaces) do
             if space == space_name then
@@ -160,26 +170,13 @@ local function remove_all()
 end
 
 local function get_func(mod_path, mod_name, fun_name)
-    for _, model in ipairs(vars.models) do
-        local parts = model.name:split('.')
-        local _mod_name
-        local _mod_path
-        for index, value in ipairs(parts) do
-            if index <= #parts-1 then
-                _mod_path = (_mod_path or '')..value
-                if index < #parts-1 then
-                    _mod_path = _mod_path .. '.'
-                end
-            else
-                _mod_name = value
-            end
-        end
-        if mod_path == _mod_path and _mod_name == mod_name then
-            if model[fun_name] and type(model[fun_name]) == 'function' then
-                return model[fun_name]
-            else
-                return nil
-            end
+    if mod_name and fun_name then
+        mod_path = mod_path or ''
+        local model = vars.models[mod_path..'.'..mod_name]
+        if model and model[fun_name] and type(model[fun_name]) == 'function' then
+            return model[fun_name]
+        else
+            return nil
         end
     end
     return nil
@@ -187,8 +184,8 @@ end
 
 local function init(dir_name)
     vars.dir_name = dir_name
-    vars.models = load_models(dir_name)
-    for _, model in ipairs(vars.models) do
+    load_models(dir_name)
+    for _, model in pairs(vars.models) do
         apply_model(model)
     end
 end

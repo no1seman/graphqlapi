@@ -11,4 +11,3 @@ local httpd = http.new(HOST, PORT,{ log_requests = false })
 
 httpd:start()
 graphqlapi.init(httpd, nil, ENDPOINT, '../example/models')
-

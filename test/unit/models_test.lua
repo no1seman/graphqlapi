@@ -4,6 +4,12 @@ local g = t.group('models')
 local helper = require('test.helper.unit')
 local models = require('graphqlapi.models')
 
+local root_path = helper.shared.root:gsub('/', '%.'):lstrip('.')
+
+g.after_each = function()
+    models.stop()
+end
+
 g.test_apply_model = function()
     local model = {}
     local ok, err = models.apply_model(model)
@@ -31,7 +37,7 @@ g.test_load_model = function()
     local ok, err = models.load_model(helper.shared.root..'/test/models/suite1/empty1.lua')
     t.assert_equals(ok, nil)
     t.assert_equals(err,
-        'cannot open /home/user/tarantool/graphqlapi/test/models/suite1/empty1.lua: No such file or directory')
+        'cannot open '..helper.shared.root..'/test/models/suite1/empty1.lua: No such file or directory')
 
     -- check empty file
     ok, err = models.load_model(helper.shared.root..'/test/models/suite1/empty.lua')
@@ -76,10 +82,11 @@ end
 
 g.test_init_stop = function()
     package.path = helper.shared.root.. '/test/models/suite1/?.lua;' .. package.path
-    models.init(helper.shared.root..'/test/models/suite1/')
+    models.init(helper.shared.root..'/test/models/suite1')
     t.assert_items_equals(models.list_models(), {
-        'home.user.tarantool.graphqlapi.test.models.suite1.missing_spaces',
-        'home.user.tarantool.graphqlapi.test.models.suite1.valid_model',
+        root_path .. '.test.models.suite1.missing_spaces',
+        root_path .. '.test.models.suite1.valid_model',
+        root_path .. '.test.models.suite1.spaces.spaces',
     })
     t.assert_items_equals(models.list_loaded(), {'module'})
 
@@ -92,48 +99,75 @@ g.test_remove_model = function()
     package.path = helper.shared.root.. '/test/models/suite1/?.lua;' .. package.path
     models.init(helper.shared.root..'/test/models/suite1/')
     t.assert_items_equals(models.list_models(), {
-        'home.user.tarantool.graphqlapi.test.models.suite1.missing_spaces',
-        'home.user.tarantool.graphqlapi.test.models.suite1.valid_model',
+        root_path .. '.test.models.suite1.missing_spaces',
+        root_path .. '.test.models.suite1.valid_model',
+        root_path .. '.test.models.suite1.spaces.spaces',
     })
     t.assert_items_equals(models.list_loaded(), {'module'})
 
-    models.remove_model('/home/user/tarantool/graphqlapi/test/models/suite1/valid_model.lua')
+    models.remove_model(helper.shared.root..'/test/models/suite1/valid_model.lua')
     t.assert_items_equals(models.list_models(), {
-        'home.user.tarantool.graphqlapi.test.models.suite1.missing_spaces'
+        root_path .. '.test.models.suite1.missing_spaces',
+        root_path .. '.test.models.suite1.spaces.spaces',
     })
 
     models.stop()
+
+    models.init(helper.shared.root..'/test/models/suite1/')
+    t.assert_items_equals(models.list_models(), {
+        root_path .. '.test.models.suite1.missing_spaces',
+        root_path .. '.test.models.suite1.valid_model',
+        root_path .. '.test.models.suite1.spaces.spaces',
+    })
+    t.assert_items_equals(models.list_loaded(), {'module'})
+
+    models.remove_model(root_path .. '.test.models.suite1.valid_model')
+    t.assert_items_equals(models.list_models(), {
+        root_path .. '.test.models.suite1.missing_spaces',
+        root_path .. '.test.models.suite1.spaces.spaces',
+    })
 end
 
 g.test_remove_model_by_space_name = function ()
     package.path = helper.shared.root.. '/test/models/suite1/?.lua;' .. package.path
     models.init(helper.shared.root..'/test/models/suite1/')
     t.assert_items_equals(models.list_models(), {
-        'home.user.tarantool.graphqlapi.test.models.suite1.missing_spaces',
-        'home.user.tarantool.graphqlapi.test.models.suite1.valid_model',
+        root_path .. '.test.models.suite1.missing_spaces',
+        root_path .. '.test.models.suite1.valid_model',
+        root_path .. '.test.models.suite1.spaces.spaces',
     })
     t.assert_items_equals(models.list_loaded(), {'module'})
 
     models.remove_model_by_space_name('model')
 
     t.assert_items_equals(models.list_models(), {
-        'home.user.tarantool.graphqlapi.test.models.suite1.missing_spaces'
+        root_path .. '.test.models.suite1.missing_spaces',
+        root_path .. '.test.models.suite1.spaces.spaces',
     })
 end
 
-g.test_update_space_models = function()
-end
+-- g.test_update_space_models = function()
+--     package.path = helper.shared.root.. '/test/models/suite1/?.lua;' .. package.path
+--     models.init(helper.shared.root..'/test/models/suite1/')
+--     -- models.list_models()
+--     -- error()
+-- end
 
 g.test_get_func = function()
     package.path = helper.shared.root.. '/test/models/suite1/?.lua;' .. package.path
-    -- local model = models.load_model(helper.shared.root..'/test/models/suite1/valid_model.lua')
-    -- models.apply_model(model)
+    local model = models.load_model(helper.shared.root..'/test/models/suite1/valid_model.lua')
+    models.apply_model(model)
 
-    models.init(helper.shared.root..'/test/models/suite1/')
-
-    local mod_path = helper.shared.root..'/test/models/suite1'
+    local mod_path = (helper.shared.root..'/test/models/suite1'):gsub('/', '%.'):lstrip('.')
     local mod_name = 'valid_model'
     local fun_name = 'f'
-    local func = models.get_func(mod_path:gsub('/', '%.'):lstrip('.'), mod_name, fun_name)
-    t.assert_items_equals(func(), {module = 'model function'})
+    local fun = models.get_func(mod_path, mod_name, fun_name)
+    t.assert_items_equals(fun(), {module = 'model function'})
+    models.stop()
+
+    models.init(helper.shared.root..'/test/models/suite1/')
+    fun = models.get_func(mod_path, mod_name, fun_name)
+    t.assert_items_equals(fun(), {module = 'model function'})
+
+    models.get_func()
 end
