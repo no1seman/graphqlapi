@@ -174,9 +174,9 @@ end
 
 g.test_remove_internal_type = function()
     local err = select(2, types.remove('list'))
-    t.assert_equals(err.err, "can't remove internal type")
+    t.assert_equals(err.err, 'can\'t remove internal type')
     err = select(2, types.remove_recursive('list'))
-    t.assert_equals(err.err, "can't remove internal type")
+    t.assert_equals(err.err, 'can\'t remove internal type')
 end
 
 g.test_remove_by_space_name = function()

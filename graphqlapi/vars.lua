@@ -1,17 +1,17 @@
 local checks = require('checks')
 
-if rawget(_G, "_graphql_api_defaults") == nil then
-    _G._graphql_api_defaults = {}
+if rawget(_G, "_graphqlapi_defaults") == nil then
+    _G._graphqlapi_defaults = {}
 end
 
-if rawget(_G, "_graphql_api_values") == nil then
-    _G._graphql_api_values = {}
+if rawget(_G, "_graphqlapi_values") == nil then
+    _G._graphqlapi_values = {}
 end
 
 local function new_var(self, name, default_value)
     checks("vars", "string", "?")
 
-    local defaults = _G._graphql_api_defaults
+    local defaults = _G._graphqlapi_defaults
 
     if defaults[self.module_name] == nil then
         defaults[self.module_name] = {}
@@ -23,7 +23,7 @@ end
 local function set_var(self, name, value)
     checks("vars", "string", "?")
 
-    local vars = _G._graphql_api_values
+    local vars = _G._graphqlapi_values
 
     local module_vars = vars[self.module_name]
     if module_vars == nil then
@@ -37,7 +37,7 @@ end
 local function get_var(self, name)
     checks("vars", "string")
 
-    local vars = _G._graphql_api_values
+    local vars = _G._graphqlapi_values
 
     if vars[self.module_name] ~= nil then
         local res = vars[self.module_name][name]
@@ -48,7 +48,7 @@ local function get_var(self, name)
         vars[self.module_name] = {}
     end
 
-    local defaults = _G._graphql_api_defaults
+    local defaults = _G._graphqlapi_defaults
 
     if defaults[self.module_name] == nil then
         defaults[self.module_name] = {}
@@ -79,6 +79,12 @@ local function new(module_name)
     })
 end
 
+local function stop()
+    _G._graphqlapi_defaults = nil
+    _G._graphqlapi_values = nil
+end
+
 return {
     new = new,
+    stop = stop,
 }

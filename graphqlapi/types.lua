@@ -153,7 +153,7 @@ types.add_space_object = function(opts)
         name = 'string',
         description = '?string',
         space = 'string',
-        fields = '?table'
+        fields = '?table',
     })
 
     if not is_space_exists(opts.space) then
@@ -175,7 +175,7 @@ types.add_space_input_object = function(opts)
         name = 'string',
         description = '?string',
         space = 'string',
-        fields = '?table'
+        fields = '?table',
     })
 
     if not is_space_exists(opts.space) then

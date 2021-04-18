@@ -631,14 +631,14 @@ local function space_update_remove()
     vars.helpers.info.exclude = nil
 end
 
--- space_add section
-local function space_add_init()
+-- space_create section
+local function space_create_init()
     vars.helpers.add.enabled = true
     space_types()
 
     operations.add_mutation({
-        name = 'space_add',
-        doc = 'Add new space',
+        name = 'space_create',
+        doc = 'Create new space',
         args = {
             format = types.list(types.SpaceFieldInput),
             id = types.int,
@@ -654,12 +654,12 @@ local function space_add_init()
             ck_constraint = types.list(types.SpaceCkConstraintInput)
         },
         kind = types.SpaceInfo,
-        callback = 'graphqlapi.spaceapi.space_add'
+        callback = 'graphqlapi.spaceapi.space_create'
     })
 end
 
-local function space_add_remove()
-    operations.remove_mutation('space_add')
+local function space_create_remove()
+    operations.remove_mutation('space_create')
     vars.helpers.add.enabled = false
     space_types()
 end
@@ -685,7 +685,7 @@ local function init(opts)
         space_drop_init()
         space_truncate_init()
         space_update_init()
-        space_add_init()
+        space_create_init()
     else
         opts = opts or {}
         if opts.info and opts.info.enabled == true then
@@ -701,7 +701,7 @@ local function init(opts)
             space_update_init(opts.update.include, opts.update.exclude)
         end
         if opts.add and opts.add.enabled == true then
-            space_add_init()
+            space_create_init()
         end
     end
 end
@@ -720,7 +720,7 @@ local function stop()
         space_update_remove()
     end
     if vars.helpers.add.enabled == true then
-        space_add_remove()
+        space_create_remove()
     end
     vars.helpers = nil
 end
@@ -746,7 +746,7 @@ return {
     space_update_init = space_update_init,
     space_update_remove = space_update_remove,
 
-    -- space_add
-    space_add_init = space_add_init,
-    space_add_remove = space_add_remove,
+    -- space_create
+    space_create_init = space_create_init,
+    space_create_remove = space_create_remove,
 }

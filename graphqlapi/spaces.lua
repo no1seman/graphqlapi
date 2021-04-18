@@ -32,7 +32,7 @@ local function updater_init()
                     end
                 end
             end)
-            if not ok and err ~= nil then
+            if not ok and err ~= nil and vars.updater ~= nil then
                 log.error('%s', err)
             end
         end

@@ -97,7 +97,7 @@ g.test_init_stop = function()
         'space_drop',
         'space_truncate',
         'space_update',
-        'space_add'
+        'space_create'
     }
 
     helpers.init()
@@ -315,7 +315,7 @@ g.test_space_update = function()
     helpers.space_truncate_remove()
 end
 
-g.test_space_add = function()
+g.test_space_create = function()
     local types_list = {
         'SpaceCkConstraint',
         'SpaceCkConstraintInput',
@@ -331,12 +331,12 @@ g.test_space_add = function()
         'SpaceInfo',
     }
 
-    local mutations_list = {'space_add'}
+    local mutations_list = {'space_create'}
 
-    helpers.space_add_init()
+    helpers.space_create_init()
     t.assert_items_include(types.list_types(), types_list)
     t.assert_items_equals(operations.list_mutations(), mutations_list)
-    helpers.space_add_remove()
+    helpers.space_create_remove()
     assert_types_absent(types_list)
     assert_mutations_absent(mutations_list)
 end

@@ -310,6 +310,7 @@ local function stop()
     operations.stop()
     vars.dir_name = nil
     vars.endpoint = nil
+    require('graphqlapi.vars').stop()
 end
 
 local function reload()
@@ -319,6 +320,7 @@ local function reload()
     helpers.stop()
     types.remove_all()
     models.stop()
+    require('graphqlapi.vars').stop()
 
     local ok, err = _init()
     if not ok then

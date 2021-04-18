@@ -255,7 +255,7 @@ local function space_truncate(_, args)
     end
 end
 
--- local function space_add(args)
+-- local function space_create(args)
 --     local space_name = args.name
 --     local space_index = args.index
 --     local space_ck_constraints = args.ck_constraint
@@ -340,6 +340,6 @@ return {
     space_info = space_info,
     space_drop = space_drop,
     space_truncate = space_truncate,
-    -- space_add = space_add,
+    -- space_create = space_create,
     list_spaces = list_spaces,
 }
