@@ -85,12 +85,7 @@ local function load_models(dir_name)
         pfile:close()
 
         for filename in string.gmatch(list, '[^%z]+') do
-            local abs_path
-            if directory:startswith('/') then
-                abs_path = fio.pathjoin(directory, filename)
-            else
-                abs_path = fio.pathjoin(fio.cwd(), directory, filename)
-            end
+            local abs_path =fio.pathjoin(directory, filename)
             if fio.path.is_dir(abs_path) then
                 scandir(abs_path)
             else
