@@ -8,7 +8,7 @@ local types = require('graphql.types')
 local utils = require('graphqlapi.utils')
 local vars = require('graphqlapi.vars').new('graphqlapi.types')
 
-vars:new('type_space', {})
+vars:new('space_type', {})
 vars:new('schema_invalid', nil)
 
 local e_graphqlapi = errors.new_class('GraphQL API error', { capture_stack = false })
@@ -38,7 +38,7 @@ local internal_types = {
     object = true,
     remove = true,
     remove_all = true,
-    remove_by_space_name = true,
+    remove_types_by_space_name = true,
     remove_recursive = true,
     reset_invalid = true,
     resolve = true,
@@ -118,34 +118,29 @@ types.remove_recursive = function (type_name)
     checks('string')
     log.debug('Removing type: %s', type_name)
 
-    if not internal_types[type_name] then
-        -- TODO: remove callbacks, mutations and other types that is used by removed type
-        types[type_name] = nil
-        vars.type_space[type_name] = nil
-        vars.schema_invalid = true
-        return type_name
-    else
-        return nil, e_graphqlapi:new("can't remove internal type")
+    local ok, err = types.remove(type_name)
+    if not ok then
+        return ok, err
     end
+    -- TODO: remove callbacks, mutations and other types that is used by removed type
+
 end
 
-types.remove_by_space_name = function(space_name)
-    for type_name, space in pairs(vars.type_space) do
-        if space == space_name then
+types.remove_types_by_space_name = function(space_name)
+    local type_list = vars.space_type[space_name]
+    if type_list and type(type_list) == 'table' then
+        for _, type_name in pairs(type_list) do
             types.remove(type_name)
-            vars.type_space[type_name] = nil
-            vars.schema_invalid = true
         end
+        vars.space_type[space_name] = nil
     end
 end
 
 types.remove_all = function()
-    for _type in pairs(types) do
-        if not internal_types[_type] then
-            types[_type] = nil
-        end
+    for type_name in pairs(types) do
+        types.remove(type_name)
     end
-    vars.type_space = nil
+    vars.space_type = nil
 end
 
 types.add_space_object = function(opts)
@@ -166,7 +161,7 @@ types.add_space_object = function(opts)
         fields = opts.fields and utils.merge_maps(space_fields(opts.space), opts.fields) or space_fields(opts.space)
     })
     types.add(new_type, opts.name)
-    vars.type_space[opts.name] = opts.space
+    vars.space_type[opts.space] = utils.merge_arrays(vars.space_type[opts.space] or {}, {opts.name})
     return opts.name, new_type
 end
 
@@ -188,7 +183,7 @@ types.add_space_input_object = function(opts)
         fields = opts.fields and utils.merge_maps(space_fields(opts.space), opts.fields) or space_fields(opts.space)
     })
     types.add(new_type, opts.name)
-    vars.type_space[opts.name] = opts.space
+    vars.space_type[opts.space] = utils.merge_arrays(vars.space_type[opts.space] or {}, {opts.name})
     return opts.name, new_type
 end
 

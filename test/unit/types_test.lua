@@ -1,7 +1,7 @@
 local t = require('luatest')
 local g = t.group('types')
 
-require('test.helper.unit')
+local test_helper = require('test.helper.unit')
 local types = require('graphqlapi.types')
 
 g.before_each = function()
@@ -10,21 +10,6 @@ end
 
 g.after_each = function()
     types.remove_all()
-end
-
-local function create_space()
-    local format = {
-        { name = 'bucket_id', type = 'unsigned', is_nullable = false },
-        { name = 'entity_id', type = 'string', is_nullable = false },
-        { name = 'entity', type = 'string', is_nullable = true },
-    }
-
-    local space = box.space['entity']
-    if space == nil and not box.cfg.read_only then
-        space = box.schema.space.create('entity', { if_not_exists = true })
-        space:format(format)
-        return space
-    end
 end
 
 g.test_remove_all = function()
@@ -54,7 +39,7 @@ g.test_remove_all = function()
             'nullable',
             'object',
             'remove_all',
-            'remove_by_space_name',
+            'remove_types_by_space_name',
             'remove_recursive',
             'remove',
             'reset_invalid',
@@ -75,7 +60,7 @@ g.test_add_remove_space_object = function ()
     }))
     t.assert_equals(err.err, "space 'entity' doesn't exists")
 
-    local space = create_space()
+    local space = test_helper.create_space()
 
     types.add_space_object({
         name = 'entity',
@@ -97,7 +82,7 @@ g.test_add_remove_space_object = function ()
     t.assert_equals(types['entity'], nil)
     space:drop()
 
-    space = create_space()
+    space = test_helper.create_space()
 
     types.add_space_object({
         name = 'entity',
@@ -128,7 +113,7 @@ g.test_add_remove_space_input_object = function ()
     }))
     t.assert_equals(err.err, "space 'entity' doesn't exists")
 
-    local space = create_space()
+    local space = test_helper.create_space()
 
     types.add_space_input_object({
         name = 'input_entity',
@@ -150,7 +135,7 @@ g.test_add_remove_space_input_object = function ()
     t.assert_equals(types['input_entity'], nil)
     space:drop()
 
-    space = create_space()
+    space = test_helper.create_space()
     types.add_space_input_object({
         name = 'entity',
         description = 'Entity object',
@@ -179,8 +164,8 @@ g.test_remove_internal_type = function()
     t.assert_equals(err.err, 'can\'t remove internal type')
 end
 
-g.test_remove_by_space_name = function()
-    local space = create_space()
+g.test_remove_types_by_space_name = function()
+    local space = test_helper.create_space()
 
     types.add_space_object({
         name = 'entity',
@@ -203,7 +188,7 @@ g.test_remove_by_space_name = function()
     types.reset_invalid()
     t.assert_equals(types.is_invalid(), false)
 
-    types.remove_by_space_name(space.name)
+    types.remove_types_by_space_name(space.name)
     t.assert_equals(types['entity'], nil)
     t.assert_equals(types['input_entity'], nil)
     t.assert_equals(types.is_invalid(), true)

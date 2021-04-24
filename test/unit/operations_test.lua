@@ -1,7 +1,7 @@
 local t = require('luatest')
 local g = t.group('operations')
 
-require('test.helper.unit')
+local test_helper = require('test.helper.unit')
 local operations = require('graphqlapi.operations')
 local types = require('graphqlapi.types')
 
@@ -70,6 +70,7 @@ g.test_add_remove_query_with_prefix = function()
     t.assert_equals(type(operations.get_queries()['test'].kind.fields['entity_1']), 'table')
     t.assert_equals(operations.get_queries()['test'].kind.fields['entity_1'].description, 'Get entity 1')
     t.assert_equals(operations.is_invalid(), true)
+
     operations.reset_invalid()
     t.assert_equals(operations.is_invalid(), false)
 
@@ -294,6 +295,123 @@ g.test_on_resolve_trigger = function()
 
     operations.stop()
 
+end
+
+g.test_add_space_query = function()
+    -- test add_space_query() without prefix
+    local space = test_helper.create_space()
+    operations.add_space_query({
+        space = 'entity',
+        doc = 'Get entity',
+        args = {
+            entity_id = types.int.nonNull
+        },
+        callback = "models.entity.entity_get"
+    })
+    t.assert_equals(type(operations.get_queries()['entity']), 'table')
+    t.assert_equals(operations.get_queries()['entity'].description, 'Get entity')
+    t.assert_equals(operations.is_invalid(), true)
+
+    operations.reset_invalid()
+    t.assert_equals(operations.is_invalid(), false)
+
+    t.assert_items_equals(operations.list_queries(), {'entity'})
+
+    operations.remove_operations_by_space_name('entity')
+    t.assert_equals(operations.is_invalid(), true)
+
+    t.assert_equals(operations.get_queries()['entity'], nil)
+    space:drop()
+
+    -- test add_space_query() with prefix
+    space = test_helper.create_space()
+    operations.add_query_prefix('test', 'Simple prefix test')
+
+    operations.add_space_query({
+        prefix = 'test',
+        space = 'entity',
+        doc = 'Get entity',
+        args = {
+            entity_id = types.int.nonNull
+        },
+        callback = "models.entity.entity_get"
+    })
+
+    t.assert_equals(type(operations.get_queries()['test'].kind.fields['entity']), 'table')
+    t.assert_equals(operations.get_queries()['test'].kind.fields['entity'].description, 'Get entity')
+    t.assert_equals(operations.is_invalid(), true)
+
+    operations.reset_invalid()
+    t.assert_equals(operations.is_invalid(), false)
+
+    t.assert_items_equals(operations.list_queries(), {'test.entity'})
+
+    operations.remove_operations_by_space_name('entity')
+    t.assert_equals(operations.get_queries()['test'].kind.fields['entity'], nil)
+    t.assert_equals(operations.is_invalid(), true)
+
+    operations.remove_query_prefix('test')
+    t.assert_equals(operations.get_queries()['test'], nil)
+
+    space:drop()
+end
+
+g.test_add_space_mutation = function()
+    -- test add_space_mutation() without prefix
+    local space = test_helper.create_space()
+    operations.add_space_mutation({
+        space = 'entity',
+        doc = 'Mutate entity',
+        args = {
+            entity_id = types.int.nonNull
+        },
+        callback = "models.entity.entity_set"
+    })
+    t.assert_equals(type(operations.get_mutations()['entity']), 'table')
+    t.assert_equals(operations.get_mutations()['entity'].description, 'Mutate entity')
+    t.assert_equals(operations.is_invalid(), true)
+
+    operations.reset_invalid()
+    t.assert_equals(operations.is_invalid(), false)
+
+    t.assert_items_equals(operations.list_mutations(), {'entity'})
+
+    operations.remove_operations_by_space_name('entity')
+    t.assert_equals(operations.get_mutations()['entity'], nil)
+    t.assert_equals(operations.is_invalid(), true)
+
+    space:drop()
+
+    -- test add_space_mutation() with prefix
+    space = test_helper.create_space()
+    operations.add_mutation_prefix('test', 'Simple prefix test')
+    operations.add_space_mutation({
+        prefix = 'test',
+        space = 'entity',
+        doc = 'Mutate entity',
+        args = {
+            entity_id = types.int.nonNull
+        },
+        callback = "models.entity.entity_set"
+    })
+
+    t.assert_equals(type(operations.get_mutations()['test'].kind.fields['entity']), 'table')
+    t.assert_equals(operations.get_mutations()['test'].kind.fields['entity'].description, 'Mutate entity')
+    t.assert_equals(operations.is_invalid(), true)
+
+    operations.reset_invalid()
+    t.assert_equals(operations.is_invalid(), false)
+
+    t.assert_items_equals(operations.list_mutations(), {'test.entity'})
+
+    operations.remove_operations_by_space_name('entity')
+    t.assert_equals(operations.get_mutations()['test'].kind.fields['entity'], nil)
+    t.assert_equals(operations.is_invalid(), true)
+
+    operations.remove_mutation_prefix('test')
+    t.assert_equals(operations.get_mutations()['test'], nil)
+
+    space:drop()
 end
 
 local function stub1()

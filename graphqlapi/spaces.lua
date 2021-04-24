@@ -3,8 +3,10 @@ local errors = require('errors')
 local fiber = require('fiber')
 local log = require('log')
 
-local models = require('graphqlapi.models')
 local helpers = require('graphqlapi.helpers')
+local models = require('graphqlapi.models')
+local operations = require('graphqlapi.operations')
+local types = require('graphqlapi.types')
 local vars = require('graphqlapi.vars').new('graphqlapi.spaces')
 
 local e_space_update_fiber = errors.new_class('space updater fiber error')
@@ -26,6 +28,8 @@ local function updater_init()
                     if message.op == 'DELETE' then
                         helpers.update_lists()
                         models.remove_model_by_space_name(message.space.name)
+                        types.remove_types_by_space_name(message.space.name)
+                        operations.remove_operations_by_space_name(message.space.name)
                     else
                         helpers.update_lists()
                         models.update_space_models(message.space.name)

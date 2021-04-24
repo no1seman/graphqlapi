@@ -1,13 +1,17 @@
 local checks = require('checks')
+local ddl = require('ddl')
 
 local types = require('graphqlapi.types')
 local funcall = require('graphqlapi.funcall')
+local utils = require('graphqlapi.utils')
 local vars = require('graphqlapi.vars').new('graphqlapi.operations')
 
 vars:new('queries', {})
 vars:new('mutations', {})
 vars:new('on_resolve_triggers', {})
 vars:new('schema_invalid', nil)
+vars:new('space_query', {})
+vars:new('space_mutation', {})
 
 local function is_invalid()
     return vars.schema_invalid
@@ -15,6 +19,11 @@ end
 
 local function reset_invalid()
     vars.schema_invalid = false
+end
+
+local function is_space_exists(space)
+    local ddl_schema = ddl.get_schema()
+    return ddl_schema.spaces[space] or false
 end
 
 local function funcall_wrap(fun_name, operation, field_name)
@@ -147,16 +156,27 @@ local function remove_query(name, prefix)
     vars.schema_invalid = true
 end
 
+local function is_query_prefix(query)
+    if query and
+       type(query) == 'table' and
+       query.kind and
+       type(query.kind) == 'table' and
+       query.kind.__type == 'Object' and
+       query.kind.name:sub(1, 3) == 'Api' and
+       query.kind.fields and
+       type(query.kind.fields) == 'table' then
+        return true
+    else
+        return false
+    end
+end
+
 local function list_queries()
     local queries = {}
     for query in pairs(vars.queries) do
-        if vars.queries[query].kind and type(vars.queries[query].kind) == 'table' and
-            vars.queries[query].kind.__type == 'Object' and
-            vars.queries[query].kind.name:sub(1, 3) == 'Api' then
-            if vars.queries[query].kind.fields then
-                for prefixed_query in pairs(vars.queries[query].kind.fields) do
-                    table.insert(queries, tostring(query)..'.'..tostring(prefixed_query))
-                end
+        if is_query_prefix(vars.queries[query]) then
+            for prefixed_query in pairs(vars.queries[query].kind.fields) do
+                table.insert(queries, tostring(query)..'.'..tostring(prefixed_query))
             end
         else
             table.insert(queries, query)
@@ -219,16 +239,111 @@ local function remove_mutation(name, prefix)
     vars.schema_invalid = true
 end
 
+local function add_space_query(opts)
+    checks({
+        type_name = '?string',
+        description = '?string',
+        space = 'string',
+        fields = '?table',
+        prefix = '?string',
+        query_name = '?string',
+        doc = '?string',
+        args = '?table',
+        callback = 'string',
+    })
+
+    if not is_space_exists(opts.space) then
+        error(string.format("space '%s' doesn't exists", opts.space))
+    end
+
+    local space_query_type = types.add_space_object({
+        name = opts.type_name or opts.space,
+        description = opts.description,
+        space = opts.space,
+        fields = opts.fields
+    })
+
+    add_query({
+        prefix = opts.prefix,
+        name = opts.query_name or opts.space,
+        doc = opts.doc,
+        args = opts.args,
+        kind = types.list(space_query_type),
+        callback = opts.callback,
+    })
+
+    local query_name
+    if opts.prefix and opts.prefix ~= '' then
+        query_name = opts.prefix..'.' .. (opts.query_name or opts.space)
+    else
+        query_name = (opts.query_name or opts.space)
+    end
+    vars.space_query[opts.space] = utils.merge_arrays(vars.space_query[opts.space] or {}, {query_name})
+end
+
+local function add_space_mutation(opts)
+    checks({
+        type_name = '?string',
+        description = '?string',
+        space = 'string',
+        fields = '?table',
+        prefix = '?string',
+        mutation_name = '?string',
+        doc = '?string',
+        args = '?table',
+        callback = 'string',
+    })
+
+    if not is_space_exists(opts.space) then
+        error(string.format("space '%s' doesn't exists", opts.space))
+    end
+
+    local space_mutation_type = types.add_space_input_object({
+        name = opts.type_name or opts.space,
+        description = opts.description,
+        space = opts.space,
+        fields = opts.fields
+    })
+
+    add_mutation({
+        prefix = opts.prefix,
+        name = opts.mutation_name or opts.space,
+        doc = opts.doc,
+        args = opts.args,
+        kind = types.list(space_mutation_type),
+        callback = opts.callback,
+    })
+
+    local mutation_name
+    if opts.prefix and opts.prefix ~= '' then
+        mutation_name = opts.prefix..'.' .. (opts.mutation_name or opts.space)
+    else
+        mutation_name = (opts.mutation_name or opts.space)
+    end
+    vars.space_mutation[opts.space] = utils.merge_arrays(vars.space_mutation[opts.space] or {}, {mutation_name})
+end
+
+local function is_mutation_prefix(mutation)
+    if mutation and
+       type(mutation) and
+       mutation.kind and
+       type(mutation.kind) == 'table' and
+       mutation.kind.__type == 'Object' and
+       mutation.kind.name:sub(1, 11) == 'MutationApi' and
+       mutation.kind.fields and
+       type (mutation.kind.fields) then
+        return true
+    else
+        return false
+    end
+end
+
 local function list_mutations()
     local mutations = {}
     for mutation in pairs(vars.mutations) do
-        if vars.mutations[mutation].kind and type(vars.mutations[mutation].kind) == 'table' and
-            vars.mutations[mutation].kind.__type == 'Object' and
-            vars.mutations[mutation].kind.name:sub(1, 11) == 'MutationApi' then
-            if vars.mutations[mutation].kind.fields then
-                for prefixed_mutation in pairs(vars.mutations[mutation].kind.fields) do
-                    table.insert(mutations, tostring(mutation)..'.'..tostring(prefixed_mutation))
-                end
+        if is_mutation_prefix(vars.mutations[mutation]) then
+            for prefixed_mutation in pairs(vars.mutations[mutation].kind.fields) do
+                table.insert(mutations, tostring(mutation)..'.'..tostring(prefixed_mutation))
             end
         else
             table.insert(mutations, mutation)
@@ -240,6 +355,8 @@ end
 local function stop()
     vars.queries = nil
     vars.mutations = nil
+    vars.space_query = nil
+    vars.space_mutation = nil
     vars.on_resolve_triggers = nil
     vars.schema_invalid = nil
 end
@@ -247,6 +364,39 @@ end
 local function remove_all()
     vars.queries = nil
     vars.mutations = nil
+    vars.space_query = nil
+    vars.space_mutation = nil
+    vars.schema_invalid = true
+end
+
+local function remove_operations_by_space_name(space_name)
+    -- Cleanup queries related to space
+    local query_list = vars.space_query[space_name]
+    if query_list and type(query_list) == 'table' then
+        for _, query_name in pairs(query_list) do
+            local parts = query_name:split('.')
+            if #parts == 2 then
+                remove_query(parts[2], parts[1])
+            else
+                remove_query(query_name)
+            end
+        end
+        vars.space_query[space_name] = nil
+    end
+
+    -- Cleanup mutations related to space
+    local mutation_list = vars.space_mutation[space_name]
+    if mutation_list and type(mutation_list) == 'table' then
+        for _, mutation_name in pairs(mutation_list) do
+            local parts = mutation_name:split('.')
+            if #parts == 2 then
+                remove_mutation(parts[2], parts[1])
+            else
+                remove_mutation(mutation_name)
+            end
+        end
+        vars.space_mutation[space_name] = nil
+    end
 end
 
 local function on_resolve(trigger_new, trigger_old)
@@ -291,6 +441,11 @@ return {
     add_mutation = add_mutation,
     remove_mutation = remove_mutation,
     list_mutations = list_mutations,
+
+    -- Spaces
+    add_space_query = add_space_query,
+    add_space_mutation = add_space_mutation,
+    remove_operations_by_space_name = remove_operations_by_space_name,
 
     -- Schema invalidation flag
     is_invalid = is_invalid,
