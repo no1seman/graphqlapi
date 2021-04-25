@@ -47,10 +47,6 @@ local e_graphql_parse = errors.new_class('GraphQL parsing failed')
 local e_graphql_validate = errors.new_class('GraphQL validation failed')
 local e_graphql_execute = errors.new_class('GraphQL execution failed')
 
--- local function set_model(model_entrypoints)
---     vars.model = model_entrypoints
--- end
-
 local function get_schema()
     if types.is_invalid() or operations.is_invalid() then
         vars.graphql_schema = nil
@@ -61,21 +57,10 @@ local function get_schema()
         return vars.graphql_schema
     end
 
-    local fields = {}
+    local queries = {}
 
     for name, fun in pairs(operations.get_queries()) do
-        fields[name] = fun
-    end
-
-    for name, entry in pairs(vars.model) do
-        local original_resolve = entry.resolve
-        entry.resolve = function(...)
-            if original_resolve then
-                return original_resolve(...)
-            end
-            return true
-        end
-        fields[name] = entry
+        queries[name] = fun
     end
 
     local mutations = {}
@@ -83,7 +68,7 @@ local function get_schema()
         mutations[name] = fun
     end
 
-    local root = {query = types.object {name = 'Query', fields=fields}}
+    local root = {query = types.object {name = 'Query', fields=queries}}
 
     if next(mutations) then
         root.mutation = types.object {name = 'Mutation', fields=mutations}
@@ -93,10 +78,10 @@ local function get_schema()
     return vars.graphql_schema
 end
 
-local function http_finalize(obj)
-    checks('table')
+local function http_finalize(obj, status)
+    checks('table', '?number')
     return vars.auth_middleware.render_response({
-        status = 200,
+        status = status or 200,
         headers = {['content-type'] = "application/json; charset=utf-8"},
         body = json.encode(obj),
     })
@@ -106,7 +91,7 @@ local function _execute_graphql(req)
     if not vars.auth_middleware.authorize_request(req) then
         return http_finalize({
             errors = {{message = "Unauthorized"}},
-        })
+        }, 401)
     end
 
     local body = req:read_cached()
@@ -114,33 +99,32 @@ local function _execute_graphql(req)
     if body == nil or body == '' then
         return http_finalize({
             errors = {{message = "Expected a non-empty request body"}},
-        })
+        }, 400)
     end
 
     local parsed = json.decode(body)
-    if parsed == nil then
+    if parsed == nil or type(parsed) ~= 'table' then
         return http_finalize({
             errors = {{message = "Body should be a valid JSON"}},
-        })
+        }, 400)
     end
 
     if parsed.query == nil or type(parsed.query) ~= "string" then
         return http_finalize({
             errors = {{message = "Body should have 'query' field"}},
-        })
+        }, 400)
     end
-
 
     if parsed.operationName ~= nil and type(parsed.operationName) ~= "string" then
         return http_finalize({
             errors = {{message = "'operationName' should be string"}},
-        })
+        }, 400)
     end
 
     if parsed.variables ~= nil and type(parsed.variables) ~= "table" then
         return http_finalize({
             errors = {{message = "'variables' should be a dictionary"}},
-        })
+        }, 400)
     end
 
     local operationName = nil
@@ -161,7 +145,7 @@ local function _execute_graphql(req)
         log.error('%s', err)
         return http_finalize({
             errors = {{message = err.err}},
-        })
+        }, 400)
     end
 
     local schema_obj = get_schema()
@@ -171,7 +155,7 @@ local function _execute_graphql(req)
         log.error('%s', err)
         return http_finalize({
             errors = {{message = err.err}},
-        })
+        }, 400)
     end
 
     local rootValue = {}
@@ -201,19 +185,13 @@ local function _execute_graphql(req)
                 message = err.err,
                 extensions = extensions,
             }}
-        })
+        }, 500)
     end
 
-    if err and #err > 0 then
-        return http_finalize({
-            data = data,
-            errors = err,
-        })
-    else
-        return http_finalize({
-            data = data,
-        })
-    end
+    return http_finalize({
+        data = data,
+        errors = err,
+    }, 200)
 end
 
 local function execute_graphql(req)
@@ -230,11 +208,10 @@ end
 
 local function delete_route(httpd, name)
     if httpd then
-        if httpd.routes and httpd.routes[name] then
-            httpd.routes[name] = nil
-        end
-        if httpd.iroutes and httpd.iroutes[name] then
+        local route = httpd.iroutes[name]
+        if route then
             httpd.iroutes[name] = nil
+            httpd.routes[route] = nil
         end
     end
 end
@@ -255,6 +232,7 @@ local function set_endpoint(endpoint, opts)
     vars.endpoint = remove_side_slashes(endpoint)
     opts = opts or {}
     opts.path = vars.endpoint
+    opts.name = vars.endpoint
     opts.method = opts.method or 'POST'
     opts.public = opts.public or false
     vars.httpd:route(opts, execute_graphql)
@@ -293,11 +271,9 @@ local function init(httpd, middleware, endpoint, models_dir, opts)
     end
 
     vars.httpd = httpd
-    --log.info('httpd', httpd)
     set_endpoint(endpoint, opts)
+
     spaces.init()
-    --log.info('models list: %s', json.encode(models.list_models()))
-    --require('graphqlapi.printer').print_types(types)
 end
 
 local function stop()
@@ -350,16 +326,6 @@ return {
     get_models_dir = get_models_dir,
     set_endpoint = set_endpoint,
     get_endpoint = get_endpoint,
-
-    -- Types
-    --set_model = set_model,
-    --types = types,
-
-    -- Operations
-    --operations = operations,
-
-    -- Execute GraphQL
-    --execute_graphql = execute_graphql,
 
     -- version
     VERSION = VERSION,
