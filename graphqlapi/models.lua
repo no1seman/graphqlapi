@@ -52,7 +52,7 @@ end
 local function load_model(filename)
     checks('string')
     local modules_before = list_modules()
-    local model_function, err = e_model_load:pcall(loadfile, filename)
+    local model_function, err = e_model_load:pcall(loadfile, fio.pathjoin(package.searchroot(), filename))
     if model_function then
         local model = model_function()
         local res, assert_err = e_model_assert:pcall(assert_model, model)
@@ -79,14 +79,15 @@ local function load_models(dir_name)
     local files = {}
 
     local function scandir(directory)
+        local full_path = fio.pathjoin(package.searchroot(), directory)
         local pfile = assert(io.popen(
-            ("find '%s' -mindepth 1 -maxdepth 1 -printf '%%f\\0'"):format(directory), 'r'))
+            ("find '%s' -mindepth 1 -maxdepth 1 -printf '%%f\\0'"):format(full_path), 'r'))
         local list = pfile:read('*a')
         pfile:close()
 
         for filename in string.gmatch(list, '[^%z]+') do
-            local abs_path =fio.pathjoin(directory, filename)
-            if fio.path.is_dir(abs_path) then
+            local abs_path = fio.pathjoin(directory, filename)
+            if fio.path.is_dir(fio.pathjoin(package.searchroot(), abs_path)) then
                 scandir(abs_path)
             else
                 if filename:match("^.+(%..+)$") == '.lua' then
@@ -123,7 +124,6 @@ local function apply_model(model)
 end
 
 local function update_space_models(space_name)
-    --log.info('update_space_models(%s)', space_name)
     for _, model in pairs(vars.models) do
         for _, space in pairs(model.spaces) do
             if space == space_name and model.model ~= nil then

@@ -1,5 +1,6 @@
 local log = require('log')
 local json = require('json')
+
 local fio = require('fio')
 local checks = require('checks')
 local errors = require('errors')
@@ -87,6 +88,23 @@ local function http_finalize(obj, status)
     })
 end
 
+local function to_graphql_error(err)
+    if type(err.err) ~= 'string' then
+        err.err = json.encode(err.err)
+    end
+
+    log.error('%s', err)
+
+    local extensions = err.graphql_extensions or {}
+    extensions['io.tarantool.errors.class_name'] = err.class_name
+    extensions['io.tarantool.errors.stack'] = err.stack
+
+    return {
+        message = err.err,
+        extensions = extensions,
+    }
+end
+
 local function _execute_graphql(req)
     if not vars.auth_middleware.authorize_request(req) then
         return http_finalize({
@@ -164,28 +182,22 @@ local function _execute_graphql(req)
         schema_obj, ast, rootValue, variables, operationName
     )
 
-    if data == nil then
-        if not errors.is_error_object(err) then
-            err = e_graphql_execute:new(err or "Unknown error")
+    if err ~= nil then
+        if errors.is_error_object(err) then
+            err = {to_graphql_error(err)}
+        elseif type(err) == 'table' then
+            local _errors = {}
+            for _, _err_arr in ipairs(err) do
+                if errors.is_error_object(_err_arr) then
+                    table.insert(_errors, to_graphql_error(_err_arr))
+                else
+                    for _, _err in ipairs(_err_arr) do
+                        table.insert(_errors, to_graphql_error(_err))
+                    end
+                end
+            end
+            err = _errors
         end
-
-        if type(err.err) ~= 'string' then
-            err.err = json.encode(err.err)
-        end
-
-        log.error('%s', err)
-
-        local extensions = err.graphql_extensions or {}
-        extensions['io.tarantool.errors.class_name'] = err.class_name
-        extensions['io.tarantool.errors.stack'] = err.stack
-
-        -- Specification: https://spec.graphql.org/June2018/#sec-Errors
-        return http_finalize({
-            errors = {{
-                message = err.err,
-                extensions = extensions,
-            }}
-        }, 500)
     end
 
     return http_finalize({
@@ -243,7 +255,7 @@ local function get_endpoint()
 end
 
 local function _init()
-    if fio.path.is_dir(vars.models_dir) then
+    if fio.path.is_dir(fio.pathjoin(package.searchroot(), vars.models_dir)) then
         models.init(vars.models_dir)
         return true
     else
@@ -288,7 +300,6 @@ local function stop()
     operations.stop()
     vars.models_dir = nil
     vars.endpoint = nil
-    --require('graphqlapi.vars').stop()
 end
 
 local function reload()
@@ -307,7 +318,7 @@ end
 
 local function set_models_dir(models_dir)
     checks('string')
-    if fio.path.is_dir(models_dir) then
+    if fio.path.is_dir(fio.pathjoin(package.searchroot(), models_dir)) then
         vars.models_dir = models_dir
         reload()
     end

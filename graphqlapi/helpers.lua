@@ -93,8 +93,6 @@ local function space_types()
         end
     end
 
-    --print(require('json').encode(type_list))
-
     if utils.value_in('SpaceFieldType', type_list) then
         if not types.SpaceFieldType then
             types.add(types.enum({
@@ -249,7 +247,7 @@ local function space_types()
                 name = 'SpaceInfo',
                 description = 'Space info',
                 fields = {
-                    format = types.list(types.SpaceField),-- !!!
+                    format = types.list(types.SpaceField),
                     id = types.int,
                     name = types.string,
                     engine = types.SpaceEngine,

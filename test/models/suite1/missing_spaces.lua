@@ -1,3 +1,3 @@
 return {
-    model = function() return 1+nil end,
+    model = function() return end,
 }
