@@ -24,7 +24,7 @@ g.after_each = function()
 end
 
 g.test_space_info = function()
-    local router = helper.get_server_by_alias(cluster, 'router')
+    local router = cluster:server('router')
     local space_info, space_info_err
 
     -- check space_info with empty cluster
@@ -85,7 +85,7 @@ g.test_space_info = function()
 
     -- check space_info with list of unexisting space on storage
     do
-        helper.get_server_by_alias(cluster, 'storage-1-master').net_box:eval(
+        cluster:server('storage-1-master').net_box:eval(
             [[ box.space['entity']:drop()]])
 
         space_info, space_info_err = router.net_box:eval(
@@ -99,8 +99,8 @@ g.test_space_info = function()
 
     -- check space_info with one replicaset not available
     do
-        helper.stop_server(cluster, 'storage-1-master')
-        helper.stop_server(cluster, 'storage-1-replica')
+        cluster:server('storage-1-master'):stop()
+        cluster:server('storage-1-replica'):stop()
 
         space_info, space_info_err = router.net_box:eval(
             [[ return require('graphqlapi.spaceapi').space_info(nil, {name = {...}}) ]],

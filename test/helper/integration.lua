@@ -1,22 +1,22 @@
 local t = require('luatest')
-
 local fio = require('fio')
 
-local cartridge_helpers = require('cartridge.test-helpers')
-local shared = require('test.helper')
+local helper = table.copy(require('cartridge.test-helpers'))
 
-local helper = {shared = shared}
-
+helper.root = fio.dirname(debug.sourcedir())
+local tmpdir = fio.pathjoin(helper.root, '../tmp')
+helper.datadir = fio.pathjoin(tmpdir, 'db_test')
+helper.server_command = fio.pathjoin(helper.root, 'entrypoint', 'init.lua')
 helper.project_root = fio.dirname(debug.sourcedir())
 
-helper.cluster = cartridge_helpers.Cluster:new({
-    server_command = shared.server_command,
-    datadir = shared.datadir,
+helper.cluster_config = {
+    server_command = helper.server_command,
+    datadir = helper.datadir,
     use_vshard = true,
     replicasets = {
         {
             alias = 'api',
-            uuid = cartridge_helpers.uuid('a'),
+            uuid = helper.uuid('a'),
             roles = {
                 'vshard-router',
                 'graphqlapi',
@@ -24,49 +24,50 @@ helper.cluster = cartridge_helpers.Cluster:new({
             },
             servers = {
                 {
-                    instance_uuid = cartridge_helpers.uuid('a', 1),
+                    instance_uuid = helper.uuid('a', 1),
                     alias = 'router',
                 },
             },
         },
         {
             alias = 'storage-1',
-            uuid = cartridge_helpers.uuid('b'),
+            uuid = helper.uuid('b'),
             roles = {
                 'vshard-storage',
                 'test.entrypoint.app.roles.storage'
             },
             servers = {
                 {
-                    instance_uuid = cartridge_helpers.uuid('b', 1),
+                    instance_uuid = helper.uuid('b', 1),
                     alias = 'storage-1-master',
                 },
                 {
-                    instance_uuid = cartridge_helpers.uuid('b', 2),
+                    instance_uuid = helper.uuid('b', 2),
                     alias = 'storage-1-replica',
                 },
             },
         },
         {
             alias = 'storage-2',
-            uuid = cartridge_helpers.uuid('c'),
+            uuid = helper.uuid('c'),
             roles = {
                 'vshard-storage',
                 'test.entrypoint.app.roles.storage'
             },
             servers = {
                 {
-                    instance_uuid = cartridge_helpers.uuid('c', 1),
+                    instance_uuid = helper.uuid('c', 1),
                     alias = 'storage-2-master',
                 },
                 {
-                    instance_uuid = cartridge_helpers.uuid('c', 2),
+                    instance_uuid = helper.uuid('c', 2),
                     alias = 'storage-2-replica',
                 },
             },
         },
     },
-})
+}
+helper.cluster = helper.Cluster:new(helper.cluster_config)
 
 function helper.get_server_by_alias(cluster, alias)
     for index, server in ipairs(cluster.servers) do
@@ -74,14 +75,6 @@ function helper.get_server_by_alias(cluster, alias)
             return cluster.servers[index]
         end
     end
-end
-
-function helper.stop_server(cluster, alias)
-    helper.get_server_by_alias(cluster, alias):stop()
-end
-
-function helper.start_server(cluster, alias)
-    helper.get_server_by_alias(cluster, alias):start()
 end
 
 function helper.create_space_on_cluster(cluster, space_name, format)
