@@ -121,7 +121,7 @@ local function _get_space_size(spaces)
             else
                 local storage = tostring(replica.master.conn.host)..':'..tostring(replica.master.conn.port)
                 remote_errors = remote_errors or {}
-                table.insert(remote_errors, e_space_api:new('instance "%s" error: %s', storage, res))
+                table.insert(remote_errors, e_space_api:new('instance \'%s\' error: %s', storage, res))
             end
 
             if eval_err and #eval_err > 0 then

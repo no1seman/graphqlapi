@@ -4,6 +4,7 @@ local types = require('graphqlapi.types')
 local ddl = require('ddl')
 local utils = require('graphqlapi.utils')
 
+require('graphqlapi.spaceapi')
 local vars = require('graphqlapi.vars').new('graphqlapi.helpers')
 
 vars:new('helpers', {
