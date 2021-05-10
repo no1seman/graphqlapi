@@ -4,11 +4,31 @@ local g = t.group('utils')
 require('test.helper.unit')
 local utils = require('graphqlapi.utils')
 
-g.test_diff = function()
-    local res = utils.diff({['a'] = true, ['c'] = true}, {['a'] = true, ['b'] = true}, {'a', 'd'})
+g.test_value_in = function()
+    t.assert_equals(utils.value_in(nil, {}), false)
+    t.assert_equals(utils.value_in(1, {2, 3, 4}), false)
+    t.assert_equals(utils.value_in('1', {1, 2}), false)
+    t.assert_equals(utils.value_in('1', {'2', '1'}), true)
+end
+
+g.test_diff_maps = function()
+    local res = utils.diff_maps({['a'] = true, ['c'] = true}, {['a'] = true, ['b'] = true}, {'a', 'd'})
     t.assert_items_equals(res, {'a', 'd', 'b'})
-    res = utils.diff({}, {['a'] = true, ['b'] = true}, {'a', 'd'})
+    res = utils.diff_maps({}, {['a'] = true, ['b'] = true}, {'a', 'd'})
     t.assert_items_equals(res, {'a', 'd', 'b'})
+end
+
+g.test_diff_arrays = function()
+    local res = utils.diff_arrays({}, {})
+    t.assert_items_equals(res, {})
+    res = utils.diff_arrays({'entity1'}, {})
+    t.assert_items_equals(res, {})
+    res = utils.diff_arrays({}, {'entity1'})
+    t.assert_items_equals(res, {})
+    res = utils.diff_arrays({'entity1'}, {'entity2'})
+    t.assert_items_equals(res, {})
+    res = utils.diff_arrays({'entity1'}, {'entity1'})
+    t.assert_items_equals(res, {'entity1'})
 end
 
 g.test_merge_maps = function()
@@ -48,11 +68,21 @@ g.test_merge_arrays = function()
     t.assert_items_equals(res, {1, 9, 3, 4, 5, 6, 10})
 end
 
-g.test_value_in = function()
-    t.assert_equals(utils.value_in(nil, {}), false)
-    t.assert_equals(utils.value_in(1, {2, 3, 4}), false)
-    t.assert_equals(utils.value_in('1', {1, 2}), false)
-    t.assert_equals(utils.value_in('1', {'2', '1'}), true)
+g.test_concat_arrays = function()
+    local res = utils.concat_arrays()
+    t.assert_items_equals(res, {})
+
+    res = utils.concat_arrays(nil, {{arr1 = 'val1'}})
+    t.assert_items_equals(res, {{arr1 = 'val1'}})
+
+    res = utils.concat_arrays({}, {})
+    t.assert_items_equals(res, {})
+
+    res = utils.concat_arrays({{arr1 = 'val1'}})
+    t.assert_items_equals(res, {{arr1 = 'val1'}})
+
+    res = utils.concat_arrays({{arr1 = 'val1'}}, {{arr2 = 'val2'}})
+    t.assert_items_equals(res, {{arr1 = 'val1'}, {arr2 = 'val2'}})
 end
 
 g.test_is_string_array = function()

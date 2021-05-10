@@ -19,6 +19,7 @@ helper.cluster = cartridge_helpers.Cluster:new({
             uuid = cartridge_helpers.uuid('a'),
             roles = {
                 'vshard-router',
+                'graphqlapi',
                 'test.entrypoint.app.roles.api',
             },
             servers = {
@@ -67,25 +68,20 @@ helper.cluster = cartridge_helpers.Cluster:new({
     },
 })
 
-function helper.register_sharding_key(space_name, fields)
-    if box.space._ddl_sharding_key == nil then
-            local sharding_space = box.schema.space.create('_ddl_sharding_key', {
-        format = {
-            {name = 'space_name', type = 'string', is_nullable = false},
-            {name = 'sharding_key', type = 'array', is_nullable = false}
-        },
-        if_not_exists = true
-    })
-    sharding_space:create_index(
-        'space_name', {
-            type = 'TREE',
-            unique = true,
-            parts = {{'space_name', 'string', is_nullable = false}},
-            if_not_exists = true
-        }
-    )
+function helper.get_server_by_alias(cluster, alias)
+    for index, server in ipairs(cluster.servers) do
+        if server.alias == alias then
+            return cluster.servers[index]
+        end
     end
-    box.space._ddl_sharding_key:replace{space_name, fields}
+end
+
+function helper.stop_server(cluster, alias)
+    helper.get_server_by_alias(cluster, alias):stop()
+end
+
+function helper.start_server(cluster, alias)
+    helper.get_server_by_alias(cluster, alias):start()
 end
 
 function helper.create_space_on_cluster(cluster, space_name, format)
@@ -118,11 +114,11 @@ function helper.create_primary_index_on_cluster(cluster, space_name, parts)
     end
 end
 
-function helper.create_secondary_index_on_cluster(cluster, space_name, unique, parts)
+function helper.create_secondary_index_on_cluster(cluster, space_name, name, unique, parts)
     assert(cluster ~= nil)
     for _, server in ipairs(cluster.servers) do
         server.net_box:eval([[
-            local space_name, unique, parts = ...
+            local space_name, name, unique, parts = ...
             local space = box.space[space_name]
             if space ~= nil and not box.cfg.read_only then
                 space:create_index(name, {
@@ -131,7 +127,7 @@ function helper.create_secondary_index_on_cluster(cluster, space_name, unique, p
                     if_not_exists = true,
                 })
             end
-        ]], {space_name, unique, parts})
+        ]], {space_name, name, unique, parts})
     end
 end
 
@@ -171,6 +167,44 @@ function helper.create_bucket_index_on_cluster(cluster, space_name, fields)
             end
         ]], {space_name, fields})
     end
+end
+
+function helper.drop_index_on_cluster(cluster, space_name, index_name)
+    assert(cluster ~= nil)
+    for _, server in ipairs(cluster.servers) do
+        server.net_box:eval([[
+            local space_name, index_name = ...
+            local space = box.space[space_name]
+            if space ~= nil and not box.cfg.read_only then
+                space:create_check_constraint(name, expression)
+            end
+        ]], {space_name, index_name})
+    end
+end
+
+function helper.create_check_constraint_on_cluster(cluster, space_name, name, expression)
+    assert(cluster ~= nil)
+    for _, server in ipairs(cluster.servers) do
+        server.net_box:eval([[
+            local space_name, name, expression = ...
+            local space = box.space[space_name]
+            if space ~= nil and not box.cfg.read_only then
+                local constraint = space:create_check_constraint(name, expression)
+                constraint:enable(false)
+            end
+        ]], {space_name, name, expression})
+    end
+end
+
+function helper.insert_data(cluster, space_name, data)
+    local router = helper.get_server_by_alias(cluster, 'router')
+    local res, err = router.net_box:eval([[
+        local space_name, data = ...
+        local _data = box.space.entity:frommap(data)
+        local vshard = require('vshard')
+        return vshard.router.callrw(data.bucket_id, 'box.space.'..space_name..':insert', {_data}, {timeout=5})
+    ]], {space_name, data})
+    return res, err
 end
 
 function helper.drop_space_on_cluster(cluster, space_name)

@@ -61,7 +61,7 @@ local function load_model(filename)
             model.name = filename:match("^(.+)%.lua$"):gsub('/', '%.'):lstrip('.')
             model.spaces = model.spaces or {}
             local modules_after = list_modules()
-            utils.diff(modules_before, modules_after, vars.loaded)
+            utils.diff_maps(modules_before, modules_after, vars.loaded)
             vars.models[model.name] = model
             return model
         else

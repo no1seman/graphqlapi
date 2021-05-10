@@ -1,18 +1,19 @@
 local checks = require('checks')
 local ddl = require('ddl')
---local errors = require('errors')
+local errors = require('errors')
 local fiber = require('fiber')
---local json = require('json')
---local log = require('log')
 local vshard = require('vshard')
+local json = require('json')
 
---local e_space_api = errors.new_class('space API error', { capture_stack = false })
+local utils = require('graphqlapi.utils')
+
+local NET_BOX_CONNECTION_TIMEOUT = 1
+local e_space_api = errors.new_class('spaceAPI error', { capture_stack = false })
 
 local function list_spaces(schema)
     local spaces = {}
-    schema = schema or ddl.get_schema()
     for space in pairs(schema.spaces) do
-        spaces[space]=space
+        table.insert(spaces, space)
     end
     return spaces
 end
@@ -20,12 +21,9 @@ end
 local function _get_space_size(spaces)
     local counters = {}
     local fibers = {}
-    local remote_errors = {}
+    local remote_errors
 
-    local shards, err = vshard.router.routeall()
-    if err ~= nil then
-        error(err)
-    end
+    local shards = vshard.router.routeall()
 
     for uid, replica in pairs(shards) do
         local f = fiber.new(function()
@@ -33,9 +31,12 @@ local function _get_space_size(spaces)
                 return replica.master.conn:eval([[
                     local log = require('log')
                     local fiber = require('fiber')
+                    local errors = require('errors')
                     local spaces = ... or {}
                     local counters = {}
-                    local errors = {}
+                    local err = {}
+
+                    local e_space_api = errors.new_class('spaceAPI error', { capture_stack = false })
 
                     for _, space_name in pairs(spaces) do
                         local space = box.space[space_name]
@@ -54,43 +55,77 @@ local function _get_space_size(spaces)
                                 end
                             end
                         else
-                            log.error(string.format(
-                                    'Error: space "%s" not found on instance "%s"',
-                                    space_name,
-                                    box.info.uuid))
-                            table.insert(errors, string.format(
-                                    'Error: space "%s" not found on instance "%s"',
-                                    space_name,
-                                    box.info.uuid))
+                            local ctg, instance = pcall(function()
+                                local parse = require('cartridge.argparse').parse()
+                                if parse and type(parse) == 'table' then
+                                    return parse.instance_name or parse.alias or nil
+                                else
+                                    return nil
+                                end
+                            end)
+                            if not ctg then
+                                instance = box.info.uuid
+                            end
+                            local space_size_error = e_space_api:new('space "%s" not found on "%s"',
+                            space_name,
+                            instance)
+                            space_size_error.file = 'spaceapi.lua'
+                            log.error('%s', space_size_error)
+                            table.insert(err, space_size_error)
                         end
                         fiber.yield()
                     end
-                    return counters, errors
-                ]], {spaces}, {timeout = 30})
+                    return counters, err
+                ]], {spaces}, {timeout = NET_BOX_CONNECTION_TIMEOUT})
             end)
+
+            local ctg, instance = pcall(function()
+                local parse = require('cartridge.argparse').parse()
+                if parse and type(parse) == 'table' then
+                    return parse.instance_name or parse.alias or nil
+                else
+                    return nil
+                end
+            end)
+            if not ctg then
+                instance = box.info.uuid
+            end
 
             if ok then
                 for _, space_name in pairs(spaces) do
-                    if res[space_name] then
-                        counters[space_name] = counters[space_name] or {}
-                        counters[space_name].len = (counters[space_name].len or 0) + (res[space_name].len or 0)
-                        counters[space_name].bsize = (counters[space_name].bsize or 0) + (res[space_name].bsize or 0)
+                    if box.space[space_name] then
+                        if res[space_name] then
+                            counters[space_name] = counters[space_name] or {}
+                            counters[space_name].len =
+                                (counters[space_name].len or 0) + (res[space_name].len or 0)
+                            counters[space_name].bsize =
+                                (counters[space_name].bsize or 0) + (res[space_name].bsize or 0)
 
-                        counters[space_name].index =  counters[space_name].index or {}
-                        for i = 0, #box.space[space_name].index do
-                            counters[space_name].index[i] = counters[space_name].index[i] or {}
-                            counters[space_name].index[i].len =
-                            (counters[space_name].index[i].len or 0) + (res[space_name].index[i].len or 0)
-                            counters[space_name].index[i].bsize =
-                            (counters[space_name].index[i].bsize or 0) + (res[space_name].index[i].bsize or 0)
+                            counters[space_name].index =  counters[space_name].index or {}
+                            for i = 0, #box.space[space_name].index do
+                                counters[space_name].index[i] = counters[space_name].index[i] or {}
+                                counters[space_name].index[i].len =
+                                    (counters[space_name].index[i].len or 0) + (res[space_name].index[i].len or 0)
+                                counters[space_name].index[i].bsize =
+                                    (counters[space_name].index[i].bsize or 0) + (res[space_name].index[i].bsize or 0)
+                            end
                         end
-
+                    else
+                        remote_errors = remote_errors or {}
+                        table.insert(
+                            remote_errors,
+                            e_space_api:new('space "%s" not found on %s', space_name, instance)
+                        )
                     end
                 end
+            else
+                local storage = tostring(replica.master.conn.host)..':'..tostring(replica.master.conn.port)
+                remote_errors = remote_errors or {}
+                table.insert(remote_errors, e_space_api:new('instance "%s" error: %s', storage, res))
             end
 
             if eval_err and #eval_err > 0 then
-                table.insert(remote_errors, eval_err)
+                remote_errors = utils.concat_arrays(remote_errors, eval_err)
             end
 
             return true
@@ -105,155 +140,164 @@ local function _get_space_size(spaces)
         f:join()
     end
 
-    if remote_errors and #remote_errors > 0 then
-        return counters, remote_errors
-    else
-        return counters
-    end
+    return counters, remote_errors
 end
 
 local function space_info(_, args)
     checks('?', { name = 'table' })
-    local spaces = args.name
+    local spaces = args.name or {}
     local schema = ddl.get_schema()
 
-    local res = {}
+    local res
 
-    if not next(spaces or {}) then
-        spaces = list_spaces(schema)
+    local router_spaces = list_spaces(schema)
+
+    if not next(spaces) then
+        spaces = router_spaces
+    else
+        local _spaces = utils.diff_arrays(spaces, router_spaces)
+        if not next(_spaces) then
+            return nil, e_space_api:new('spaces %s not found', json.encode(spaces))
+        end
+        spaces = _spaces
     end
 
     local spaces_size, remote_errors = _get_space_size(spaces)
 
-    for _,space_name in pairs(spaces) do
+    for _, space_name in pairs(spaces) do
         local space = {}
+        local _space = box.space[space_name]
+        if _space then
+            if spaces_size[space_name] then
+                for k, v in pairs(_space) do
+                    if type(v) ~= 'table' and type(v) ~= 'function' then space[k] = v end
+                end
 
-        for k, v in pairs(box.space[space_name]) do
-            if type(v) ~= 'table' then space[k] = v end
-        end
+                space.format = _space:format()
 
-        space.format = box.space[space_name]:format()
-        space.bsize = spaces_size[space_name].bsize or 0
-        space.len = spaces_size[space_name].len or 0
-        space.field_count = #space.format
+                space.bsize = spaces_size[space_name].bsize or 0
+                space.len = spaces_size[space_name].len or 0
+                space.field_count = #space.format
 
-        space.index = {}
-        for i = 0, #box.space[space_name].index do
-            local index = {}
-            if box.space[space_name].index[i] ~= nil and
-               spaces_size[space_name].index and
-               spaces_size[space_name].index[i] then
-                index.id = i
-                index.len = spaces_size[space_name].index[i].len or 0
-                index.bsize = spaces_size[space_name].index[i].bsize or 0
-                table.insert(space.index, index)
+                space.index = {}
+                for i = 0, #_space.index do
+                    if _space.index[i] ~= nil and
+                    spaces_size[space_name].index and
+                    spaces_size[space_name].index[i] then
+                        local index = table.copy(_space.index[i])
+                        index.id = i
+                        index.len = spaces_size[space_name].index[i].len or 0
+                        index.bsize = spaces_size[space_name].index[i].bsize or 0
+                        table.insert(space.index, index)
+                    end
+                end
+
+                space.ck_constraint = {}
+                if _space.ck_constraint then
+                    for _, v in pairs(_space.ck_constraint) do
+                        table.insert(space.ck_constraint, v)
+                    end
+                end
+                res = res or {}
+                table.insert(res, space)
             end
         end
-
-        space.ck_constraint = {}
-        if box.space[space_name].ck_constraint then
-            for _, v in pairs(box.space[space_name].ck_constraint) do
-                table.insert(space.ck_constraint, v)
-            end
-        end
-
-        table.insert(res, space)
     end
 
     return res, remote_errors
 end
 
-local function space_drop(_, args)
-    checks('?', { name = 'string' }, '?')
-    local space = args.name
-    local fibers = {}
-    local remote_errors = {}
+-- local function space_drop(_, args)
+--     checks('?', { name = 'string' }, '?')
+--     local space = args.name
+--     local fibers = {}
+--     local remote_errors = {}
 
-    local shards, err = vshard.router.routeall()
-    if err ~= nil then
-        error(err)
-    end
+--     local shards, err = vshard.router.routeall()
+--     if err ~= nil then
+--         error(err)
+--     end
 
-    for uid, replica in pairs(shards) do
-        local f = fiber.new(function()
-            local _, _, eval_err = pcall(function()
-                return replica.master.conn:eval([[
-                    local space = box.space[...]
-                    if space then
-                        return box.space[space]:drop()
-                    end
-                ]], {space}, {timeout = 30})
-            end)
+--     for uid, replica in pairs(shards) do
+--         local f = fiber.new(function()
+--             local _, _, eval_err = pcall(function()
+--                 return replica.master.conn:eval([[
+--                     local space = box.space[...]
+--                     if space then
+--                         return box.space[space]:drop()
+--                     end
+--                 ]], {space}, {timeout = 30})
+--             end)
 
-            if eval_err and #eval_err > 0 then
-                table.insert(remote_errors, eval_err)
-            end
+--             if eval_err and #eval_err > 0 then
+--                 table.insert(remote_errors, eval_err)
+--             end
 
-            return true
-        end)
-        f:set_joinable(true)
-        f:name(uid, { truncate=true })
-        table.insert(fibers, f)
-        fiber.yield()
-    end
+--             return true
+--         end)
+--         f:set_joinable(true)
+--         f:name(uid, { truncate=true })
+--         table.insert(fibers, f)
+--         fiber.yield()
+--     end
 
-    for _, f in pairs(fibers) do
-        f:join()
-    end
+--     for _, f in pairs(fibers) do
+--         f:join()
+--     end
 
-    if remote_errors and #remote_errors > 0 then
-        return nil, remote_errors
-    else
-        return true
-    end
-end
+--     if remote_errors and #remote_errors > 0 then
+--         return nil, remote_errors
+--     else
+--         return true
+--     end
+-- end
 
-local function space_truncate(_, args)
-    checks('?', { name = 'string' })
-    local space = args.name
-    local fibers = {}
-    local remote_errors = {}
+-- local function space_truncate(_, args)
+--     checks('?', { name = 'string' })
+--     local space = args.name
+--     local fibers = {}
+--     local remote_errors = {}
 
-    local shards, err = vshard.router.routeall()
-    if err ~= nil then
-        error(err)
-    end
+--     local shards, err = vshard.router.routeall()
+--     if err ~= nil then
+--         error(err)
+--     end
 
-    for uid, replica in pairs(shards) do
-        local f = fiber.new(function()
-            local _, _, eval_err = pcall(function()
-                return replica.master.conn:eval([[
-                    local space = box.space[...]
-                    if space then
-                        space:truncate()
-                        -- counters[space_name].len = space:len() or 0
-                        -- counters[space_name].bsize = space:bsize() or 0
-                    end
-                ]], {space}, {timeout = 30})
-            end)
+--     for uid, replica in pairs(shards) do
+--         local f = fiber.new(function()
+--             local _, _, eval_err = pcall(function()
+--                 return replica.master.conn:eval([[
+--                     local space = box.space[...]
+--                     if space then
+--                         space:truncate()
+--                         -- counters[space_name].len = space:len() or 0
+--                         -- counters[space_name].bsize = space:bsize() or 0
+--                     end
+--                 ]], {space}, {timeout = 30})
+--             end)
 
-            if eval_err and #eval_err > 0 then
-                table.insert(remote_errors, eval_err)
-            end
+--             if eval_err and #eval_err > 0 then
+--                 table.insert(remote_errors, eval_err)
+--             end
 
-            return true
-        end)
-        f:set_joinable(true)
-        f:name(uid, { truncate=true })
-        table.insert(fibers, f)
-        fiber.yield()
-    end
+--             return true
+--         end)
+--         f:set_joinable(true)
+--         f:name(uid, { truncate=true })
+--         table.insert(fibers, f)
+--         fiber.yield()
+--     end
 
-    for _, f in pairs(fibers) do
-        f:join()
-    end
+--     for _, f in pairs(fibers) do
+--         f:join()
+--     end
 
-    if remote_errors and #remote_errors > 0 then
-        return nil, remote_errors
-    else
-        return true
-    end
-end
+--     if remote_errors and #remote_errors > 0 then
+--         return nil, remote_errors
+--     else
+--         return true
+--     end
+-- end
 
 -- local function space_create(args)
 --     local space_name = args.name
@@ -338,8 +382,9 @@ end
 
 return {
     space_info = space_info,
-    space_drop = space_drop,
-    space_truncate = space_truncate,
+    --space_drop = space_drop,
+    --space_truncate = space_truncate,
     -- space_create = space_create,
     list_spaces = list_spaces,
+    NET_BOX_CONNECTION_TIMEOUT = NET_BOX_CONNECTION_TIMEOUT,
 }

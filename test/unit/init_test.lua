@@ -1,6 +1,5 @@
 local t = require('luatest')
 local g = t.group('graphqlapi')
-local fiber = require('fiber')
 local json = require('json')
 
 local helper = require('test.helper.unit')
@@ -14,7 +13,6 @@ local errors = require('errors')
 local http = require('http.server')
 local http_client = require('http.client').new()
 local graphqlapi = require('graphqlapi')
-local helpers = require('graphqlapi.helpers')
 local operations = require('graphqlapi.operations')
 local types = require('graphqlapi.types')
 
@@ -71,9 +69,6 @@ g.test_custom_auth_middleware = function()
     local httpd = http.new(HOST, PORT,{ log_requests = false })
     httpd:start()
     graphqlapi.init(httpd, custom_middleware, nil, '../../test/models/suite1')
-    helpers.init()
-    local space = helper.create_space()
-    fiber.sleep(10)
 
     local query = [[
         {
@@ -93,7 +88,6 @@ g.test_custom_auth_middleware = function()
 
     graphqlapi.stop()
     httpd:stop()
-    space:drop()
 end
 
 g.test_invalid_requests = function()
@@ -102,21 +96,25 @@ g.test_invalid_requests = function()
     httpd:start()
     graphqlapi.init(httpd, nil, nil, '../../test/models/suite1')
 
+    -- check empty graphql query
     local query = ''
     local response = http_client:post(url, query)
     t.assert_equals(response.body, "{\"errors\":[{\"message\":\"Expected a non-empty request body\"}]}")
     t.assert_equals(response.status, 400)
 
+    -- check empty string graphql query
     query = '""'
     response = http_client:post(url, query)
     t.assert_equals(response.body, "{\"errors\":[{\"message\":\"Body should be a valid JSON\"}]}")
     t.assert_equals(response.status, 400)
 
+    -- check empty field graphql query
     query = '{"field":{}}'
     response = http_client:post(url, query)
     t.assert_equals(response.body, "{\"errors\":[{\"message\":\"Body should have 'query' field\"}]}")
     t.assert_equals(response.status, 400)
 
+    -- check incorrect operation name query
     query = [[
         {
             "operationName": true,
@@ -129,6 +127,7 @@ g.test_invalid_requests = function()
     t.assert_equals(response.body, "{\"errors\":[{\"message\":\"'operationName' should be string\"}]}")
     t.assert_equals(response.status, 400)
 
+    -- check incorrect variable query
     query = [[
         {
             "query":"query {space_info(name: [qqqq]) {name}}",
@@ -140,6 +139,7 @@ g.test_invalid_requests = function()
     t.assert_equals(response.body, "{\"errors\":[{\"message\":\"'variables' should be a dictionary\"}]}")
     t.assert_equals(response.status, 400)
 
+    -- check incorrect syntax query
     query = [[
         {
             "operationName": "MyQuery",
@@ -155,55 +155,8 @@ g.test_invalid_requests = function()
     )
     t.assert_equals(response.status, 400)
 
-    query = [[
-        {
-            "query":"query($space: [SpaceInfoNames]!){ space_info(name: $space) { name } }",
-            "variables":{"space":["entity"]}
-        }
-    ]]
-
-    helpers.init()
-    local space = helper.create_space()
-    fiber.sleep(10)
-
-    response = http_client:post(url, query)
-    t.assert_str_contains(response.body, 'attempt to call field \'routeall\' (a nil value)')
-    t.assert_equals(response.status, 200)
-
-    --helpers.stop()
     graphqlapi.stop()
     httpd:stop()
-    space:drop()
-end
-
-g.test_execute_graphql = function()
-    package.path = helper.shared.root.. '/test/models/suite1/?.lua;' .. package.path
-    local httpd = http.new(HOST, PORT,{ log_requests = false })
-    httpd:start()
-    graphqlapi.init(httpd, nil, nil, '../../test/models/suite1')
-    helpers.init()
-    local space = helper.create_space()
-    fiber.sleep(10)
-
-    local query = [[
-        {
-            "query":"
-                query {
-                    space_info(name: []) {
-                        name
-                    }
-                }",
-            "variables":null
-        }
-    ]]
-
-    local response = http_client:post(url, query)
-    t.assert_str_contains(response.body, 'attempt to call field \'routeall\' (a nil value)')
-    t.assert_equals(response.status, 200)
-
-    graphqlapi.stop()
-    httpd:stop()
-    space:drop()
 end
 
 g.test_execute_graphql_data_and_or_errors = function()

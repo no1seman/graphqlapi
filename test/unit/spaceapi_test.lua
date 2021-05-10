@@ -1,5 +1,5 @@
 local t = require('luatest')
-local g = t.group('spaceapi-unit')
+local g = t.group('spaceapi_unit')
 local ddl = require('ddl')
 
 require('test.helper.unit')

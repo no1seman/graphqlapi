@@ -1,7 +1,7 @@
 local checks = require('checks')
 local operations = require('graphqlapi.operations')
 local types = require('graphqlapi.types')
-local spaceapi = require('graphqlapi.spaceapi')
+local ddl = require('ddl')
 local utils = require('graphqlapi.utils')
 
 local vars = require('graphqlapi.vars').new('graphqlapi.helpers')
@@ -66,7 +66,7 @@ vars:new('helpers', {
             'SpaceInfo',
         },
     },
-    ['add'] = {
+    ['create'] = {
         types = {
             'SpaceCkConstraint',
             'SpaceCkConstraintInput',
@@ -206,6 +206,7 @@ local function space_types()
                     type = types.SpaceIndexType,
                     id = types.int,
                     unique = types.boolean,
+                    hint = types.boolean,
                     if_not_exists = types.boolean,
                     parts = types.list(types.SpaceIndexPart),
                     dimension = types.int,
@@ -343,6 +344,15 @@ local function space_types()
     end
 end
 
+local function existing_spaces()
+    local spaces = {}
+    local schema = ddl.get_schema()
+    for space in pairs(schema.spaces) do
+        spaces[space]=space
+    end
+    return spaces
+end
+
 -- space_info section
 local function space_info_query_remove()
     operations.remove_query('space_info')
@@ -366,10 +376,10 @@ local function space_info_list_remove()
 end
 
 local function space_info_list()
-    local exist = spaceapi.list_spaces()
+    local existing = existing_spaces()
 
     local list_spaces = {}
-    for _, space in pairs(exist) do
+    for _, space in pairs(existing) do
         if (utils.value_in(space, vars.helpers.info.include) or #vars.helpers.info.include == 0) and
             not utils.value_in(space, vars.helpers.info.exclude) then
             list_spaces[space]=space
@@ -434,10 +444,10 @@ local function space_drop_list_remove()
 end
 
 local function space_drop_list()
-    local exist = spaceapi.list_spaces()
+    local existing = existing_spaces()
 
     local list_spaces = {}
-    for _, space in pairs(exist) do
+    for _, space in pairs(existing) do
         if (utils.value_in(space, vars.helpers.drop.include) or #vars.helpers.drop.include == 0) and
             not utils.value_in(space, vars.helpers.drop.exclude) then
             list_spaces[space]=space
@@ -503,10 +513,10 @@ local function space_truncate_list_remove()
 end
 
 local function space_truncate_list()
-    local exist = spaceapi.list_spaces()
+    local existing = existing_spaces()
 
     local list_spaces = {}
-    for _, space in pairs(exist) do
+    for _, space in pairs(existing) do
         if (utils.value_in(space, vars.helpers.truncate.include) or #vars.helpers.truncate.include == 0) and
             not utils.value_in(space, vars.helpers.truncate.exclude) then
             list_spaces[space]=space
@@ -583,10 +593,10 @@ local function space_update_list_remove()
 end
 
 local function space_update_list()
-    local exist = spaceapi.list_spaces()
+    local existing = existing_spaces()
 
     local list_spaces = {}
-    for _, space in pairs(exist) do
+    for _, space in pairs(existing) do
         if (utils.value_in(space, vars.helpers.update.include) or #vars.helpers.update.include == 0) and
             not utils.value_in(space, vars.helpers.update.exclude) then
             list_spaces[space]=space
@@ -631,7 +641,7 @@ end
 
 -- space_create section
 local function space_create_init()
-    vars.helpers.add.enabled = true
+    vars.helpers.create.enabled = true
     space_types()
 
     operations.add_mutation({
@@ -658,7 +668,7 @@ end
 
 local function space_create_remove()
     operations.remove_mutation('space_create')
-    vars.helpers.add.enabled = false
+    vars.helpers.create.enabled = false
     space_types()
 end
 
@@ -717,7 +727,7 @@ local function stop()
     if vars.helpers.update.enabled == true then
         space_update_remove()
     end
-    if vars.helpers.add.enabled == true then
+    if vars.helpers.create.enabled == true then
         space_create_remove()
     end
     vars.helpers = nil
