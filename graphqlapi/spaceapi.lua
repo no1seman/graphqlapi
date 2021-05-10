@@ -10,15 +10,26 @@ local utils = require('graphqlapi.utils')
 local NET_BOX_CONNECTION_TIMEOUT = 1
 local e_space_api = errors.new_class('spaceAPI error', { capture_stack = false })
 
-local function list_spaces(schema)
-    local spaces = {}
+local function check_spaces(spaces)
+    local schema = ddl.get_schema()
+
+    local router_spaces = {}
     for space in pairs(schema.spaces) do
-        table.insert(spaces, space)
+        table.insert(router_spaces, space)
     end
-    return spaces
+
+    if not next(spaces) then
+        return router_spaces
+    else
+        local _spaces = utils.diff_arrays(spaces, router_spaces)
+        if not next(_spaces) then
+            return nil, e_space_api:new('spaces %s not found', json.encode(spaces))
+        end
+        return _spaces
+    end
 end
 
-local function _get_space_size(spaces)
+local function _get_spaces_size(spaces)
     local counters = {}
     local fibers = {}
     local remote_errors
@@ -143,26 +154,17 @@ local function _get_space_size(spaces)
     return counters, remote_errors
 end
 
+
 local function space_info(_, args)
     checks('?', { name = 'table' })
-    local spaces = args.name or {}
-    local schema = ddl.get_schema()
+    local spaces, err = check_spaces(args.name or {})
 
-    local res
-
-    local router_spaces = list_spaces(schema)
-
-    if not next(spaces) then
-        spaces = router_spaces
-    else
-        local _spaces = utils.diff_arrays(spaces, router_spaces)
-        if not next(_spaces) then
-            return nil, e_space_api:new('spaces %s not found', json.encode(spaces))
-        end
-        spaces = _spaces
+    if not spaces then
+        return spaces, err
     end
 
-    local spaces_size, remote_errors = _get_space_size(spaces)
+    local res
+    local spaces_size, remote_errors = _get_spaces_size(spaces)
 
     for _, space_name in pairs(spaces) do
         local space = {}
@@ -385,6 +387,6 @@ return {
     --space_drop = space_drop,
     --space_truncate = space_truncate,
     -- space_create = space_create,
-    list_spaces = list_spaces,
+    --list_spaces = list_spaces,
     NET_BOX_CONNECTION_TIMEOUT = NET_BOX_CONNECTION_TIMEOUT,
 }
