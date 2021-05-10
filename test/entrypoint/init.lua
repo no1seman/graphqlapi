@@ -14,6 +14,7 @@ local ok, err = errors.pcall('CartridgeCfgError', cartridge.cfg, {
         'test.entrypoint.app.roles.api',
         'test.entrypoint.app.roles.storage',
     },
+    roles_reload_allowed = true,
 })
 if not ok then
     log.error('%s', err)

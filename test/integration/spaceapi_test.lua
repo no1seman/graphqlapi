@@ -10,6 +10,7 @@ local g = t.group('spaceapi')
 --     encode_invalid_as_nil = true
 -- }
 
+local entity_space = require('test.helper.entity_space')
 local helper = require('test.helper.integration')
 local cluster = helper.cluster
 
@@ -20,63 +21,6 @@ end
 
 g.after_each = function()
     g.cluster:stop()
-end
-
-local function sample_data(length)
-return {{
-    format = {
-        { type = 'unsigned', name = 'bucket_id', is_nullable = false, },
-        { type = 'string', name = 'entity_id', is_nullable = false, },
-        { type = 'string', name = 'entity', is_nullable = false, },
-        { type = 'number', name = "entity_value", is_nullable = true, }
-    },
-    id = 512, engine = 'memtx', field_count = 4, is_sync = false,
-    index = {
-        {
-            parts = {{ type = 'string', fieldno = 2, is_nullable = false, }},
-            id = 0, space_id = 512, len = length, unique = true, bsize = 49152*length,
-            hint = true, type = 'TREE', name = 'primary',
-        },
-        {
-            parts = {{ type = 'number', fieldno = 4, is_nullable = true, }},
-            id = 1, space_id = 512, len = length, unique = true, bsize = 49152*length,
-            hint = true, type = 'TREE', name = 'secondary',
-        },
-        {
-            parts = {{ type = 'unsigned', fieldno = 1, is_nullable = false, }},
-            id = 2, space_id = 512, len = length, unique = false, bsize = 49152*length,
-            hint = true, type = 'TREE', name = 'bucket_id',
-        }
-    },
-    bsize = length*16+(length-1)*2,
-    temporary = false,
-    ck_constraint = {
-        {
-            space_id = 512, is_enabled = false,
-            name = 'entity_value', expr = "'entity_value' > 0",
-        }
-    },
-    is_local = false, enabled = true, name = 'entity', len = length,
-}}
-end
-
-local function create_test_space(space_name)
-    local format = {
-        {name = 'bucket_id', type = 'unsigned', is_nullable = false},
-        {name = 'entity_id', type = 'string', is_nullable = false},
-        {name = 'entity', type = 'string', is_nullable = false},
-        {name = 'entity_value', type = 'number', is_nullable = true}
-    }
-
-    local primary_index_parts = { {field = 'entity_id'} }
-    local secondary_index_parts = { {field = 'entity_value'} }
-    local sharding_key = {{'entity_id'}}
-
-    helper.create_space_on_cluster(cluster, space_name, format)
-    helper.create_primary_index_on_cluster(cluster, space_name, primary_index_parts)
-    helper.create_secondary_index_on_cluster(cluster, space_name, 'secondary', true, secondary_index_parts)
-    helper.create_bucket_index_on_cluster(cluster, space_name, sharding_key)
-    helper.create_check_constraint_on_cluster(cluster, space_name, 'entity_value', [['entity_value' > 0]])
 end
 
 g.test_space_info = function()
@@ -94,7 +38,7 @@ g.test_space_info = function()
         t.assert_equals(space_info_err, nil)
     end
 
-    create_test_space('entity')
+    entity_space.create_test_space(cluster, 'entity')
 
     helper.insert_data(
         cluster, 'entity',
@@ -124,7 +68,7 @@ g.test_space_info = function()
             {'entity'}
         )
 
-        t.assert_items_equals(space_info, sample_data(2))
+        t.assert_items_equals(space_info, entity_space.sample_data(2))
         t.assert_equals(space_info_err, nil)
     end
 
@@ -135,7 +79,7 @@ g.test_space_info = function()
             {}
         )
 
-        t.assert_items_equals(space_info, sample_data(2))
+        t.assert_items_equals(space_info, entity_space.sample_data(2))
         t.assert_equals(space_info_err, nil)
     end
 
@@ -149,7 +93,7 @@ g.test_space_info = function()
             {'entity'}
         )
 
-        t.assert_equals(space_info, sample_data(1))
+        t.assert_equals(space_info, entity_space.sample_data(1))
         t.assert_str_contains(space_info_err[1].str, 'space "entity" not found on "storage-1-master"')
     end
 
@@ -162,7 +106,7 @@ g.test_space_info = function()
             [[ return require('graphqlapi.spaceapi').space_info(nil, {name = {...}}) ]],
             {'entity'}
         )
-        t.assert_items_equals(space_info, sample_data(1))
+        t.assert_items_equals(space_info, entity_space.sample_data(1))
         t.assert_str_contains(space_info_err[1].str, 'Connection refused')
     end
 
