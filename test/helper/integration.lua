@@ -1,16 +1,27 @@
-local t = require('luatest')
+--local t = require('luatest')
 local fio = require('fio')
 
 local helper = table.copy(require('cartridge.test-helpers'))
 
 helper.root = fio.dirname(debug.sourcedir())
 local tmpdir = fio.pathjoin(helper.root, '../tmp')
-helper.datadir = fio.pathjoin(tmpdir, 'db_test')
-helper.server_command = fio.pathjoin(helper.root, 'entrypoint', 'init.lua')
+helper.datadir = fio.abspath(fio.pathjoin(tmpdir, 'db_test'))
 helper.project_root = fio.dirname(debug.sourcedir())
 
+function helper.entrypoint(name)
+    local path = fio.pathjoin(
+        helper.project_root,
+        'entrypoint',
+        string.format('%s.lua', name)
+    )
+    if not fio.path.exists(path) then
+        error(path .. ': no such entrypoint', 2)
+    end
+    return path
+end
+
 helper.cluster_config = {
-    server_command = helper.server_command,
+    server_command = helper.entrypoint('basic_srv'),
     datadir = helper.datadir,
     use_vshard = true,
     replicasets = {
@@ -20,7 +31,7 @@ helper.cluster_config = {
             roles = {
                 'vshard-router',
                 'graphqlapi',
-                'test.entrypoint.app.roles.api',
+                'app.roles.api',
             },
             servers = {
                 {
@@ -34,7 +45,7 @@ helper.cluster_config = {
             uuid = helper.uuid('b'),
             roles = {
                 'vshard-storage',
-                'test.entrypoint.app.roles.storage'
+                'app.roles.storage'
             },
             servers = {
                 {
@@ -52,7 +63,7 @@ helper.cluster_config = {
             uuid = helper.uuid('c'),
             roles = {
                 'vshard-storage',
-                'test.entrypoint.app.roles.storage'
+                'app.roles.storage'
             },
             servers = {
                 {
@@ -67,7 +78,6 @@ helper.cluster_config = {
         },
     },
 }
-helper.cluster = helper.Cluster:new(helper.cluster_config)
 
 function helper.get_server_by_alias(cluster, alias)
     for index, server in ipairs(cluster.servers) do
@@ -225,8 +235,5 @@ function helper.truncate_space_on_cluster(cluster, space_name)
         ]], {space_name})
     end
 end
-
-t.before_suite(function() helper.cluster:start() end)
-t.after_suite(function() helper.cluster:stop() end)
 
 return helper

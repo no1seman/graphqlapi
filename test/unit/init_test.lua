@@ -1,6 +1,6 @@
+local json = require('json')
 local t = require('luatest')
 local g = t.group('graphqlapi')
-local json = require('json')
 
 local helper = require('test.helper.unit')
 

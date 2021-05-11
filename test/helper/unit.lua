@@ -1,8 +1,11 @@
 local t = require('luatest')
 
+local fio = require('fio')
 local shared = require('test.helper')
 
 local helper = {shared = shared}
+
+helper.shared.datadir = fio.pathjoin(helper.shared.root, 'tmp', 'unit_test')
 
 helper.create_space = function()
     local format = {
@@ -19,6 +22,12 @@ helper.create_space = function()
     end
 end
 
-t.before_suite(function() box.cfg({work_dir = shared.datadir}) end)
+t.before_suite(function()
+    box.cfg({work_dir = shared.datadir})
+end)
+
+t.after_suite(function()
+    fio.rmtree(shared.datadir)
+end)
 
 return helper

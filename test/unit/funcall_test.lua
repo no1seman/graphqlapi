@@ -4,12 +4,6 @@ local g = t.group('funcall')
 require('test.helper.unit')
 local funcall = require('graphqlapi.funcall')
 
-g.after_all = function ()
-    if g.cluster ~= nil then
-        g.cluster:stop()
-    end
-end
-
 g.test_call = function()
     t.assert_error_msg_contains('attempt to call a nil value', funcall.call(''))
     t.assert_error_msg_contains('attempt to call a nil value', funcall.call('get_entity'))
