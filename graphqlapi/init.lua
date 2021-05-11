@@ -312,8 +312,9 @@ local function reload()
 
     local ok, err = _init()
     if not ok then
-        return err
+        return nil, err
     end
+    return true
 end
 
 local function set_models_dir(models_dir)
