@@ -223,7 +223,13 @@ local function delete_route(httpd, name)
         local route = httpd.iroutes[name]
         if route then
             httpd.iroutes[name] = nil
-            httpd.routes[route] = nil
+            table.remove(httpd.routes, route)
+        end
+
+        for n, r in ipairs(httpd.routes) do
+            if r.name then
+                httpd.iroutes[r.name] = n
+            end
         end
     end
 end
@@ -249,6 +255,7 @@ local function set_endpoint(endpoint, opts)
     opts.public = opts.public or false
     vars.httpd:route(opts, execute_graphql)
 end
+
 
 local function get_endpoint()
     return vars.endpoint
