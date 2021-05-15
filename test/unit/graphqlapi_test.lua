@@ -53,7 +53,43 @@ g.test_set_get_endpoint = function()
 end
 
 g.test_reload = function()
-    --
+    package.path = helper.shared.root.. '/test/models/suite1/?.lua;' .. package.path
+    local httpd = http.new(HOST, PORT,{ log_requests = false })
+    httpd:start()
+    graphqlapi.init(httpd, nil, nil, '../../test/models/suite1')
+
+    local check = function()
+        operations.add_query({
+            name = 'test_data',
+            doc = 'Get test_data',
+
+            kind = types.object({
+                name = 'some_data1',
+                fields = {
+                    some_data1 = types.string
+                }
+            }),
+            callback = 'test.unit.graphqlapi_test.stub_data'
+        })
+
+        local query = [[
+            {
+                "query":"{ test_data {some_data1}}",
+                "variables":null
+            }
+        ]]
+
+        local response = http_client:post(url, query)
+        t.assert_items_equals(json.decode(response.body), { data = { test_data = {some_data1 = 'some_data1'} }})
+        t.assert_equals(response.status, 200)
+    end
+
+    check()
+    graphqlapi.reload()
+    check()
+
+    graphqlapi.stop()
+    httpd:stop()
 end
 
 g.test_custom_auth_middleware = function()
@@ -171,14 +207,13 @@ g.test_execute_graphql_data_and_or_errors = function()
             name = 'test_data',
             doc = 'Get test_data',
 
-            kind = types.object(
-            {
+            kind = types.object({
                 name = 'some_data1',
                 fields = {
                     some_data1 = types.string
                 }
             }),
-            callback = 'test.unit.init_test.stub_data'
+            callback = 'test.unit.graphqlapi_test.stub_data'
         })
 
         local query = [[
@@ -199,14 +234,13 @@ g.test_execute_graphql_data_and_or_errors = function()
             name = 'test_and_errors',
             doc = 'Get test_and_errors',
 
-            kind = types.object(
-            {
+            kind = types.object({
                 name = 'some_data2',
                 fields = {
                     some_data2 = types.string
                 }
             }),
-            callback = 'test.unit.init_test.stub_data_errors'
+            callback = 'test.unit.graphqlapi_test.stub_data_errors'
         })
 
         local query = [[
@@ -230,14 +264,13 @@ g.test_execute_graphql_data_and_or_errors = function()
             name = 'test_errors_string',
             doc = 'Get test_errors_string',
 
-            kind = types.object(
-            {
+            kind = types.object({
                 name = 'some_data3',
                 fields = {
                     some_data3 = types.string
                 }
             }),
-            callback = 'test.unit.init_test.stub_error_string'
+            callback = 'test.unit.graphqlapi_test.stub_error_string'
         })
 
         local query = [[
@@ -259,14 +292,13 @@ g.test_execute_graphql_data_and_or_errors = function()
             name = 'test_errors_error',
             doc = 'Get test_errors_error',
 
-            kind = types.object(
-            {
+            kind = types.object({
                 name = 'some_data4',
                 fields = {
                     some_data4 = types.string
                 }
             }),
-            callback = 'test.unit.init_test.stub_error_error'
+            callback = 'test.unit.graphqlapi_test.stub_error_error'
         })
 
         local query = [[
@@ -287,14 +319,13 @@ g.test_execute_graphql_data_and_or_errors = function()
             name = 'test_errors_array',
             doc = 'Get test_errors_error',
 
-            kind = types.object(
-            {
+            kind = types.object({
                 name = 'some_data5',
                 fields = {
                     some_data5 = types.string
                 }
             }),
-            callback = 'test.unit.init_test.stub_errors_array'
+            callback = 'test.unit.graphqlapi_test.stub_errors_array'
         })
 
         local query = [[

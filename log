@@ -1,0 +1,1321 @@
+........[35mrouter | [0m2021-05-15 14:17:02.715 [5842] main/103/basic_srv.lua I> Using advertise_uri "localhost:13301"[0m
+[35mrouter | [0m2021-05-15 14:17:02.715 [5842] main/103/basic_srv.lua I> Membership encryption enabled[0m
+[35mrouter | [0m2021-05-15 14:17:02.716 [5842] main/103/basic_srv.lua I> Probe uri was successful[0m
+[35mrouter | [0m2021-05-15 14:17:02.717 [5842] main/103/basic_srv.lua I> Membership BROADCAST sent to 127.0.0.1:13302[0m
+[35mrouter | [0m2021-05-15 14:17:02.717 [5842] main/103/basic_srv.lua I> Membership BROADCAST sent to 172.18.79.255:13302[0m
+[35mrouter | [0m2021-05-15 14:17:02.717 [5842] main/103/basic_srv.lua I> Membership BROADCAST sent to 127.0.0.1:13301[0m
+[35mrouter | [0m2021-05-15 14:17:02.717 [5842] main/103/basic_srv.lua I> Membership BROADCAST sent to 172.18.79.255:13301[0m
+[35mrouter | [0m2021-05-15 14:17:02.718 [5842] main/103/basic_srv.lua I> Membership BROADCAST sent to 127.0.0.1:3301[0m
+[35mrouter | [0m2021-05-15 14:17:02.718 [5842] main/103/basic_srv.lua I> Membership BROADCAST sent to 172.18.79.255:3301[0m
+[35mrouter | [0m2021-05-15 14:17:02.718 [5842] main/103/basic_srv.lua I> Membership BROADCAST sent to 127.0.0.1:13300[0m
+[35mrouter | [0m2021-05-15 14:17:02.718 [5842] main/103/basic_srv.lua I> Membership BROADCAST sent to 172.18.79.255:13300[0m
+[35mrouter | [0m2021-05-15 14:17:02.719 [5842] main/107/http/0.0.0.0:8081 I> started[0m
+[35mrouter | [0m2021-05-15 14:17:02.719 [5842] main/103/basic_srv.lua I> Listening HTTP on 0.0.0.0:8081[0m
+[35mrouter | [0m2021-05-15 14:17:02.731 [5842] main/108/remote_control/0.0.0.0:13301 I> started[0m
+[35mrouter | [0m2021-05-15 14:17:02.731 [5842] main/103/basic_srv.lua I> Remote control bound to 0.0.0.0:13301[0m
+[35mrouter | [0m2021-05-15 14:17:02.732 [5842] main/103/basic_srv.lua I> Remote control ready to accept connections[0m
+[35mrouter | [0m2021-05-15 14:17:02.732 [5842] main/103/basic_srv.lua I> Instance state changed:  -> Unconfigured[0m
+[35mrouter | [0m2021-05-15 14:17:02.732 [5842] main/103/basic_srv.lua I> Cartridge 2.6.0[0m
+[35mrouter | [0m2021-05-15 14:17:02.732 [5842] main/103/basic_srv.lua I> server alias router[0m
+[35mrouter | [0m2021-05-15 14:17:02.732 [5842] main/103/basic_srv.lua I> advertise uri localhost:13301[0m
+[35mrouter | [0m2021-05-15 14:17:02.732 [5842] main/103/basic_srv.lua I> working directory /home/user/tarantool/graphqlapi/tmp/db_test/localhost-13301[0m
+[35mrouter | [31m2021-05-15 14:17:02.732 [5842] main C> entering the event loop[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:02.943 [5850] main/103/basic_srv.lua I> Using advertise_uri "localhost:13302"[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:02.943 [5850] main/103/basic_srv.lua I> Membership encryption enabled[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:02.945 [5850] main/103/basic_srv.lua I> Probe uri was successful[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:02.945 [5850] main/103/basic_srv.lua I> Membership BROADCAST sent to 127.0.0.1:13303[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:02.945 [5850] main/103/basic_srv.lua I> Membership BROADCAST sent to 172.18.79.255:13303[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:02.945 [5850] main/103/basic_srv.lua I> Membership BROADCAST sent to 127.0.0.1:13302[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:02.946 [5850] main/103/basic_srv.lua I> Membership BROADCAST sent to 172.18.79.255:13302[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:02.946 [5850] main/103/basic_srv.lua I> Membership BROADCAST sent to 127.0.0.1:3301[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:02.946 [5850] main/103/basic_srv.lua I> Membership BROADCAST sent to 172.18.79.255:3301[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:02.947 [5850] main/103/basic_srv.lua I> Membership BROADCAST sent to 127.0.0.1:13301[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:02.947 [5850] main/103/basic_srv.lua I> Membership BROADCAST sent to 172.18.79.255:13301[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:02.948 [5850] main/107/http/0.0.0.0:8082 I> started[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:02.949 [5850] main/103/basic_srv.lua I> Listening HTTP on 0.0.0.0:8082[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:02.961 [5850] main/108/remote_control/0.0.0.0:13302 I> started[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:02.961 [5850] main/103/basic_srv.lua I> Remote control bound to 0.0.0.0:13302[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:02.961 [5850] main/103/basic_srv.lua I> Remote control ready to accept connections[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:02.961 [5850] main/103/basic_srv.lua I> Instance state changed:  -> Unconfigured[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:02.961 [5850] main/103/basic_srv.lua I> Cartridge 2.6.0[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:02.961 [5850] main/103/basic_srv.lua I> server alias storage-1-master[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:02.961 [5850] main/103/basic_srv.lua I> advertise uri localhost:13302[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:02.961 [5850] main/103/basic_srv.lua I> working directory /home/user/tarantool/graphqlapi/tmp/db_test/localhost-13302[0m
+[34mstorage-1-master | [31m2021-05-15 14:17:02.961 [5850] main C> entering the event loop[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:03.207 [5860] main/103/basic_srv.lua I> Using advertise_uri "localhost:13303"[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:03.207 [5860] main/103/basic_srv.lua I> Membership encryption enabled[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:03.209 [5860] main/103/basic_srv.lua I> Probe uri was successful[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:03.209 [5860] main/103/basic_srv.lua I> Membership BROADCAST sent to 127.0.0.1:13304[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:03.209 [5860] main/103/basic_srv.lua I> Membership BROADCAST sent to 172.18.79.255:13304[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:03.209 [5860] main/103/basic_srv.lua I> Membership BROADCAST sent to 127.0.0.1:13303[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:03.210 [5860] main/103/basic_srv.lua I> Membership BROADCAST sent to 172.18.79.255:13303[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:03.210 [5860] main/103/basic_srv.lua I> Membership BROADCAST sent to 127.0.0.1:3301[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:03.210 [5860] main/103/basic_srv.lua I> Membership BROADCAST sent to 172.18.79.255:3301[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:03.211 [5860] main/103/basic_srv.lua I> Membership BROADCAST sent to 127.0.0.1:13302[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:03.211 [5860] main/103/basic_srv.lua I> Membership BROADCAST sent to 172.18.79.255:13302[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:03.212 [5860] main/107/http/0.0.0.0:8083 I> started[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:03.212 [5860] main/103/basic_srv.lua I> Listening HTTP on 0.0.0.0:8083[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:03.224 [5860] main/108/remote_control/0.0.0.0:13303 I> started[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:03.224 [5860] main/103/basic_srv.lua I> Remote control bound to 0.0.0.0:13303[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:03.224 [5860] main/103/basic_srv.lua I> Remote control ready to accept connections[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:03.224 [5860] main/103/basic_srv.lua I> Instance state changed:  -> Unconfigured[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:03.224 [5860] main/103/basic_srv.lua I> Cartridge 2.6.0[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:03.224 [5860] main/103/basic_srv.lua I> server alias storage-1-replica[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:03.224 [5860] main/103/basic_srv.lua I> advertise uri localhost:13303[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:03.224 [5860] main/103/basic_srv.lua I> working directory /home/user/tarantool/graphqlapi/tmp/db_test/localhost-13303[0m
+[36mstorage-1-replica | [31m2021-05-15 14:17:03.224 [5860] main C> entering the event loop[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.460 [5870] main/103/basic_srv.lua I> Using advertise_uri "localhost:13304"[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.460 [5870] main/103/basic_srv.lua I> Membership encryption enabled[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.461 [5870] main/103/basic_srv.lua I> Probe uri was successful[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.462 [5870] main/103/basic_srv.lua I> Membership BROADCAST sent to 127.0.0.1:13305[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.462 [5870] main/103/basic_srv.lua I> Membership BROADCAST sent to 172.18.79.255:13305[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.462 [5870] main/103/basic_srv.lua I> Membership BROADCAST sent to 127.0.0.1:13304[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.463 [5870] main/103/basic_srv.lua I> Membership BROADCAST sent to 172.18.79.255:13304[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.463 [5870] main/103/basic_srv.lua I> Membership BROADCAST sent to 127.0.0.1:3301[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.463 [5870] main/103/basic_srv.lua I> Membership BROADCAST sent to 172.18.79.255:3301[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.463 [5870] main/103/basic_srv.lua I> Membership BROADCAST sent to 127.0.0.1:13303[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.464 [5870] main/103/basic_srv.lua I> Membership BROADCAST sent to 172.18.79.255:13303[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.464 [5870] main/107/http/0.0.0.0:8084 I> started[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.465 [5870] main/103/basic_srv.lua I> Listening HTTP on 0.0.0.0:8084[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.477 [5870] main/108/remote_control/0.0.0.0:13304 I> started[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.477 [5870] main/103/basic_srv.lua I> Remote control bound to 0.0.0.0:13304[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.478 [5870] main/103/basic_srv.lua I> Remote control ready to accept connections[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.478 [5870] main/103/basic_srv.lua I> Instance state changed:  -> Unconfigured[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.478 [5870] main/103/basic_srv.lua I> Cartridge 2.6.0[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.478 [5870] main/103/basic_srv.lua I> server alias storage-2-master[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.478 [5870] main/103/basic_srv.lua I> advertise uri localhost:13304[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.478 [5870] main/103/basic_srv.lua I> working directory /home/user/tarantool/graphqlapi/tmp/db_test/localhost-13304[0m
+[32mstorage-2-master | [31m2021-05-15 14:17:03.478 [5870] main C> entering the event loop[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:03.705 [5886] main/103/basic_srv.lua I> Using advertise_uri "localhost:13305"[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:03.705 [5886] main/103/basic_srv.lua I> Membership encryption enabled[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:03.706 [5886] main/103/basic_srv.lua I> Probe uri was successful[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:03.707 [5886] main/103/basic_srv.lua I> Membership BROADCAST sent to 127.0.0.1:13306[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:03.707 [5886] main/103/basic_srv.lua I> Membership BROADCAST sent to 172.18.79.255:13306[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:03.707 [5886] main/103/basic_srv.lua I> Membership BROADCAST sent to 127.0.0.1:13305[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:03.707 [5886] main/103/basic_srv.lua I> Membership BROADCAST sent to 172.18.79.255:13305[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:03.708 [5886] main/103/basic_srv.lua I> Membership BROADCAST sent to 127.0.0.1:3301[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:03.708 [5886] main/103/basic_srv.lua I> Membership BROADCAST sent to 172.18.79.255:3301[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:03.708 [5886] main/103/basic_srv.lua I> Membership BROADCAST sent to 127.0.0.1:13304[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:03.708 [5886] main/103/basic_srv.lua I> Membership BROADCAST sent to 172.18.79.255:13304[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:03.709 [5886] main/107/http/0.0.0.0:8085 I> started[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:03.710 [5886] main/103/basic_srv.lua I> Listening HTTP on 0.0.0.0:8085[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:03.722 [5886] main/108/remote_control/0.0.0.0:13305 I> started[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:03.722 [5886] main/103/basic_srv.lua I> Remote control bound to 0.0.0.0:13305[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:03.722 [5886] main/103/basic_srv.lua I> Remote control ready to accept connections[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:03.722 [5886] main/103/basic_srv.lua I> Instance state changed:  -> Unconfigured[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:03.722 [5886] main/103/basic_srv.lua I> Cartridge 2.6.0[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:03.722 [5886] main/103/basic_srv.lua I> server alias storage-2-replica[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:03.722 [5886] main/103/basic_srv.lua I> advertise uri localhost:13305[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:03.722 [5886] main/103/basic_srv.lua I> working directory /home/user/tarantool/graphqlapi/tmp/db_test/localhost-13305[0m
+[95mstorage-2-replica | [31m2021-05-15 14:17:03.722 [5886] main C> entering the event loop[0m
+[35mrouter | [33m2021-05-15 14:17:03.852 [5842] main/110/http/127.0.0.1:52796 twophase.lua:497 W> Updating config clusterwide...[0m
+[35mrouter | [33m2021-05-15 14:17:03.854 [5842] main/110/http/127.0.0.1:52796 twophase.lua:373 W> (2PC) patch_clusterwide upload phase...[0m
+[35mrouter | [33m2021-05-15 14:17:03.902 [5842] main/110/http/127.0.0.1:52796 twophase.lua:386 W> (2PC) patch_clusterwide prepare phase...[0m
+[35mrouter | [33m2021-05-15 14:17:03.910 [5842] main/110/http/127.0.0.1:52796 twophase.lua:395 W> Prepared for patch_clusterwide at localhost:13301[0m
+[35mrouter | [33m2021-05-15 14:17:03.910 [5842] main/110/http/127.0.0.1:52796 twophase.lua:395 W> Prepared for patch_clusterwide at localhost:13302[0m
+[35mrouter | [33m2021-05-15 14:17:03.910 [5842] main/110/http/127.0.0.1:52796 twophase.lua:395 W> Prepared for patch_clusterwide at localhost:13303[0m
+[35mrouter | [33m2021-05-15 14:17:03.910 [5842] main/110/http/127.0.0.1:52796 twophase.lua:395 W> Prepared for patch_clusterwide at localhost:13304[0m
+[35mrouter | [33m2021-05-15 14:17:03.910 [5842] main/110/http/127.0.0.1:52796 twophase.lua:395 W> Prepared for patch_clusterwide at localhost:13305[0m
+[35mrouter | [33m2021-05-15 14:17:03.910 [5842] main/110/http/127.0.0.1:52796 twophase.lua:419 W> (2PC) patch_clusterwide commit phase...[0m
+[35mrouter | [0m2021-05-15 14:17:03.911 [5842] main/121/remote_control/127.0.0.1:46314 I> Instance state changed: Unconfigured -> BootstrappingBox[0m
+[35mrouter | [33m2021-05-15 14:17:03.911 [5842] main/121/remote_control/127.0.0.1:46314 confapplier.lua:427 W> Calling box.cfg()...[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:03.911 [5886] main/110/remote_control/127.0.0.1:37036 I> Instance state changed: Unconfigured -> BootstrappingBox[0m
+[95mstorage-2-replica | [33m2021-05-15 14:17:03.911 [5886] main/110/remote_control/127.0.0.1:37036 confapplier.lua:427 W> Calling box.cfg()...[0m
+[95mstorage-2-replica | [31m2021-05-15 14:17:03.912 [5886] main/110/remote_control/127.0.0.1:37036 C> Tarantool 2.6.3-0-gcd487a2c5[0m
+[95mstorage-2-replica | [31m2021-05-15 14:17:03.912 [5886] main/110/remote_control/127.0.0.1:37036 C> log level 5[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:03.912 [5886] main/110/remote_control/127.0.0.1:37036 I> wal/engine cleanup is paused[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:03.912 [5886] main/110/remote_control/127.0.0.1:37036 I> mapping 268435456 bytes for memtx tuple arena...[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:03.912 [5886] main/110/remote_control/127.0.0.1:37036 I> Actual slab_alloc_factor calculated on the basis of desired slab_alloc_factor = 1.044274[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:03.912 [5886] main/110/remote_control/127.0.0.1:37036 I> mapping 134217728 bytes for vinyl tuple arena...[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.911 [5870] main/110/remote_control/127.0.0.1:56250 I> Instance state changed: Unconfigured -> BootstrappingBox[0m
+[32mstorage-2-master | [33m2021-05-15 14:17:03.911 [5870] main/110/remote_control/127.0.0.1:56250 confapplier.lua:427 W> Calling box.cfg()...[0m
+[32mstorage-2-master | [31m2021-05-15 14:17:03.912 [5870] main/110/remote_control/127.0.0.1:56250 C> Tarantool 2.6.3-0-gcd487a2c5[0m
+[32mstorage-2-master | [31m2021-05-15 14:17:03.912 [5870] main/110/remote_control/127.0.0.1:56250 C> log level 5[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.912 [5870] main/110/remote_control/127.0.0.1:56250 I> wal/engine cleanup is paused[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.912 [5870] main/110/remote_control/127.0.0.1:56250 I> mapping 268435456 bytes for memtx tuple arena...[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.912 [5870] main/110/remote_control/127.0.0.1:56250 I> Actual slab_alloc_factor calculated on the basis of desired slab_alloc_factor = 1.044274[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.912 [5870] main/110/remote_control/127.0.0.1:56250 I> mapping 134217728 bytes for vinyl tuple arena...[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.911 [5850] main/110/remote_control/127.0.0.1:48808 I> Instance state changed: Unconfigured -> BootstrappingBox[0m
+[34mstorage-1-master | [33m2021-05-15 14:17:03.911 [5850] main/110/remote_control/127.0.0.1:48808 confapplier.lua:427 W> Calling box.cfg()...[0m
+[34mstorage-1-master | [31m2021-05-15 14:17:03.912 [5850] main/110/remote_control/127.0.0.1:48808 C> Tarantool 2.6.3-0-gcd487a2c5[0m
+[34mstorage-1-master | [31m2021-05-15 14:17:03.912 [5850] main/110/remote_control/127.0.0.1:48808 C> log level 5[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.912 [5850] main/110/remote_control/127.0.0.1:48808 I> wal/engine cleanup is paused[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.912 [5850] main/110/remote_control/127.0.0.1:48808 I> mapping 268435456 bytes for memtx tuple arena...[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.912 [5850] main/110/remote_control/127.0.0.1:48808 I> Actual slab_alloc_factor calculated on the basis of desired slab_alloc_factor = 1.044274[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.912 [5850] main/110/remote_control/127.0.0.1:48808 I> mapping 134217728 bytes for vinyl tuple arena...[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.918 [5850] main/111/remote_control/127.0.0.1:48808 I> Cartridge 2.6.0[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.918 [5850] main/111/remote_control/127.0.0.1:48808 I> server alias storage-1-master[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.918 [5850] main/111/remote_control/127.0.0.1:48808 I> advertise uri localhost:13302[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.918 [5850] main/111/remote_control/127.0.0.1:48808 I> working directory /home/user/tarantool/graphqlapi/tmp/db_test/localhost-13302[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.918 [5850] main/110/remote_control/127.0.0.1:48808 I> instance uuid bbbbbbbb-0000-0000-0000-000000000001[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.918 [5850] main/110/remote_control/127.0.0.1:48808 I> initializing an empty data directory[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:03.911 [5860] main/110/remote_control/127.0.0.1:56324 I> Instance state changed: Unconfigured -> BootstrappingBox[0m
+[36mstorage-1-replica | [33m2021-05-15 14:17:03.911 [5860] main/110/remote_control/127.0.0.1:56324 confapplier.lua:427 W> Calling box.cfg()...[0m
+[36mstorage-1-replica | [31m2021-05-15 14:17:03.912 [5860] main/110/remote_control/127.0.0.1:56324 C> Tarantool 2.6.3-0-gcd487a2c5[0m
+[36mstorage-1-replica | [31m2021-05-15 14:17:03.912 [5860] main/110/remote_control/127.0.0.1:56324 C> log level 5[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:03.912 [5860] main/110/remote_control/127.0.0.1:56324 I> wal/engine cleanup is paused[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:03.912 [5860] main/110/remote_control/127.0.0.1:56324 I> mapping 268435456 bytes for memtx tuple arena...[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:03.912 [5860] main/110/remote_control/127.0.0.1:56324 I> Actual slab_alloc_factor calculated on the basis of desired slab_alloc_factor = 1.044274[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:03.912 [5860] main/110/remote_control/127.0.0.1:56324 I> mapping 134217728 bytes for vinyl tuple arena...[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:03.918 [5860] main/111/remote_control/127.0.0.1:56324 I> Cartridge 2.6.0[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:03.918 [5860] main/111/remote_control/127.0.0.1:56324 I> server alias storage-1-replica[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:03.918 [5860] main/111/remote_control/127.0.0.1:56324 I> advertise uri localhost:13303[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:03.918 [5860] main/111/remote_control/127.0.0.1:56324 I> working directory /home/user/tarantool/graphqlapi/tmp/db_test/localhost-13303[0m
+[35mrouter | [31m2021-05-15 14:17:03.914 [5842] main/121/remote_control/127.0.0.1:46314 C> Tarantool 2.6.3-0-gcd487a2c5[0m
+[35mrouter | [31m2021-05-15 14:17:03.914 [5842] main/121/remote_control/127.0.0.1:46314 C> log level 5[0m
+[35mrouter | [0m2021-05-15 14:17:03.914 [5842] main/121/remote_control/127.0.0.1:46314 I> wal/engine cleanup is paused[0m
+[35mrouter | [0m2021-05-15 14:17:03.916 [5842] main/121/remote_control/127.0.0.1:46314 I> mapping 268435456 bytes for memtx tuple arena...[0m
+[35mrouter | [0m2021-05-15 14:17:03.916 [5842] main/121/remote_control/127.0.0.1:46314 I> Actual slab_alloc_factor calculated on the basis of desired slab_alloc_factor = 1.044274[0m
+[35mrouter | [0m2021-05-15 14:17:03.916 [5842] main/121/remote_control/127.0.0.1:46314 I> mapping 134217728 bytes for vinyl tuple arena...[0m
+[35mrouter | [0m2021-05-15 14:17:03.920 [5842] main/121/remote_control/127.0.0.1:46314 I> instance uuid aaaaaaaa-0000-0000-0000-000000000001[0m
+[35mrouter | [0m2021-05-15 14:17:03.921 [5842] main/143/remote_control/127.0.0.1:46314 I> Cartridge 2.6.0[0m
+[35mrouter | [0m2021-05-15 14:17:03.921 [5842] main/143/remote_control/127.0.0.1:46314 I> server alias router[0m
+[35mrouter | [0m2021-05-15 14:17:03.921 [5842] main/143/remote_control/127.0.0.1:46314 I> advertise uri localhost:13301[0m
+[35mrouter | [0m2021-05-15 14:17:03.921 [5842] main/143/remote_control/127.0.0.1:46314 I> working directory /home/user/tarantool/graphqlapi/tmp/db_test/localhost-13301[0m
+[35mrouter | [0m2021-05-15 14:17:03.921 [5842] main/121/remote_control/127.0.0.1:46314 I> initializing an empty data directory[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:03.918 [5886] main/110/remote_control/127.0.0.1:37036 I> instance uuid cccccccc-0000-0000-0000-000000000002[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:03.918 [5886] main/111/remote_control/127.0.0.1:37036 I> Cartridge 2.6.0[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:03.918 [5886] main/111/remote_control/127.0.0.1:37036 I> server alias storage-2-replica[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:03.918 [5886] main/111/remote_control/127.0.0.1:37036 I> advertise uri localhost:13305[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:03.918 [5886] main/111/remote_control/127.0.0.1:37036 I> working directory /home/user/tarantool/graphqlapi/tmp/db_test/localhost-13305[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:03.918 [5886] main/110/remote_control/127.0.0.1:37036 I> connecting to 1 replicas[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:03.926 [5886] main/118/applier/admin@localhost:13304 I> remote master 00000000-0000-0000-0000-000000000000 at 127.0.0.1:13304 running Tarantool 2.6.3[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:03.927 [5886] main/118/applier/admin@localhost:13304 I> can't connect to master[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:03.927 [5886] main/118/applier/admin@localhost:13304 coio.cc:358 !> SystemError unexpected EOF when reading from socket, called on fd 59, aka 127.0.0.1:56254, peer of 127.0.0.1:13304: Broken pipe[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:03.927 [5886] main/118/applier/admin@localhost:13304 I> will retry every 1.00 second[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.918 [5870] main/110/remote_control/127.0.0.1:56250 I> instance uuid cccccccc-0000-0000-0000-000000000001[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.918 [5870] main/111/remote_control/127.0.0.1:56250 I> Cartridge 2.6.0[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.918 [5870] main/111/remote_control/127.0.0.1:56250 I> server alias storage-2-master[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.918 [5870] main/111/remote_control/127.0.0.1:56250 I> advertise uri localhost:13304[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.918 [5870] main/111/remote_control/127.0.0.1:56250 I> working directory /home/user/tarantool/graphqlapi/tmp/db_test/localhost-13304[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.918 [5870] main/110/remote_control/127.0.0.1:56250 I> initializing an empty data directory[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.926 [5870] main/110/remote_control/127.0.0.1:56250 I> assigned id 1 to replica cccccccc-0000-0000-0000-000000000001[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.926 [5870] main/110/remote_control/127.0.0.1:56250 I> cluster uuid cccccccc-0000-0000-0000-000000000000[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.928 [5870] snapshot/101/main I> saving snapshot `/home/user/tarantool/graphqlapi/tmp/db_test/localhost-13304/00000000000000000000.snap.inprogress'[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:03.926 [5860] main/110/remote_control/127.0.0.1:56324 I> instance uuid bbbbbbbb-0000-0000-0000-000000000002[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:03.927 [5860] main/110/remote_control/127.0.0.1:56324 I> connecting to 1 replicas[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:03.931 [5860] main/118/applier/admin@localhost:13302 I> remote master 00000000-0000-0000-0000-000000000000 at 127.0.0.1:13302 running Tarantool 2.6.3[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:03.931 [5860] main/118/applier/admin@localhost:13302 I> can't connect to master[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:03.932 [5860] main/118/applier/admin@localhost:13302 coio.cc:358 !> SystemError unexpected EOF when reading from socket, called on fd 49, aka 127.0.0.1:48818, peer of 127.0.0.1:13302: Broken pipe[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:03.932 [5860] main/118/applier/admin@localhost:13302 I> will retry every 1.00 second[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.930 [5850] main/110/remote_control/127.0.0.1:48808 I> assigned id 1 to replica bbbbbbbb-0000-0000-0000-000000000001[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.930 [5850] main/110/remote_control/127.0.0.1:48808 I> cluster uuid bbbbbbbb-0000-0000-0000-000000000000[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.932 [5850] snapshot/101/main I> saving snapshot `/home/user/tarantool/graphqlapi/tmp/db_test/localhost-13302/00000000000000000000.snap.inprogress'[0m
+[35mrouter | [0m2021-05-15 14:17:03.932 [5842] main/121/remote_control/127.0.0.1:46314 I> assigned id 1 to replica aaaaaaaa-0000-0000-0000-000000000001[0m
+[35mrouter | [0m2021-05-15 14:17:03.933 [5842] main/121/remote_control/127.0.0.1:46314 I> cluster uuid aaaaaaaa-0000-0000-0000-000000000000[0m
+[35mrouter | [0m2021-05-15 14:17:03.934 [5842] snapshot/101/main I> saving snapshot `/home/user/tarantool/graphqlapi/tmp/db_test/localhost-13301/00000000000000000000.snap.inprogress'[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.935 [5850] snapshot/101/main I> done[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.936 [5850] main/110/remote_control/127.0.0.1:48808 I> ready to accept requests[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.936 [5850] main/112/gc I> wal/engine cleanup is resumed[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.936 [5850] main/110/remote_control/127.0.0.1:48808 I> set 'log_level' configuration option to 5[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.936 [5850] main/113/checkpoint_daemon I> scheduled next checkpoint for Sat May 15 15:52:00 2021[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.937 [5850] main/110/remote_control/127.0.0.1:48808 I> set 'instance_uuid' configuration option to "bbbbbbbb-0000-0000-0000-000000000001"[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.937 [5850] main/110/remote_control/127.0.0.1:48808 I> set 'replication_connect_quorum' configuration option to 0[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.937 [5850] main/110/remote_control/127.0.0.1:48808 I> set 'log_format' configuration option to "plain"[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.937 [5850] main/110/remote_control/127.0.0.1:48808 I> set 'replicaset_uuid' configuration option to "bbbbbbbb-0000-0000-0000-000000000000"[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.935 [5870] snapshot/101/main I> done[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.936 [5870] main/110/remote_control/127.0.0.1:56250 I> ready to accept requests[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.936 [5870] main/112/gc I> wal/engine cleanup is resumed[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.936 [5870] main/110/remote_control/127.0.0.1:56250 I> set 'log_level' configuration option to 5[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.936 [5870] main/113/checkpoint_daemon I> scheduled next checkpoint for Sat May 15 15:37:58 2021[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.937 [5870] main/110/remote_control/127.0.0.1:56250 I> set 'instance_uuid' configuration option to "cccccccc-0000-0000-0000-000000000001"[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.937 [5870] main/110/remote_control/127.0.0.1:56250 I> set 'replication_connect_quorum' configuration option to 0[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.937 [5870] main/110/remote_control/127.0.0.1:56250 I> set 'log_format' configuration option to "plain"[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.937 [5870] main/110/remote_control/127.0.0.1:56250 I> set 'replicaset_uuid' configuration option to "cccccccc-0000-0000-0000-000000000000"[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.940 [5870] main/110/remote_control/127.0.0.1:56250 I> Making sure user "admin" exists...[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.940 [5870] main/110/remote_control/127.0.0.1:56250 I> Granting replication permissions to "admin"...[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.941 [5870] main/110/remote_control/127.0.0.1:56250 I> Setting password for user "admin" ...[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.941 [5870] main/110/remote_control/127.0.0.1:56250 I> Remote control stopped[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.941 [5870] iproto/101/main I> binary: bound to 0.0.0.0:13304[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.941 [5870] main/108/remote_control/0.0.0.0:13304 I> stopped[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.941 [5870] main/110/remote_control/127.0.0.1:56250 I> set 'listen' configuration option to "13304"[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.942 [5870] main/110/remote_control/127.0.0.1:56250 I> Instance state changed: BootstrappingBox -> ConnectingFullmesh[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.942 [5870] main/110/remote_control/127.0.0.1:56250 I> connecting to 2 replicas[0m
+[32mstorage-2-master | [31m2021-05-15 14:17:03.942 [5870] main/110/remote_control/127.0.0.1:56250 C> failed to connect to 2 out of 2 replicas[0m
+[32mstorage-2-master | [31m2021-05-15 14:17:03.942 [5870] main/110/remote_control/127.0.0.1:56250 C> leaving orphan mode[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.942 [5870] main/110/remote_control/127.0.0.1:56250 I> set 'replication' configuration option to ["admin@localhost:13304","admin@localhost:13305"][0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.942 [5870] main/110/remote_control/127.0.0.1:56250 I> Instance state changed: ConnectingFullmesh -> BoxConfigured[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.942 [5870] main/110/remote_control/127.0.0.1:56250 I> Instance state changed: BoxConfigured -> ConfiguringRoles[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.942 [5870] main/110/remote_control/127.0.0.1:56250 I> Failover disabled[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.943 [5870] main/110/remote_control/127.0.0.1:56250 I> Reconfiguring vshard.storage...[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.943 [5870] main/110/remote_control/127.0.0.1:56250 I> Starting configuration of replica cccccccc-0000-0000-0000-000000000001[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.943 [5870] main/110/remote_control/127.0.0.1:56250 I> I am master[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.943 [5870] main/110/remote_control/127.0.0.1:56250 I> Taking on replicaset master role...[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.943 [5870] main/110/remote_control/127.0.0.1:56250 I> connecting to 2 replicas[0m
+[32mstorage-2-master | [31m2021-05-15 14:17:03.943 [5870] main/110/remote_control/127.0.0.1:56250 C> failed to connect to 2 out of 2 replicas[0m
+[32mstorage-2-master | [31m2021-05-15 14:17:03.944 [5870] main/110/remote_control/127.0.0.1:56250 C> leaving orphan mode[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.944 [5870] main/110/remote_control/127.0.0.1:56250 I> set 'replication' configuration option to ["admin@localhost:13305","admin@localhost:13304"][0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.944 [5870] main/110/remote_control/127.0.0.1:56250 I> Box has been configured[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.944 [5870] main/110/remote_control/127.0.0.1:56250 I> Initializing schema {0.1.15.0}[0m
+[35mrouter | [0m2021-05-15 14:17:03.937 [5842] snapshot/101/main I> done[0m
+[35mrouter | [0m2021-05-15 14:17:03.937 [5842] main/121/remote_control/127.0.0.1:46314 I> ready to accept requests[0m
+[35mrouter | [0m2021-05-15 14:17:03.937 [5842] main/144/gc I> wal/engine cleanup is resumed[0m
+[35mrouter | [0m2021-05-15 14:17:03.937 [5842] main/121/remote_control/127.0.0.1:46314 I> set 'log_level' configuration option to 5[0m
+[35mrouter | [0m2021-05-15 14:17:03.937 [5842] main/145/checkpoint_daemon I> scheduled next checkpoint for Sat May 15 15:56:09 2021[0m
+[35mrouter | [0m2021-05-15 14:17:03.938 [5842] main/121/remote_control/127.0.0.1:46314 I> set 'instance_uuid' configuration option to "aaaaaaaa-0000-0000-0000-000000000001"[0m
+[35mrouter | [0m2021-05-15 14:17:03.939 [5842] main/121/remote_control/127.0.0.1:46314 I> set 'replication_connect_quorum' configuration option to 0[0m
+[35mrouter | [0m2021-05-15 14:17:03.939 [5842] main/121/remote_control/127.0.0.1:46314 I> set 'log_format' configuration option to "plain"[0m
+[35mrouter | [0m2021-05-15 14:17:03.939 [5842] main/121/remote_control/127.0.0.1:46314 I> set 'replicaset_uuid' configuration option to "aaaaaaaa-0000-0000-0000-000000000000"[0m
+[35mrouter | [0m2021-05-15 14:17:03.942 [5842] main/121/remote_control/127.0.0.1:46314 I> Making sure user "admin" exists...[0m
+[35mrouter | [0m2021-05-15 14:17:03.942 [5842] main/121/remote_control/127.0.0.1:46314 I> Granting replication permissions to "admin"...[0m
+[35mrouter | [0m2021-05-15 14:17:03.943 [5842] main/121/remote_control/127.0.0.1:46314 I> Setting password for user "admin" ...[0m
+[35mrouter | [0m2021-05-15 14:17:03.943 [5842] main/121/remote_control/127.0.0.1:46314 I> Remote control stopped[0m
+[35mrouter | [0m2021-05-15 14:17:03.943 [5842] iproto/101/main I> binary: bound to 0.0.0.0:13301[0m
+[35mrouter | [0m2021-05-15 14:17:03.943 [5842] main/108/remote_control/0.0.0.0:13301 I> stopped[0m
+[35mrouter | [0m2021-05-15 14:17:03.943 [5842] main/121/remote_control/127.0.0.1:46314 I> set 'listen' configuration option to "13301"[0m
+[35mrouter | [0m2021-05-15 14:17:03.943 [5842] main/121/remote_control/127.0.0.1:46314 I> Instance state changed: BootstrappingBox -> ConnectingFullmesh[0m
+[35mrouter | [0m2021-05-15 14:17:03.944 [5842] main/121/remote_control/127.0.0.1:46314 I> connecting to 1 replicas[0m
+[35mrouter | [31m2021-05-15 14:17:03.944 [5842] main/121/remote_control/127.0.0.1:46314 C> failed to connect to 1 out of 1 replicas[0m
+[35mrouter | [31m2021-05-15 14:17:03.944 [5842] main/121/remote_control/127.0.0.1:46314 C> leaving orphan mode[0m
+[35mrouter | [0m2021-05-15 14:17:03.944 [5842] main/121/remote_control/127.0.0.1:46314 I> set 'replication' configuration option to ["admin@localhost:13301"][0m
+[35mrouter | [0m2021-05-15 14:17:03.944 [5842] main/121/remote_control/127.0.0.1:46314 I> Instance state changed: ConnectingFullmesh -> BoxConfigured[0m
+[35mrouter | [0m2021-05-15 14:17:03.944 [5842] main/121/remote_control/127.0.0.1:46314 I> Instance state changed: BoxConfigured -> ConfiguringRoles[0m
+[35mrouter | [0m2021-05-15 14:17:03.944 [5842] main/121/remote_control/127.0.0.1:46314 I> Failover disabled[0m
+[35mrouter | [0m2021-05-15 14:17:03.945 [5842] main/121/remote_control/127.0.0.1:46314 I> Reconfiguring vshard-router/default ...[0m
+[35mrouter | [0m2021-05-15 14:17:03.945 [5842] main/121/remote_control/127.0.0.1:46314 I> Starting router configuration[0m
+[35mrouter | [0m2021-05-15 14:17:03.945 [5842] main/121/remote_control/127.0.0.1:46314 I> Calling box.cfg()...[0m
+[35mrouter | [0m2021-05-15 14:17:03.945 [5842] main/121/remote_control/127.0.0.1:46314 I> {"read_only":false}[0m
+[35mrouter | [0m2021-05-15 14:17:03.945 [5842] main/121/remote_control/127.0.0.1:46314 I> Box has been configured[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.940 [5850] main/110/remote_control/127.0.0.1:48808 I> Making sure user "admin" exists...[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.940 [5850] main/110/remote_control/127.0.0.1:48808 I> Granting replication permissions to "admin"...[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.941 [5850] main/110/remote_control/127.0.0.1:48808 I> Setting password for user "admin" ...[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.941 [5850] main/110/remote_control/127.0.0.1:48808 I> Remote control stopped[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.941 [5850] iproto/101/main I> binary: bound to 0.0.0.0:13302[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.941 [5850] main/108/remote_control/0.0.0.0:13302 I> stopped[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.941 [5850] main/110/remote_control/127.0.0.1:48808 I> set 'listen' configuration option to "13302"[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.941 [5850] main/110/remote_control/127.0.0.1:48808 I> Instance state changed: BootstrappingBox -> ConnectingFullmesh[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.941 [5850] main/110/remote_control/127.0.0.1:48808 I> connecting to 2 replicas[0m
+[34mstorage-1-master | [31m2021-05-15 14:17:03.942 [5850] main/110/remote_control/127.0.0.1:48808 C> failed to connect to 2 out of 2 replicas[0m
+[34mstorage-1-master | [31m2021-05-15 14:17:03.942 [5850] main/110/remote_control/127.0.0.1:48808 C> leaving orphan mode[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.942 [5850] main/110/remote_control/127.0.0.1:48808 I> set 'replication' configuration option to ["admin@localhost:13302","admin@localhost:13303"][0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.942 [5850] main/110/remote_control/127.0.0.1:48808 I> Instance state changed: ConnectingFullmesh -> BoxConfigured[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.942 [5850] main/110/remote_control/127.0.0.1:48808 I> Instance state changed: BoxConfigured -> ConfiguringRoles[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.942 [5850] main/110/remote_control/127.0.0.1:48808 I> Failover disabled[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.943 [5850] main/110/remote_control/127.0.0.1:48808 I> Reconfiguring vshard.storage...[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.943 [5850] main/110/remote_control/127.0.0.1:48808 I> Starting configuration of replica bbbbbbbb-0000-0000-0000-000000000001[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.943 [5850] main/110/remote_control/127.0.0.1:48808 I> I am master[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.943 [5850] main/110/remote_control/127.0.0.1:48808 I> Taking on replicaset master role...[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.943 [5850] main/110/remote_control/127.0.0.1:48808 I> Box has been configured[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.943 [5850] main/110/remote_control/127.0.0.1:48808 I> Initializing schema {0.1.15.0}[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.944 [5850] main/127/applier/admin@localhost:13303 I> remote master 00000000-0000-0000-0000-000000000000 at 127.0.0.1:13303 running Tarantool 2.6.3[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.944 [5850] main/127/applier/admin@localhost:13303 I> can't connect to master[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.944 [5850] main/127/applier/admin@localhost:13303 coio.cc:358 !> SystemError unexpected EOF when reading from socket, called on fd 46, aka 127.0.0.1:56340, peer of 127.0.0.1:13303: Broken pipe[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.944 [5850] main/127/applier/admin@localhost:13303 I> will retry every 1.00 second[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.944 [5850] main/128/applier/admin@localhost:13302 I> remote master bbbbbbbb-0000-0000-0000-000000000001 at 127.0.0.1:13302 running Tarantool 2.6.3[0m
+[34mstorage-1-master | [31m2021-05-15 14:17:03.945 [5850] main/128/applier/admin@localhost:13302 C> leaving orphan mode[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.945 [5870] main/131/applier/admin@localhost:13304 I> remote master cccccccc-0000-0000-0000-000000000001 at 127.0.0.1:13304 running Tarantool 2.6.3[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.945 [5870] main/132/applier/admin@localhost:13305 I> remote master 00000000-0000-0000-0000-000000000000 at 127.0.0.1:13305 running Tarantool 2.6.3[0m
+[32mstorage-2-master | [31m2021-05-15 14:17:03.946 [5870] main/131/applier/admin@localhost:13304 C> leaving orphan mode[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.946 [5870] main/132/applier/admin@localhost:13305 I> can't connect to master[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.946 [5870] main/132/applier/admin@localhost:13305 coio.cc:358 !> SystemError unexpected EOF when reading from socket, called on fd 56, aka 127.0.0.1:37054, peer of 127.0.0.1:13305: Broken pipe[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.946 [5870] main/132/applier/admin@localhost:13305 I> will retry every 1.00 second[0m
+[35mrouter | [0m2021-05-15 14:17:03.948 [5842] main/157/applier/admin@localhost:13301 I> remote master aaaaaaaa-0000-0000-0000-000000000001 at 127.0.0.1:13301 running Tarantool 2.6.3[0m
+[35mrouter | [31m2021-05-15 14:17:03.948 [5842] main/157/applier/admin@localhost:13301 C> leaving orphan mode[0m
+[35mrouter | [0m2021-05-15 14:17:03.949 [5842] main/160/localhost:13302 (net.box) I> connected to localhost:13302[0m
+[35mrouter | [0m2021-05-15 14:17:03.950 [5842] main/159/localhost:13304 (net.box) I> connected to localhost:13304[0m
+[35mrouter | [0m2021-05-15 14:17:03.950 [5842] main/162/lua I> failover_f has been started[0m
+[35mrouter | [0m2021-05-15 14:17:03.950 [5842] main/162/lua I> New replica localhost:13304(admin@localhost:13304) for replicaset(uuid="cccccccc-0000-0000-0000-000000000000", master=localhost:13304(admin@localhost:13304))[0m
+[35mrouter | [0m2021-05-15 14:17:03.951 [5842] main/162/lua I> New replica localhost:13302(admin@localhost:13302) for replicaset(uuid="bbbbbbbb-0000-0000-0000-000000000000", master=localhost:13302(admin@localhost:13302))[0m
+[35mrouter | [0m2021-05-15 14:17:03.951 [5842] main/162/lua I> All replicas are ok[0m
+[35mrouter | [0m2021-05-15 14:17:03.951 [5842] main/162/lua I> Failovering step is finished. Schedule next after 1.000000 seconds[0m
+[35mrouter | [0m2021-05-15 14:17:03.951 [5842] main/163/lua I> discovery_f has been started[0m
+[35mrouter | [31m2021-05-15 14:17:03.951 [5842] main/121/remote_control/127.0.0.1:46314 graphqlapi.lua:271 E> Path is not valid: nil[0m
+[35mrouter | [0m2021-05-15 14:17:03.951 [5842] main/121/remote_control/127.0.0.1:46314 I> Roles configuration finished[0m
+[35mrouter | [0m2021-05-15 14:17:03.951 [5842] main/121/remote_control/127.0.0.1:46314 I> Instance state changed: ConfiguringRoles -> RolesConfigured[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.951 [5850] main/110/remote_control/127.0.0.1:48808 I> Upgrade vshard schema to {0.1.16.0}[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.951 [5850] main/110/remote_control/127.0.0.1:48808 I> Insert 'vshard_version' into _schema[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.951 [5850] main/110/remote_control/127.0.0.1:48808 I> Create function vshard.storage._call()[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.952 [5850] main/110/remote_control/127.0.0.1:48808 I> Successful vshard schema upgrade to {0.1.16.0}[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.952 [5850] main/129/lua I> gc_bucket_f has been started[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.952 [5850] main/130/lua I> recovery_f has been started[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.952 [5850] main/110/remote_control/127.0.0.1:48808 I> Took on replicaset master role[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.952 [5850] main/131/lua I> rebalancer_f has been started[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.952 [5870] main/110/remote_control/127.0.0.1:56250 I> Upgrade vshard schema to {0.1.16.0}[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.952 [5870] main/110/remote_control/127.0.0.1:56250 I> Insert 'vshard_version' into _schema[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.952 [5870] main/110/remote_control/127.0.0.1:56250 I> Create function vshard.storage._call()[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.952 [5870] main/110/remote_control/127.0.0.1:56250 I> Successful vshard schema upgrade to {0.1.16.0}[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.953 [5870] main/133/lua I> gc_bucket_f has been started[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.953 [5870] main/134/lua I> recovery_f has been started[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.953 [5870] main/110/remote_control/127.0.0.1:56250 I> Took on replicaset master role[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.956 [5850] main/110/remote_control/127.0.0.1:48808 I> Roles configuration finished[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.956 [5850] main/110/remote_control/127.0.0.1:48808 I> Instance state changed: ConfiguringRoles -> RolesConfigured[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.957 [5870] main/110/remote_control/127.0.0.1:56250 I> Roles configuration finished[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:03.957 [5870] main/110/remote_control/127.0.0.1:56250 I> Instance state changed: ConfiguringRoles -> RolesConfigured[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.958 [5850] main/132/localhost:13304 (net.box) I> connected to localhost:13304[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.960 [5850] main/133/localhost:13302 (net.box) I> connected to localhost:13302[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.961 [5850] main/131/vshard.rebalancer I> Total active bucket count is not equal to total. Possibly a boostrap is not finished yet. Expected 30000, but found 0[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:03.961 [5850] main/131/vshard.rebalancer I> Some buckets are not active, retry rebalancing later[0m
+[35mrouter | [0m2021-05-15 14:17:03.971 [5842] main/163/vshard.discovery._static_router I> Start aggressive discovery, 30000 buckets are unknown. Discovery works with 1 seconds interval[0m
+[35mrouter | [0m2021-05-15 14:17:03.998 [5842] main/161/localhost:13303 (net.box) I> connected to localhost:13303[0m
+[35mrouter | [0m2021-05-15 14:17:03.998 [5842] main/158/localhost:13305 (net.box) I> connected to localhost:13305[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:04.928 [5886] main/110/remote_control/127.0.0.1:37036 I> connected to 1 replicas[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:04.929 [5886] main/118/applier/admin@localhost:13304 I> authenticated[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:04.929 [5886] main/110/remote_control/127.0.0.1:37036 I> bootstrapping replica from cccccccc-0000-0000-0000-000000000001 at 127.0.0.1:13304[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:04.929 [5870] main/117/main I> joining replica cccccccc-0000-0000-0000-000000000002 at fd 48, aka 127.0.0.1:13304, peer of 127.0.0.1:56286[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:04.931 [5870] main/117/main I> initial data sent.[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:04.931 [5870] main I> assigned id 2 to replica cccccccc-0000-0000-0000-000000000002[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:04.931 [5870] relay/127.0.0.1:56286/101/main I> recover from `/home/user/tarantool/graphqlapi/tmp/db_test/localhost-13304/00000000000000000000.xlog'[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:04.931 [5870] main/117/main I> final data sent.[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:04.932 [5886] main/118/applier/admin@localhost:13304 I> cluster uuid cccccccc-0000-0000-0000-000000000000[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:04.933 [5860] main/110/remote_control/127.0.0.1:56324 I> connected to 1 replicas[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:04.933 [5860] main/118/applier/admin@localhost:13302 I> authenticated[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:04.933 [5860] main/110/remote_control/127.0.0.1:56324 I> bootstrapping replica from bbbbbbbb-0000-0000-0000-000000000001 at 127.0.0.1:13302[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:04.934 [5850] main/117/main I> joining replica bbbbbbbb-0000-0000-0000-000000000002 at fd 48, aka 127.0.0.1:13302, peer of 127.0.0.1:48850[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:04.935 [5850] main/117/main I> initial data sent.[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:04.936 [5850] main I> assigned id 2 to replica bbbbbbbb-0000-0000-0000-000000000002[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:04.936 [5850] relay/127.0.0.1:48850/101/main I> recover from `/home/user/tarantool/graphqlapi/tmp/db_test/localhost-13302/00000000000000000000.xlog'[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:04.936 [5850] main/117/main I> final data sent.[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:04.937 [5860] main/118/applier/admin@localhost:13302 I> cluster uuid bbbbbbbb-0000-0000-0000-000000000000[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:04.938 [5886] main/118/applier/admin@localhost:13304 I> assigned id 1 to replica cccccccc-0000-0000-0000-000000000001[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:04.938 [5886] main/118/applier/admin@localhost:13304 I> initial data received[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:04.938 [5886] main/118/applier/admin@localhost:13304 I> assigned id 2 to replica cccccccc-0000-0000-0000-000000000002[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:04.938 [5886] main/118/applier/admin@localhost:13304 I> final data received[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:04.939 [5886] snapshot/101/main I> saving snapshot `/home/user/tarantool/graphqlapi/tmp/db_test/localhost-13305/00000000000000000040.snap.inprogress'[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:04.943 [5860] main/118/applier/admin@localhost:13302 I> assigned id 1 to replica bbbbbbbb-0000-0000-0000-000000000001[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:04.943 [5860] main/118/applier/admin@localhost:13302 I> initial data received[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:04.943 [5860] main/118/applier/admin@localhost:13302 I> assigned id 2 to replica bbbbbbbb-0000-0000-0000-000000000002[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:04.943 [5860] main/118/applier/admin@localhost:13302 I> final data received[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:04.945 [5860] snapshot/101/main I> saving snapshot `/home/user/tarantool/graphqlapi/tmp/db_test/localhost-13303/00000000000000000040.snap.inprogress'[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:04.945 [5886] snapshot/101/main I> done[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:04.946 [5886] main/110/remote_control/127.0.0.1:37036 I> ready to accept requests[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:04.946 [5886] main/110/remote_control/127.0.0.1:37036 I> synchronizing with 1 replicas[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:04.946 [5886] main/118/applier/admin@localhost:13304 I> subscribed[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:04.946 [5886] main/118/applier/admin@localhost:13304 I> remote vclock {1: 40} local vclock {1: 40}[0m
+[95mstorage-2-replica | [31m2021-05-15 14:17:04.947 [5886] main/121/applierw/admin@localhost:13304 C> leaving orphan mode[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:04.947 [5886] main/110/remote_control/127.0.0.1:37036 I> replica set sync complete[0m
+[95mstorage-2-replica | [31m2021-05-15 14:17:04.947 [5886] main/110/remote_control/127.0.0.1:37036 C> leaving orphan mode[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:04.947 [5886] main/110/remote_control/127.0.0.1:37036 I> set 'log_level' configuration option to 5[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:04.947 [5886] main/113/checkpoint_daemon I> scheduled next checkpoint for Sat May 15 15:58:16 2021[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:04.948 [5886] main/110/remote_control/127.0.0.1:37036 I> set 'replication' configuration option to ["admin@localhost:13304"][0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:04.948 [5886] main/110/remote_control/127.0.0.1:37036 I> set 'instance_uuid' configuration option to "cccccccc-0000-0000-0000-000000000002"[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:04.946 [5870] main/117/main I> subscribed replica cccccccc-0000-0000-0000-000000000002 at fd 48, aka 127.0.0.1:13304, peer of 127.0.0.1:56286[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:04.946 [5870] main/117/main I> remote vclock {1: 40} local vclock {1: 40}[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:04.947 [5870] relay/127.0.0.1:56286/101/main I> recover from `/home/user/tarantool/graphqlapi/tmp/db_test/localhost-13304/00000000000000000000.xlog'[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:04.948 [5860] snapshot/101/main I> done[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:04.948 [5860] main/110/remote_control/127.0.0.1:56324 I> ready to accept requests[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:04.948 [5860] main/110/remote_control/127.0.0.1:56324 I> synchronizing with 1 replicas[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:04.949 [5860] main/118/applier/admin@localhost:13302 I> subscribed[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:04.949 [5860] main/118/applier/admin@localhost:13302 I> remote vclock {1: 40} local vclock {1: 40}[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:04.949 [5850] main/117/main I> subscribed replica bbbbbbbb-0000-0000-0000-000000000002 at fd 48, aka 127.0.0.1:13302, peer of 127.0.0.1:48850[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:04.949 [5850] main/117/main I> remote vclock {1: 40} local vclock {1: 40}[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:04.950 [5850] relay/127.0.0.1:48850/101/main I> recover from `/home/user/tarantool/graphqlapi/tmp/db_test/localhost-13302/00000000000000000000.xlog'[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:04.949 [5886] main/110/remote_control/127.0.0.1:37036 I> set 'read_only' configuration option to true[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:04.949 [5886] main/110/remote_control/127.0.0.1:37036 I> set 'log_format' configuration option to "plain"[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:04.949 [5886] main/110/remote_control/127.0.0.1:37036 I> set 'replicaset_uuid' configuration option to "cccccccc-0000-0000-0000-000000000000"[0m
+[36mstorage-1-replica | [31m2021-05-15 14:17:04.950 [5860] main/122/applierw/admin@localhost:13302 C> leaving orphan mode[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:04.950 [5860] main/110/remote_control/127.0.0.1:56324 I> replica set sync complete[0m
+[36mstorage-1-replica | [31m2021-05-15 14:17:04.950 [5860] main/110/remote_control/127.0.0.1:56324 C> leaving orphan mode[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:04.950 [5860] main/110/remote_control/127.0.0.1:56324 I> set 'log_level' configuration option to 5[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:04.950 [5860] main/113/checkpoint_daemon I> scheduled next checkpoint for Sat May 15 15:24:41 2021[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:04.951 [5860] main/110/remote_control/127.0.0.1:56324 I> set 'replication' configuration option to ["admin@localhost:13302"][0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:04.951 [5860] main/110/remote_control/127.0.0.1:56324 I> set 'instance_uuid' configuration option to "bbbbbbbb-0000-0000-0000-000000000002"[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:04.952 [5860] main/110/remote_control/127.0.0.1:56324 I> set 'read_only' configuration option to true[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:04.952 [5860] main/110/remote_control/127.0.0.1:56324 I> set 'log_format' configuration option to "plain"[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:04.952 [5860] main/110/remote_control/127.0.0.1:56324 I> set 'replicaset_uuid' configuration option to "bbbbbbbb-0000-0000-0000-000000000000"[0m
+[35mrouter | [0m2021-05-15 14:17:04.951 [5842] main/162/vshard.failover._static_router I> All replicas are ok[0m
+[35mrouter | [0m2021-05-15 14:17:04.953 [5842] main/158/localhost:13305 (net.box) I> disconnected from localhost:13305[0m
+[35mrouter | [33m2021-05-15 14:17:04.953 [5842] main/158/localhost:13305 (net.box) net_box.lua:1015 W> localhost:13305: Peer closed[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:04.952 [5886] main/110/remote_control/127.0.0.1:37036 I> Making sure user "admin" exists...[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:04.952 [5886] main/110/remote_control/127.0.0.1:37036 I> Granting replication permissions to "admin"...[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:04.952 [5886] main/110/remote_control/127.0.0.1:37036 I> Setting password for user "admin" ...[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:04.952 [5886] main/110/remote_control/127.0.0.1:37036 I> set 'read_only' configuration option to false[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:04.953 [5886] main/110/remote_control/127.0.0.1:37036 I> set 'read_only' configuration option to true[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:04.953 [5886] main/110/remote_control/127.0.0.1:37036 I> Remote control stopped[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:04.953 [5886] iproto/101/main I> binary: bound to 0.0.0.0:13305[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:04.953 [5886] main/108/remote_control/0.0.0.0:13305 I> stopped[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:04.953 [5886] main/110/remote_control/127.0.0.1:37036 I> set 'listen' configuration option to "13305"[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:04.953 [5886] main/110/remote_control/127.0.0.1:37036 I> Instance state changed: BootstrappingBox -> ConnectingFullmesh[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:04.953 [5886] main/110/remote_control/127.0.0.1:37036 I> connecting to 2 replicas[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:04.954 [5886] main/130/applier/admin@localhost:13305 I> remote master cccccccc-0000-0000-0000-000000000002 at 127.0.0.1:13305 running Tarantool 2.6.3[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:04.954 [5886] main/129/applier/admin@localhost:13304 I> remote master cccccccc-0000-0000-0000-000000000001 at 127.0.0.1:13304 running Tarantool 2.6.3[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:04.954 [5886] main/110/remote_control/127.0.0.1:37036 I> connected to 2 replicas[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:04.954 [5886] main/110/remote_control/127.0.0.1:37036 I> synchronizing with 2 replicas[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:04.954 [5886] main/129/applier/admin@localhost:13304 I> authenticated[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:04.955 [5886] main/129/applier/admin@localhost:13304 I> can't join/subscribe[0m
+[95mstorage-2-replica | [31m2021-05-15 14:17:04.955 [5886] main/129/applier/admin@localhost:13304 box.cc:2695 E> ER_CFG: Incorrect value for option 'replication': duplicate connection with the same replica UUID[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:04.955 [5886] main/129/applier/admin@localhost:13304 I> will retry every 1.00 second[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:04.955 [5870] relay/127.0.0.1:56286/101/main coio.cc:378 !> SystemError unexpected EOF when reading from socket, called on fd 48, aka 127.0.0.1:13304, peer of 127.0.0.1:56286: Broken pipe[0m
+[32mstorage-2-master | [31m2021-05-15 14:17:04.955 [5870] relay/127.0.0.1:56286/101/main C> exiting the relay loop[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:04.956 [5860] main/110/remote_control/127.0.0.1:56324 I> Making sure user "admin" exists...[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:04.956 [5860] main/110/remote_control/127.0.0.1:56324 I> Granting replication permissions to "admin"...[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:04.956 [5860] main/110/remote_control/127.0.0.1:56324 I> Setting password for user "admin" ...[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:04.956 [5860] main/110/remote_control/127.0.0.1:56324 I> set 'read_only' configuration option to false[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:04.956 [5860] main/110/remote_control/127.0.0.1:56324 I> set 'read_only' configuration option to true[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:04.956 [5860] main/110/remote_control/127.0.0.1:56324 I> Remote control stopped[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:04.957 [5860] iproto/101/main I> binary: bound to 0.0.0.0:13303[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:04.957 [5860] main/108/remote_control/0.0.0.0:13303 I> stopped[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:04.957 [5860] main/110/remote_control/127.0.0.1:56324 I> set 'listen' configuration option to "13303"[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:04.957 [5860] main/110/remote_control/127.0.0.1:56324 I> Instance state changed: BootstrappingBox -> ConnectingFullmesh[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:04.957 [5860] main/110/remote_control/127.0.0.1:56324 I> connecting to 2 replicas[0m
+[35mrouter | [0m2021-05-15 14:17:04.957 [5842] main/161/localhost:13303 (net.box) I> disconnected from localhost:13303[0m
+[35mrouter | [33m2021-05-15 14:17:04.957 [5842] main/161/localhost:13303 (net.box) net_box.lua:1015 W> localhost:13303: Peer closed[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:04.958 [5860] main/130/applier/admin@localhost:13303 I> remote master bbbbbbbb-0000-0000-0000-000000000002 at 127.0.0.1:13303 running Tarantool 2.6.3[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:04.958 [5860] main/129/applier/admin@localhost:13302 I> remote master bbbbbbbb-0000-0000-0000-000000000001 at 127.0.0.1:13302 running Tarantool 2.6.3[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:04.959 [5860] main/110/remote_control/127.0.0.1:56324 I> connected to 2 replicas[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:04.959 [5860] main/110/remote_control/127.0.0.1:56324 I> synchronizing with 2 replicas[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:04.959 [5860] main/129/applier/admin@localhost:13302 I> authenticated[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:04.959 [5860] main/129/applier/admin@localhost:13302 I> can't join/subscribe[0m
+[36mstorage-1-replica | [31m2021-05-15 14:17:04.959 [5860] main/129/applier/admin@localhost:13302 box.cc:2695 E> ER_CFG: Incorrect value for option 'replication': duplicate connection with the same replica UUID[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:04.959 [5860] main/129/applier/admin@localhost:13302 I> will retry every 1.00 second[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:04.959 [5850] relay/127.0.0.1:48850/101/main coio.cc:378 !> SystemError unexpected EOF when reading from socket, called on fd 48, aka 127.0.0.1:13302, peer of 127.0.0.1:48850: Broken pipe[0m
+[34mstorage-1-master | [31m2021-05-15 14:17:04.959 [5850] relay/127.0.0.1:48850/101/main C> exiting the relay loop[0m
+[35mrouter | [0m2021-05-15 14:17:05.458 [5842] main/158/localhost:13305 (net.box) I> connected to localhost:13305[0m
+[35mrouter | [0m2021-05-15 14:17:05.462 [5842] main/161/localhost:13303 (net.box) I> connected to localhost:13303[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:05.947 [5850] main/127/applier/admin@localhost:13303 I> authenticated[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:05.948 [5850] main/127/applier/admin@localhost:13303 I> subscribed[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:05.948 [5850] main/127/applier/admin@localhost:13303 I> remote vclock {1: 40, 2: 1} local vclock {1: 40}[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:05.948 [5860] main/117/main I> subscribed replica bbbbbbbb-0000-0000-0000-000000000001 at fd 50, aka 127.0.0.1:13303, peer of 127.0.0.1:56386[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:05.948 [5860] main/117/main I> remote vclock {1: 40} local vclock {1: 40, 2: 1}[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:05.948 [5860] main/112/gc I> wal/engine cleanup is resumed[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:05.949 [5870] main/132/applier/admin@localhost:13305 I> authenticated[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:05.949 [5870] main/132/applier/admin@localhost:13305 I> subscribed[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:05.949 [5870] main/132/applier/admin@localhost:13305 I> remote vclock {1: 40, 2: 1} local vclock {1: 40}[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:05.949 [5886] main/117/main I> subscribed replica cccccccc-0000-0000-0000-000000000001 at fd 60, aka 127.0.0.1:13305, peer of 127.0.0.1:37096[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:05.949 [5886] main/117/main I> remote vclock {1: 40} local vclock {1: 40, 2: 1}[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:05.949 [5886] main/112/gc I> wal/engine cleanup is resumed[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:05.950 [5886] relay/127.0.0.1:37096/101/main I> recover from `/home/user/tarantool/graphqlapi/tmp/db_test/localhost-13305/00000000000000000040.xlog'[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:05.949 [5860] relay/127.0.0.1:56386/101/main I> recover from `/home/user/tarantool/graphqlapi/tmp/db_test/localhost-13303/00000000000000000040.xlog'[0m
+[34mstorage-1-master | [31m2021-05-15 14:17:05.950 [5850] main/135/applierw/admin@localhost:13303 C> leaving orphan mode[0m
+[32mstorage-2-master | [31m2021-05-15 14:17:05.951 [5870] main/136/applierw/admin@localhost:13305 C> leaving orphan mode[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:05.957 [5886] main/129/applier/admin@localhost:13304 I> authenticated[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:05.957 [5886] main/129/applier/admin@localhost:13304 I> subscribed[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:05.957 [5886] main/129/applier/admin@localhost:13304 I> remote vclock {1: 40, 2: 1} local vclock {1: 40, 2: 1}[0m
+[95mstorage-2-replica | [31m2021-05-15 14:17:05.958 [5886] main/132/applierw/admin@localhost:13304 C> leaving orphan mode[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:05.958 [5886] main/110/remote_control/127.0.0.1:37036 I> replica set sync complete[0m
+[95mstorage-2-replica | [31m2021-05-15 14:17:05.958 [5886] main/110/remote_control/127.0.0.1:37036 C> leaving orphan mode[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:05.958 [5886] main/110/remote_control/127.0.0.1:37036 I> set 'replication' configuration option to ["admin@localhost:13304","admin@localhost:13305"][0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:05.958 [5886] main/110/remote_control/127.0.0.1:37036 I> Instance state changed: ConnectingFullmesh -> BoxConfigured[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:05.958 [5886] main/110/remote_control/127.0.0.1:37036 I> Instance state changed: BoxConfigured -> ConfiguringRoles[0m
+[95mstorage-2-replica | [31m2021-05-15 14:17:05.959 [5886] main/110/remote_control/127.0.0.1:37036 C> leaving orphan mode[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:05.959 [5886] main/110/remote_control/127.0.0.1:37036 I> set 'replication_connect_quorum' configuration option to 0[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:05.959 [5886] main/110/remote_control/127.0.0.1:37036 I> Failover disabled[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:05.959 [5886] main/110/remote_control/127.0.0.1:37036 I> Reconfiguring vshard.storage...[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:05.959 [5886] main/110/remote_control/127.0.0.1:37036 I> Starting configuration of replica cccccccc-0000-0000-0000-000000000002[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:05.959 [5886] main/110/remote_control/127.0.0.1:37036 I> connecting to 2 replicas[0m
+[95mstorage-2-replica | [31m2021-05-15 14:17:05.959 [5886] main/110/remote_control/127.0.0.1:37036 C> failed to connect to 2 out of 2 replicas[0m
+[95mstorage-2-replica | [31m2021-05-15 14:17:05.959 [5886] main/110/remote_control/127.0.0.1:37036 C> leaving orphan mode[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:05.960 [5886] main/110/remote_control/127.0.0.1:37036 I> set 'replication' configuration option to ["admin@localhost:13305","admin@localhost:13304"][0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:05.960 [5886] main/110/remote_control/127.0.0.1:37036 I> Box has been configured[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:05.957 [5870] main/135/main I> subscribed replica cccccccc-0000-0000-0000-000000000002 at fd 57, aka 127.0.0.1:13304, peer of 127.0.0.1:56314[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:05.957 [5870] main/135/main I> remote vclock {1: 40, 2: 1} local vclock {1: 40, 2: 1}[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:05.958 [5870] relay/127.0.0.1:56314/101/main I> recover from `/home/user/tarantool/graphqlapi/tmp/db_test/localhost-13304/00000000000000000000.xlog'[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:05.960 [5870] relay/127.0.0.1:56314/101/main coio.cc:378 !> SystemError unexpected EOF when reading from socket, called on fd 57, aka 127.0.0.1:13304, peer of 127.0.0.1:56314: Broken pipe[0m
+[32mstorage-2-master | [31m2021-05-15 14:17:05.960 [5870] relay/127.0.0.1:56314/101/main C> exiting the relay loop[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:05.960 [5860] main/129/applier/admin@localhost:13302 I> authenticated[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:05.960 [5860] main/129/applier/admin@localhost:13302 I> subscribed[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:05.960 [5860] main/129/applier/admin@localhost:13302 I> remote vclock {1: 40, 2: 1} local vclock {1: 40, 2: 1}[0m
+[36mstorage-1-replica | [31m2021-05-15 14:17:05.961 [5860] main/132/applierw/admin@localhost:13302 C> leaving orphan mode[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:05.961 [5860] main/110/remote_control/127.0.0.1:56324 I> replica set sync complete[0m
+[36mstorage-1-replica | [31m2021-05-15 14:17:05.961 [5860] main/110/remote_control/127.0.0.1:56324 C> leaving orphan mode[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:05.961 [5860] main/110/remote_control/127.0.0.1:56324 I> set 'replication' configuration option to ["admin@localhost:13302","admin@localhost:13303"][0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:05.961 [5860] main/110/remote_control/127.0.0.1:56324 I> Instance state changed: ConnectingFullmesh -> BoxConfigured[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:05.961 [5860] main/110/remote_control/127.0.0.1:56324 I> Instance state changed: BoxConfigured -> ConfiguringRoles[0m
+[36mstorage-1-replica | [31m2021-05-15 14:17:05.961 [5860] main/110/remote_control/127.0.0.1:56324 C> leaving orphan mode[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:05.961 [5860] main/110/remote_control/127.0.0.1:56324 I> set 'replication_connect_quorum' configuration option to 0[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:05.962 [5860] main/110/remote_control/127.0.0.1:56324 I> Failover disabled[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:05.962 [5860] main/110/remote_control/127.0.0.1:56324 I> Reconfiguring vshard.storage...[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:05.962 [5860] main/110/remote_control/127.0.0.1:56324 I> Starting configuration of replica bbbbbbbb-0000-0000-0000-000000000002[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:05.962 [5860] main/110/remote_control/127.0.0.1:56324 I> Box has been configured[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:05.960 [5850] main/134/main I> subscribed replica bbbbbbbb-0000-0000-0000-000000000002 at fd 49, aka 127.0.0.1:13302, peer of 127.0.0.1:48878[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:05.960 [5850] main/134/main I> remote vclock {1: 40, 2: 1} local vclock {1: 40, 2: 1}[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:05.961 [5850] relay/127.0.0.1:48878/101/main I> recover from `/home/user/tarantool/graphqlapi/tmp/db_test/localhost-13302/00000000000000000000.xlog'[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:05.963 [5886] main/110/remote_control/127.0.0.1:37036 I> Roles configuration finished[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:05.963 [5886] main/110/remote_control/127.0.0.1:37036 I> Instance state changed: ConfiguringRoles -> RolesConfigured[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:05.964 [5886] main/135/applier/admin@localhost:13304 I> remote master cccccccc-0000-0000-0000-000000000001 at 127.0.0.1:13304 running Tarantool 2.6.3[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:05.964 [5886] main/136/applier/admin@localhost:13305 I> remote master cccccccc-0000-0000-0000-000000000002 at 127.0.0.1:13305 running Tarantool 2.6.3[0m
+[95mstorage-2-replica | [31m2021-05-15 14:17:05.964 [5886] main/136/applier/admin@localhost:13305 C> leaving orphan mode[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:05.964 [5886] main/135/applier/admin@localhost:13304 I> authenticated[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:05.964 [5886] main/135/applier/admin@localhost:13304 I> subscribed[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:05.964 [5886] main/135/applier/admin@localhost:13304 I> remote vclock {1: 40, 2: 1} local vclock {1: 40, 2: 1}[0m
+[95mstorage-2-replica | [31m2021-05-15 14:17:05.965 [5886] main/137/applierw/admin@localhost:13304 C> leaving orphan mode[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:05.964 [5870] main/135/main I> subscribed replica cccccccc-0000-0000-0000-000000000002 at fd 57, aka 127.0.0.1:13304, peer of 127.0.0.1:56318[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:05.964 [5870] main/135/main I> remote vclock {1: 40, 2: 1} local vclock {1: 40, 2: 1}[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:05.965 [5870] relay/127.0.0.1:56318/101/main I> recover from `/home/user/tarantool/graphqlapi/tmp/db_test/localhost-13304/00000000000000000000.xlog'[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:05.966 [5860] main/110/remote_control/127.0.0.1:56324 I> Roles configuration finished[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:05.966 [5860] main/110/remote_control/127.0.0.1:56324 I> Instance state changed: ConfiguringRoles -> RolesConfigured[0m
+[35mrouter | [33m2021-05-15 14:17:05.967 [5842] main/110/http/127.0.0.1:52796 twophase.lua:428 W> Committed patch_clusterwide at localhost:13301[0m
+[35mrouter | [33m2021-05-15 14:17:05.967 [5842] main/110/http/127.0.0.1:52796 twophase.lua:428 W> Committed patch_clusterwide at localhost:13302[0m
+[35mrouter | [33m2021-05-15 14:17:05.967 [5842] main/110/http/127.0.0.1:52796 twophase.lua:428 W> Committed patch_clusterwide at localhost:13303[0m
+[35mrouter | [33m2021-05-15 14:17:05.967 [5842] main/110/http/127.0.0.1:52796 twophase.lua:428 W> Committed patch_clusterwide at localhost:13304[0m
+[35mrouter | [33m2021-05-15 14:17:05.967 [5842] main/110/http/127.0.0.1:52796 twophase.lua:428 W> Committed patch_clusterwide at localhost:13305[0m
+[35mrouter | [33m2021-05-15 14:17:05.967 [5842] main/110/http/127.0.0.1:52796 twophase.lua:593 W> Clusterwide config updated successfully[0m
+[35mrouter | [0m2021-05-15 14:17:06.381 [5842] main/165/http/127.0.0.1:52878 I> Bootstrapping vshard-router/default ...[0m
+[35mrouter | [0m2021-05-15 14:17:06.411 [5842] main/165/http/127.0.0.1:52878 I> Buckets from 1 to 15000 are bootstrapped on "cccccccc-0000-0000-0000-000000000000"[0m
+[35mrouter | [0m2021-05-15 14:17:06.446 [5842] main/165/http/127.0.0.1:52878 I> Buckets from 15001 to 30000 are bootstrapped on "bbbbbbbb-0000-0000-0000-000000000000"[0m
+[35mrouter | [33m2021-05-15 14:17:06.446 [5842] main/165/http/127.0.0.1:52878 twophase.lua:497 W> Updating config clusterwide...[0m
+[35mrouter | [33m2021-05-15 14:17:06.447 [5842] main/165/http/127.0.0.1:52878 twophase.lua:373 W> (2PC) patch_clusterwide upload phase...[0m
+[35mrouter | [33m2021-05-15 14:17:06.455 [5842] main/165/http/127.0.0.1:52878 twophase.lua:386 W> (2PC) patch_clusterwide prepare phase...[0m
+[35mrouter | [33m2021-05-15 14:17:06.460 [5842] main/165/http/127.0.0.1:52878 twophase.lua:395 W> Prepared for patch_clusterwide at localhost:13301[0m
+[35mrouter | [33m2021-05-15 14:17:06.460 [5842] main/165/http/127.0.0.1:52878 twophase.lua:395 W> Prepared for patch_clusterwide at localhost:13302[0m
+[35mrouter | [33m2021-05-15 14:17:06.460 [5842] main/165/http/127.0.0.1:52878 twophase.lua:395 W> Prepared for patch_clusterwide at localhost:13303[0m
+[35mrouter | [33m2021-05-15 14:17:06.460 [5842] main/165/http/127.0.0.1:52878 twophase.lua:395 W> Prepared for patch_clusterwide at localhost:13304[0m
+[35mrouter | [33m2021-05-15 14:17:06.460 [5842] main/165/http/127.0.0.1:52878 twophase.lua:395 W> Prepared for patch_clusterwide at localhost:13305[0m
+[35mrouter | [33m2021-05-15 14:17:06.460 [5842] main/165/http/127.0.0.1:52878 twophase.lua:419 W> (2PC) patch_clusterwide commit phase...[0m
+[35mrouter | [0m2021-05-15 14:17:06.461 [5842] main/164/main I> Backup of active config created: "/home/user/tarantool/graphqlapi/tmp/db_test/localhost-13301/config.backup"[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:06.461 [5860] main/131/main I> Backup of active config created: "/home/user/tarantool/graphqlapi/tmp/db_test/localhost-13303/config.backup"[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:06.461 [5860] main/131/main I> Instance state changed: RolesConfigured -> ConfiguringRoles[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:06.461 [5860] main/131/main I> Failover disabled[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:06.461 [5886] main/131/main I> Backup of active config created: "/home/user/tarantool/graphqlapi/tmp/db_test/localhost-13305/config.backup"[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:06.461 [5886] main/131/main I> Instance state changed: RolesConfigured -> ConfiguringRoles[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:06.461 [5886] main/131/main I> connecting to 2 replicas[0m
+[95mstorage-2-replica | [31m2021-05-15 14:17:06.462 [5886] main/131/main C> failed to connect to 2 out of 2 replicas[0m
+[95mstorage-2-replica | [31m2021-05-15 14:17:06.462 [5886] main/131/main C> leaving orphan mode[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:06.462 [5886] main/131/main I> set 'replication' configuration option to ["admin@localhost:13304","admin@localhost:13305"][0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:06.462 [5886] main/131/main I> Failover disabled[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:06.463 [5886] main/131/main I> Roles configuration finished[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:06.463 [5886] main/131/main I> Instance state changed: ConfiguringRoles -> RolesConfigured[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:06.463 [5886] main/140/applier/admin@localhost:13305 I> remote master cccccccc-0000-0000-0000-000000000002 at 127.0.0.1:13305 running Tarantool 2.6.3[0m
+[95mstorage-2-replica | [31m2021-05-15 14:17:06.463 [5886] main/140/applier/admin@localhost:13305 C> leaving orphan mode[0m
+[95mstorage-2-replica | [31m2021-05-15 14:17:06.463 [5886] relay/127.0.0.1:37096/101/main coio.cc:378 !> SystemError unexpected EOF when reading from socket, called on fd 60, aka 127.0.0.1:13305, peer of 127.0.0.1:37096: Broken pipe[0m
+[95mstorage-2-replica | [31m2021-05-15 14:17:06.463 [5886] relay/127.0.0.1:37096/101/main C> exiting the relay loop[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:06.464 [5886] main/141/applier/admin@localhost:13304 I> remote master cccccccc-0000-0000-0000-000000000001 at 127.0.0.1:13304 running Tarantool 2.6.3[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:06.464 [5886] main/117/main I> subscribed replica cccccccc-0000-0000-0000-000000000001 at fd 53, aka 127.0.0.1:13305, peer of 127.0.0.1:37128[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:06.464 [5886] main/117/main I> remote vclock {1: 15040, 2: 1} local vclock {1: 15040, 2: 1}[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:06.464 [5886] main/141/applier/admin@localhost:13304 I> authenticated[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:06.465 [5886] main/141/applier/admin@localhost:13304 I> subscribed[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:06.465 [5886] main/141/applier/admin@localhost:13304 I> remote vclock {1: 15040, 2: 1} local vclock {1: 15040, 2: 1}[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:06.465 [5886] relay/127.0.0.1:37128/101/main I> recover from `/home/user/tarantool/graphqlapi/tmp/db_test/localhost-13305/00000000000000000040.xlog'[0m
+[95mstorage-2-replica | [31m2021-05-15 14:17:06.467 [5886] main/142/applierw/admin@localhost:13304 C> leaving orphan mode[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:06.461 [5870] main/137/main I> Backup of active config created: "/home/user/tarantool/graphqlapi/tmp/db_test/localhost-13304/config.backup"[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:06.461 [5870] main/137/main I> Instance state changed: RolesConfigured -> ConfiguringRoles[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:06.462 [5870] main/137/main I> connecting to 2 replicas[0m
+[32mstorage-2-master | [31m2021-05-15 14:17:06.462 [5870] main/137/main C> failed to connect to 2 out of 2 replicas[0m
+[32mstorage-2-master | [31m2021-05-15 14:17:06.463 [5870] main/137/main C> leaving orphan mode[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:06.463 [5870] main/137/main I> set 'replication' configuration option to ["admin@localhost:13304","admin@localhost:13305"][0m
+[32mstorage-2-master | [0m2021-05-15 14:17:06.463 [5870] main/137/main I> Failover disabled[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:06.464 [5870] main/137/main I> Roles configuration finished[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:06.464 [5870] main/137/main I> Instance state changed: ConfiguringRoles -> RolesConfigured[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:06.464 [5870] main/140/applier/admin@localhost:13305 I> remote master cccccccc-0000-0000-0000-000000000002 at 127.0.0.1:13305 running Tarantool 2.6.3[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:06.464 [5870] main/141/applier/admin@localhost:13304 I> remote master cccccccc-0000-0000-0000-000000000001 at 127.0.0.1:13304 running Tarantool 2.6.3[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:06.464 [5870] main/140/applier/admin@localhost:13305 I> authenticated[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:06.464 [5870] relay/127.0.0.1:56318/101/main coio.cc:378 !> SystemError unexpected EOF when reading from socket, called on fd 57, aka 127.0.0.1:13304, peer of 127.0.0.1:56318: Broken pipe[0m
+[32mstorage-2-master | [31m2021-05-15 14:17:06.464 [5870] relay/127.0.0.1:56318/101/main C> exiting the relay loop[0m
+[32mstorage-2-master | [31m2021-05-15 14:17:06.464 [5870] main/141/applier/admin@localhost:13304 C> leaving orphan mode[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:06.464 [5870] main/140/applier/admin@localhost:13305 I> subscribed[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:06.464 [5870] main/140/applier/admin@localhost:13305 I> remote vclock {1: 15040, 2: 1} local vclock {1: 15040, 2: 1}[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:06.465 [5870] main/117/main I> subscribed replica cccccccc-0000-0000-0000-000000000002 at fd 48, aka 127.0.0.1:13304, peer of 127.0.0.1:56342[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:06.465 [5870] main/117/main I> remote vclock {1: 15040, 2: 1} local vclock {1: 15040, 2: 1}[0m
+[32mstorage-2-master | [0m2021-05-15 14:17:06.465 [5870] relay/127.0.0.1:56342/101/main I> recover from `/home/user/tarantool/graphqlapi/tmp/db_test/localhost-13304/00000000000000000000.xlog'[0m
+[32mstorage-2-master | [31m2021-05-15 14:17:06.466 [5870] main/142/applierw/admin@localhost:13305 C> leaving orphan mode[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:06.461 [5850] main/136/main I> Backup of active config created: "/home/user/tarantool/graphqlapi/tmp/db_test/localhost-13302/config.backup"[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:06.461 [5850] main/136/main I> Instance state changed: RolesConfigured -> ConfiguringRoles[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:06.462 [5850] main/136/main I> Failover disabled[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:06.463 [5850] main/136/main I> Roles configuration finished[0m
+[34mstorage-1-master | [0m2021-05-15 14:17:06.463 [5850] main/136/main I> Instance state changed: ConfiguringRoles -> RolesConfigured[0m
+[35mrouter | [0m2021-05-15 14:17:06.461 [5842] main/164/main I> Instance state changed: RolesConfigured -> ConfiguringRoles[0m
+[35mrouter | [0m2021-05-15 14:17:06.461 [5842] main/164/main I> Failover disabled[0m
+[35mrouter | [0m2021-05-15 14:17:06.462 [5842] main/164/main I> Roles configuration finished[0m
+[35mrouter | [0m2021-05-15 14:17:06.462 [5842] main/164/main I> Instance state changed: ConfiguringRoles -> RolesConfigured[0m
+[35mrouter | [33m2021-05-15 14:17:06.464 [5842] main/165/http/127.0.0.1:52878 twophase.lua:428 W> Committed patch_clusterwide at localhost:13301[0m
+[35mrouter | [33m2021-05-15 14:17:06.464 [5842] main/165/http/127.0.0.1:52878 twophase.lua:428 W> Committed patch_clusterwide at localhost:13302[0m
+[35mrouter | [33m2021-05-15 14:17:06.464 [5842] main/165/http/127.0.0.1:52878 twophase.lua:428 W> Committed patch_clusterwide at localhost:13303[0m
+[35mrouter | [33m2021-05-15 14:17:06.464 [5842] main/165/http/127.0.0.1:52878 twophase.lua:428 W> Committed patch_clusterwide at localhost:13304[0m
+[35mrouter | [33m2021-05-15 14:17:06.464 [5842] main/165/http/127.0.0.1:52878 twophase.lua:428 W> Committed patch_clusterwide at localhost:13305[0m
+[35mrouter | [33m2021-05-15 14:17:06.464 [5842] main/165/http/127.0.0.1:52878 twophase.lua:593 W> Clusterwide config updated successfully[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:06.462 [5860] main/131/main I> Roles configuration finished[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:06.462 [5860] main/131/main I> Instance state changed: ConfiguringRoles -> RolesConfigured[0m
+.[35mrouter | [33m2021-05-15 14:17:06.508 [5842] main/164/main roles.lua:450 W> Reloading roles ...[0m
+[35mrouter | [0m2021-05-15 14:17:06.508 [5842] main/164/main I> Instance state changed: RolesConfigured -> ReloadingRoles[0m
+[35mrouter | [0m2021-05-15 14:17:06.508 [5842] main/164/main I> Starting router configuration[0m
+[35mrouter | [0m2021-05-15 14:17:06.508 [5842] main/164/main I> Calling box.cfg()...[0m
+[35mrouter | [0m2021-05-15 14:17:06.508 [5842] main/164/main I> Box has been configured[0m
+[35mrouter | [0m2021-05-15 14:17:06.509 [5842] main/202/lua I> Old replicaset and replica objects are outdated.[0m
+[35mrouter | [31m2021-05-15 14:17:06.509 [5842] main/164/main roles.lua:459 E> HotReloadError: .../user/tarantool/graphqlapi/test/entrypoint/basic_srv.lua:22: attempt to index a nil value[0m
+[35mrouter | [31mstack traceback:[0m
+[35mrouter | [31m	[C]: in function 'xpcall'[0m
+[35mrouter | [31m	...r/tarantool/graphqlapi/.rocks/share/tarantool/errors.lua:145: in function 'pcall'[0m
+[35mrouter | [31m	...ol/graphqlapi/.rocks/share/tarantool/cartridge/roles.lua:457: in function <...ol/graphqlapi/.rocks/share/tarantool/cartridge/roles.lua:431>[0m
+[35mrouter | [31m	[C]: at 0x004f8790[0m
+[35mrouter | [0m2021-05-15 14:17:06.509 [5842] main/164/main I> Unsetting global "_graphqlapi_values"[0m
+[35mrouter | [0m2021-05-15 14:17:06.509 [5842] main/164/main I> Unsetting global "__module_vshard_registry"[0m
+[35mrouter | [0m2021-05-15 14:17:06.509 [5842] main/164/main I> Unsetting global "_graphqlapi_defaults"[0m
+[35mrouter | [0m2021-05-15 14:17:06.512 [5842] main/164/main I> Killing fiber "localhost:13301 (net.box)" (201)[0m
+[35mrouter | [0m2021-05-15 14:17:06.512 [5842] main/164/main I> Killing fiber "localhost:13304 (net.box)" (167)[0m
+[35mrouter | [0m2021-05-15 14:17:06.512 [5842] main/164/main I> Killing fiber "localhost:13302 (net.box)" (166)[0m
+[35mrouter | [0m2021-05-15 14:17:06.512 [5842] main/164/main I> Killing fiber "localhost:13303 (net.box)" (161)[0m
+[35mrouter | [0m2021-05-15 14:17:06.512 [5842] main/164/main I> Killing fiber "localhost:13304 (net.box)" (176)[0m
+[35mrouter | [0m2021-05-15 14:17:06.512 [5842] main/164/main I> Killing fiber "localhost:13305 (net.box)" (177)[0m
+[35mrouter | [0m2021-05-15 14:17:06.512 [5842] main/164/main I> Killing fiber "localhost:13303 (net.box)" (175)[0m
+[35mrouter | [0m2021-05-15 14:17:06.512 [5842] main/164/main I> Killing fiber "localhost:13304 (net.box)" (159)[0m
+[35mrouter | [0m2021-05-15 14:17:06.512 [5842] main/164/main I> Killing fiber "localhost:13305 (net.box)" (158)[0m
+[35mrouter | [0m2021-05-15 14:17:06.512 [5842] main/164/main I> Killing fiber "localhost:13301 (net.box)" (173)[0m
+[35mrouter | [0m2021-05-15 14:17:06.512 [5842] main/164/main I> Killing fiber "localhost:13302 (net.box)" (174)[0m
+[35mrouter | [0m2021-05-15 14:17:06.512 [5842] main/164/main I> Killing fiber "localhost:13302 (net.box)" (160)[0m
+[35mrouter | [0m2021-05-15 14:17:06.512 [5842] main/164/main I> Removing HTTP route "/hello" (GET)[0m
+[35mrouter | [0m2021-05-15 14:17:06.521 [5842] main/164/main I> Starting router configuration[0m
+[35mrouter | [0m2021-05-15 14:17:06.521 [5842] main/164/main I> Calling box.cfg()...[0m
+[35mrouter | [0m2021-05-15 14:17:06.521 [5842] main/203/lua I> Old replicaset and replica objects are outdated.[0m
+[35mrouter | [0m2021-05-15 14:17:06.521 [5842] main/204/lua I> failover_f has been started[0m
+[35mrouter | [0m2021-05-15 14:17:06.521 [5842] main/204/lua I> All replicas are ok[0m
+[35mrouter | [0m2021-05-15 14:17:06.521 [5842] main/205/lua I> discovery_f has been started[0m
+[35mrouter | [33m2021-05-15 14:17:06.521 [5842] main/205/lua init.lua:293 W> Error during discovery aaaaaaaa-0000-0000-0000-000000000000, retry will be done later: {"code":6,"type":"ShardingError","name":"MISSING_MASTER","replicaset_uuid":"aaaaaaaa-0000-0000-0000-000000000000","message":"Master is not configured for replicaset aaaaaaaa-0000-0000-0000-000000000000"}[0m
+[35mrouter | [33m2021-05-15 14:17:06.526 [5842] main/164/main roles.lua:487 W> Roles reloaded successfully[0m
+[35mrouter | [0m2021-05-15 14:17:06.526 [5842] main/164/main I> Instance state changed: ReloadingRoles -> BoxConfigured[0m
+[35mrouter | [0m2021-05-15 14:17:06.526 [5842] main/164/main I> Instance state changed: BoxConfigured -> ConfiguringRoles[0m
+[35mrouter | [0m2021-05-15 14:17:06.527 [5842] main/164/main I> Failover disabled[0m
+[35mrouter | [0m2021-05-15 14:17:06.527 [5842] main/164/main I> Reconfiguring vshard-router/default ...[0m
+[35mrouter | [0m2021-05-15 14:17:06.527 [5842] main/164/main I> Starting router configuration[0m
+[35mrouter | [0m2021-05-15 14:17:06.527 [5842] main/164/main I> Calling box.cfg()...[0m
+[35mrouter | [0m2021-05-15 14:17:06.527 [5842] main/164/main I> {"read_only":false}[0m
+[35mrouter | [0m2021-05-15 14:17:06.527 [5842] main/164/main I> Box has been configured[0m
+[35mrouter | [33m2021-05-15 14:17:06.527 [5842] main/201/localhost:13301 (net.box) net_box.lua:1015 W> localhost:13301: fiber is cancelled[0m
+[35mrouter | [0m2021-05-15 14:17:06.528 [5842] main/205/vshard.discovery._static_router I> Start aggressive discovery, 30000 buckets are unknown. Discovery works with 1 seconds interval[0m
+[35mrouter | [0m2021-05-15 14:17:06.530 [5842] main/206/localhost:13305 (net.box) I> connected to localhost:13305[0m
+[35mrouter | [0m2021-05-15 14:17:06.530 [5842] main/208/localhost:13302 (net.box) I> connected to localhost:13302[0m
+[35mrouter | [0m2021-05-15 14:17:06.530 [5842] main/207/localhost:13304 (net.box) I> connected to localhost:13304[0m
+[35mrouter | [0m2021-05-15 14:17:06.530 [5842] main/211/lua I> Old replicaset and replica objects are outdated.[0m
+[35mrouter | [0m2021-05-15 14:17:06.531 [5842] main/209/localhost:13303 (net.box) I> connected to localhost:13303[0m
+[35mrouter | [31m2021-05-15 14:17:06.531 [5842] main/164/main graphqlapi.lua:271 E> Path is not valid: nil[0m
+[35mrouter | [0m2021-05-15 14:17:06.531 [5842] main/164/main I> Roles configuration finished[0m
+[35mrouter | [0m2021-05-15 14:17:06.531 [5842] main/164/main I> Instance state changed: ConfiguringRoles -> RolesConfigured[0m
+.[36mstorage-1-replica | [0m2021-05-15 14:17:06.637 [5860] main/129/applier/admin@localhost:13302 I> can't read row[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:06.637 [5860] main/129/applier/admin@localhost:13302 coio.cc:378 !> SystemError unexpected EOF when reading from socket, called on fd 55, aka 127.0.0.1:48878, peer of 127.0.0.1:13302: Broken pipe[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:06.637 [5860] main/129/applier/admin@localhost:13302 I> will retry every 1.00 second[0m
+[36mstorage-1-replica | [0m2021-05-15 14:17:06.638 [5860] relay/127.0.0.1:56386/101/main coio.cc:378 !> SystemError unexpected EOF when reading from socket, called on fd 50, aka 127.0.0.1:13303, peer of 127.0.0.1:56386: Broken pipe[0m
+[36mstorage-1-replica | [31m2021-05-15 14:17:06.638 [5860] relay/127.0.0.1:56386/101/main C> exiting the relay loop[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:06.839 [5886] main/141/applier/admin@localhost:13304 I> can't read row[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:06.839 [5886] main/141/applier/admin@localhost:13304 coio.cc:378 !> SystemError unexpected EOF when reading from socket, called on fd 66, aka 127.0.0.1:56342, peer of 127.0.0.1:13304: Broken pipe[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:06.839 [5886] main/141/applier/admin@localhost:13304 I> will retry every 1.00 second[0m
+[95mstorage-2-replica | [0m2021-05-15 14:17:06.839 [5886] relay/127.0.0.1:37128/101/main coio.cc:378 !> SystemError unexpected EOF when reading from socket, called on fd 53, aka 127.0.0.1:13305, peer of 127.0.0.1:37128: Broken pipe[0m
+[95mstorage-2-replica | [31m2021-05-15 14:17:06.839 [5886] relay/127.0.0.1:37128/101/main C> exiting the relay loop[0m
+.......................[96mrouter | [0m2021-05-15 14:17:07.233 [5954] main/103/basic_srv.lua I> Using advertise_uri "localhost:13301"[0m
+[96mrouter | [0m2021-05-15 14:17:07.233 [5954] main/103/basic_srv.lua I> Membership encryption enabled[0m
+[96mrouter | [0m2021-05-15 14:17:07.234 [5954] main/103/basic_srv.lua I> Probe uri was successful[0m
+[96mrouter | [0m2021-05-15 14:17:07.234 [5954] main/103/basic_srv.lua I> Membership BROADCAST sent to 127.0.0.1:13302[0m
+[96mrouter | [0m2021-05-15 14:17:07.234 [5954] main/103/basic_srv.lua I> Membership BROADCAST sent to 172.18.79.255:13302[0m
+[96mrouter | [0m2021-05-15 14:17:07.235 [5954] main/103/basic_srv.lua I> Membership BROADCAST sent to 127.0.0.1:13301[0m
+[96mrouter | [0m2021-05-15 14:17:07.235 [5954] main/103/basic_srv.lua I> Membership BROADCAST sent to 172.18.79.255:13301[0m
+[96mrouter | [0m2021-05-15 14:17:07.235 [5954] main/103/basic_srv.lua I> Membership BROADCAST sent to 127.0.0.1:3301[0m
+[96mrouter | [0m2021-05-15 14:17:07.235 [5954] main/103/basic_srv.lua I> Membership BROADCAST sent to 172.18.79.255:3301[0m
+[96mrouter | [0m2021-05-15 14:17:07.236 [5954] main/103/basic_srv.lua I> Membership BROADCAST sent to 127.0.0.1:13300[0m
+[96mrouter | [0m2021-05-15 14:17:07.236 [5954] main/103/basic_srv.lua I> Membership BROADCAST sent to 172.18.79.255:13300[0m
+[96mrouter | [0m2021-05-15 14:17:07.236 [5954] main/107/http/0.0.0.0:8081 I> started[0m
+[96mrouter | [0m2021-05-15 14:17:07.237 [5954] main/103/basic_srv.lua I> Listening HTTP on 0.0.0.0:8081[0m
+[96mrouter | [0m2021-05-15 14:17:07.249 [5954] main/108/remote_control/0.0.0.0:13301 I> started[0m
+[96mrouter | [0m2021-05-15 14:17:07.249 [5954] main/103/basic_srv.lua I> Remote control bound to 0.0.0.0:13301[0m
+[96mrouter | [0m2021-05-15 14:17:07.249 [5954] main/103/basic_srv.lua I> Remote control ready to accept connections[0m
+[96mrouter | [0m2021-05-15 14:17:07.249 [5954] main/103/basic_srv.lua I> Instance state changed:  -> Unconfigured[0m
+[96mrouter | [0m2021-05-15 14:17:07.249 [5954] main/103/basic_srv.lua I> Cartridge 2.6.0[0m
+[96mrouter | [0m2021-05-15 14:17:07.249 [5954] main/103/basic_srv.lua I> server alias router[0m
+[96mrouter | [0m2021-05-15 14:17:07.249 [5954] main/103/basic_srv.lua I> advertise uri localhost:13301[0m
+[96mrouter | [0m2021-05-15 14:17:07.249 [5954] main/103/basic_srv.lua I> working directory /home/user/tarantool/graphqlapi/tmp/db_test/localhost-13301[0m
+[96mrouter | [31m2021-05-15 14:17:07.249 [5954] main C> entering the event loop[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:07.474 [5962] main/103/basic_srv.lua I> Using advertise_uri "localhost:13302"[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:07.474 [5962] main/103/basic_srv.lua I> Membership encryption enabled[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:07.475 [5962] main/103/basic_srv.lua I> Probe uri was successful[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:07.475 [5962] main/103/basic_srv.lua I> Membership BROADCAST sent to 127.0.0.1:13303[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:07.475 [5962] main/103/basic_srv.lua I> Membership BROADCAST sent to 172.18.79.255:13303[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:07.476 [5962] main/103/basic_srv.lua I> Membership BROADCAST sent to 127.0.0.1:13302[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:07.476 [5962] main/103/basic_srv.lua I> Membership BROADCAST sent to 172.18.79.255:13302[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:07.476 [5962] main/103/basic_srv.lua I> Membership BROADCAST sent to 127.0.0.1:3301[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:07.477 [5962] main/103/basic_srv.lua I> Membership BROADCAST sent to 172.18.79.255:3301[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:07.477 [5962] main/103/basic_srv.lua I> Membership BROADCAST sent to 127.0.0.1:13301[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:07.477 [5962] main/103/basic_srv.lua I> Membership BROADCAST sent to 172.18.79.255:13301[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:07.478 [5962] main/107/http/0.0.0.0:8082 I> started[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:07.479 [5962] main/103/basic_srv.lua I> Listening HTTP on 0.0.0.0:8082[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:07.490 [5962] main/108/remote_control/0.0.0.0:13302 I> started[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:07.490 [5962] main/103/basic_srv.lua I> Remote control bound to 0.0.0.0:13302[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:07.491 [5962] main/103/basic_srv.lua I> Remote control ready to accept connections[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:07.491 [5962] main/103/basic_srv.lua I> Instance state changed:  -> Unconfigured[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:07.491 [5962] main/103/basic_srv.lua I> Cartridge 2.6.0[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:07.491 [5962] main/103/basic_srv.lua I> server alias storage-1-master[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:07.491 [5962] main/103/basic_srv.lua I> advertise uri localhost:13302[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:07.491 [5962] main/103/basic_srv.lua I> working directory /home/user/tarantool/graphqlapi/tmp/db_test/localhost-13302[0m
+[94mstorage-1-master | [31m2021-05-15 14:17:07.491 [5962] main C> entering the event loop[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:07.729 [5970] main/103/basic_srv.lua I> Using advertise_uri "localhost:13303"[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:07.730 [5970] main/103/basic_srv.lua I> Membership encryption enabled[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:07.731 [5970] main/103/basic_srv.lua I> Probe uri was successful[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:07.731 [5970] main/103/basic_srv.lua I> Membership BROADCAST sent to 127.0.0.1:13304[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:07.731 [5970] main/103/basic_srv.lua I> Membership BROADCAST sent to 172.18.79.255:13304[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:07.732 [5970] main/103/basic_srv.lua I> Membership BROADCAST sent to 127.0.0.1:13303[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:07.732 [5970] main/103/basic_srv.lua I> Membership BROADCAST sent to 172.18.79.255:13303[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:07.732 [5970] main/103/basic_srv.lua I> Membership BROADCAST sent to 127.0.0.1:3301[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:07.733 [5970] main/103/basic_srv.lua I> Membership BROADCAST sent to 172.18.79.255:3301[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:07.733 [5970] main/103/basic_srv.lua I> Membership BROADCAST sent to 127.0.0.1:13302[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:07.733 [5970] main/103/basic_srv.lua I> Membership BROADCAST sent to 172.18.79.255:13302[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:07.734 [5970] main/107/http/0.0.0.0:8083 I> started[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:07.734 [5970] main/103/basic_srv.lua I> Listening HTTP on 0.0.0.0:8083[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:07.746 [5970] main/108/remote_control/0.0.0.0:13303 I> started[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:07.746 [5970] main/103/basic_srv.lua I> Remote control bound to 0.0.0.0:13303[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:07.746 [5970] main/103/basic_srv.lua I> Remote control ready to accept connections[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:07.746 [5970] main/103/basic_srv.lua I> Instance state changed:  -> Unconfigured[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:07.747 [5970] main/103/basic_srv.lua I> Cartridge 2.6.0[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:07.747 [5970] main/103/basic_srv.lua I> server alias storage-1-replica[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:07.747 [5970] main/103/basic_srv.lua I> advertise uri localhost:13303[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:07.747 [5970] main/103/basic_srv.lua I> working directory /home/user/tarantool/graphqlapi/tmp/db_test/localhost-13303[0m
+[92mstorage-1-replica | [31m2021-05-15 14:17:07.747 [5970] main C> entering the event loop[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:07.973 [5978] main/103/basic_srv.lua I> Using advertise_uri "localhost:13304"[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:07.973 [5978] main/103/basic_srv.lua I> Membership encryption enabled[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:07.974 [5978] main/103/basic_srv.lua I> Probe uri was successful[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:07.975 [5978] main/103/basic_srv.lua I> Membership BROADCAST sent to 127.0.0.1:13305[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:07.975 [5978] main/103/basic_srv.lua I> Membership BROADCAST sent to 172.18.79.255:13305[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:07.975 [5978] main/103/basic_srv.lua I> Membership BROADCAST sent to 127.0.0.1:13304[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:07.975 [5978] main/103/basic_srv.lua I> Membership BROADCAST sent to 172.18.79.255:13304[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:07.976 [5978] main/103/basic_srv.lua I> Membership BROADCAST sent to 127.0.0.1:3301[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:07.976 [5978] main/103/basic_srv.lua I> Membership BROADCAST sent to 172.18.79.255:3301[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:07.976 [5978] main/103/basic_srv.lua I> Membership BROADCAST sent to 127.0.0.1:13303[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:07.976 [5978] main/103/basic_srv.lua I> Membership BROADCAST sent to 172.18.79.255:13303[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:07.978 [5978] main/107/http/0.0.0.0:8084 I> started[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:07.978 [5978] main/103/basic_srv.lua I> Listening HTTP on 0.0.0.0:8084[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:07.990 [5978] main/108/remote_control/0.0.0.0:13304 I> started[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:07.990 [5978] main/103/basic_srv.lua I> Remote control bound to 0.0.0.0:13304[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:07.990 [5978] main/103/basic_srv.lua I> Remote control ready to accept connections[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:07.991 [5978] main/103/basic_srv.lua I> Instance state changed:  -> Unconfigured[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:07.991 [5978] main/103/basic_srv.lua I> Cartridge 2.6.0[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:07.991 [5978] main/103/basic_srv.lua I> server alias storage-2-master[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:07.991 [5978] main/103/basic_srv.lua I> advertise uri localhost:13304[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:07.991 [5978] main/103/basic_srv.lua I> working directory /home/user/tarantool/graphqlapi/tmp/db_test/localhost-13304[0m
+[35mstorage-2-master | [31m2021-05-15 14:17:07.991 [5978] main C> entering the event loop[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:08.221 [5986] main/103/basic_srv.lua I> Using advertise_uri "localhost:13305"[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:08.221 [5986] main/103/basic_srv.lua I> Membership encryption enabled[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:08.222 [5986] main/103/basic_srv.lua I> Probe uri was successful[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:08.223 [5986] main/103/basic_srv.lua I> Membership BROADCAST sent to 127.0.0.1:13306[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:08.223 [5986] main/103/basic_srv.lua I> Membership BROADCAST sent to 172.18.79.255:13306[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:08.223 [5986] main/103/basic_srv.lua I> Membership BROADCAST sent to 127.0.0.1:13305[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:08.223 [5986] main/103/basic_srv.lua I> Membership BROADCAST sent to 172.18.79.255:13305[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:08.224 [5986] main/103/basic_srv.lua I> Membership BROADCAST sent to 127.0.0.1:3301[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:08.224 [5986] main/103/basic_srv.lua I> Membership BROADCAST sent to 172.18.79.255:3301[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:08.224 [5986] main/103/basic_srv.lua I> Membership BROADCAST sent to 127.0.0.1:13304[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:08.224 [5986] main/103/basic_srv.lua I> Membership BROADCAST sent to 172.18.79.255:13304[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:08.226 [5986] main/107/http/0.0.0.0:8085 I> started[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:08.226 [5986] main/103/basic_srv.lua I> Listening HTTP on 0.0.0.0:8085[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:08.238 [5986] main/108/remote_control/0.0.0.0:13305 I> started[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:08.238 [5986] main/103/basic_srv.lua I> Remote control bound to 0.0.0.0:13305[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:08.239 [5986] main/103/basic_srv.lua I> Remote control ready to accept connections[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:08.239 [5986] main/103/basic_srv.lua I> Instance state changed:  -> Unconfigured[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:08.239 [5986] main/103/basic_srv.lua I> Cartridge 2.6.0[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:08.239 [5986] main/103/basic_srv.lua I> server alias storage-2-replica[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:08.239 [5986] main/103/basic_srv.lua I> advertise uri localhost:13305[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:08.239 [5986] main/103/basic_srv.lua I> working directory /home/user/tarantool/graphqlapi/tmp/db_test/localhost-13305[0m
+[34mstorage-2-replica | [31m2021-05-15 14:17:08.239 [5986] main C> entering the event loop[0m
+[96mrouter | [33m2021-05-15 14:17:08.373 [5954] main/110/http/127.0.0.1:52962 twophase.lua:497 W> Updating config clusterwide...[0m
+[96mrouter | [33m2021-05-15 14:17:08.374 [5954] main/110/http/127.0.0.1:52962 twophase.lua:373 W> (2PC) patch_clusterwide upload phase...[0m
+[96mrouter | [33m2021-05-15 14:17:08.431 [5954] main/110/http/127.0.0.1:52962 twophase.lua:386 W> (2PC) patch_clusterwide prepare phase...[0m
+[96mrouter | [33m2021-05-15 14:17:08.439 [5954] main/110/http/127.0.0.1:52962 twophase.lua:395 W> Prepared for patch_clusterwide at localhost:13301[0m
+[96mrouter | [33m2021-05-15 14:17:08.439 [5954] main/110/http/127.0.0.1:52962 twophase.lua:395 W> Prepared for patch_clusterwide at localhost:13302[0m
+[96mrouter | [33m2021-05-15 14:17:08.439 [5954] main/110/http/127.0.0.1:52962 twophase.lua:395 W> Prepared for patch_clusterwide at localhost:13303[0m
+[96mrouter | [33m2021-05-15 14:17:08.439 [5954] main/110/http/127.0.0.1:52962 twophase.lua:395 W> Prepared for patch_clusterwide at localhost:13304[0m
+[96mrouter | [33m2021-05-15 14:17:08.439 [5954] main/110/http/127.0.0.1:52962 twophase.lua:395 W> Prepared for patch_clusterwide at localhost:13305[0m
+[96mrouter | [33m2021-05-15 14:17:08.439 [5954] main/110/http/127.0.0.1:52962 twophase.lua:419 W> (2PC) patch_clusterwide commit phase...[0m
+[96mrouter | [0m2021-05-15 14:17:08.440 [5954] main/121/remote_control/127.0.0.1:46480 I> Instance state changed: Unconfigured -> BootstrappingBox[0m
+[96mrouter | [33m2021-05-15 14:17:08.440 [5954] main/121/remote_control/127.0.0.1:46480 confapplier.lua:427 W> Calling box.cfg()...[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.440 [5978] main/110/remote_control/127.0.0.1:56416 I> Instance state changed: Unconfigured -> BootstrappingBox[0m
+[35mstorage-2-master | [33m2021-05-15 14:17:08.440 [5978] main/110/remote_control/127.0.0.1:56416 confapplier.lua:427 W> Calling box.cfg()...[0m
+[35mstorage-2-master | [31m2021-05-15 14:17:08.441 [5978] main/110/remote_control/127.0.0.1:56416 C> Tarantool 2.6.3-0-gcd487a2c5[0m
+[35mstorage-2-master | [31m2021-05-15 14:17:08.441 [5978] main/110/remote_control/127.0.0.1:56416 C> log level 5[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.441 [5978] main/110/remote_control/127.0.0.1:56416 I> wal/engine cleanup is paused[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.441 [5978] main/110/remote_control/127.0.0.1:56416 I> mapping 268435456 bytes for memtx tuple arena...[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.441 [5978] main/110/remote_control/127.0.0.1:56416 I> Actual slab_alloc_factor calculated on the basis of desired slab_alloc_factor = 1.044274[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.441 [5978] main/110/remote_control/127.0.0.1:56416 I> mapping 134217728 bytes for vinyl tuple arena...[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:08.440 [5986] main/110/remote_control/127.0.0.1:37202 I> Instance state changed: Unconfigured -> BootstrappingBox[0m
+[34mstorage-2-replica | [33m2021-05-15 14:17:08.441 [5986] main/110/remote_control/127.0.0.1:37202 confapplier.lua:427 W> Calling box.cfg()...[0m
+[34mstorage-2-replica | [31m2021-05-15 14:17:08.441 [5986] main/110/remote_control/127.0.0.1:37202 C> Tarantool 2.6.3-0-gcd487a2c5[0m
+[34mstorage-2-replica | [31m2021-05-15 14:17:08.441 [5986] main/110/remote_control/127.0.0.1:37202 C> log level 5[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:08.441 [5986] main/110/remote_control/127.0.0.1:37202 I> wal/engine cleanup is paused[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:08.441 [5986] main/110/remote_control/127.0.0.1:37202 I> mapping 268435456 bytes for memtx tuple arena...[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:08.441 [5986] main/110/remote_control/127.0.0.1:37202 I> Actual slab_alloc_factor calculated on the basis of desired slab_alloc_factor = 1.044274[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:08.441 [5986] main/110/remote_control/127.0.0.1:37202 I> mapping 134217728 bytes for vinyl tuple arena...[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.440 [5962] main/110/remote_control/127.0.0.1:48974 I> Instance state changed: Unconfigured -> BootstrappingBox[0m
+[94mstorage-1-master | [33m2021-05-15 14:17:08.441 [5962] main/110/remote_control/127.0.0.1:48974 confapplier.lua:427 W> Calling box.cfg()...[0m
+[94mstorage-1-master | [31m2021-05-15 14:17:08.441 [5962] main/110/remote_control/127.0.0.1:48974 C> Tarantool 2.6.3-0-gcd487a2c5[0m
+[94mstorage-1-master | [31m2021-05-15 14:17:08.441 [5962] main/110/remote_control/127.0.0.1:48974 C> log level 5[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.441 [5962] main/110/remote_control/127.0.0.1:48974 I> wal/engine cleanup is paused[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.441 [5962] main/110/remote_control/127.0.0.1:48974 I> mapping 268435456 bytes for memtx tuple arena...[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.441 [5962] main/110/remote_control/127.0.0.1:48974 I> Actual slab_alloc_factor calculated on the basis of desired slab_alloc_factor = 1.044274[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.441 [5962] main/110/remote_control/127.0.0.1:48974 I> mapping 134217728 bytes for vinyl tuple arena...[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.447 [5962] main/110/remote_control/127.0.0.1:48974 I> instance uuid bbbbbbbb-0000-0000-0000-000000000001[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.447 [5962] main/111/remote_control/127.0.0.1:48974 I> Cartridge 2.6.0[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.447 [5962] main/111/remote_control/127.0.0.1:48974 I> server alias storage-1-master[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.447 [5962] main/111/remote_control/127.0.0.1:48974 I> advertise uri localhost:13302[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.447 [5962] main/111/remote_control/127.0.0.1:48974 I> working directory /home/user/tarantool/graphqlapi/tmp/db_test/localhost-13302[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.447 [5962] main/110/remote_control/127.0.0.1:48974 I> initializing an empty data directory[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:08.441 [5970] main/110/remote_control/127.0.0.1:56490 I> Instance state changed: Unconfigured -> BootstrappingBox[0m
+[92mstorage-1-replica | [33m2021-05-15 14:17:08.441 [5970] main/110/remote_control/127.0.0.1:56490 confapplier.lua:427 W> Calling box.cfg()...[0m
+[92mstorage-1-replica | [31m2021-05-15 14:17:08.441 [5970] main/110/remote_control/127.0.0.1:56490 C> Tarantool 2.6.3-0-gcd487a2c5[0m
+[92mstorage-1-replica | [31m2021-05-15 14:17:08.441 [5970] main/110/remote_control/127.0.0.1:56490 C> log level 5[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:08.441 [5970] main/110/remote_control/127.0.0.1:56490 I> wal/engine cleanup is paused[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:08.442 [5970] main/110/remote_control/127.0.0.1:56490 I> mapping 268435456 bytes for memtx tuple arena...[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:08.442 [5970] main/110/remote_control/127.0.0.1:56490 I> Actual slab_alloc_factor calculated on the basis of desired slab_alloc_factor = 1.044274[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:08.442 [5970] main/110/remote_control/127.0.0.1:56490 I> mapping 134217728 bytes for vinyl tuple arena...[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:08.447 [5970] main/111/remote_control/127.0.0.1:56490 I> Cartridge 2.6.0[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:08.447 [5970] main/111/remote_control/127.0.0.1:56490 I> server alias storage-1-replica[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:08.447 [5970] main/111/remote_control/127.0.0.1:56490 I> advertise uri localhost:13303[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:08.447 [5970] main/111/remote_control/127.0.0.1:56490 I> working directory /home/user/tarantool/graphqlapi/tmp/db_test/localhost-13303[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:08.448 [5970] main/110/remote_control/127.0.0.1:56490 I> instance uuid bbbbbbbb-0000-0000-0000-000000000002[0m
+[96mrouter | [31m2021-05-15 14:17:08.443 [5954] main/121/remote_control/127.0.0.1:46480 C> Tarantool 2.6.3-0-gcd487a2c5[0m
+[96mrouter | [31m2021-05-15 14:17:08.443 [5954] main/121/remote_control/127.0.0.1:46480 C> log level 5[0m
+[96mrouter | [0m2021-05-15 14:17:08.443 [5954] main/121/remote_control/127.0.0.1:46480 I> wal/engine cleanup is paused[0m
+[96mrouter | [0m2021-05-15 14:17:08.445 [5954] main/121/remote_control/127.0.0.1:46480 I> mapping 268435456 bytes for memtx tuple arena...[0m
+[96mrouter | [0m2021-05-15 14:17:08.445 [5954] main/121/remote_control/127.0.0.1:46480 I> Actual slab_alloc_factor calculated on the basis of desired slab_alloc_factor = 1.044274[0m
+[96mrouter | [0m2021-05-15 14:17:08.445 [5954] main/121/remote_control/127.0.0.1:46480 I> mapping 134217728 bytes for vinyl tuple arena...[0m
+[96mrouter | [0m2021-05-15 14:17:08.450 [5954] main/121/remote_control/127.0.0.1:46480 I> instance uuid aaaaaaaa-0000-0000-0000-000000000001[0m
+[96mrouter | [0m2021-05-15 14:17:08.450 [5954] main/143/remote_control/127.0.0.1:46480 I> Cartridge 2.6.0[0m
+[96mrouter | [0m2021-05-15 14:17:08.450 [5954] main/143/remote_control/127.0.0.1:46480 I> server alias router[0m
+[96mrouter | [0m2021-05-15 14:17:08.450 [5954] main/143/remote_control/127.0.0.1:46480 I> advertise uri localhost:13301[0m
+[96mrouter | [0m2021-05-15 14:17:08.450 [5954] main/143/remote_control/127.0.0.1:46480 I> working directory /home/user/tarantool/graphqlapi/tmp/db_test/localhost-13301[0m
+[96mrouter | [0m2021-05-15 14:17:08.450 [5954] main/121/remote_control/127.0.0.1:46480 I> initializing an empty data directory[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:08.447 [5986] main/110/remote_control/127.0.0.1:37202 I> instance uuid cccccccc-0000-0000-0000-000000000002[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:08.447 [5986] main/110/remote_control/127.0.0.1:37202 I> connecting to 1 replicas[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:08.448 [5986] main/111/remote_control/127.0.0.1:37202 I> Cartridge 2.6.0[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:08.448 [5986] main/111/remote_control/127.0.0.1:37202 I> server alias storage-2-replica[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:08.448 [5986] main/111/remote_control/127.0.0.1:37202 I> advertise uri localhost:13305[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:08.448 [5986] main/111/remote_control/127.0.0.1:37202 I> working directory /home/user/tarantool/graphqlapi/tmp/db_test/localhost-13305[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:08.448 [5986] main/118/applier/admin@localhost:13304 I> remote master 00000000-0000-0000-0000-000000000000 at 127.0.0.1:13304 running Tarantool 2.6.3[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.448 [5978] main/110/remote_control/127.0.0.1:56416 I> instance uuid cccccccc-0000-0000-0000-000000000001[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.448 [5978] main/111/remote_control/127.0.0.1:56416 I> Cartridge 2.6.0[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.448 [5978] main/111/remote_control/127.0.0.1:56416 I> server alias storage-2-master[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.448 [5978] main/111/remote_control/127.0.0.1:56416 I> advertise uri localhost:13304[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.448 [5978] main/111/remote_control/127.0.0.1:56416 I> working directory /home/user/tarantool/graphqlapi/tmp/db_test/localhost-13304[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.448 [5978] main/110/remote_control/127.0.0.1:56416 I> initializing an empty data directory[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.457 [5978] main/110/remote_control/127.0.0.1:56416 I> assigned id 1 to replica cccccccc-0000-0000-0000-000000000001[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.457 [5978] main/110/remote_control/127.0.0.1:56416 I> cluster uuid cccccccc-0000-0000-0000-000000000000[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.456 [5962] main/110/remote_control/127.0.0.1:48974 I> assigned id 1 to replica bbbbbbbb-0000-0000-0000-000000000001[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.456 [5962] main/110/remote_control/127.0.0.1:48974 I> cluster uuid bbbbbbbb-0000-0000-0000-000000000000[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.457 [5962] snapshot/101/main I> saving snapshot `/home/user/tarantool/graphqlapi/tmp/db_test/localhost-13302/00000000000000000000.snap.inprogress'[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:08.457 [5986] main/118/applier/admin@localhost:13304 I> can't connect to master[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:08.457 [5986] main/118/applier/admin@localhost:13304 coio.cc:358 !> SystemError unexpected EOF when reading from socket, called on fd 89, aka 127.0.0.1:56420, peer of 127.0.0.1:13304: Broken pipe[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:08.457 [5986] main/118/applier/admin@localhost:13304 I> will retry every 1.00 second[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:08.457 [5970] main/110/remote_control/127.0.0.1:56490 I> connecting to 1 replicas[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:08.458 [5970] main/118/applier/admin@localhost:13302 I> remote master 00000000-0000-0000-0000-000000000000 at 127.0.0.1:13302 running Tarantool 2.6.3[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:08.458 [5970] main/118/applier/admin@localhost:13302 I> can't connect to master[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:08.458 [5970] main/118/applier/admin@localhost:13302 coio.cc:358 !> SystemError unexpected EOF when reading from socket, called on fd 79, aka 127.0.0.1:48984, peer of 127.0.0.1:13302: Broken pipe[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:08.458 [5970] main/118/applier/admin@localhost:13302 I> will retry every 1.00 second[0m
+[96mrouter | [0m2021-05-15 14:17:08.458 [5954] main/121/remote_control/127.0.0.1:46480 I> assigned id 1 to replica aaaaaaaa-0000-0000-0000-000000000001[0m
+[96mrouter | [0m2021-05-15 14:17:08.459 [5954] main/121/remote_control/127.0.0.1:46480 I> cluster uuid aaaaaaaa-0000-0000-0000-000000000000[0m
+[96mrouter | [0m2021-05-15 14:17:08.460 [5954] snapshot/101/main I> saving snapshot `/home/user/tarantool/graphqlapi/tmp/db_test/localhost-13301/00000000000000000000.snap.inprogress'[0m
+[96mrouter | [0m2021-05-15 14:17:08.465 [5954] snapshot/101/main I> done[0m
+[96mrouter | [0m2021-05-15 14:17:08.466 [5954] main/121/remote_control/127.0.0.1:46480 I> ready to accept requests[0m
+[96mrouter | [0m2021-05-15 14:17:08.466 [5954] main/144/gc I> wal/engine cleanup is resumed[0m
+[96mrouter | [0m2021-05-15 14:17:08.466 [5954] main/121/remote_control/127.0.0.1:46480 I> set 'log_level' configuration option to 5[0m
+[96mrouter | [0m2021-05-15 14:17:08.466 [5954] main/145/checkpoint_daemon I> scheduled next checkpoint for Sat May 15 15:49:49 2021[0m
+[96mrouter | [0m2021-05-15 14:17:08.467 [5954] main/121/remote_control/127.0.0.1:46480 I> set 'instance_uuid' configuration option to "aaaaaaaa-0000-0000-0000-000000000001"[0m
+[96mrouter | [0m2021-05-15 14:17:08.467 [5954] main/121/remote_control/127.0.0.1:46480 I> set 'replication_connect_quorum' configuration option to 0[0m
+[96mrouter | [0m2021-05-15 14:17:08.467 [5954] main/121/remote_control/127.0.0.1:46480 I> set 'log_format' configuration option to "plain"[0m
+[96mrouter | [0m2021-05-15 14:17:08.468 [5954] main/121/remote_control/127.0.0.1:46480 I> set 'replicaset_uuid' configuration option to "aaaaaaaa-0000-0000-0000-000000000000"[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.459 [5978] snapshot/101/main I> saving snapshot `/home/user/tarantool/graphqlapi/tmp/db_test/localhost-13304/00000000000000000000.snap.inprogress'[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.465 [5978] snapshot/101/main I> done[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.466 [5978] main/110/remote_control/127.0.0.1:56416 I> ready to accept requests[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.466 [5978] main/112/gc I> wal/engine cleanup is resumed[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.466 [5978] main/110/remote_control/127.0.0.1:56416 I> set 'log_level' configuration option to 5[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.466 [5978] main/113/checkpoint_daemon I> scheduled next checkpoint for Sat May 15 16:02:14 2021[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.467 [5978] main/110/remote_control/127.0.0.1:56416 I> set 'instance_uuid' configuration option to "cccccccc-0000-0000-0000-000000000001"[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.467 [5978] main/110/remote_control/127.0.0.1:56416 I> set 'replication_connect_quorum' configuration option to 0[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.467 [5978] main/110/remote_control/127.0.0.1:56416 I> set 'log_format' configuration option to "plain"[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.467 [5978] main/110/remote_control/127.0.0.1:56416 I> set 'replicaset_uuid' configuration option to "cccccccc-0000-0000-0000-000000000000"[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.469 [5978] main/110/remote_control/127.0.0.1:56416 I> Making sure user "admin" exists...[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.469 [5978] main/110/remote_control/127.0.0.1:56416 I> Granting replication permissions to "admin"...[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.470 [5978] main/110/remote_control/127.0.0.1:56416 I> Setting password for user "admin" ...[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.470 [5978] main/110/remote_control/127.0.0.1:56416 I> Remote control stopped[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.470 [5978] iproto/101/main I> binary: bound to 0.0.0.0:13304[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.470 [5978] main/108/remote_control/0.0.0.0:13304 I> stopped[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.470 [5978] main/110/remote_control/127.0.0.1:56416 I> set 'listen' configuration option to "13304"[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.471 [5978] main/110/remote_control/127.0.0.1:56416 I> Instance state changed: BootstrappingBox -> ConnectingFullmesh[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.471 [5978] main/110/remote_control/127.0.0.1:56416 I> connecting to 2 replicas[0m
+[35mstorage-2-master | [31m2021-05-15 14:17:08.471 [5978] main/110/remote_control/127.0.0.1:56416 C> failed to connect to 2 out of 2 replicas[0m
+[35mstorage-2-master | [31m2021-05-15 14:17:08.471 [5978] main/110/remote_control/127.0.0.1:56416 C> leaving orphan mode[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.471 [5978] main/110/remote_control/127.0.0.1:56416 I> set 'replication' configuration option to ["admin@localhost:13304","admin@localhost:13305"][0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.471 [5978] main/110/remote_control/127.0.0.1:56416 I> Instance state changed: ConnectingFullmesh -> BoxConfigured[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.471 [5978] main/110/remote_control/127.0.0.1:56416 I> Instance state changed: BoxConfigured -> ConfiguringRoles[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.472 [5978] main/110/remote_control/127.0.0.1:56416 I> Failover disabled[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.472 [5978] main/110/remote_control/127.0.0.1:56416 I> Reconfiguring vshard.storage...[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.472 [5978] main/110/remote_control/127.0.0.1:56416 I> Starting configuration of replica cccccccc-0000-0000-0000-000000000001[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.472 [5978] main/110/remote_control/127.0.0.1:56416 I> I am master[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.472 [5978] main/110/remote_control/127.0.0.1:56416 I> Taking on replicaset master role...[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.472 [5978] main/110/remote_control/127.0.0.1:56416 I> connecting to 2 replicas[0m
+[35mstorage-2-master | [31m2021-05-15 14:17:08.472 [5978] main/110/remote_control/127.0.0.1:56416 C> failed to connect to 2 out of 2 replicas[0m
+[35mstorage-2-master | [31m2021-05-15 14:17:08.472 [5978] main/110/remote_control/127.0.0.1:56416 C> leaving orphan mode[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.473 [5978] main/110/remote_control/127.0.0.1:56416 I> set 'replication' configuration option to ["admin@localhost:13305","admin@localhost:13304"][0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.473 [5978] main/110/remote_control/127.0.0.1:56416 I> Box has been configured[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.473 [5978] main/110/remote_control/127.0.0.1:56416 I> Initializing schema {0.1.15.0}[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.473 [5978] main/131/applier/admin@localhost:13304 I> remote master cccccccc-0000-0000-0000-000000000001 at 127.0.0.1:13304 running Tarantool 2.6.3[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.473 [5978] main/132/applier/admin@localhost:13305 I> remote master 00000000-0000-0000-0000-000000000000 at 127.0.0.1:13305 running Tarantool 2.6.3[0m
+[35mstorage-2-master | [31m2021-05-15 14:17:08.474 [5978] main/131/applier/admin@localhost:13304 C> leaving orphan mode[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.474 [5978] main/132/applier/admin@localhost:13305 I> can't connect to master[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.474 [5978] main/132/applier/admin@localhost:13305 coio.cc:358 !> SystemError unexpected EOF when reading from socket, called on fd 86, aka 127.0.0.1:37218, peer of 127.0.0.1:13305: Broken pipe[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.474 [5978] main/132/applier/admin@localhost:13305 I> will retry every 1.00 second[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.465 [5962] snapshot/101/main I> done[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.466 [5962] main/110/remote_control/127.0.0.1:48974 I> ready to accept requests[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.466 [5962] main/112/gc I> wal/engine cleanup is resumed[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.466 [5962] main/110/remote_control/127.0.0.1:48974 I> set 'log_level' configuration option to 5[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.466 [5962] main/113/checkpoint_daemon I> scheduled next checkpoint for Sat May 15 15:50:07 2021[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.467 [5962] main/110/remote_control/127.0.0.1:48974 I> set 'instance_uuid' configuration option to "bbbbbbbb-0000-0000-0000-000000000001"[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.467 [5962] main/110/remote_control/127.0.0.1:48974 I> set 'replication_connect_quorum' configuration option to 0[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.467 [5962] main/110/remote_control/127.0.0.1:48974 I> set 'log_format' configuration option to "plain"[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.467 [5962] main/110/remote_control/127.0.0.1:48974 I> set 'replicaset_uuid' configuration option to "bbbbbbbb-0000-0000-0000-000000000000"[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.470 [5962] main/110/remote_control/127.0.0.1:48974 I> Making sure user "admin" exists...[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.470 [5962] main/110/remote_control/127.0.0.1:48974 I> Granting replication permissions to "admin"...[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.470 [5962] main/110/remote_control/127.0.0.1:48974 I> Setting password for user "admin" ...[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.470 [5962] main/110/remote_control/127.0.0.1:48974 I> Remote control stopped[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.471 [5962] iproto/101/main I> binary: bound to 0.0.0.0:13302[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.471 [5962] main/108/remote_control/0.0.0.0:13302 I> stopped[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.471 [5962] main/110/remote_control/127.0.0.1:48974 I> set 'listen' configuration option to "13302"[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.471 [5962] main/110/remote_control/127.0.0.1:48974 I> Instance state changed: BootstrappingBox -> ConnectingFullmesh[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.471 [5962] main/110/remote_control/127.0.0.1:48974 I> connecting to 2 replicas[0m
+[94mstorage-1-master | [31m2021-05-15 14:17:08.471 [5962] main/110/remote_control/127.0.0.1:48974 C> failed to connect to 2 out of 2 replicas[0m
+[94mstorage-1-master | [31m2021-05-15 14:17:08.471 [5962] main/110/remote_control/127.0.0.1:48974 C> leaving orphan mode[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.471 [5962] main/110/remote_control/127.0.0.1:48974 I> set 'replication' configuration option to ["admin@localhost:13302","admin@localhost:13303"][0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.471 [5962] main/110/remote_control/127.0.0.1:48974 I> Instance state changed: ConnectingFullmesh -> BoxConfigured[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.471 [5962] main/110/remote_control/127.0.0.1:48974 I> Instance state changed: BoxConfigured -> ConfiguringRoles[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.472 [5962] main/110/remote_control/127.0.0.1:48974 I> Failover disabled[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.472 [5962] main/110/remote_control/127.0.0.1:48974 I> Reconfiguring vshard.storage...[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.472 [5962] main/110/remote_control/127.0.0.1:48974 I> Starting configuration of replica bbbbbbbb-0000-0000-0000-000000000001[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.472 [5962] main/110/remote_control/127.0.0.1:48974 I> I am master[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.472 [5962] main/110/remote_control/127.0.0.1:48974 I> Taking on replicaset master role...[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.472 [5962] main/110/remote_control/127.0.0.1:48974 I> Box has been configured[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.472 [5962] main/110/remote_control/127.0.0.1:48974 I> Initializing schema {0.1.15.0}[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.473 [5962] main/128/applier/admin@localhost:13302 I> remote master bbbbbbbb-0000-0000-0000-000000000001 at 127.0.0.1:13302 running Tarantool 2.6.3[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.473 [5962] main/127/applier/admin@localhost:13303 I> remote master 00000000-0000-0000-0000-000000000000 at 127.0.0.1:13303 running Tarantool 2.6.3[0m
+[94mstorage-1-master | [31m2021-05-15 14:17:08.473 [5962] main/128/applier/admin@localhost:13302 C> leaving orphan mode[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.473 [5962] main/127/applier/admin@localhost:13303 I> can't connect to master[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.473 [5962] main/127/applier/admin@localhost:13303 coio.cc:358 !> SystemError unexpected EOF when reading from socket, called on fd 74, aka 127.0.0.1:56504, peer of 127.0.0.1:13303: Broken pipe[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.473 [5962] main/127/applier/admin@localhost:13303 I> will retry every 1.00 second[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.480 [5962] main/110/remote_control/127.0.0.1:48974 I> Upgrade vshard schema to {0.1.16.0}[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.480 [5962] main/110/remote_control/127.0.0.1:48974 I> Insert 'vshard_version' into _schema[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.481 [5962] main/110/remote_control/127.0.0.1:48974 I> Create function vshard.storage._call()[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.481 [5962] main/110/remote_control/127.0.0.1:48974 I> Successful vshard schema upgrade to {0.1.16.0}[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.481 [5962] main/129/lua I> gc_bucket_f has been started[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.481 [5962] main/130/lua I> recovery_f has been started[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.481 [5962] main/110/remote_control/127.0.0.1:48974 I> Took on replicaset master role[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.482 [5962] main/131/lua I> rebalancer_f has been started[0m
+[96mrouter | [0m2021-05-15 14:17:08.471 [5954] main/121/remote_control/127.0.0.1:46480 I> Making sure user "admin" exists...[0m
+[96mrouter | [0m2021-05-15 14:17:08.471 [5954] main/121/remote_control/127.0.0.1:46480 I> Granting replication permissions to "admin"...[0m
+[96mrouter | [0m2021-05-15 14:17:08.471 [5954] main/121/remote_control/127.0.0.1:46480 I> Setting password for user "admin" ...[0m
+[96mrouter | [0m2021-05-15 14:17:08.472 [5954] main/121/remote_control/127.0.0.1:46480 I> Remote control stopped[0m
+[96mrouter | [0m2021-05-15 14:17:08.472 [5954] iproto/101/main I> binary: bound to 0.0.0.0:13301[0m
+[96mrouter | [0m2021-05-15 14:17:08.472 [5954] main/108/remote_control/0.0.0.0:13301 I> stopped[0m
+[96mrouter | [0m2021-05-15 14:17:08.472 [5954] main/121/remote_control/127.0.0.1:46480 I> set 'listen' configuration option to "13301"[0m
+[96mrouter | [0m2021-05-15 14:17:08.472 [5954] main/121/remote_control/127.0.0.1:46480 I> Instance state changed: BootstrappingBox -> ConnectingFullmesh[0m
+[96mrouter | [0m2021-05-15 14:17:08.472 [5954] main/121/remote_control/127.0.0.1:46480 I> connecting to 1 replicas[0m
+[96mrouter | [31m2021-05-15 14:17:08.472 [5954] main/121/remote_control/127.0.0.1:46480 C> failed to connect to 1 out of 1 replicas[0m
+[96mrouter | [31m2021-05-15 14:17:08.472 [5954] main/121/remote_control/127.0.0.1:46480 C> leaving orphan mode[0m
+[96mrouter | [0m2021-05-15 14:17:08.472 [5954] main/121/remote_control/127.0.0.1:46480 I> set 'replication' configuration option to ["admin@localhost:13301"][0m
+[96mrouter | [0m2021-05-15 14:17:08.472 [5954] main/121/remote_control/127.0.0.1:46480 I> Instance state changed: ConnectingFullmesh -> BoxConfigured[0m
+[96mrouter | [0m2021-05-15 14:17:08.473 [5954] main/121/remote_control/127.0.0.1:46480 I> Instance state changed: BoxConfigured -> ConfiguringRoles[0m
+[96mrouter | [0m2021-05-15 14:17:08.473 [5954] main/121/remote_control/127.0.0.1:46480 I> Failover disabled[0m
+[96mrouter | [0m2021-05-15 14:17:08.474 [5954] main/121/remote_control/127.0.0.1:46480 I> Reconfiguring vshard-router/default ...[0m
+[96mrouter | [0m2021-05-15 14:17:08.474 [5954] main/121/remote_control/127.0.0.1:46480 I> Starting router configuration[0m
+[96mrouter | [0m2021-05-15 14:17:08.474 [5954] main/121/remote_control/127.0.0.1:46480 I> Calling box.cfg()...[0m
+[96mrouter | [0m2021-05-15 14:17:08.474 [5954] main/121/remote_control/127.0.0.1:46480 I> {"read_only":false}[0m
+[96mrouter | [0m2021-05-15 14:17:08.474 [5954] main/121/remote_control/127.0.0.1:46480 I> Box has been configured[0m
+[96mrouter | [0m2021-05-15 14:17:08.476 [5954] main/157/applier/admin@localhost:13301 I> remote master aaaaaaaa-0000-0000-0000-000000000001 at 127.0.0.1:13301 running Tarantool 2.6.3[0m
+[96mrouter | [0m2021-05-15 14:17:08.478 [5954] main/160/localhost:13302 (net.box) I> connected to localhost:13302[0m
+[96mrouter | [31m2021-05-15 14:17:08.478 [5954] main/157/applier/admin@localhost:13301 C> leaving orphan mode[0m
+[96mrouter | [0m2021-05-15 14:17:08.479 [5954] main/159/localhost:13304 (net.box) I> connected to localhost:13304[0m
+[96mrouter | [0m2021-05-15 14:17:08.479 [5954] main/162/lua I> failover_f has been started[0m
+[96mrouter | [0m2021-05-15 14:17:08.479 [5954] main/162/lua I> New replica localhost:13304(admin@localhost:13304) for replicaset(uuid="cccccccc-0000-0000-0000-000000000000", master=localhost:13304(admin@localhost:13304))[0m
+[96mrouter | [0m2021-05-15 14:17:08.479 [5954] main/162/lua I> New replica localhost:13302(admin@localhost:13302) for replicaset(uuid="bbbbbbbb-0000-0000-0000-000000000000", master=localhost:13302(admin@localhost:13302))[0m
+[96mrouter | [0m2021-05-15 14:17:08.479 [5954] main/162/lua I> All replicas are ok[0m
+[96mrouter | [0m2021-05-15 14:17:08.479 [5954] main/162/lua I> Failovering step is finished. Schedule next after 1.000000 seconds[0m
+[96mrouter | [0m2021-05-15 14:17:08.479 [5954] main/163/lua I> discovery_f has been started[0m
+[96mrouter | [31m2021-05-15 14:17:08.480 [5954] main/121/remote_control/127.0.0.1:46480 graphqlapi.lua:271 E> Path is not valid: nil[0m
+[96mrouter | [0m2021-05-15 14:17:08.480 [5954] main/121/remote_control/127.0.0.1:46480 I> Roles configuration finished[0m
+[96mrouter | [0m2021-05-15 14:17:08.480 [5954] main/121/remote_control/127.0.0.1:46480 I> Instance state changed: ConfiguringRoles -> RolesConfigured[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.481 [5978] main/110/remote_control/127.0.0.1:56416 I> Upgrade vshard schema to {0.1.16.0}[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.481 [5978] main/110/remote_control/127.0.0.1:56416 I> Insert 'vshard_version' into _schema[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.481 [5978] main/110/remote_control/127.0.0.1:56416 I> Create function vshard.storage._call()[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.482 [5978] main/110/remote_control/127.0.0.1:56416 I> Successful vshard schema upgrade to {0.1.16.0}[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.482 [5978] main/133/lua I> gc_bucket_f has been started[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.482 [5978] main/134/lua I> recovery_f has been started[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.482 [5978] main/110/remote_control/127.0.0.1:56416 I> Took on replicaset master role[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.486 [5978] main/110/remote_control/127.0.0.1:56416 I> Roles configuration finished[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:08.486 [5978] main/110/remote_control/127.0.0.1:56416 I> Instance state changed: ConfiguringRoles -> RolesConfigured[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.486 [5962] main/110/remote_control/127.0.0.1:48974 I> Roles configuration finished[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.486 [5962] main/110/remote_control/127.0.0.1:48974 I> Instance state changed: ConfiguringRoles -> RolesConfigured[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.488 [5962] main/132/localhost:13304 (net.box) I> connected to localhost:13304[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.489 [5962] main/133/localhost:13302 (net.box) I> connected to localhost:13302[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.490 [5962] main/131/vshard.rebalancer I> Total active bucket count is not equal to total. Possibly a boostrap is not finished yet. Expected 30000, but found 0[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:08.490 [5962] main/131/vshard.rebalancer I> Some buckets are not active, retry rebalancing later[0m
+[96mrouter | [0m2021-05-15 14:17:08.500 [5954] main/163/vshard.discovery._static_router I> Start aggressive discovery, 30000 buckets are unknown. Discovery works with 1 seconds interval[0m
+[96mrouter | [0m2021-05-15 14:17:08.528 [5954] main/158/localhost:13305 (net.box) I> connected to localhost:13305[0m
+[96mrouter | [0m2021-05-15 14:17:08.528 [5954] main/161/localhost:13303 (net.box) I> connected to localhost:13303[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:09.459 [5986] main/110/remote_control/127.0.0.1:37202 I> connected to 1 replicas[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:09.459 [5986] main/118/applier/admin@localhost:13304 I> authenticated[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:09.459 [5986] main/110/remote_control/127.0.0.1:37202 I> bootstrapping replica from cccccccc-0000-0000-0000-000000000001 at 127.0.0.1:13304[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:09.459 [5978] main/117/main I> joining replica cccccccc-0000-0000-0000-000000000002 at fd 86, aka 127.0.0.1:13304, peer of 127.0.0.1:56452[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:09.460 [5970] main/110/remote_control/127.0.0.1:56490 I> connected to 1 replicas[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:09.460 [5970] main/118/applier/admin@localhost:13302 I> authenticated[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:09.460 [5970] main/110/remote_control/127.0.0.1:56490 I> bootstrapping replica from bbbbbbbb-0000-0000-0000-000000000001 at 127.0.0.1:13302[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:09.460 [5962] main/117/main I> joining replica bbbbbbbb-0000-0000-0000-000000000002 at fd 78, aka 127.0.0.1:13302, peer of 127.0.0.1:49016[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:09.461 [5978] main/117/main I> initial data sent.[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:09.461 [5978] main I> assigned id 2 to replica cccccccc-0000-0000-0000-000000000002[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:09.462 [5978] relay/127.0.0.1:56452/101/main I> recover from `/home/user/tarantool/graphqlapi/tmp/db_test/localhost-13304/00000000000000000000.xlog'[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:09.462 [5978] main/117/main I> final data sent.[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:09.462 [5962] main/117/main I> initial data sent.[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:09.462 [5962] main I> assigned id 2 to replica bbbbbbbb-0000-0000-0000-000000000002[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:09.462 [5962] relay/127.0.0.1:49016/101/main I> recover from `/home/user/tarantool/graphqlapi/tmp/db_test/localhost-13302/00000000000000000000.xlog'[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:09.462 [5962] main/117/main I> final data sent.[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:09.464 [5986] main/118/applier/admin@localhost:13304 I> cluster uuid cccccccc-0000-0000-0000-000000000000[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:09.464 [5970] main/118/applier/admin@localhost:13302 I> cluster uuid bbbbbbbb-0000-0000-0000-000000000000[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:09.469 [5986] main/118/applier/admin@localhost:13304 I> assigned id 1 to replica cccccccc-0000-0000-0000-000000000001[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:09.469 [5986] main/118/applier/admin@localhost:13304 I> initial data received[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:09.469 [5986] main/118/applier/admin@localhost:13304 I> assigned id 2 to replica cccccccc-0000-0000-0000-000000000002[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:09.469 [5986] main/118/applier/admin@localhost:13304 I> final data received[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:09.469 [5970] main/118/applier/admin@localhost:13302 I> assigned id 1 to replica bbbbbbbb-0000-0000-0000-000000000001[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:09.469 [5970] main/118/applier/admin@localhost:13302 I> initial data received[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:09.469 [5970] main/118/applier/admin@localhost:13302 I> assigned id 2 to replica bbbbbbbb-0000-0000-0000-000000000002[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:09.469 [5970] main/118/applier/admin@localhost:13302 I> final data received[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:09.470 [5970] snapshot/101/main I> saving snapshot `/home/user/tarantool/graphqlapi/tmp/db_test/localhost-13303/00000000000000000040.snap.inprogress'[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:09.470 [5986] snapshot/101/main I> saving snapshot `/home/user/tarantool/graphqlapi/tmp/db_test/localhost-13305/00000000000000000040.snap.inprogress'[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:09.479 [5970] snapshot/101/main I> done[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:09.479 [5986] snapshot/101/main I> done[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:09.480 [5986] main/110/remote_control/127.0.0.1:37202 I> ready to accept requests[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:09.480 [5986] main/110/remote_control/127.0.0.1:37202 I> synchronizing with 1 replicas[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:09.480 [5986] main/118/applier/admin@localhost:13304 I> subscribed[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:09.480 [5986] main/118/applier/admin@localhost:13304 I> remote vclock {1: 40} local vclock {1: 40}[0m
+[96mrouter | [0m2021-05-15 14:17:09.480 [5954] main/162/vshard.failover._static_router I> All replicas are ok[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:09.480 [5970] main/110/remote_control/127.0.0.1:56490 I> ready to accept requests[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:09.480 [5970] main/110/remote_control/127.0.0.1:56490 I> synchronizing with 1 replicas[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:09.480 [5970] main/118/applier/admin@localhost:13302 I> subscribed[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:09.480 [5970] main/118/applier/admin@localhost:13302 I> remote vclock {1: 40} local vclock {1: 40}[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:09.480 [5978] main/117/main I> subscribed replica cccccccc-0000-0000-0000-000000000002 at fd 86, aka 127.0.0.1:13304, peer of 127.0.0.1:56452[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:09.480 [5978] main/117/main I> remote vclock {1: 40} local vclock {1: 40}[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:09.481 [5978] relay/127.0.0.1:56452/101/main I> recover from `/home/user/tarantool/graphqlapi/tmp/db_test/localhost-13304/00000000000000000000.xlog'[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:09.480 [5962] main/117/main I> subscribed replica bbbbbbbb-0000-0000-0000-000000000002 at fd 78, aka 127.0.0.1:13302, peer of 127.0.0.1:49016[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:09.480 [5962] main/117/main I> remote vclock {1: 40} local vclock {1: 40}[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:09.481 [5962] relay/127.0.0.1:49016/101/main I> recover from `/home/user/tarantool/graphqlapi/tmp/db_test/localhost-13302/00000000000000000000.xlog'[0m
+[34mstorage-2-replica | [31m2021-05-15 14:17:09.481 [5986] main/122/applierw/admin@localhost:13304 C> leaving orphan mode[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:09.481 [5986] main/110/remote_control/127.0.0.1:37202 I> replica set sync complete[0m
+[34mstorage-2-replica | [31m2021-05-15 14:17:09.481 [5986] main/110/remote_control/127.0.0.1:37202 C> leaving orphan mode[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:09.481 [5986] main/110/remote_control/127.0.0.1:37202 I> set 'log_level' configuration option to 5[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:09.481 [5986] main/113/checkpoint_daemon I> scheduled next checkpoint for Sat May 15 15:51:29 2021[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:09.482 [5986] main/110/remote_control/127.0.0.1:37202 I> set 'replication' configuration option to ["admin@localhost:13304"][0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:09.482 [5986] main/110/remote_control/127.0.0.1:37202 I> set 'instance_uuid' configuration option to "cccccccc-0000-0000-0000-000000000002"[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:09.482 [5986] main/110/remote_control/127.0.0.1:37202 I> set 'read_only' configuration option to true[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:09.483 [5986] main/110/remote_control/127.0.0.1:37202 I> set 'log_format' configuration option to "plain"[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:09.483 [5986] main/110/remote_control/127.0.0.1:37202 I> set 'replicaset_uuid' configuration option to "cccccccc-0000-0000-0000-000000000000"[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:09.486 [5986] main/110/remote_control/127.0.0.1:37202 I> Making sure user "admin" exists...[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:09.486 [5986] main/110/remote_control/127.0.0.1:37202 I> Granting replication permissions to "admin"...[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:09.486 [5986] main/110/remote_control/127.0.0.1:37202 I> Setting password for user "admin" ...[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:09.486 [5986] main/110/remote_control/127.0.0.1:37202 I> set 'read_only' configuration option to false[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:09.486 [5986] main/110/remote_control/127.0.0.1:37202 I> set 'read_only' configuration option to true[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:09.486 [5986] main/110/remote_control/127.0.0.1:37202 I> Remote control stopped[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:09.487 [5986] iproto/101/main I> binary: bound to 0.0.0.0:13305[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:09.487 [5986] main/108/remote_control/0.0.0.0:13305 I> stopped[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:09.487 [5986] main/110/remote_control/127.0.0.1:37202 I> set 'listen' configuration option to "13305"[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:09.487 [5986] main/110/remote_control/127.0.0.1:37202 I> Instance state changed: BootstrappingBox -> ConnectingFullmesh[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:09.487 [5986] main/110/remote_control/127.0.0.1:37202 I> connecting to 2 replicas[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:09.487 [5986] main/129/applier/admin@localhost:13304 I> remote master cccccccc-0000-0000-0000-000000000001 at 127.0.0.1:13304 running Tarantool 2.6.3[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:09.487 [5986] main/130/applier/admin@localhost:13305 I> remote master cccccccc-0000-0000-0000-000000000002 at 127.0.0.1:13305 running Tarantool 2.6.3[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:09.488 [5986] main/110/remote_control/127.0.0.1:37202 I> connected to 2 replicas[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:09.488 [5986] main/110/remote_control/127.0.0.1:37202 I> synchronizing with 2 replicas[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:09.488 [5986] main/129/applier/admin@localhost:13304 I> authenticated[0m
+[92mstorage-1-replica | [31m2021-05-15 14:17:09.481 [5970] main/122/applierw/admin@localhost:13302 C> leaving orphan mode[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:09.482 [5970] main/110/remote_control/127.0.0.1:56490 I> replica set sync complete[0m
+[92mstorage-1-replica | [31m2021-05-15 14:17:09.482 [5970] main/110/remote_control/127.0.0.1:56490 C> leaving orphan mode[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:09.482 [5970] main/110/remote_control/127.0.0.1:56490 I> set 'log_level' configuration option to 5[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:09.482 [5970] main/113/checkpoint_daemon I> scheduled next checkpoint for Sat May 15 15:57:05 2021[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:09.483 [5970] main/110/remote_control/127.0.0.1:56490 I> set 'replication' configuration option to ["admin@localhost:13302"][0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:09.483 [5970] main/110/remote_control/127.0.0.1:56490 I> set 'instance_uuid' configuration option to "bbbbbbbb-0000-0000-0000-000000000002"[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:09.483 [5970] main/110/remote_control/127.0.0.1:56490 I> set 'read_only' configuration option to true[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:09.483 [5970] main/110/remote_control/127.0.0.1:56490 I> set 'log_format' configuration option to "plain"[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:09.483 [5970] main/110/remote_control/127.0.0.1:56490 I> set 'replicaset_uuid' configuration option to "bbbbbbbb-0000-0000-0000-000000000000"[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:09.486 [5970] main/110/remote_control/127.0.0.1:56490 I> Making sure user "admin" exists...[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:09.486 [5970] main/110/remote_control/127.0.0.1:56490 I> Granting replication permissions to "admin"...[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:09.487 [5970] main/110/remote_control/127.0.0.1:56490 I> Setting password for user "admin" ...[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:09.487 [5970] main/110/remote_control/127.0.0.1:56490 I> set 'read_only' configuration option to false[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:09.487 [5970] main/110/remote_control/127.0.0.1:56490 I> set 'read_only' configuration option to true[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:09.487 [5970] main/110/remote_control/127.0.0.1:56490 I> Remote control stopped[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:09.487 [5970] iproto/101/main I> binary: bound to 0.0.0.0:13303[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:09.487 [5970] main/108/remote_control/0.0.0.0:13303 I> stopped[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:09.487 [5970] main/110/remote_control/127.0.0.1:56490 I> set 'listen' configuration option to "13303"[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:09.487 [5970] main/110/remote_control/127.0.0.1:56490 I> Instance state changed: BootstrappingBox -> ConnectingFullmesh[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:09.488 [5970] main/110/remote_control/127.0.0.1:56490 I> connecting to 2 replicas[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:09.488 [5970] main/129/applier/admin@localhost:13302 I> remote master bbbbbbbb-0000-0000-0000-000000000001 at 127.0.0.1:13302 running Tarantool 2.6.3[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:09.488 [5970] main/130/applier/admin@localhost:13303 I> remote master bbbbbbbb-0000-0000-0000-000000000002 at 127.0.0.1:13303 running Tarantool 2.6.3[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:09.488 [5970] main/110/remote_control/127.0.0.1:56490 I> connected to 2 replicas[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:09.489 [5970] main/110/remote_control/127.0.0.1:56490 I> synchronizing with 2 replicas[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:09.489 [5970] main/129/applier/admin@localhost:13302 I> authenticated[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:09.489 [5970] main/129/applier/admin@localhost:13302 I> can't join/subscribe[0m
+[92mstorage-1-replica | [31m2021-05-15 14:17:09.489 [5970] main/129/applier/admin@localhost:13302 box.cc:2695 E> ER_CFG: Incorrect value for option 'replication': duplicate connection with the same replica UUID[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:09.489 [5970] main/129/applier/admin@localhost:13302 I> will retry every 1.00 second[0m
+[96mrouter | [0m2021-05-15 14:17:09.487 [5954] main/158/localhost:13305 (net.box) I> disconnected from localhost:13305[0m
+[96mrouter | [33m2021-05-15 14:17:09.487 [5954] main/158/localhost:13305 (net.box) net_box.lua:1015 W> localhost:13305: Peer closed[0m
+[96mrouter | [0m2021-05-15 14:17:09.487 [5954] main/161/localhost:13303 (net.box) I> disconnected from localhost:13303[0m
+[96mrouter | [33m2021-05-15 14:17:09.488 [5954] main/161/localhost:13303 (net.box) net_box.lua:1015 W> localhost:13303: Peer closed[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:09.488 [5978] relay/127.0.0.1:56452/101/main coio.cc:378 !> SystemError unexpected EOF when reading from socket, called on fd 86, aka 127.0.0.1:13304, peer of 127.0.0.1:56452: Broken pipe[0m
+[35mstorage-2-master | [31m2021-05-15 14:17:09.488 [5978] relay/127.0.0.1:56452/101/main C> exiting the relay loop[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:09.488 [5986] main/129/applier/admin@localhost:13304 I> can't join/subscribe[0m
+[34mstorage-2-replica | [31m2021-05-15 14:17:09.488 [5986] main/129/applier/admin@localhost:13304 box.cc:2695 E> ER_CFG: Incorrect value for option 'replication': duplicate connection with the same replica UUID[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:09.488 [5986] main/129/applier/admin@localhost:13304 I> will retry every 1.00 second[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:09.489 [5962] relay/127.0.0.1:49016/101/main coio.cc:378 !> SystemError unexpected EOF when reading from socket, called on fd 78, aka 127.0.0.1:13302, peer of 127.0.0.1:49016: Broken pipe[0m
+[94mstorage-1-master | [31m2021-05-15 14:17:09.489 [5962] relay/127.0.0.1:49016/101/main C> exiting the relay loop[0m
+[96mrouter | [0m2021-05-15 14:17:09.993 [5954] main/161/localhost:13303 (net.box) I> connected to localhost:13303[0m
+[96mrouter | [0m2021-05-15 14:17:09.993 [5954] main/158/localhost:13305 (net.box) I> connected to localhost:13305[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:10.476 [5962] main/127/applier/admin@localhost:13303 I> authenticated[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:10.477 [5962] main/127/applier/admin@localhost:13303 I> subscribed[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:10.477 [5962] main/127/applier/admin@localhost:13303 I> remote vclock {1: 40, 2: 1} local vclock {1: 40}[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:10.476 [5970] main/117/main I> subscribed replica bbbbbbbb-0000-0000-0000-000000000001 at fd 80, aka 127.0.0.1:13303, peer of 127.0.0.1:56552[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:10.477 [5970] main/117/main I> remote vclock {1: 40} local vclock {1: 40, 2: 1}[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:10.477 [5970] main/112/gc I> wal/engine cleanup is resumed[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:10.477 [5978] main/132/applier/admin@localhost:13305 I> authenticated[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:10.477 [5978] main/132/applier/admin@localhost:13305 I> subscribed[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:10.478 [5978] main/132/applier/admin@localhost:13305 I> remote vclock {1: 40, 2: 1} local vclock {1: 40}[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:10.477 [5986] main/117/main I> subscribed replica cccccccc-0000-0000-0000-000000000001 at fd 90, aka 127.0.0.1:13305, peer of 127.0.0.1:37262[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:10.478 [5986] main/117/main I> remote vclock {1: 40} local vclock {1: 40, 2: 1}[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:10.478 [5986] main/112/gc I> wal/engine cleanup is resumed[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:10.479 [5986] relay/127.0.0.1:37262/101/main I> recover from `/home/user/tarantool/graphqlapi/tmp/db_test/localhost-13305/00000000000000000040.xlog'[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:10.478 [5970] relay/127.0.0.1:56552/101/main I> recover from `/home/user/tarantool/graphqlapi/tmp/db_test/localhost-13303/00000000000000000040.xlog'[0m
+[94mstorage-1-master | [31m2021-05-15 14:17:10.478 [5962] main/135/applierw/admin@localhost:13303 C> leaving orphan mode[0m
+[35mstorage-2-master | [31m2021-05-15 14:17:10.479 [5978] main/136/applierw/admin@localhost:13305 C> leaving orphan mode[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:10.490 [5986] main/129/applier/admin@localhost:13304 I> authenticated[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:10.491 [5986] main/129/applier/admin@localhost:13304 I> subscribed[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:10.491 [5986] main/129/applier/admin@localhost:13304 I> remote vclock {1: 40, 2: 1} local vclock {1: 40, 2: 1}[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:10.491 [5978] main/135/main I> subscribed replica cccccccc-0000-0000-0000-000000000002 at fd 87, aka 127.0.0.1:13304, peer of 127.0.0.1:56480[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:10.491 [5978] main/135/main I> remote vclock {1: 40, 2: 1} local vclock {1: 40, 2: 1}[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:10.491 [5978] relay/127.0.0.1:56480/101/main I> recover from `/home/user/tarantool/graphqlapi/tmp/db_test/localhost-13304/00000000000000000000.xlog'[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:10.491 [5970] main/129/applier/admin@localhost:13302 I> authenticated[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:10.491 [5970] main/129/applier/admin@localhost:13302 I> subscribed[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:10.491 [5970] main/129/applier/admin@localhost:13302 I> remote vclock {1: 40, 2: 1} local vclock {1: 40, 2: 1}[0m
+[92mstorage-1-replica | [31m2021-05-15 14:17:10.492 [5970] main/132/applierw/admin@localhost:13302 C> leaving orphan mode[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:10.492 [5970] main/110/remote_control/127.0.0.1:56490 I> replica set sync complete[0m
+[92mstorage-1-replica | [31m2021-05-15 14:17:10.492 [5970] main/110/remote_control/127.0.0.1:56490 C> leaving orphan mode[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:10.492 [5970] main/110/remote_control/127.0.0.1:56490 I> set 'replication' configuration option to ["admin@localhost:13302","admin@localhost:13303"][0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:10.492 [5970] main/110/remote_control/127.0.0.1:56490 I> Instance state changed: ConnectingFullmesh -> BoxConfigured[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:10.492 [5970] main/110/remote_control/127.0.0.1:56490 I> Instance state changed: BoxConfigured -> ConfiguringRoles[0m
+[92mstorage-1-replica | [31m2021-05-15 14:17:10.492 [5970] main/110/remote_control/127.0.0.1:56490 C> leaving orphan mode[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:10.492 [5970] main/110/remote_control/127.0.0.1:56490 I> set 'replication_connect_quorum' configuration option to 0[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:10.492 [5970] main/110/remote_control/127.0.0.1:56490 I> Failover disabled[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:10.492 [5970] main/110/remote_control/127.0.0.1:56490 I> Reconfiguring vshard.storage...[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:10.493 [5970] main/110/remote_control/127.0.0.1:56490 I> Starting configuration of replica bbbbbbbb-0000-0000-0000-000000000002[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:10.493 [5970] main/110/remote_control/127.0.0.1:56490 I> Box has been configured[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:10.491 [5962] main/117/main I> subscribed replica bbbbbbbb-0000-0000-0000-000000000002 at fd 79, aka 127.0.0.1:13302, peer of 127.0.0.1:49042[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:10.491 [5962] main/117/main I> remote vclock {1: 40, 2: 1} local vclock {1: 40, 2: 1}[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:10.492 [5962] relay/127.0.0.1:49042/101/main I> recover from `/home/user/tarantool/graphqlapi/tmp/db_test/localhost-13302/00000000000000000000.xlog'[0m
+[34mstorage-2-replica | [31m2021-05-15 14:17:10.492 [5986] main/132/applierw/admin@localhost:13304 C> leaving orphan mode[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:10.492 [5986] main/110/remote_control/127.0.0.1:37202 I> replica set sync complete[0m
+[34mstorage-2-replica | [31m2021-05-15 14:17:10.492 [5986] main/110/remote_control/127.0.0.1:37202 C> leaving orphan mode[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:10.492 [5986] main/110/remote_control/127.0.0.1:37202 I> set 'replication' configuration option to ["admin@localhost:13304","admin@localhost:13305"][0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:10.492 [5986] main/110/remote_control/127.0.0.1:37202 I> Instance state changed: ConnectingFullmesh -> BoxConfigured[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:10.492 [5986] main/110/remote_control/127.0.0.1:37202 I> Instance state changed: BoxConfigured -> ConfiguringRoles[0m
+[34mstorage-2-replica | [31m2021-05-15 14:17:10.492 [5986] main/110/remote_control/127.0.0.1:37202 C> leaving orphan mode[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:10.492 [5986] main/110/remote_control/127.0.0.1:37202 I> set 'replication_connect_quorum' configuration option to 0[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:10.492 [5986] main/110/remote_control/127.0.0.1:37202 I> Failover disabled[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:10.493 [5986] main/110/remote_control/127.0.0.1:37202 I> Reconfiguring vshard.storage...[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:10.493 [5986] main/110/remote_control/127.0.0.1:37202 I> Starting configuration of replica cccccccc-0000-0000-0000-000000000002[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:10.493 [5986] main/110/remote_control/127.0.0.1:37202 I> connecting to 2 replicas[0m
+[34mstorage-2-replica | [31m2021-05-15 14:17:10.493 [5986] main/110/remote_control/127.0.0.1:37202 C> failed to connect to 2 out of 2 replicas[0m
+[34mstorage-2-replica | [31m2021-05-15 14:17:10.493 [5986] main/110/remote_control/127.0.0.1:37202 C> leaving orphan mode[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:10.493 [5986] main/110/remote_control/127.0.0.1:37202 I> set 'replication' configuration option to ["admin@localhost:13305","admin@localhost:13304"][0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:10.493 [5986] main/110/remote_control/127.0.0.1:37202 I> Box has been configured[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:10.498 [5986] main/110/remote_control/127.0.0.1:37202 I> Roles configuration finished[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:10.498 [5986] main/110/remote_control/127.0.0.1:37202 I> Instance state changed: ConfiguringRoles -> RolesConfigured[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:10.494 [5978] relay/127.0.0.1:56480/101/main coio.cc:378 !> SystemError unexpected EOF when reading from socket, called on fd 87, aka 127.0.0.1:13304, peer of 127.0.0.1:56480: Broken pipe[0m
+[35mstorage-2-master | [31m2021-05-15 14:17:10.494 [5978] relay/127.0.0.1:56480/101/main C> exiting the relay loop[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:10.498 [5970] main/110/remote_control/127.0.0.1:56490 I> Roles configuration finished[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:10.498 [5970] main/110/remote_control/127.0.0.1:56490 I> Instance state changed: ConfiguringRoles -> RolesConfigured[0m
+[96mrouter | [33m2021-05-15 14:17:10.499 [5954] main/110/http/127.0.0.1:52962 twophase.lua:428 W> Committed patch_clusterwide at localhost:13301[0m
+[96mrouter | [33m2021-05-15 14:17:10.499 [5954] main/110/http/127.0.0.1:52962 twophase.lua:428 W> Committed patch_clusterwide at localhost:13302[0m
+[96mrouter | [33m2021-05-15 14:17:10.499 [5954] main/110/http/127.0.0.1:52962 twophase.lua:428 W> Committed patch_clusterwide at localhost:13303[0m
+[96mrouter | [33m2021-05-15 14:17:10.499 [5954] main/110/http/127.0.0.1:52962 twophase.lua:428 W> Committed patch_clusterwide at localhost:13304[0m
+[96mrouter | [33m2021-05-15 14:17:10.499 [5954] main/110/http/127.0.0.1:52962 twophase.lua:428 W> Committed patch_clusterwide at localhost:13305[0m
+[96mrouter | [33m2021-05-15 14:17:10.499 [5954] main/110/http/127.0.0.1:52962 twophase.lua:593 W> Clusterwide config updated successfully[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:10.499 [5986] main/135/applier/admin@localhost:13304 I> remote master cccccccc-0000-0000-0000-000000000001 at 127.0.0.1:13304 running Tarantool 2.6.3[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:10.499 [5986] main/136/applier/admin@localhost:13305 I> remote master cccccccc-0000-0000-0000-000000000002 at 127.0.0.1:13305 running Tarantool 2.6.3[0m
+[34mstorage-2-replica | [31m2021-05-15 14:17:10.499 [5986] main/136/applier/admin@localhost:13305 C> leaving orphan mode[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:10.499 [5986] main/135/applier/admin@localhost:13304 I> authenticated[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:10.499 [5986] main/135/applier/admin@localhost:13304 I> subscribed[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:10.499 [5986] main/135/applier/admin@localhost:13304 I> remote vclock {1: 40, 2: 1} local vclock {1: 40, 2: 1}[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:10.499 [5978] main/135/main I> subscribed replica cccccccc-0000-0000-0000-000000000002 at fd 87, aka 127.0.0.1:13304, peer of 127.0.0.1:56484[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:10.499 [5978] main/135/main I> remote vclock {1: 40, 2: 1} local vclock {1: 40, 2: 1}[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:10.500 [5978] relay/127.0.0.1:56484/101/main I> recover from `/home/user/tarantool/graphqlapi/tmp/db_test/localhost-13304/00000000000000000000.xlog'[0m
+[34mstorage-2-replica | [31m2021-05-15 14:17:10.500 [5986] main/137/applierw/admin@localhost:13304 C> leaving orphan mode[0m
+[96mrouter | [0m2021-05-15 14:17:10.914 [5954] main/165/http/127.0.0.1:53044 I> Bootstrapping vshard-router/default ...[0m
+[96mrouter | [0m2021-05-15 14:17:10.954 [5954] main/165/http/127.0.0.1:53044 I> Buckets from 1 to 15000 are bootstrapped on "cccccccc-0000-0000-0000-000000000000"[0m
+[96mrouter | [0m2021-05-15 14:17:10.990 [5954] main/165/http/127.0.0.1:53044 I> Buckets from 15001 to 30000 are bootstrapped on "bbbbbbbb-0000-0000-0000-000000000000"[0m
+[96mrouter | [33m2021-05-15 14:17:10.990 [5954] main/165/http/127.0.0.1:53044 twophase.lua:497 W> Updating config clusterwide...[0m
+[96mrouter | [33m2021-05-15 14:17:10.991 [5954] main/165/http/127.0.0.1:53044 twophase.lua:373 W> (2PC) patch_clusterwide upload phase...[0m
+[96mrouter | [33m2021-05-15 14:17:10.999 [5954] main/165/http/127.0.0.1:53044 twophase.lua:386 W> (2PC) patch_clusterwide prepare phase...[0m
+[96mrouter | [33m2021-05-15 14:17:11.006 [5954] main/165/http/127.0.0.1:53044 twophase.lua:395 W> Prepared for patch_clusterwide at localhost:13301[0m
+[96mrouter | [33m2021-05-15 14:17:11.006 [5954] main/165/http/127.0.0.1:53044 twophase.lua:395 W> Prepared for patch_clusterwide at localhost:13302[0m
+[96mrouter | [33m2021-05-15 14:17:11.006 [5954] main/165/http/127.0.0.1:53044 twophase.lua:395 W> Prepared for patch_clusterwide at localhost:13303[0m
+[96mrouter | [33m2021-05-15 14:17:11.006 [5954] main/165/http/127.0.0.1:53044 twophase.lua:395 W> Prepared for patch_clusterwide at localhost:13304[0m
+[96mrouter | [33m2021-05-15 14:17:11.006 [5954] main/165/http/127.0.0.1:53044 twophase.lua:395 W> Prepared for patch_clusterwide at localhost:13305[0m
+[96mrouter | [33m2021-05-15 14:17:11.006 [5954] main/165/http/127.0.0.1:53044 twophase.lua:419 W> (2PC) patch_clusterwide commit phase...[0m
+[96mrouter | [0m2021-05-15 14:17:11.007 [5954] main/164/main I> Backup of active config created: "/home/user/tarantool/graphqlapi/tmp/db_test/localhost-13301/config.backup"[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:11.006 [5986] main/131/main I> Backup of active config created: "/home/user/tarantool/graphqlapi/tmp/db_test/localhost-13305/config.backup"[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:11.007 [5986] main/131/main I> Instance state changed: RolesConfigured -> ConfiguringRoles[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:11.007 [5986] main/131/main I> connecting to 2 replicas[0m
+[34mstorage-2-replica | [31m2021-05-15 14:17:11.007 [5986] main/131/main C> failed to connect to 2 out of 2 replicas[0m
+[34mstorage-2-replica | [31m2021-05-15 14:17:11.007 [5986] main/131/main C> leaving orphan mode[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:11.007 [5986] main/131/main I> set 'replication' configuration option to ["admin@localhost:13304","admin@localhost:13305"][0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:11.007 [5986] main/131/main I> Failover disabled[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:11.008 [5986] main/131/main I> Roles configuration finished[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:11.008 [5986] main/131/main I> Instance state changed: ConfiguringRoles -> RolesConfigured[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:11.009 [5986] main/140/applier/admin@localhost:13305 I> remote master cccccccc-0000-0000-0000-000000000002 at 127.0.0.1:13305 running Tarantool 2.6.3[0m
+[34mstorage-2-replica | [31m2021-05-15 14:17:11.009 [5986] main/140/applier/admin@localhost:13305 C> leaving orphan mode[0m
+[34mstorage-2-replica | [31m2021-05-15 14:17:11.009 [5986] relay/127.0.0.1:37262/101/main coio.cc:378 !> SystemError unexpected EOF when reading from socket, called on fd 90, aka 127.0.0.1:13305, peer of 127.0.0.1:37262: Broken pipe[0m
+[34mstorage-2-replica | [31m2021-05-15 14:17:11.009 [5986] relay/127.0.0.1:37262/101/main C> exiting the relay loop[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:11.010 [5986] main/141/applier/admin@localhost:13304 I> remote master cccccccc-0000-0000-0000-000000000001 at 127.0.0.1:13304 running Tarantool 2.6.3[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:11.010 [5986] main/141/applier/admin@localhost:13304 I> authenticated[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:11.010 [5986] main/141/applier/admin@localhost:13304 I> can't join/subscribe[0m
+[34mstorage-2-replica | [31m2021-05-15 14:17:11.010 [5986] main/141/applier/admin@localhost:13304 box.cc:2695 E> ER_CFG: Incorrect value for option 'replication': duplicate connection with the same replica UUID[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:11.010 [5986] main/141/applier/admin@localhost:13304 I> will retry every 1.00 second[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:11.011 [5986] main/131/main I> subscribed replica cccccccc-0000-0000-0000-000000000001 at fd 83, aka 127.0.0.1:13305, peer of 127.0.0.1:37294[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:11.011 [5986] main/131/main I> remote vclock {1: 15040, 2: 1} local vclock {1: 15040, 2: 1}[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:11.011 [5986] relay/127.0.0.1:37294/101/main I> recover from `/home/user/tarantool/graphqlapi/tmp/db_test/localhost-13305/00000000000000000040.xlog'[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:11.006 [5962] main/136/main I> Backup of active config created: "/home/user/tarantool/graphqlapi/tmp/db_test/localhost-13302/config.backup"[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:11.007 [5962] main/136/main I> Instance state changed: RolesConfigured -> ConfiguringRoles[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:11.007 [5962] main/136/main I> Failover disabled[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:11.008 [5962] main/136/main I> Roles configuration finished[0m
+[94mstorage-1-master | [0m2021-05-15 14:17:11.008 [5962] main/136/main I> Instance state changed: ConfiguringRoles -> RolesConfigured[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:11.006 [5970] main/131/main I> Backup of active config created: "/home/user/tarantool/graphqlapi/tmp/db_test/localhost-13303/config.backup"[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:11.007 [5970] main/131/main I> Instance state changed: RolesConfigured -> ConfiguringRoles[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:11.007 [5970] main/131/main I> Failover disabled[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:11.008 [5970] main/131/main I> Roles configuration finished[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:11.008 [5970] main/131/main I> Instance state changed: ConfiguringRoles -> RolesConfigured[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:11.006 [5978] main/137/main I> Backup of active config created: "/home/user/tarantool/graphqlapi/tmp/db_test/localhost-13304/config.backup"[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:11.007 [5978] main/137/main I> Instance state changed: RolesConfigured -> ConfiguringRoles[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:11.007 [5978] main/137/main I> connecting to 2 replicas[0m
+[35mstorage-2-master | [31m2021-05-15 14:17:11.007 [5978] main/137/main C> failed to connect to 2 out of 2 replicas[0m
+[35mstorage-2-master | [31m2021-05-15 14:17:11.009 [5978] main/137/main C> leaving orphan mode[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:11.009 [5978] main/137/main I> set 'replication' configuration option to ["admin@localhost:13304","admin@localhost:13305"][0m
+[35mstorage-2-master | [0m2021-05-15 14:17:11.009 [5978] main/137/main I> Failover disabled[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:11.010 [5978] main/137/main I> Roles configuration finished[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:11.010 [5978] main/137/main I> Instance state changed: ConfiguringRoles -> RolesConfigured[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:11.010 [5978] main/141/applier/admin@localhost:13304 I> remote master cccccccc-0000-0000-0000-000000000001 at 127.0.0.1:13304 running Tarantool 2.6.3[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:11.010 [5978] main/140/applier/admin@localhost:13305 I> remote master cccccccc-0000-0000-0000-000000000002 at 127.0.0.1:13305 running Tarantool 2.6.3[0m
+[35mstorage-2-master | [31m2021-05-15 14:17:11.010 [5978] main/141/applier/admin@localhost:13304 C> leaving orphan mode[0m
+[35mstorage-2-master | [31m2021-05-15 14:17:11.010 [5978] relay/127.0.0.1:56484/101/main coio.cc:378 !> SystemError unexpected EOF when reading from socket, called on fd 87, aka 127.0.0.1:13304, peer of 127.0.0.1:56484: Broken pipe[0m
+[35mstorage-2-master | [31m2021-05-15 14:17:11.010 [5978] relay/127.0.0.1:56484/101/main C> exiting the relay loop[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:11.010 [5978] main/140/applier/admin@localhost:13305 I> authenticated[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:11.011 [5978] main/140/applier/admin@localhost:13305 I> subscribed[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:11.011 [5978] main/140/applier/admin@localhost:13305 I> remote vclock {1: 15040, 2: 1} local vclock {1: 15040, 2: 1}[0m
+[35mstorage-2-master | [31m2021-05-15 14:17:11.013 [5978] main/142/applierw/admin@localhost:13305 C> leaving orphan mode[0m
+[96mrouter | [0m2021-05-15 14:17:11.007 [5954] main/164/main I> Instance state changed: RolesConfigured -> ConfiguringRoles[0m
+[96mrouter | [0m2021-05-15 14:17:11.007 [5954] main/164/main I> Failover disabled[0m
+[96mrouter | [0m2021-05-15 14:17:11.008 [5954] main/164/main I> Roles configuration finished[0m
+[96mrouter | [0m2021-05-15 14:17:11.008 [5954] main/164/main I> Instance state changed: ConfiguringRoles -> RolesConfigured[0m
+[96mrouter | [33m2021-05-15 14:17:11.010 [5954] main/165/http/127.0.0.1:53044 twophase.lua:428 W> Committed patch_clusterwide at localhost:13301[0m
+[96mrouter | [33m2021-05-15 14:17:11.010 [5954] main/165/http/127.0.0.1:53044 twophase.lua:428 W> Committed patch_clusterwide at localhost:13302[0m
+[96mrouter | [33m2021-05-15 14:17:11.010 [5954] main/165/http/127.0.0.1:53044 twophase.lua:428 W> Committed patch_clusterwide at localhost:13303[0m
+[96mrouter | [33m2021-05-15 14:17:11.010 [5954] main/165/http/127.0.0.1:53044 twophase.lua:428 W> Committed patch_clusterwide at localhost:13304[0m
+[96mrouter | [33m2021-05-15 14:17:11.010 [5954] main/165/http/127.0.0.1:53044 twophase.lua:428 W> Committed patch_clusterwide at localhost:13305[0m
+[96mrouter | [33m2021-05-15 14:17:11.010 [5954] main/165/http/127.0.0.1:53044 twophase.lua:593 W> Clusterwide config updated successfully[0m
+[94mstorage-1-master | [31m2021-05-15 14:17:11.059 [5962] main/134/main eval:42 E> spaceAPI error: space "entity" not found on "storage-1-master"[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:11.063 [5970] main/129/applier/admin@localhost:13302 I> can't read row[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:11.063 [5970] main/129/applier/admin@localhost:13302 coio.cc:378 !> SystemError unexpected EOF when reading from socket, called on fd 85, aka 127.0.0.1:49042, peer of 127.0.0.1:13302: Broken pipe[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:11.063 [5970] main/129/applier/admin@localhost:13302 I> will retry every 1.00 second[0m
+[92mstorage-1-replica | [0m2021-05-15 14:17:11.064 [5970] relay/127.0.0.1:56552/101/main coio.cc:378 !> SystemError unexpected EOF when reading from socket, called on fd 80, aka 127.0.0.1:13303, peer of 127.0.0.1:56552: Broken pipe[0m
+[92mstorage-1-replica | [31m2021-05-15 14:17:11.064 [5970] relay/127.0.0.1:56552/101/main C> exiting the relay loop[0m
+[96mrouter | [0m2021-05-15 14:17:11.063 [5954] main/160/localhost:13302 (net.box) I> disconnected from localhost:13302[0m
+[96mrouter | [33m2021-05-15 14:17:11.063 [5954] main/160/localhost:13302 (net.box) net_box.lua:1015 W> localhost:13302: Peer closed[0m
+[96mrouter | [0m2021-05-15 14:17:11.164 [5954] main/161/localhost:13303 (net.box) I> disconnected from localhost:13303[0m
+[96mrouter | [31m2021-05-15 14:17:11.542 [5954] main/163/vshard.discovery._static_router replicaset.lua:291 E> Exception during calling 'vshard.storage.buckets_discovery' on 'localhost:13302(admin@localhost:13302)': Peer closed[0m
+[96mrouter | [33m2021-05-15 14:17:11.542 [5954] main/163/vshard.discovery._static_router init.lua:293 W> Error during discovery bbbbbbbb-0000-0000-0000-000000000000, retry will be done later: {"code":77,"base_type":"ClientError","type":"ClientError","message":"Peer closed","trace":[{"file":"builtin\/box\/net_box.lua","line":541}]}[0m
+[96mrouter | [0m2021-05-15 14:17:11.553 [5954] main/163/vshard.discovery._static_router I> Updated replicaset(uuid="cccccccc-0000-0000-0000-000000000000", master=localhost:13304(admin@localhost:13304)) buckets: was 1, became 1000[0m
+[96mrouter | [33m2021-05-15 14:17:11.564 [5954] main/160/localhost:13302 (net.box) net_box.lua:1015 W> localhost:13302: Connection refused[0m
+[96mrouter | [33m2021-05-15 14:17:11.665 [5954] main/161/localhost:13303 (net.box) net_box.lua:1015 W> localhost:13303: Connection refused[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:12.012 [5986] main/141/applier/admin@localhost:13304 I> authenticated[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:12.013 [5986] main/141/applier/admin@localhost:13304 I> subscribed[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:12.013 [5986] main/141/applier/admin@localhost:13304 I> remote vclock {1: 15053, 2: 1} local vclock {1: 15040, 2: 1}[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:12.013 [5978] main/117/main I> subscribed replica cccccccc-0000-0000-0000-000000000002 at fd 78, aka 127.0.0.1:13304, peer of 127.0.0.1:56518[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:12.013 [5978] main/117/main I> remote vclock {1: 15040, 2: 1} local vclock {1: 15053, 2: 1}[0m
+[35mstorage-2-master | [0m2021-05-15 14:17:12.013 [5978] relay/127.0.0.1:56518/101/main I> recover from `/home/user/tarantool/graphqlapi/tmp/db_test/localhost-13304/00000000000000000000.xlog'[0m
+[34mstorage-2-replica | [31m2021-05-15 14:17:12.015 [5986] main/142/applierw/admin@localhost:13304 C> leaving orphan mode[0m
+.....[34mstorage-2-replica | [0m2021-05-15 14:17:12.366 [5986] main/141/applier/admin@localhost:13304 I> can't read row[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:12.366 [5986] main/141/applier/admin@localhost:13304 coio.cc:378 !> SystemError unexpected EOF when reading from socket, called on fd 94, aka 127.0.0.1:56518, peer of 127.0.0.1:13304: Broken pipe[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:12.366 [5986] main/141/applier/admin@localhost:13304 I> will retry every 1.00 second[0m
+[34mstorage-2-replica | [0m2021-05-15 14:17:12.367 [5986] relay/127.0.0.1:37294/101/main coio.cc:378 !> SystemError unexpected EOF when reading from socket, called on fd 83, aka 127.0.0.1:13305, peer of 127.0.0.1:37294: Broken pipe[0m
+[34mstorage-2-replica | [31m2021-05-15 14:17:12.367 [5986] relay/127.0.0.1:37294/101/main C> exiting the relay loop[0m
+..................
+Ran 56 tests in 10.160 seconds, [1m[32m56 successes[0m, 0 failures
