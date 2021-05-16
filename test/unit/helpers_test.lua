@@ -223,16 +223,7 @@ end
 
 g.test_space_truncate = function()
     local types_list = {
-        'SpaceCkConstraint',
-        'SpaceEngine',
-        'SpaceField',
-        'SpaceFieldType',
-        'SpaceIndex',
-        'SpaceIndexDimension',
-        'SpaceIndexPart',
-        'SpaceIndexType',
-        'SpaceInfo',
-        'SpaceTruncateNames',
+        'SpaceTruncateResult',
     }
 
     local mutations_list = {'space_truncate'}

@@ -10,7 +10,7 @@ local helper = table.copy(cartridge_helpers)
 helper.root = fio.dirname(debug.sourcedir())
 local tmpdir = fio.pathjoin(helper.root, 'tmp')
 helper.datadir = fio.pathjoin(tmpdir, 'db_test')
-helper.server_command = fio.pathjoin(helper.root, 'test', 'entrypoint', 'basic_srv.lua')
+helper.server_command = fio.pathjoin(helper.root, 'entrypoint', 'basic_srv.lua')
 
 t.before_suite(function()
     fio.rmtree(helper.datadir)

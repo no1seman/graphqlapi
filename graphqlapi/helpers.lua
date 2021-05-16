@@ -36,15 +36,7 @@ vars:new('helpers', {
     },
     ['truncate'] = {
         types = {
-            'SpaceCkConstraint',
-            'SpaceEngine',
-            'SpaceField',
-            'SpaceFieldType',
-            'SpaceIndex',
-            'SpaceIndexDimension',
-            'SpaceIndexPart',
-            'SpaceIndexType',
-            'SpaceInfo',
+            'SpaceTruncateResult',
         },
     },
     ['count'] = {
@@ -343,6 +335,21 @@ local function space_types()
     else
         types.remove('SpaceCkConstraintInput')
     end
+
+    if utils.value_in('SpaceTruncateResult', type_list) then
+        if not types.SpaceTruncateResult then
+            types.add(types.object({
+                name = 'SpaceTruncateResult',
+                description = 'Space Truncate Result',
+                fields = {
+                    truncated_len = types.long,
+                    truncated_bsize = types.long,
+                }
+            }), 'SpaceTruncateResult')
+        end
+    else
+        types.remove('SpaceTruncateResult')
+    end
 end
 
 local function existing_spaces()
@@ -435,7 +442,7 @@ local function space_drop_mutation()
         args = {
             name = types.SpaceDropNames,
         },
-        kind = types.SpaceInfo,
+        kind = types.boolean,
         callback = 'graphqlapi.spaceapi.space_drop'
     })
 end
@@ -498,13 +505,16 @@ end
 
 local function space_truncate_mutation()
     space_truncate_mutation_remove()
+    
+
+    
     operations.add_mutation({
         name = 'space_truncate',
         doc = 'Truncate space',
         args = {
             name = types.SpaceTruncateNames,
         },
-        kind = types.SpaceInfo,
+        kind = types.SpaceTruncateResult,
         callback = 'graphqlapi.spaceapi.space_truncate'
     })
 end

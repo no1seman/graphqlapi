@@ -22,6 +22,7 @@ build = {
     type = 'builtin',
     modules = {
         ['graphqlapi'] = 'graphqlapi/graphqlapi.lua',
+        ['graphqlapi.cluster'] = 'graphqlapi/cluster.lua',
         ['graphqlapi.funcall'] = 'graphqlapi/funcall.lua',
         ['graphqlapi.helpers'] = 'graphqlapi/helpers.lua',
         ['graphqlapi.middleware'] = 'graphqlapi/middleware.lua',

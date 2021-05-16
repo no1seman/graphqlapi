@@ -2,7 +2,7 @@ local fio = require('fio')
 local t = require('luatest')
 local g = t.group('graphqlapi_role')
 
-local entity_space = require('test.helper.entity_space')
+--local entity_space = require('test.helper.entity_space')
 local helper = require('test.helper.integration')
 
 g.before_all = function()
@@ -34,14 +34,14 @@ g.test_roles_reload = function()
 
     t.skip_if(not hotreload, 'Roles reload is not allowed')
 
-    entity_space.create_test_space(g.cluster, 'entity')
+    helper.create_test_space(g.cluster, 'entity')
 
     local space_info, space_info_err = router.net_box:eval(
         [[ return require('graphqlapi.spaceapi').space_info(nil, {name = {...}}) ]],
         {'entity'}
     )
 
-    t.assert_items_equals(space_info, entity_space.sample_data(0))
+    t.assert_items_equals(space_info, helper.sample_data(0))
     t.assert_equals(space_info_err, nil)
 
     router.net_box:eval([[ return require('cartridge').reload_roles() ]])
@@ -51,6 +51,6 @@ g.test_roles_reload = function()
         {'entity'}
     )
 
-    t.assert_items_equals(space_info, entity_space.sample_data(0))
+    t.assert_items_equals(space_info, helper.sample_data(0))
     t.assert_equals(space_info_err, nil)
 end
