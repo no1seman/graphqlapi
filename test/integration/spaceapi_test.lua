@@ -1,8 +1,8 @@
-local fio = require('fio')
+--local fio = require('fio')
 local t = require('luatest')
 local g = t.group('spaceapi')
 
-local json = require('json')
+-- local json = require('json')
 
 -- local json_cfg = {
 --     encode_use_tostring = true,

@@ -50,13 +50,17 @@ g.test_get_masters = function()
     local storage_1_master = g.cluster:server('storage-1-master')
     local _storage_1_master = find_by_alias(servers, 'storage-1-master')
     t.assert_equals(_storage_1_master.replicaset_uuid, storage_1_master.replicaset_uuid)
-    t.assert_equals(tostring(_storage_1_master.conn.host)..':'..tostring(_storage_1_master.conn.port), storage_1_master.net_box_uri)
+    t.assert_equals(
+        tostring(_storage_1_master.conn.host)..':'..
+        tostring(_storage_1_master.conn.port), storage_1_master.net_box_uri)
 
     -- check storage-2-master
     local storage_2_master = g.cluster:server('storage-2-master')
     local _storage_2_master = find_by_alias(servers, 'storage-2-master')
     t.assert_equals(_storage_2_master.replicaset_uuid, storage_2_master.replicaset_uuid)
-    t.assert_equals(tostring(_storage_2_master.conn.host)..':'..tostring(_storage_2_master.conn.port), storage_2_master.net_box_uri)
+    t.assert_equals(
+        tostring(_storage_2_master.conn.host)..':'..
+        tostring(_storage_2_master.conn.port), storage_2_master.net_box_uri)
 end
 
 g.test_get_storages_masters = function()
@@ -69,11 +73,15 @@ g.test_get_storages_masters = function()
     local storage_1_master = g.cluster:server('storage-1-master')
     local _storage_1_master = find_by_alias(servers, 'storage-1-master')
     t.assert_equals(_storage_1_master.replicaset_uuid, storage_1_master.replicaset_uuid)
-    t.assert_equals(tostring(_storage_1_master.conn.host)..':'..tostring(_storage_1_master.conn.port), storage_1_master.net_box_uri)
+    t.assert_equals(
+        tostring(_storage_1_master.conn.host)..':'..
+        tostring(_storage_1_master.conn.port), storage_1_master.net_box_uri)
 
     -- check storage-2-master
     local storage_2_master = g.cluster:server('storage-2-master')
     local _storage_2_master = find_by_alias(servers, 'storage-2-master')
     t.assert_equals(_storage_2_master.replicaset_uuid, storage_2_master.replicaset_uuid)
-    t.assert_equals(tostring(_storage_2_master.conn.host)..':'..tostring(_storage_2_master.conn.port), storage_2_master.net_box_uri)
+    t.assert_equals(
+        tostring(_storage_2_master.conn.host)..':'..
+        tostring(_storage_2_master.conn.port), storage_2_master.net_box_uri)
 end

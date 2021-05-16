@@ -460,7 +460,7 @@ local function space_create(args)
             check_constraint_is_enabled)
     end
 
-    return _space_get(space_name)
+    return space_name
 end
 
 return {

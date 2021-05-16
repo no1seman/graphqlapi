@@ -505,9 +505,6 @@ end
 
 local function space_truncate_mutation()
     space_truncate_mutation_remove()
-    
-
-    
     operations.add_mutation({
         name = 'space_truncate',
         doc = 'Truncate space',

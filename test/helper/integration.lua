@@ -1,4 +1,4 @@
-local t = require('luatest')
+--local t = require('luatest')
 local fio = require('fio')
 
 local helper = table.copy(require('cartridge.test-helpers'))
