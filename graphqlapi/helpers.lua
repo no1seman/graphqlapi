@@ -7,7 +7,12 @@ local utils = require('graphqlapi.utils')
 require('graphqlapi.spaceapi')
 local vars = require('graphqlapi.vars').new('graphqlapi.helpers')
 
-vars:new('helpers', {
+vars:new('prefix', {
+    queries = false,
+    mutations = false,
+})
+
+vars:new('helpers',{
     ['info'] = {
         types = {
             'SpaceCkConstraint',
@@ -38,9 +43,6 @@ vars:new('helpers', {
         types = {
             'SpaceTruncateResult',
         },
-    },
-    ['count'] = {
-        types = {},
     },
     ['update'] = {
         types = {
@@ -76,6 +78,41 @@ vars:new('helpers', {
         },
     },
 })
+
+local log = require('log')
+
+local function operations_prefixes()
+    if vars.helpers.info.enabled then
+        if not vars.prefix.queries then
+            log.info('add_query_prefix')
+            operations.add_query_prefix('spaces', 'Spaces queries')
+            vars.prefix.queries = true
+        end
+    else
+        if vars.prefix.queries then
+            log.info('remove_query_prefix')
+            operations.remove_query_prefix('spaces')
+            vars.prefix.queries = false
+        end
+    end
+
+    if vars.helpers.drop.enabled or
+       vars.helpers.truncate.enabled or
+       vars.helpers.update.enabled or
+       vars.helpers.create.enabled then
+        if not vars.prefix.mutations then
+            log.info('add_mutation_prefix')
+            operations.add_mutation_prefix('spaces', 'Spaces mutations')
+            vars.prefix.mutations = true
+        end
+    else
+        if vars.prefix.mutations then
+            log.info('remove_mutation_prefix')
+            operations.remove_mutation_prefix('spaces')
+            vars.prefix.mutations = false
+        end
+    end
+end
 
 local function space_types()
     local type_list = {}
@@ -370,6 +407,7 @@ end
 local function space_info_query()
     space_info_query_remove()
     operations.add_query({
+        prefix = 'spaces',
         name = 'space_info',
         doc = 'Get space(s) definition',
         args = {
@@ -415,6 +453,7 @@ local function space_info_init(include, exclude)
 
     vars.helpers.info.enabled = true
     space_types()
+    operations_prefixes()
 
     vars.helpers.info.include = include
     vars.helpers.info.exclude = exclude
@@ -426,6 +465,7 @@ local function space_info_remove()
     space_info_list_remove()
     vars.helpers.info.enabled = false
     space_types()
+    operations_prefixes()
     vars.helpers.info.include = nil
     vars.helpers.info.exclude = nil
 end
@@ -438,6 +478,7 @@ end
 local function space_drop_mutation()
     space_drop_mutation_remove()
     operations.add_mutation({
+        prefix = 'spaces',
         name = 'space_drop',
         doc = 'Drop space',
         args = {
@@ -483,6 +524,7 @@ local function space_drop_init(include, exclude)
 
     vars.helpers.drop.enabled = true
     space_types()
+    operations_prefixes()
 
     vars.helpers.drop.include = include
     vars.helpers.drop.exclude = exclude
@@ -495,6 +537,7 @@ local function space_drop_remove()
     space_drop_list_remove()
     vars.helpers.drop.enabled = false
     space_types()
+    operations_prefixes()
     vars.helpers.info.include = nil
     vars.helpers.info.exclude = nil
 end
@@ -507,6 +550,7 @@ end
 local function space_truncate_mutation()
     space_truncate_mutation_remove()
     operations.add_mutation({
+        prefix = 'spaces',
         name = 'space_truncate',
         doc = 'Truncate space',
         args = {
@@ -552,6 +596,7 @@ local function space_truncate_init(include, exclude)
 
     vars.helpers.truncate.enabled = true
     space_types()
+    operations_prefixes()
 
     vars.helpers.truncate.include = include
     vars.helpers.truncate.exclude = exclude
@@ -564,6 +609,7 @@ local function space_truncate_remove()
     space_truncate_list_remove()
     vars.helpers.truncate.enabled = false
     space_types()
+    operations_prefixes()
     vars.helpers.info.include = nil
     vars.helpers.info.exclude = nil
 end
@@ -576,6 +622,7 @@ end
 local function space_update_mutation()
     space_update_mutation_remove()
     operations.add_mutation({
+        prefix = 'spaces',
         name = 'space_update',
         doc = 'Update existing space',
         args = {
@@ -632,6 +679,7 @@ local function space_update_init(include, exclude)
 
     vars.helpers.update.enabled = true
     space_types()
+    operations_prefixes()
 
     vars.helpers.update.include = include
     vars.helpers.update.exclude = exclude
@@ -644,6 +692,7 @@ local function space_update_remove()
     space_update_list_remove()
     vars.helpers.update.enabled = false
     space_types()
+    operations_prefixes()
     vars.helpers.info.include = nil
     vars.helpers.info.exclude = nil
 end
@@ -652,8 +701,10 @@ end
 local function space_create_init()
     vars.helpers.create.enabled = true
     space_types()
+    operations_prefixes()
 
     operations.add_mutation({
+        prefix = 'spaces',
         name = 'space_create',
         doc = 'Create new space',
         args = {
@@ -679,6 +730,7 @@ local function space_create_remove()
     operations.remove_mutation('space_create')
     vars.helpers.create.enabled = false
     space_types()
+    operations_prefixes()
 end
 
 local function update_lists()
@@ -740,6 +792,7 @@ local function stop()
         space_create_remove()
     end
     vars.helpers = nil
+    vars.prefix = nil
 end
 
 return {
