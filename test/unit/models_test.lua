@@ -175,6 +175,5 @@ g.test_get_func = function()
     fun = models.get_func(mod_path, mod_name, fun_name)
     t.assert_items_equals(fun(), {module = 'model function'})
 
-    models.get_func()
     models.stop()
 end

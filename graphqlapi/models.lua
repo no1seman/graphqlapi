@@ -10,9 +10,9 @@ vars:new('models', {})
 vars:new('loaded', {})
 vars:new('dir_name', nil)
 
-local e_model_load = errors.new_class('GraphQL model load failed', { capture_stack = false })
-local e_model_assert = errors.new_class('graphQL model check failed', { capture_stack = false })
-local e_model_execute = errors.new_class('graphQL model execute failed', { capture_stack = false })
+local e_model_load = errors.new_class('GraphQLAPI model load failed', { capture_stack = false })
+local e_model_assert = errors.new_class('GraphQLAPI model check failed', { capture_stack = false })
+local e_model_execute = errors.new_class('GraphQLAPI model execute failed', { capture_stack = false })
 
 local function list_modules()
     local list = {}
@@ -115,10 +115,10 @@ local function apply_model(model)
 
     local _, err = e_model_execute:pcall(model.model)
     if err ~= nil then
-        log.error("graphQL model '%s' not applied: %s", model.filename or 'unknown', err)
+        log.error("GraphQLAPI model '%s' not applied: %s", model.filename or 'unknown', err)
         return nil, err
     else
-        log.info("graphQL model '%s' applied", model.filename)
+        log.info("GraphQLAPI model '%s' applied", model.filename)
         return true
     end
 end
