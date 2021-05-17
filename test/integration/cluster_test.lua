@@ -26,7 +26,10 @@ end
 
 g.test_get_servers = function()
     local router = g.cluster:server('router')
-    local servers = router.net_box:eval('return require("graphqlapi.cluster").get_servers()')
+    local servers = helper.run_remotely(
+        router,
+        function() return require("graphqlapi.cluster").get_servers() end
+    )
 
     t.assert_equals(#servers, #g.cluster.servers)
     for _, server in pairs(servers) do
@@ -38,7 +41,10 @@ end
 
 g.test_get_masters = function()
     local router = g.cluster:server('router')
-    local servers = router.net_box:eval('return require("graphqlapi.cluster").get_masters()')
+    local servers = helper.run_remotely(
+        router,
+        function() return require("graphqlapi.cluster").get_masters() end
+    )
 
     t.assert_equals(#servers, 3)
     -- check router
@@ -65,8 +71,10 @@ end
 
 g.test_get_storages_masters = function()
     local router = g.cluster:server('router')
-    local servers = router.net_box:eval('return require("graphqlapi.cluster").get_storages_masters()')
-
+    local servers = helper.run_remotely(
+        router,
+        function() return require("graphqlapi.cluster").get_storages_masters() end
+    )
     t.assert_equals(#servers, 2)
 
     -- check storage-1-master

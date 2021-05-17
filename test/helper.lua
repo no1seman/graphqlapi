@@ -1,6 +1,7 @@
 -- This file is required automatically by luatest.
 -- Add common configuration here.
 
+local checks = require('checks')
 local fio = require('fio')
 local t = require('luatest')
 
@@ -95,6 +96,22 @@ helper.cluster_config = {
         },
     },
 }
+
+function helper.run_remotely(srv, fn)
+    checks('table', 'function')
+    --utils.assert_upvalues(fn, {})
+
+    local ok, ret = srv.net_box:eval([[
+        local fn = loadstring(...)
+        return pcall(fn)
+    ]], {string.dump(fn)})
+
+    if not ok then
+        error(ret, 0)
+    end
+
+    return ret
+end
 
 function helper.get_server_by_alias(cluster, alias)
     for index, server in ipairs(cluster.servers) do
