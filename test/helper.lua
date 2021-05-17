@@ -55,6 +55,8 @@ helper.cluster_config = {
                 {
                     instance_uuid = helper.uuid('a', 1),
                     alias = 'router',
+                    advertise_port = 13301,
+                    http_port = 8281,
                 },
             },
         },
@@ -69,10 +71,14 @@ helper.cluster_config = {
                 {
                     instance_uuid = helper.uuid('b', 1),
                     alias = 'storage-1-master',
+                    advertise_port = 13302,
+                    http_port = 8282,
                 },
                 {
                     instance_uuid = helper.uuid('b', 2),
                     alias = 'storage-1-replica',
+                    advertise_port = 13303,
+                    http_port = 8283,
                 },
             },
         },
@@ -87,10 +93,14 @@ helper.cluster_config = {
                 {
                     instance_uuid = helper.uuid('c', 1),
                     alias = 'storage-2-master',
+                    advertise_port = 13304,
+                    http_port = 8284
                 },
                 {
                     instance_uuid = helper.uuid('c', 2),
                     alias = 'storage-2-replica',
+                    advertise_port = 13305,
+                    http_port = 8285
                 },
             },
         },
@@ -272,6 +282,8 @@ function helper.sample_data(length)
         bsize = length*16+(length-1)*2
     end
 
+    local full_bsize = bsize+3*49152*length
+
     return {{
         format = {
             { type = 'unsigned', name = 'bucket_id', is_nullable = false, },
@@ -298,6 +310,7 @@ function helper.sample_data(length)
             }
         },
         bsize = bsize,
+        full_bsize = full_bsize,
         temporary = false,
         ck_constraint = {
             {
@@ -339,5 +352,10 @@ t.before_suite(function()
     fio.mktree(helper.datadir)
     box.cfg({work_dir = helper.datadir})
 end)
+
+-- t.after_suite(function()
+--     fio.rmtree(helper.datadir)
+--     fio.rmtree(fio.helper.cluster_config.datadir)
+-- end)
 
 return helper
