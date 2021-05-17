@@ -28,7 +28,7 @@ g.test_get_servers = function()
     local router = g.cluster:server('router')
     local servers = helper.run_remotely(
         router,
-        function() return require("graphqlapi.cluster").get_servers() end
+        function() return require('graphqlapi.cluster').get_servers() end
     )
 
     t.assert_equals(#servers, #g.cluster.servers)
@@ -43,7 +43,7 @@ g.test_get_masters = function()
     local router = g.cluster:server('router')
     local servers = helper.run_remotely(
         router,
-        function() return require("graphqlapi.cluster").get_masters() end
+        function() return require('graphqlapi.cluster').get_masters() end
     )
 
     t.assert_equals(#servers, 3)
@@ -73,7 +73,7 @@ g.test_get_storages_masters = function()
     local router = g.cluster:server('router')
     local servers = helper.run_remotely(
         router,
-        function() return require("graphqlapi.cluster").get_storages_masters() end
+        function() return require('graphqlapi.cluster').get_storages_masters() end
     )
     t.assert_equals(#servers, 2)
 
@@ -92,4 +92,13 @@ g.test_get_storages_masters = function()
     t.assert_equals(
         tostring(_storage_2_master.conn.host)..':'..
         tostring(_storage_2_master.conn.port), storage_2_master.net_box_uri)
+end
+
+g.test_get_self_alias = function()
+    local router = g.cluster:server('router')
+    local alias = helper.run_remotely(
+        router,
+        function() return require('graphqlapi.cluster').get_self_alias() end
+    )
+    t.assert_equals(alias, 'router')
 end

@@ -769,7 +769,7 @@ local function init(opts)
         if opts.update and opts.update.enabled == true then
             space_update_init(opts.update.include, opts.update.exclude)
         end
-        if opts.add and opts.add.enabled == true then
+        if opts.create and opts.create.enabled == true then
             space_create_init()
         end
     end

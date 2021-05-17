@@ -118,7 +118,13 @@ g.test_init_stop = function()
     helpers.stop()
     good_space:drop()
 
-    helpers.init()
+    helpers.init({
+        info = { enabled = true },
+        drop = { enabled = true },
+        truncate = { enabled = true },
+        update = { enabled = true },
+        create = { enabled = true },
+    })
     good_space = create_space('good_space')
     helpers.update_lists()
     assert_enum_include('SpaceInfoNames', {'good_space'})
