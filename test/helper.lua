@@ -349,13 +349,9 @@ function helper.truncate_space_on_cluster(cluster, space_name)
 end
 
 t.before_suite(function()
+    fio.rmtree(helper.datadir)
     fio.mktree(helper.datadir)
     box.cfg({work_dir = helper.datadir})
 end)
-
--- t.after_suite(function()
---     fio.rmtree(helper.datadir)
---     fio.rmtree(fio.helper.cluster_config.datadir)
--- end)
 
 return helper
