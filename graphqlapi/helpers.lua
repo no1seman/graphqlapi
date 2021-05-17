@@ -250,6 +250,7 @@ local function space_types()
                     is_local = types.boolean,
                     enabled = types.boolean,
                     bsize = types.long,
+                    full_bsize = types.long,
                     len = types.long,
                     user = types.string,
                     index = types.list(types.SpaceIndex),

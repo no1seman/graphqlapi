@@ -99,6 +99,7 @@ local function _get_spaces_size(spaces)
                                 (counters[space_name].len or 0) + (res[space_name].len or 0)
                             counters[space_name].bsize =
                                 (counters[space_name].bsize or 0) + (res[space_name].bsize or 0)
+                            local full_bsize = counters[space_name].bsize
 
                             counters[space_name].index =  counters[space_name].index or {}
                             for i = 0, #box.space[space_name].index do
@@ -107,7 +108,9 @@ local function _get_spaces_size(spaces)
                                     (counters[space_name].index[i].len or 0) + (res[space_name].index[i].len or 0)
                                 counters[space_name].index[i].bsize =
                                     (counters[space_name].index[i].bsize or 0) + (res[space_name].index[i].bsize or 0)
+                                full_bsize = full_bsize + counters[space_name].index[i].bsize
                             end
+                            counters[space_name].full_bsize = full_bsize
                         end
                     else
                         remote_errors = remote_errors or {}
@@ -165,6 +168,7 @@ local function space_info(_, args)
 
                 space.bsize = spaces_size[space_name].bsize or 0
                 space.len = spaces_size[space_name].len or 0
+                space.full_bsize = spaces_size[space_name].full_bsize or 0
                 space.field_count = #space.format
 
                 space.index = {}
