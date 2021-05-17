@@ -13,6 +13,9 @@ vars:new('schema_invalid', nil)
 vars:new('space_query', {})
 vars:new('space_mutation', {})
 
+local QUERY_PREFIX = 'api_'
+local MUTATION_PREFIX = 'mutation_api_'
+
 local function is_invalid()
     return vars.schema_invalid
 end
@@ -48,7 +51,7 @@ local function add_query_prefix(prefix, doc)
     checks("string", "?string")
 
     local kind = types.object{
-        name = 'Api'..prefix,
+        name = QUERY_PREFIX..prefix,
         fields = {},
         description = doc,
     }
@@ -77,7 +80,7 @@ local function add_mutation_prefix(prefix, doc)
     checks("string", "?string")
 
     local kind = types.object({
-        name = 'MutationApi'..prefix,
+        name = MUTATION_PREFIX..prefix,
         fields = {},
         description = doc,
     })
@@ -162,7 +165,7 @@ local function is_query_prefix(query)
        query.kind and
        type(query.kind) == 'table' and
        query.kind.__type == 'Object' and
-       query.kind.name:sub(1, 3) == 'Api' and
+       query.kind.name:sub(1, #QUERY_PREFIX) == QUERY_PREFIX and
        query.kind.fields and
        type(query.kind.fields) == 'table' then
         return true
@@ -329,7 +332,7 @@ local function is_mutation_prefix(mutation)
        mutation.kind and
        type(mutation.kind) == 'table' and
        mutation.kind.__type == 'Object' and
-       mutation.kind.name:sub(1, 11) == 'MutationApi' and
+       mutation.kind.name:sub(1, #MUTATION_PREFIX) == MUTATION_PREFIX and
        mutation.kind.fields and
        type (mutation.kind.fields) then
         return true
