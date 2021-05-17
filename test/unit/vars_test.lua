@@ -1,7 +1,7 @@
 local t = require('luatest')
 local g = t.group('vars')
 
-require('test.helper.unit')
+require('test.helper')
 local vars = require('graphqlapi.vars').new('vars_test')
 
 vars:new('test_nil', nil)

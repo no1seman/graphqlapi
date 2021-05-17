@@ -2,7 +2,7 @@ local json = require('json')
 local t = require('luatest')
 local g = t.group('graphqlapi')
 
-local helper = require('test.helper.unit')
+local helper = require('test.helper')
 
 local HOST = 'localhost'
 local PORT = 15999
@@ -17,7 +17,7 @@ local operations = require('graphqlapi.operations')
 local types = require('graphqlapi.types')
 
 g.test_init_stop = function()
-    package.path = helper.shared.root.. '/test/models/suite1/?.lua;' .. package.path
+    package.path = helper.project_root.. '/test/models/suite1/?.lua;' .. package.path
     local httpd = http.new(HOST, PORT,{ log_requests = false })
     httpd:start()
     graphqlapi.init(httpd, nil, nil, '../../test/models/suite1')
@@ -29,7 +29,7 @@ g.test_init_stop = function()
 end
 
 g.test_set_get_models_dir = function()
-    package.path = helper.shared.root.. '/test/models/suite1/?.lua;' .. package.path
+    package.path = helper.project_root.. '/test/models/suite1/?.lua;' .. package.path
     local httpd = http.new(HOST, PORT,{ log_requests = false })
     httpd:start()
     graphqlapi.init(httpd, nil, nil, '../../test/models/suite1')
@@ -40,7 +40,7 @@ g.test_set_get_models_dir = function()
 end
 
 g.test_set_get_endpoint = function()
-    package.path = helper.shared.root.. '/test/models/suite1/?.lua;' .. package.path
+    package.path = helper.project_root.. '/test/models/suite1/?.lua;' .. package.path
     local httpd = http.new(HOST, PORT,{ log_requests = false })
     httpd:start()
     graphqlapi.init(httpd, nil, nil, '../../test/models/suite1')
@@ -53,7 +53,7 @@ g.test_set_get_endpoint = function()
 end
 
 g.test_reload = function()
-    package.path = helper.shared.root.. '/test/models/suite1/?.lua;' .. package.path
+    package.path = helper.project_root.. '/test/models/suite1/?.lua;' .. package.path
     local httpd = http.new(HOST, PORT,{ log_requests = false })
     httpd:start()
     graphqlapi.init(httpd, nil, nil, '../../test/models/suite1')
@@ -101,7 +101,7 @@ g.test_custom_auth_middleware = function()
             return resp
         end
     }
-    package.path = helper.shared.root.. '/test/models/suite1/?.lua;' .. package.path
+    package.path = helper.project_root.. '/test/models/suite1/?.lua;' .. package.path
     local httpd = http.new(HOST, PORT,{ log_requests = false })
     httpd:start()
     graphqlapi.init(httpd, custom_middleware, nil, '../../test/models/suite1')
@@ -127,7 +127,7 @@ g.test_custom_auth_middleware = function()
 end
 
 g.test_invalid_requests = function()
-    package.path = helper.shared.root.. '/test/models/suite1/?.lua;' .. package.path
+    package.path = helper.project_root.. '/test/models/suite1/?.lua;' .. package.path
     local httpd = http.new(HOST, PORT,{ log_requests = false })
     httpd:start()
     graphqlapi.init(httpd, nil, nil, '../../test/models/suite1')
@@ -196,7 +196,7 @@ g.test_invalid_requests = function()
 end
 
 g.test_execute_graphql_data_and_or_errors = function()
-    package.path = helper.shared.root.. '/test/models/suite1/?.lua;' .. package.path
+    package.path = helper.project_root.. '/test/models/suite1/?.lua;' .. package.path
     local httpd = http.new(HOST, PORT,{ log_requests = false })
     httpd:start()
     graphqlapi.init(httpd, nil, nil, '../../test/models/suite1')

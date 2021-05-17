@@ -382,91 +382,91 @@ local function space_truncate(_, args)
     return { truncated_len = len, truncated_bsize = bsize }, remote_errors
 end
 
-local function space_create(args)
-    local space_name = args.name
-    local space_index = args.index
-    local space_ck_constraints = args.ck_constraint
+-- local function space_create(args)
+--     local space_name = args.name
+--     local space_index = args.index
+--     local space_ck_constraints = args.ck_constraint
 
-    if box.space[space_name] then
-        return nil, e_space_api:new('space %s already exists', space_name)
-    end
+--     if box.space[space_name] then
+--         return nil, e_space_api:new('space %s already exists', space_name)
+--     end
 
-    local space_options = {
-        engine = args.engine and args.engine or 'memtx',
-        field_count = args.field_count and
-            tonumber(args.field_count) or 0,
-        id = args.id and args.id or nil,
-        if_not_exists = args.if_not_exists and args.if_not_exists or
-            false,
-        is_local = args.is_local and args.is_local or false,
-        temporary = args.temporary and args.temporary or false,
-        user = args.user and args.user or box.session.user()
-    }
+--     local space_options = {
+--         engine = args.engine and args.engine or 'memtx',
+--         field_count = args.field_count and
+--             tonumber(args.field_count) or 0,
+--         id = args.id and args.id or nil,
+--         if_not_exists = args.if_not_exists and args.if_not_exists or
+--             false,
+--         is_local = args.is_local and args.is_local or false,
+--         temporary = args.temporary and args.temporary or false,
+--         user = args.user and args.user or box.session.user()
+--     }
 
-    local format = {}
-    for _, field in pairs(args.format) do
-        table.insert(format, {
-            name = field.name,
-            type = field.type,
-            is_nullable = field.is_nullable and field.is_nullable or false
-        })
-    end
+--     local format = {}
+--     for _, field in pairs(args.format) do
+--         table.insert(format, {
+--             name = field.name,
+--             type = field.type,
+--             is_nullable = field.is_nullable and field.is_nullable or false
+--         })
+--     end
 
-    space_options.format = format
+--     space_options.format = format
 
-    local ok, err = pcall(box.schema.space.create, space_name, space_options)
+--     local ok, err = pcall(box.schema.space.create, space_name, space_options)
 
-    if not ok then
-        return nil, e_space_api:new('space creation error: %s', err)
-    end
+--     if not ok then
+--         return nil, e_space_api:new('space creation error: %s', err)
+--     end
 
-    for _, index in pairs(space_index) do
-        local index_name = index.name
-        local index_options = {
-            type = index.type and index.type or 'TREE',
-            id = index.id and index.id or nil,
-            unique = index.unique and index.unique or true,
-            if_not_exists = index.if_not_exists and index.if_not_exists or true
-        }
+--     for _, index in pairs(space_index) do
+--         local index_name = index.name
+--         local index_options = {
+--             type = index.type and index.type or 'TREE',
+--             id = index.id and index.id or nil,
+--             unique = index.unique and index.unique or true,
+--             if_not_exists = index.if_not_exists and index.if_not_exists or true
+--         }
 
-        index_options.parts = {}
+--         index_options.parts = {}
 
-        if index.parts then
-            for _, part in pairs(index.parts) do
-                table.insert(index_options.parts, {
-                    field = part.fieldno,
-                    type = part.type,
-                    is_nullable = part.is_nullable
-                })
-            end
-        else
-            index_options.parts = {1, 'unsigned'}
-        end
+--         if index.parts then
+--             for _, part in pairs(index.parts) do
+--                 table.insert(index_options.parts, {
+--                     field = part.fieldno,
+--                     type = part.type,
+--                     is_nullable = part.is_nullable
+--                 })
+--             end
+--         else
+--             index_options.parts = {1, 'unsigned'}
+--         end
 
-        ok = box.space[space_name]:create_index(index_name, index_options)
+--         ok = box.space[space_name]:create_index(index_name, index_options)
 
-        if not ok then
-            return nil, e_space_api:new('Index %s creation error: %s', index_name, err)
-        end
-    end
+--         if not ok then
+--             return nil, e_space_api:new('Index %s creation error: %s', index_name, err)
+--         end
+--     end
 
-    for _, check_constraint in pairs(space_ck_constraints) do
-        local check_constraint_name = check_constraint.name
-        local check_constraint_expr = check_constraint.expr
-        local check_constraint_is_enabled = check_constraint.is_enabled
-        box.space[space_name]:create_check_constraint(check_constraint_name,
-                                                      check_constraint_expr)
-        box.space[space_name].ck_constraint[check_constraint_name]:enable(
-            check_constraint_is_enabled)
-    end
+--     for _, check_constraint in pairs(space_ck_constraints) do
+--         local check_constraint_name = check_constraint.name
+--         local check_constraint_expr = check_constraint.expr
+--         local check_constraint_is_enabled = check_constraint.is_enabled
+--         box.space[space_name]:create_check_constraint(check_constraint_name,
+--                                                       check_constraint_expr)
+--         box.space[space_name].ck_constraint[check_constraint_name]:enable(
+--             check_constraint_is_enabled)
+--     end
 
-    return space_name
-end
+--     return space_name
+-- end
 
 return {
     space_info = space_info,
     space_drop = space_drop,
     space_truncate = space_truncate,
-    space_create = space_create,
+    --space_create = space_create,
     NET_BOX_CONNECTION_TIMEOUT = NET_BOX_CONNECTION_TIMEOUT,
 }

@@ -1,7 +1,7 @@
 local t = require('luatest')
 local g = t.group('funcall')
 
-require('test.helper.unit')
+require('test.helper')
 local funcall = require('graphqlapi.funcall')
 
 g.test_call = function()

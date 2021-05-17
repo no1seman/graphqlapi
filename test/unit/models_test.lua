@@ -1,7 +1,7 @@
 local t = require('luatest')
 local g = t.group('models')
 
-local helper = require('test.helper.unit')
+local helper = require('test.helper')
 local models = require('graphqlapi.models')
 
 g.test_apply_model = function()
@@ -27,7 +27,7 @@ g.test_apply_model = function()
 end
 
 g.test_load_model = function()
-    package.path = helper.shared.root.. '/test/models/suite1/?.lua;' .. package.path
+    package.path = helper.project_root.. '/test/models/suite1/?.lua;' .. package.path
     -- check non-existent file
     local ok, err = models.load_model('../../test/models/suite1/empty1.lua')
     t.assert_equals(ok, nil)
@@ -77,7 +77,7 @@ g.test_load_model = function()
 end
 
 g.test_init_stop = function()
-    package.path = helper.shared.root.. '/test/models/suite1/?.lua;' .. package.path
+    package.path = helper.project_root.. '/test/models/suite1/?.lua;' .. package.path
     models.init('../../test/models/suite1')
     t.assert_items_equals(models.list_models(), {
         'test.models.suite1.missing_spaces',
@@ -92,7 +92,7 @@ g.test_init_stop = function()
 end
 
 g.test_remove_model = function()
-    package.path = helper.shared.root.. '/test/models/suite1/?.lua;' .. package.path
+    package.path = helper.project_root.. '/test/models/suite1/?.lua;' .. package.path
     models.init('../../test/models/suite1/')
     t.assert_items_equals(models.list_models(), {
         'test.models.suite1.missing_spaces',
@@ -126,7 +126,7 @@ g.test_remove_model = function()
 end
 
 g.test_remove_model_by_space_name = function ()
-    package.path = helper.shared.root.. '/test/models/suite1/?.lua;' .. package.path
+    package.path = helper.project_root.. '/test/models/suite1/?.lua;' .. package.path
     models.init('../../test/models/suite1/')
     t.assert_items_equals(models.list_models(), {
         'test.models.suite1.missing_spaces',
@@ -146,7 +146,7 @@ end
 
 g.test_update_space_models = function()
     _G._test_model = 0
-    package.path = helper.shared.root.. '/test/models/suite1/?.lua;' .. package.path
+    package.path = helper.project_root.. '/test/models/suite1/?.lua;' .. package.path
     models.init('../../test/models/suite1')
     t.assert_items_equals(models.list_models(), {
         'test.models.suite1.missing_spaces',
@@ -160,7 +160,7 @@ g.test_update_space_models = function()
 end
 
 g.test_get_func = function()
-    package.path = helper.shared.root.. '/test/models/suite1/?.lua;' .. package.path
+    package.path = helper.project_root.. '/test/models/suite1/?.lua;' .. package.path
     local model = models.load_model('../../test/models/suite1/valid_model.lua')
     models.apply_model(model)
 

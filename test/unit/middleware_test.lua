@@ -1,7 +1,7 @@
 local t = require('luatest')
 local g = t.group('middleware')
 
-require('test.helper.unit')
+require('test.helper')
 local middleware = require('graphqlapi.middleware')
 
 g.test_render_response = function()

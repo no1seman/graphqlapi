@@ -1,7 +1,7 @@
 local t = require('luatest')
 local g = t.group('helpers')
 
-require('test.helper.unit')
+require('test.helper')
 local helpers = require('graphqlapi.helpers')
 local operations = require('graphqlapi.operations')
 local types = require('graphqlapi.types')

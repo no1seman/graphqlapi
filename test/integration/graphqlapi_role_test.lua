@@ -3,7 +3,7 @@ local t = require('luatest')
 local g = t.group('graphqlapi_role')
 
 --local entity_space = require('test.helper.entity_space')
-local helper = require('test.helper.integration')
+local helper = require('test.helper')
 
 g.before_all = function()
     local cluster_config = table.deepcopy(helper.cluster_config)

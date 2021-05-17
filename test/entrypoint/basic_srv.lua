@@ -5,16 +5,14 @@ require('strict').on()
 local log = require('log')
 local errors = require('errors')
 local cartridge = require('cartridge')
+local fio = require('fio')
+
+package.path =  fio.pathjoin(fio.dirname(debug.sourcedir()), '/../?.lua;').. package.path
 
 package.preload['app.roles.api'] = function()
     local function init(opts) -- luacheck: no unused args
         -- if opts.is_master then
         -- end
-        local httpd = cartridge.service_get('httpd')
-        httpd:route({method = 'GET', path = '/hello'}, function()
-            return {body = 'Hello world!'}
-        end)
-
         return true
     end
 

@@ -2,7 +2,7 @@ local fio = require('fio')
 local t = require('luatest')
 local g = t.group('cluster')
 
-local helper = require('test.helper.integration')
+local helper = require('test.helper')
 
 g.before_all = function()
     local cluster_config = table.deepcopy(helper.cluster_config)

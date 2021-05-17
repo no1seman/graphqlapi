@@ -3,7 +3,7 @@ local g = t.group('spaces')
 
 local fiber = require('fiber')
 
-local test_helper = require('test.helper.unit')
+local test_helper = require('test.helper')
 local spaces = require('graphqlapi.spaces')
 local helpers = require('graphqlapi.helpers')
 
