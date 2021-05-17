@@ -17,6 +17,7 @@ dependencies = {
     'checks ~> 3.1',
     'errors ~> 2.1',
     'graphql ~> 0.1',
+    'vshard ~> 0.1',
 }
 build = {
     type = 'builtin',
