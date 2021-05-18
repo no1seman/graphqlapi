@@ -184,7 +184,7 @@ g.test_space_truncate = function()
             [[ return require('graphqlapi.spaceapi').space_truncate(nil, {name = ...}) ]],
             {'entity'}
         )
-        t.assert_items_equals(space_truncate, { truncated_bsize = 0, truncated_len = 0 })
+        t.assert_items_equals(space_truncate, { truncated_bsize = 0, truncated_len = 0, name = "entity" })
         t.assert_equals(space_truncate_err, nil)
     end
 
@@ -202,7 +202,7 @@ g.test_space_truncate = function()
             [[ return require('graphqlapi.spaceapi').space_truncate(nil, {name = ...}) ]],
             {'entity'}
         )
-        t.assert_items_equals(space_truncate, { truncated_bsize = 294946, truncated_len = 2 })
+        t.assert_items_equals(space_truncate, { truncated_bsize = 294946, truncated_len = 2, name = "entity" })
         t.assert_equals(space_truncate_err, nil)
     end
 
@@ -221,7 +221,7 @@ g.test_space_truncate = function()
             [[ return require('graphqlapi.spaceapi').space_truncate(nil, {name = ...}) ]],
             {'entity'}
         )
-        t.assert_equals(space_truncate, { truncated_bsize = 147472, truncated_len = 1 })
+        t.assert_equals(space_truncate, { truncated_bsize = 147472, truncated_len = 1, name = "entity" })
         t.assert_str_contains(space_truncate_err[1].str, 'space "entity" not found on "storage-1-master"')
     end
 
@@ -241,7 +241,7 @@ g.test_space_truncate = function()
             [[ return require('graphqlapi.spaceapi').space_truncate(nil, {name = ...}) ]],
             {'entity'}
         )
-        t.assert_items_equals(space_truncate, { truncated_bsize = 147472, truncated_len = 1 })
+        t.assert_items_equals(space_truncate, { truncated_bsize = 147472, truncated_len = 1, name = "entity" })
         t.assert_str_contains(space_truncate_err[1].str, 'Connection refused')
     end
     g.after_each()

@@ -383,7 +383,7 @@ local function space_truncate(_, args)
         f:join()
     end
 
-    return { truncated_len = len, truncated_bsize = bsize }, remote_errors
+    return { truncated_len = len, truncated_bsize = bsize , name = space }, remote_errors
 end
 
 -- local function space_create(args)

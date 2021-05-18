@@ -35,31 +35,31 @@ local function get_servers()
 end
 
 local function get_masters()
-    local masters = {}
+    local servers = {}
     local connect_errors
     for _, replicaset in pairs(require('cartridge').admin_get_replicasets()) do
         local conn, err = pool.connect(replicaset.active_master.uri)
         local replicaset_uuid = replicaset.uuid or '00000000-0000-0000-0000-000000000000'
         local alias = replicaset.active_master.alias or 'unknown'
         if conn then
-            table.insert(masters, {replicaset_uuid = replicaset_uuid, alias = alias, conn = conn})
+            table.insert(servers, {replicaset_uuid = replicaset_uuid, alias = alias, conn = conn})
         else
             connect_errors = connect_errors or {}
             table.insert(connect_errors,  e_space_api:new('instance \'%s\' error: %s', alias, err))
         end
     end
-    return masters, connect_errors
+    return servers, connect_errors
 end
 
 local function get_storages_masters()
-    local masters = {}
+    local servers = {}
     for uuid, replicaset in pairs(vshard.router.routeall()) do
         local conn = replicaset.master.conn
         local replicaset_uuid = uuid or '00000000-0000-0000-0000-000000000000'
         local alias = get_alias_by_uuid(conn)
-        table.insert(masters, {replicaset_uuid = replicaset_uuid, alias = alias, conn = replicaset.master.conn})
+        table.insert(servers, {replicaset_uuid = replicaset_uuid, alias = alias, conn = replicaset.master.conn})
     end
-    return masters
+    return servers
 end
 
 local function get_self_alias()

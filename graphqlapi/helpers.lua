@@ -382,6 +382,7 @@ local function space_types()
                 fields = {
                     truncated_len = types.long,
                     truncated_bsize = types.long,
+                    name = types.string,
                 }
             }), 'SpaceTruncateResult')
         end

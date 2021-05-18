@@ -20,18 +20,22 @@ local internal_types = {
     bare = true,
     boolean = true,
     directive = true,
+    double = true,
     enum = true,
     float = true,
     get_env = true,
     id = true,
     include = true,
     inputObject = true,
+    inputMap = true,
+    inputUnion = true,
     int = true,
     interface = true,
     is_invalid = true,
     list = true,
     list_types = true,
     long = true,
+    map = true,
     mapper = true,
     nonNull = true,
     nullable = true,
@@ -48,6 +52,82 @@ local internal_types = {
     union = true,
 }
 
+types.double = types.scalar({
+    name = 'Double',
+    serialize = tonumber,
+    parseValue = tonumber,
+    parseLiteral = function(node)
+      -- 'float' and 'int' are names of immediate value types
+      if node.kind == 'float' or node.kind == 'int' then
+        return tonumber(node.value)
+      end
+    end,
+    isValueOfTheType = function(value)
+      return type(value) == 'number'
+    end,
+})
+
+function types.map(config)
+    local instance = {
+      __type = 'Scalar',
+      subtype = 'Map',
+      name = config.name,
+      description = 'Map is a dictionary with string keys and values of ' ..
+        'arbitrary but same among all values type',
+      serialize = function(value) return value end,
+      parseValue = function(value) return value end,
+      parseLiteral = function(_)
+        error('Literal parsing is implemented in util.coerceValue; ' ..
+          'we should not go here')
+      end,
+      values = config.values,
+    }
+
+    instance.nonNull = types.nonNull(instance)
+
+    return instance
+end
+
+function types.inputMap(config)
+    local instance = {
+      __type = 'Scalar',
+      subtype = 'InputMap',
+      name = config.name,
+      serialize = function(value) return value end,
+      parseValue = function(value) return value end,
+      parseLiteral = function(_)
+        error('Literal parsing is implemented in util.coerceValue; ' ..
+          'we should not go here')
+      end,
+      values = config.values,
+    }
+
+    instance.nonNull = types.nonNull(instance)
+
+    return instance
+  end
+
+function types.inputUnion(config)
+    local instance = {
+        __type = 'Scalar',
+        subtype = 'InputUnion',
+        name = config.name,
+        types = config.types,
+        serialize = function(value) return value end,
+        parseValue = function(value) return value end,
+        parseLiteral = function(_)
+        error('Literal parsing is implemented in util.coerceValue; ' ..
+            'we should not go here')
+        end,
+        resolveType = config.resolveType,
+        resolveNodeType = config.resolveNodeType,
+    }
+
+    instance.nonNull = types.nonNull(instance)
+
+    return instance
+end
+
 types.mapper = {
     ['unsigned'] = types.long, -- OK
     ['integer'] = types.int, -- OK
@@ -56,11 +136,11 @@ types.mapper = {
     ['scalar'] = types.scalar, -- ???
     ['boolean'] = types.boolean, -- OK
     ['varbinary'] = types.bare, -- ???
-    ['array'] = types.bare, -- ???
-    ['map'] = types.bare, -- ???
+    ['array'] = types.list, -- OK
+    ['map'] = types.map, -- ???
     ['any'] = types.scalar, -- ???
-    ['decimal'] = types.float, -- ???
-    ['double'] = types.float, -- OK
+    ['decimal'] = types.long, -- OK
+    ['double'] = types.double, -- OK
     ['uuid'] = types.id, -- OK
 }
 
