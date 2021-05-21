@@ -82,7 +82,7 @@ g.test_add_remove_query_with_prefix = function()
             entity_id = types.long
         },
         kind = types.string,
-        callback = 'models.entity.entity_2_get'
+        callback = 'models.entity.entity_2_get',
     })
 
     t.assert_equals(type(operations.get_queries()['test'].kind.fields['entity_1']), 'table')
@@ -107,6 +107,21 @@ g.test_add_remove_query_with_prefix = function()
     t.assert_equals(operations.is_invalid(), true)
     operations.reset_invalid()
     t.assert_equals(operations.is_invalid(), false)
+
+    t.assert_error_msg_content_equals(
+        'No such query prefix test1',
+        operations.add_query,
+        {
+            prefix = 'test1',
+            name = 'entity_2',
+            doc = 'Get entity 2',
+            args = {
+                entity_id = types.long
+            },
+            kind = types.string,
+            callback = 'models.entity.entity_2_get',
+        }
+    )
 end
 
 g.test_add_remove_mutation = function()
@@ -141,6 +156,7 @@ g.test_add_remove_mutation_with_prefix = function()
 
     t.assert_equals(type(operations.get_mutations()['test']), 'table')
     t.assert_equals(operations.get_mutations()['test'].description, 'Simple prefix test')
+    t.assert_equals(operations.get_mutations()['test'].resolve(), {})
     t.assert_equals(operations.is_invalid(), true)
 
     operations.reset_invalid()
@@ -196,6 +212,22 @@ g.test_add_remove_mutation_with_prefix = function()
     t.assert_equals(operations.is_invalid(), true)
     operations.reset_invalid()
     t.assert_equals(operations.is_invalid(), false)
+
+
+    t.assert_error_msg_content_equals(
+        'No such mutation prefix test1',
+        operations.add_mutation,
+        {
+            prefix = 'test1',
+            name = 'entity_2',
+            doc = 'Mutate entity 2',
+            args = {
+                name = types.long,
+            },
+            kind = types.string,
+            callback = 'models.entity.entity_2_set'
+        }
+    )
 end
 
 g.test_operations_safety = function()
@@ -290,9 +322,10 @@ g.test_on_resolve_trigger = function()
     end
 
     operations.on_resolve(on_resolve_trigger2, nil)
-
     t.assert_error_msg_contains('callback error', operations.get_queries()['entity'].resolve)
 
+    operations.on_resolve(nil, on_resolve_trigger2)
+    t.assert_error_msg_contains('callback error', operations.get_queries()['entity'].resolve)
     operations.stop()
 
 end
@@ -354,6 +387,21 @@ g.test_add_space_query = function()
     t.assert_equals(operations.get_queries()['test'], nil)
 
     space:drop()
+
+    -- test add_space_query() with unexisting space
+    t.assert_error_msg_contains(
+        'space \'entity\' doesn\'t exists',
+        operations.add_space_query,
+        {
+            prefix = 'test',
+            space = 'entity',
+            doc = 'Get entity',
+            args = {
+                entity_id = types.int.nonNull
+            },
+            callback = "models.entity.entity_get"
+        }
+    )
 end
 
 g.test_add_space_mutation = function()
@@ -412,6 +460,21 @@ g.test_add_space_mutation = function()
     t.assert_equals(operations.get_mutations()['test'], nil)
 
     space:drop()
+
+    -- test add_space_mutation() with unexisting space
+    t.assert_error_msg_contains(
+        'space \'entity\' doesn\'t exists',
+        operations.add_space_mutation,
+        {
+            prefix = 'test',
+            space = 'entity',
+            doc = 'Mutate entity',
+            args = {
+                entity_id = types.int.nonNull
+            },
+            callback = "models.entity.entity_set"
+        }
+    )
 end
 
 local function stub1()

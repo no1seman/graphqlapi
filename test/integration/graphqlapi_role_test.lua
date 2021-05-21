@@ -4,17 +4,17 @@ local g = t.group('graphqlapi_role')
 
 local helper = require('test.helper')
 
-g.before_all = function()
+g.before_all(function()
     local cluster_config = table.deepcopy(helper.cluster_config)
     g.cluster = helper.Cluster:new(cluster_config)
     g.cluster:start()
-end
+end)
 
-g.after_all = function()
+g.after_all(function()
     g.cluster:stop()
     fio.rmtree(g.cluster.datadir)
     g.cluster = nil
-end
+end)
 
 g.test_role_init_stop = function()
     local router = g.cluster:server('router')

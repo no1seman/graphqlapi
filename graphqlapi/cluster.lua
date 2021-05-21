@@ -14,7 +14,6 @@ local function get_alias_by_uuid(conn)
             return server.alias
         end
     end
-    return tostring(conn.host)..':'..tostring(conn.port)
 end
 
 local function get_servers()

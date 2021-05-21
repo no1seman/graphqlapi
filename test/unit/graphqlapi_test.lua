@@ -20,8 +20,8 @@ g.test_init_stop = function()
     package.path = helper.project_root.. '/test/models/suite1/?.lua;' .. package.path
     local httpd = http.new(HOST, PORT,{ log_requests = false })
     httpd:start()
-    graphqlapi.init(httpd, nil, nil, '../../test/models/suite1')
-    t.assert_equals(graphqlapi.get_models_dir(), '../../test/models/suite1')
+    graphqlapi.init(httpd, nil, nil, 'test/models/suite1')
+    t.assert_equals(graphqlapi.get_models_dir(), 'test/models/suite1')
     t.assert_equals(graphqlapi.get_endpoint(), 'admin/graphql')
 
     graphqlapi.stop()
@@ -32,9 +32,9 @@ g.test_set_get_models_dir = function()
     package.path = helper.project_root.. '/test/models/suite1/?.lua;' .. package.path
     local httpd = http.new(HOST, PORT,{ log_requests = false })
     httpd:start()
-    graphqlapi.init(httpd, nil, nil, '../../test/models/suite1')
-    graphqlapi.set_models_dir('../../test/models/suite1')
-    t.assert_equals(graphqlapi.get_models_dir(), '../../test/models/suite1')
+    graphqlapi.init(httpd, nil, nil, 'test/models/suite1')
+    graphqlapi.set_models_dir('test/models/suite1')
+    t.assert_equals(graphqlapi.get_models_dir(), 'test/models/suite1')
     graphqlapi.stop()
     httpd:stop()
 end
@@ -43,7 +43,7 @@ g.test_set_get_endpoint = function()
     package.path = helper.project_root.. '/test/models/suite1/?.lua;' .. package.path
     local httpd = http.new(HOST, PORT,{ log_requests = false })
     httpd:start()
-    graphqlapi.init(httpd, nil, nil, '../../test/models/suite1')
+    graphqlapi.init(httpd, nil, nil, 'test/models/suite1')
     graphqlapi.set_endpoint(ENDPOINT)
     t.assert_equals(graphqlapi.get_endpoint(), 'graphql')
     graphqlapi.set_endpoint(ENDPOINT..'/')
@@ -56,7 +56,7 @@ g.test_reload = function()
     package.path = helper.project_root.. '/test/models/suite1/?.lua;' .. package.path
     local httpd = http.new(HOST, PORT,{ log_requests = false })
     httpd:start()
-    graphqlapi.init(httpd, nil, nil, '../../test/models/suite1')
+    graphqlapi.init(httpd, nil, nil, 'test/models/suite1')
 
     local check = function()
         operations.add_query({
@@ -104,7 +104,7 @@ g.test_custom_auth_middleware = function()
     package.path = helper.project_root.. '/test/models/suite1/?.lua;' .. package.path
     local httpd = http.new(HOST, PORT,{ log_requests = false })
     httpd:start()
-    graphqlapi.init(httpd, custom_middleware, nil, '../../test/models/suite1')
+    graphqlapi.init(httpd, custom_middleware, nil, 'test/models/suite1')
 
     local query = [[
         {
@@ -130,7 +130,7 @@ g.test_invalid_requests = function()
     package.path = helper.project_root.. '/test/models/suite1/?.lua;' .. package.path
     local httpd = http.new(HOST, PORT,{ log_requests = false })
     httpd:start()
-    graphqlapi.init(httpd, nil, nil, '../../test/models/suite1')
+    graphqlapi.init(httpd, nil, nil, 'test/models/suite1')
 
     -- check empty graphql query
     local query = ''
@@ -199,7 +199,7 @@ g.test_execute_graphql_data_and_or_errors = function()
     package.path = helper.project_root.. '/test/models/suite1/?.lua;' .. package.path
     local httpd = http.new(HOST, PORT,{ log_requests = false })
     httpd:start()
-    graphqlapi.init(httpd, nil, nil, '../../test/models/suite1')
+    graphqlapi.init(httpd, nil, nil, 'test/models/suite1')
 
     -- test return data without errors
     do

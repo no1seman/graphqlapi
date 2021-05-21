@@ -139,7 +139,7 @@ local function space_types()
                     decimal = 'decimal',
                     map = 'map',
                     array = 'array',
-                    scalar = 'scalar'
+                    scalar = 'scalar',
                 }
             }), 'SpaceFieldType')
         end
@@ -157,7 +157,7 @@ local function space_types()
                     vinyl = 'vinyl',
                     blackhole = 'blackhole',
                     sysview = 'sysview',
-                    service = 'service'
+                    service = 'service',
                 }
             }), 'SpaceEngine')
         end
@@ -174,7 +174,7 @@ local function space_types()
                     tree = 'TREE',
                     hash = 'HASH',
                     bitset = 'BITSET',
-                    rtree = 'RTREE'
+                    rtree = 'RTREE',
                 }
             }), 'SpaceIndexType')
         end
@@ -187,7 +187,7 @@ local function space_types()
             types.add(types.enum({
                 name = 'SpaceIndexDimension',
                 description = 'Space index dimension',
-                values = {euclid = 'euclid', manhattan = 'manhattan'}
+                values = {euclid = 'euclid', manhattan = 'manhattan'},
             }), 'SpaceIndexDimension')
         end
     else
@@ -202,7 +202,7 @@ local function space_types()
                 fields = {
                     name = types.string,
                     type = types.SpaceFieldType,
-                    is_nullable = types.boolean
+                    is_nullable = types.boolean,
                 }
             }), 'SpaceField')
         end
@@ -218,7 +218,7 @@ local function space_types()
                 fields = {
                     type = types.SpaceFieldType,
                     fieldno = types.int,
-                    is_nullable = types.boolean
+                    is_nullable = types.boolean,
                 }
             }), 'SpaceIndexPart')
         end
@@ -247,7 +247,7 @@ local function space_types()
                     run_count_per_level = types.int,
                     run_size_ratio = types.float,
                     bsize = types.long,
-                    len = types.long
+                    len = types.long,
                 }
             }), 'SpaceIndex')
         end
@@ -264,7 +264,7 @@ local function space_types()
                     name = types.string,
                     is_enabled = types.boolean,
                     space_id = types.int,
-                    expr = types.string
+                    expr = types.string,
                 }
             }), 'SpaceCkConstraint')
         end
@@ -307,7 +307,7 @@ local function space_types()
                 fields = {
                     name = types.string,
                     type = types.SpaceFieldType,
-                    is_nullable = types.boolean
+                    is_nullable = types.boolean,
                 }
             }), 'SpaceFieldInput')
         end
@@ -323,7 +323,7 @@ local function space_types()
                 fields = {
                     type = types.SpaceFieldInput,
                     fieldno = types.int,
-                    is_nullable = types.boolean
+                    is_nullable = types.boolean,
                 }
             }), 'SpaceIndexPartInput')
         end
@@ -349,7 +349,7 @@ local function space_types()
                 page_size = types.int,
                 range_size = types.int,
                 run_count_per_level = types.int,
-                run_size_ratio = types.float
+                run_size_ratio = types.float,
             }
         }), 'SpaceIndexInput')
         end
@@ -366,7 +366,7 @@ local function space_types()
                 name = types.string,
                 is_enabled = types.boolean,
                 space_id = types.int,
-                expr = types.string
+                expr = types.string,
             }
         }), 'SpaceCkConstraintInput')
         end
@@ -415,7 +415,7 @@ local function space_info_query()
             name = types.list(types.SpaceInfoNames)
         },
         kind = types.list(types.SpaceInfo),
-        callback = 'graphqlapi.spaceapi.space_info'
+        callback = 'graphqlapi.spaceapi.space_info',
     })
 end
 

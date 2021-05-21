@@ -15,4 +15,8 @@ g.test_vars = function()
     t.assert_equals(vars.test_nil, {})
     vars.test_nil = nil
     t.assert_equals(vars.test_nil, nil)
+
+    require('graphqlapi.vars').stop()
+    t.assert_equals(_G._graphqlapi_defaults, nil)
+    t.assert_equals(_G._graphqlapi_values, nil)
 end

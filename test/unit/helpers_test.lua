@@ -91,7 +91,7 @@ g.test_init_stop = function()
         'spaces.space_drop',
         'spaces.space_truncate',
         'spaces.space_update',
-        'spaces.space_create'
+        'spaces.space_create',
     }
 
     helpers.init()
@@ -200,6 +200,7 @@ g.test_space_drop = function()
     helpers.space_drop_init()
     t.assert_items_include(types.list_types(), types_list)
     t.assert_items_equals(operations.list_mutations(), mutations_list)
+
     helpers.space_drop_remove()
     assert_types_absent(types_list)
     assert_mutations_absent(mutations_list)

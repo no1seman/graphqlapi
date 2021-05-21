@@ -5,9 +5,6 @@ require('strict').on()
 local log = require('log')
 local errors = require('errors')
 local cartridge = require('cartridge')
-local fio = require('fio')
-
-package.path =  fio.pathjoin(fio.dirname(debug.sourcedir()), '/../?.lua;').. package.path
 
 package.preload['app.roles.api'] = function()
     local function init(opts) -- luacheck: no unused args

@@ -13,20 +13,19 @@ local g = t.group('spaceapi')
 
 local helper = require('test.helper')
 
-g.before_each = function()
+g.before_each(function()
     local cluster_config = table.deepcopy(helper.cluster_config)
     g.cluster = helper.Cluster:new(cluster_config)
     g.cluster:start()
-end
+end)
 
-g.after_each = function()
+g.after_each(function()
     g.cluster:stop()
     fio.rmtree(g.cluster.datadir)
     g.cluster = nil
-end
+end)
 
 g.test_space_info = function()
-    g.before_each()
     local router = g.cluster:server('router')
     local space_info, space_info_err
 
@@ -105,11 +104,9 @@ g.test_space_info = function()
         t.assert_items_equals(space_info, helper.sample_data(1))
         t.assert_str_contains(space_info_err[1].str, 'Connection refused')
     end
-    g.after_each()
 end
 
 g.test_space_drop = function()
-    g.before_each()
     local router = g.cluster:server('router')
     local space_drop, space_drop_err
 
@@ -159,11 +156,9 @@ g.test_space_drop = function()
         t.assert_equals(space_drop, true)
         t.assert_str_contains(space_drop_err[1].str, 'Connection refused')
     end
-    g.after_each()
 end
 
 g.test_space_truncate = function()
-    g.before_each()
     local router = g.cluster:server('router')
     local space_truncate, space_truncate_err
 
@@ -244,7 +239,6 @@ g.test_space_truncate = function()
         t.assert_items_equals(space_truncate, { truncated_bsize = 147472, truncated_len = 1, name = "entity" })
         t.assert_str_contains(space_truncate_err[1].str, 'Connection refused')
     end
-    g.after_each()
 end
 
 g.test_space_create = function()

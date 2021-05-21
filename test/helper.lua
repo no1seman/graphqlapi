@@ -351,7 +351,7 @@ end
 t.before_suite(function()
     fio.rmtree(helper.datadir)
     fio.mktree(helper.datadir)
-    box.cfg({work_dir = helper.datadir})
+    box.cfg({memtx_dir = helper.datadir, wal_dir = helper.datadir})
 end)
 
 return helper

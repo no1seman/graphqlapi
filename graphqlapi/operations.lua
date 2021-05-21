@@ -118,7 +118,7 @@ local function add_query(opts)
     if opts.prefix then
         local obj = vars.queries[opts.prefix]
         if obj == nil then
-            error('No such callback prefix ' .. opts.prefix, 0)
+            error('No such query prefix ' .. opts.prefix, 0)
         end
 
         local oldkind = obj.kind

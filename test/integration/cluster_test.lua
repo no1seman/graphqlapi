@@ -4,17 +4,17 @@ local g = t.group('cluster')
 
 local helper = require('test.helper')
 
-g.before_all = function()
+g.before_each(function()
     local cluster_config = table.deepcopy(helper.cluster_config)
     g.cluster = helper.Cluster:new(cluster_config)
     g.cluster:start()
-end
+end)
 
-g.after_all = function()
+g.after_each(function()
     g.cluster:stop()
     fio.rmtree(g.cluster.datadir)
     g.cluster = nil
-end
+end)
 
 local function find_by_alias(servers, alias)
     for _, server in pairs(servers) do
@@ -26,10 +26,7 @@ end
 
 g.test_get_servers = function()
     local router = g.cluster:server('router')
-    local servers = helper.run_remotely(
-        router,
-        function() return require('graphqlapi.cluster').get_servers() end
-    )
+    local servers = router.net_box:eval("return require('graphqlapi.cluster').get_servers()")
 
     t.assert_equals(#servers, #g.cluster.servers)
     for _, server in pairs(servers) do
@@ -37,14 +34,15 @@ g.test_get_servers = function()
         t.assert_equals(server.replicaset_uuid, instance.replicaset_uuid)
         t.assert_equals(tostring(server.conn.host)..':'..tostring(server.conn.port), instance.net_box_uri)
     end
+
+    g.cluster:server('storage-1-master'):stop()
+    local _, errors = router.net_box:eval("return require('graphqlapi.cluster').get_servers()")
+    t.assert_str_contains(errors[1].str, 'instance \'storage-1-master\' error')
 end
 
 g.test_get_masters = function()
     local router = g.cluster:server('router')
-    local servers = helper.run_remotely(
-        router,
-        function() return require('graphqlapi.cluster').get_masters() end
-    )
+    local servers = router.net_box:eval("return require('graphqlapi.cluster').get_masters()")
 
     t.assert_equals(#servers, 3)
     -- check router
@@ -71,10 +69,7 @@ end
 
 g.test_get_storages_masters = function()
     local router = g.cluster:server('router')
-    local servers = helper.run_remotely(
-        router,
-        function() return require('graphqlapi.cluster').get_storages_masters() end
-    )
+    local servers = router.net_box:eval("return require('graphqlapi.cluster').get_storages_masters()")
     t.assert_equals(#servers, 2)
 
     -- check storage-1-master
@@ -96,9 +91,6 @@ end
 
 g.test_get_self_alias = function()
     local router = g.cluster:server('router')
-    local alias = helper.run_remotely(
-        router,
-        function() return require('graphqlapi.cluster').get_self_alias() end
-    )
+    local alias = router.net_box:eval("return require('graphqlapi.cluster').get_self_alias()")
     t.assert_equals(alias, 'router')
 end
