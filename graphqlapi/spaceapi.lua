@@ -1,5 +1,4 @@
 local checks = require('checks')
-local ddl = require('ddl')
 local errors = require('errors')
 local fiber = require('fiber')
 local json = require('json')
@@ -11,7 +10,7 @@ local NET_BOX_CONNECTION_TIMEOUT = 1
 local e_space_api = errors.new_class('spaceAPI error', { capture_stack = false })
 
 local function check_spaces(spaces)
-    local schema = ddl.get_schema()
+    local schema = cluster.get_schema()
 
     local router_spaces = {}
     for space in pairs(schema.spaces) do
@@ -200,7 +199,7 @@ local function space_info(_, args)
 end
 
 local function check_space(space)
-    local schema = ddl.get_schema()
+    local schema = cluster.get_schema()
 
     local router_spaces = {}
     for _space in pairs(schema.spaces) do

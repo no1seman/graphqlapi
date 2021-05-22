@@ -1,8 +1,8 @@
 local checks = require('checks')
-local ddl = require('ddl')
 
-local types = require('graphqlapi.types')
+local cluster = require('graphqlapi.cluster')
 local funcall = require('graphqlapi.funcall')
+local types = require('graphqlapi.types')
 local utils = require('graphqlapi.utils')
 local vars = require('graphqlapi.vars').new('graphqlapi.operations')
 
@@ -22,11 +22,6 @@ end
 
 local function reset_invalid()
     vars.schema_invalid = false
-end
-
-local function is_space_exists(space)
-    local ddl_schema = ddl.get_schema()
-    return ddl_schema.spaces[space] or false
 end
 
 local function funcall_wrap(fun_name, operation, field_name)
@@ -255,7 +250,7 @@ local function add_space_query(opts)
         callback = 'string',
     })
 
-    if not is_space_exists(opts.space) then
+    if not cluster.is_space_exists(opts.space) then
         error(string.format("space '%s' doesn't exists", opts.space))
     end
 
@@ -297,7 +292,7 @@ local function add_space_mutation(opts)
         callback = 'string',
     })
 
-    if not is_space_exists(opts.space) then
+    if not cluster.is_space_exists(opts.space) then
         error(string.format("space '%s' doesn't exists", opts.space))
     end
 

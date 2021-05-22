@@ -1,6 +1,7 @@
 local argparse = require('cartridge.argparse')
 local cartridge = require('cartridge')
 local checks = require('checks')
+local ddl = require('ddl')
 local errors = require('errors')
 local pool = require('cartridge.pool')
 local vshard = require('vshard')
@@ -66,9 +67,29 @@ local function get_self_alias()
     return parse.instance_name or parse.alias or box.info.uuid
 end
 
+local function get_existing_spaces()
+    local spaces = {}
+    local schema = ddl.get_schema()
+    for space in pairs(schema.spaces) do
+        spaces[space]=space
+    end
+    return spaces
+end
+
+local function is_space_exists(space)
+    return ddl.get_schema().spaces[space] ~= nil
+end
+
+local function get_schema()
+    return ddl.get_schema()
+end
+
 return {
     get_servers = get_servers,
     get_masters = get_masters,
     get_storages_masters = get_storages_masters,
     get_self_alias = get_self_alias,
+    get_existing_spaces = get_existing_spaces,
+    is_space_exists = is_space_exists,
+    get_schema = get_schema,
 }

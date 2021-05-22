@@ -1,10 +1,10 @@
 local checks = require('checks')
 local errors = require('errors')
-local ddl = require('ddl')
 local log = require('log')
 
 local types = require('graphql.types')
 
+local cluster = require('graphqlapi.cluster')
 local utils = require('graphqlapi.utils')
 local vars = require('graphqlapi.vars').new('graphqlapi.types')
 
@@ -144,17 +144,12 @@ types.mapper = {
     ['uuid'] = types.id, -- OK
 }
 
-local function is_space_exists(space)
-    local ddl_schema = ddl.get_schema()
-    return ddl_schema.spaces[space] or false
-end
-
 local function space_fields(space)
-    local ddl_schema = ddl.get_schema()
+    local schema = cluster.get_schema()
 
-    if not ddl_schema.spaces[space] then return nil end
+    if not schema.spaces[space] then return nil end
     local fields = {}
-    for _, field in ipairs(ddl_schema.spaces[space].format) do
+    for _, field in ipairs(schema.spaces[space].format) do
         if field.is_nullable then
             fields[field.name] = types.mapper[field.type]
         else
@@ -231,7 +226,7 @@ types.add_space_object = function(opts)
         fields = '?table',
     })
 
-    if not is_space_exists(opts.space) then
+    if not cluster.is_space_exists(opts.space) then
         return nil, nil, e_graphqlapi:new(string.format("space '%s' doesn't exists", opts.space))
     end
 
@@ -253,7 +248,7 @@ types.add_space_input_object = function(opts)
         fields = '?table',
     })
 
-    if not is_space_exists(opts.space) then
+    if not cluster.is_space_exists(opts.space) then
         return nil, nil, e_graphqlapi:new(string.format("space '%s' doesn't exists", opts.space))
     end
 

@@ -1,7 +1,7 @@
 local checks = require('checks')
+local cluster = require('graphqlapi.cluster')
 local operations = require('graphqlapi.operations')
 local types = require('graphqlapi.types')
-local ddl = require('ddl')
 local utils = require('graphqlapi.utils')
 
 require('graphqlapi.spaceapi')
@@ -391,15 +391,6 @@ local function space_types()
     end
 end
 
-local function existing_spaces()
-    local spaces = {}
-    local schema = ddl.get_schema()
-    for space in pairs(schema.spaces) do
-        spaces[space]=space
-    end
-    return spaces
-end
-
 -- space_info section
 local function space_info_query_remove()
     operations.remove_query('space_info')
@@ -424,7 +415,7 @@ local function space_info_list_remove()
 end
 
 local function space_info_list()
-    local existing = existing_spaces()
+    local existing = cluster.get_existing_spaces()
 
     local list_spaces = {}
     for _, space in pairs(existing) do
@@ -495,7 +486,7 @@ local function space_drop_list_remove()
 end
 
 local function space_drop_list()
-    local existing = existing_spaces()
+    local existing = cluster.get_existing_spaces()
 
     local list_spaces = {}
     for _, space in pairs(existing) do
@@ -567,7 +558,7 @@ local function space_truncate_list_remove()
 end
 
 local function space_truncate_list()
-    local existing = existing_spaces()
+    local existing = cluster.get_existing_spaces()
 
     local list_spaces = {}
     for _, space in pairs(existing) do
@@ -650,7 +641,7 @@ local function space_update_list_remove()
 end
 
 local function space_update_list()
-    local existing = existing_spaces()
+    local existing = cluster.get_existing_spaces()
 
     local list_spaces = {}
     for _, space in pairs(existing) do
