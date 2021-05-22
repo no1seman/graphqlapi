@@ -112,7 +112,6 @@ local function load_models(dir_name)
 end
 
 local function apply_model(model)
-
     local _, err = e_model_execute:pcall(model.model)
     if err ~= nil then
         log.error("GraphQLAPI model '%s' not applied: %s", model.filename or 'unknown', err)

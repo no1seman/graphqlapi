@@ -1,17 +1,18 @@
-# Module **graphqlapi** methods
+# Module **graphqlapi** functions
 
-- [Module **graphqlapi** methods](#module-graphqlapi-methods)
-  - [init](#init)
-  - [stop](#stop)
-  - [reload](#reload)
-  - [set models dir](#set-models-dir)
-  - [get models dir](#get-models-dir)
-  - [set endpoint](#set-endpoint)
-  - [get endpoint](#get-endpoint)
-  - [VERSION](#version)
+- [Module **graphqlapi** functions](#module-graphqlapi-functions)
+  - [Lua API](#lua-api)
+    - [init()](#init)
+    - [stop()](#stop)
+    - [reload()](#reload)
+    - [set_models_dir()](#set_models_dir)
+    - [get_models_dir()](#get_models_dir)
+    - [set_endpoint()](#set_endpoint)
+    - [get_endpoint()](#get_endpoint)
+    - [VERSION](#version)
 
 
-`graphqlapi.lua` - is a common module which provides general methods to init/stop/reload module and also for setting/getting http-endpoint and for setting/getting GraphQLAPI models dir path.
+`graphqlapi.lua` - is a common module which provides general functions to init/stop/reload module and also for setting/getting http-endpoint and for setting/getting GraphQLAPI models dir path.
 
 It can be loadded by the following code:
 
@@ -26,9 +27,11 @@ If module runs in Tarantool Cartridge Application Role you can also use the foll
     local graphqlapi = cartridge.service_get('cartridge')
 ```
 
-## init
+## Lua API
 
-`init(httpd, middleware, endpoint, models_dir, opts)` - used to initialize GraphQLAPI module,
+### init()
+
+`init(httpd, middleware, endpoint, models_dir, opts)` - function is used to initialize GraphQLAPI module,
 
 where:
 
@@ -60,21 +63,21 @@ Example:
     graphqlapi.init(httpd, nil, ENDPOINT, '../example/models')
 ```
 
-## stop
+### stop()
 
-`stop()` - used to deinit GraphQL API module, remove all used variables, cleanup cache and destroy http-endpoint.
+`stop()` - function is used to deinit GraphQL API module, remove all used variables, cleanup cache and destroy http-endpoint.
 
-## reload
+### reload()
 
-`reload()` - used to reload all models from disk. Usually used to load new models, that must be places to the same models_dir.
+`reload()` - function is used to reload all models from disk. Usually used to load new models, that may be placed to the same models_dir.
 
-## set models dir
+### set_models_dir()
 
-`set_models_dir(models_dir)` - method is used to get GraphQL API models dir path, 
+`set_models_dir(models_dir)` - function is used to get GraphQL API models dir path, 
 
 where:
 
-* `models_dir` (`string`) - path to GraphQL API models. Base path - is the path to root dir of the application.
+* `models_dir` (`string`) - mandatory, path to GraphQL API models. Base path - is the path to root dir of the application, but absolute path is also possible.
 
 Example:
 
@@ -83,9 +86,9 @@ Example:
     graphqlapi.set_models_dir('models')
 ```
 
-## get models dir
+### get_models_dir()
 
-`get_models_dir()` - method is used to get GraphQL API models dir path, 
+`get_models_dir()` - function is used to get GraphQL API models dir path, 
 
 Returns `models_dir` (`string`) - path to GraphQL API models.
 
@@ -98,13 +101,13 @@ Example:
     log.info('GraphQL API models dir path: %s', models_dir)
 ```
 
-## set endpoint
+### set_endpoint()
 
-`set_endpoint(endpoint)` - method is used to set endpoint in runtime.
+`set_endpoint(endpoint)` - function is used to set endpoint in runtime.
 
 where:
 
-* `endpoint` (`string`) - URI-endpoint of GraphQL API. Parameter is mandatory.
+* `endpoint` (`string`) - mandatory, URI-endpoint of GraphQL API.
 
 Example:
 
@@ -114,9 +117,9 @@ Example:
     graphqlapi.set_endpoint(endpoint)
 ```
 
-## get endpoint
+### get_endpoint()
 
-`get_endpoint()` - method is used to get endpoint.
+`get_endpoint()` - function is used to get endpoint.
 
 Returns:
 
@@ -131,7 +134,7 @@ Example:
     log.info('GraphQL API endpoint: %s', graphqlapi_endpoint)
 ```
 
-## VERSION
+### VERSION
 
 GraphQLAPI module and Tarantool Cartridge role has `VERSION` constant to determine which version is installed.
 

@@ -8,7 +8,7 @@ description = {
     summary     = "GraphQL API backend module for Tarantool and Tarantool Cartridge",
     homepage    = 'https://github.com/no1seman/graphqlapi',
     license     = 'BSD',
-    maintainer  = "Yaroslav Shumakov <noiseman2000@gmail.com>";
+    maintainer  = "Yaroslav Shumakov <noiseman2000@mail.ru>";
 }
 dependencies = {
     'lua >= 5.1',

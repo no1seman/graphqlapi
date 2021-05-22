@@ -1,31 +1,51 @@
-# Module **types** methods
+# Submodule **types** methods
 
-## double
+- [Submodule **types** methods](#submodule-types-methods)
+  - [Lua API](#lua-api)
+    - [double](#double)
+    - [map](#map)
+    - [inputMap](#inputmap)
+    - [inputUnion](#inputunion)
+    - [mapper](#mapper)
+    - [add](#add)
+    - [is_invalid](#is_invalid)
+    - [reset_invalid](#reset_invalid)
+    - [remove](#remove)
+    - [remove_recursive](#remove_recursive)
+    - [remove_types_by_space_name](#remove_types_by_space_name)
+    - [remove_all](#remove_all)
+    - [add_space_object](#add_space_object)
+    - [add_space_input_object](#add_space_input_object)
+    - [list_types](#list_types)
 
-## map
+## Lua API
 
-## inputMap
+### double
 
-## inputUnion
+### map
 
-## mapper
+### inputMap
 
-## add
+### inputUnion
 
-## is_invalid
+### mapper
 
-## reset_invalid
+### add
 
-## remove
+### is_invalid
 
-## remove_recursive
+### reset_invalid
 
-## remove_types_by_space_name
+### remove
 
-## remove_all
+### remove_recursive
 
-## add_space_object
+### remove_types_by_space_name
 
-## add_space_input_object
+### remove_all
 
-## list_types
+### add_space_object
+
+### add_space_input_object
+
+### list_types
