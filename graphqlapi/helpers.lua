@@ -84,8 +84,8 @@ local log = require('log')
 local function operations_prefixes()
     if vars.helpers.info.enabled then
         if not vars.prefix.queries then
-            log.info('add_query_prefix')
-            operations.add_query_prefix('spaces', 'Spaces queries')
+            log.info('add_queries_prefix')
+            operations.add_queries_prefix('spaces', 'Spaces queries')
             vars.prefix.queries = true
         end
     else
@@ -101,8 +101,8 @@ local function operations_prefixes()
        vars.helpers.update.enabled or
        vars.helpers.create.enabled then
         if not vars.prefix.mutations then
-            log.info('add_mutation_prefix')
-            operations.add_mutation_prefix('spaces', 'Spaces mutations')
+            log.info('add_mutations_prefix')
+            operations.add_mutations_prefix('spaces', 'Spaces mutations')
             vars.prefix.mutations = true
         end
     else

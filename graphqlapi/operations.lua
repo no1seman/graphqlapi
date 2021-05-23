@@ -42,7 +42,7 @@ local function funcall_wrap(fun_name, operation, field_name)
     end
 end
 
-local function add_query_prefix(prefix, doc)
+local function add_queries_prefix(prefix, doc)
     checks("string", "?string")
 
     local kind = types.object{
@@ -71,7 +71,7 @@ local function remove_query_prefix(prefix)
     end
 end
 
-local function add_mutation_prefix(prefix, doc)
+local function add_mutations_prefix(prefix, doc)
     checks("string", "?string")
 
     local kind = types.object({
@@ -244,9 +244,10 @@ local function add_space_query(opts)
         space = 'string',
         fields = '?table',
         prefix = '?string',
-        query_name = '?string',
+        name = '?string',
         doc = '?string',
         args = '?table',
+        kind = '?boolean',
         callback = 'string',
     })
 
@@ -263,18 +264,18 @@ local function add_space_query(opts)
 
     add_query({
         prefix = opts.prefix,
-        name = opts.query_name or opts.space,
+        name = opts.name or opts.space,
         doc = opts.doc,
         args = opts.args,
-        kind = types.list(space_query_type),
+        kind = opts.kind or space_query_type and types.list(space_query_type),
         callback = opts.callback,
     })
 
     local query_name
     if opts.prefix and opts.prefix ~= '' then
-        query_name = opts.prefix..'.' .. (opts.query_name or opts.space)
+        query_name = opts.prefix..'.' .. (opts.name or opts.space)
     else
-        query_name = (opts.query_name or opts.space)
+        query_name = (opts.name or opts.space)
     end
     vars.space_query[opts.space] = utils.merge_arrays(vars.space_query[opts.space] or {}, {query_name})
 end
@@ -286,9 +287,10 @@ local function add_space_mutation(opts)
         space = 'string',
         fields = '?table',
         prefix = '?string',
-        mutation_name = '?string',
+        name = '?string',
         doc = '?string',
         args = '?table',
+        kind = '?boolean',
         callback = 'string',
     })
 
@@ -305,18 +307,18 @@ local function add_space_mutation(opts)
 
     add_mutation({
         prefix = opts.prefix,
-        name = opts.mutation_name or opts.space,
+        name = opts.name or opts.space,
         doc = opts.doc,
         args = opts.args,
-        kind = types.list(space_mutation_type),
+        kind = opts.kind or space_mutation_type and types.list(space_mutation_type),
         callback = opts.callback,
     })
 
     local mutation_name
     if opts.prefix and opts.prefix ~= '' then
-        mutation_name = opts.prefix..'.' .. (opts.mutation_name or opts.space)
+        mutation_name = opts.prefix..'.' .. (opts.name or opts.space)
     else
-        mutation_name = (opts.mutation_name or opts.space)
+        mutation_name = (opts.name or opts.space)
     end
     vars.space_mutation[opts.space] = utils.merge_arrays(vars.space_mutation[opts.space] or {}, {mutation_name})
 end
@@ -423,11 +425,11 @@ return {
     get_mutations = get_mutations,
 
     -- Queries prefixes
-    add_query_prefix = add_query_prefix,
+    add_queries_prefix = add_queries_prefix,
     remove_query_prefix = remove_query_prefix,
 
     -- Mutations prefixes
-    add_mutation_prefix = add_mutation_prefix,
+    add_mutations_prefix = add_mutations_prefix,
     remove_mutation_prefix = remove_mutation_prefix,
 
     -- Callbacks

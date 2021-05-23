@@ -45,7 +45,7 @@ g.test_add_remove_query = function()
 end
 
 g.test_add_remove_query_with_prefix = function()
-    operations.add_query_prefix('test', 'Simple prefix test')
+    operations.add_queries_prefix('test', 'Simple prefix test')
 
     t.assert_items_equals(operations.get_queries()['test'].resolve(), {})
 
@@ -152,7 +152,7 @@ g.test_add_remove_mutation = function()
 end
 
 g.test_add_remove_mutation_with_prefix = function()
-    operations.add_mutation_prefix('test', 'Simple prefix test')
+    operations.add_mutations_prefix('test', 'Simple prefix test')
 
     t.assert_equals(type(operations.get_mutations()['test']), 'table')
     t.assert_equals(operations.get_mutations()['test'].description, 'Simple prefix test')
@@ -358,7 +358,7 @@ g.test_add_space_query = function()
 
     -- test add_space_query() with prefix
     space = test_helper.create_space()
-    operations.add_query_prefix('test', 'Simple prefix test')
+    operations.add_queries_prefix('test', 'Simple prefix test')
 
     operations.add_space_query({
         prefix = 'test',
@@ -432,7 +432,7 @@ g.test_add_space_mutation = function()
 
     -- test add_space_mutation() with prefix
     space = test_helper.create_space()
-    operations.add_mutation_prefix('test', 'Simple prefix test')
+    operations.add_mutations_prefix('test', 'Simple prefix test')
     operations.add_space_mutation({
         prefix = 'test',
         space = 'entity',
