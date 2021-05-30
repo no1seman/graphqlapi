@@ -12,7 +12,7 @@
     - [VERSION](#version)
 
 
-`graphqlapi.lua` - is a common module which provides general functions to init/stop/reload module and also for setting/getting http-endpoint and for setting/getting GraphQLAPI models dir path.
+Submodule `graphqlapi.lua` is a common module which provides general functions to init/stop/reload module and also for setting/getting http-endpoint and for setting/getting GraphQLAPI models dir path.
 
 It can be loadded by the following code:
 
@@ -31,7 +31,7 @@ If module runs in Tarantool Cartridge Application Role you can also use the foll
 
 ### init()
 
-`init(httpd, middleware, endpoint, models_dir, opts)` - function is used to initialize GraphQLAPI module,
+`graphqlapi.init(httpd, middleware, endpoint, models_dir, opts)` - function is used to initialize GraphQLAPI module,
 
 where:
 
@@ -65,15 +65,15 @@ Example:
 
 ### stop()
 
-`stop()` - function is used to deinit GraphQL API module, remove all used variables, cleanup cache and destroy http-endpoint.
+`graphqlapi.stop()` - function is used to deinit GraphQL API module, remove all used variables, cleanup cache and destroy http-endpoint.
 
 ### reload()
 
-`reload()` - function is used to reload all models from disk. Usually used to load new models, that may be placed to the same models_dir.
+`graphqlapi.reload()` - function is used to reload all models from disk. Usually used to load new models, that may be placed to the same models_dir.
 
 ### set_models_dir()
 
-`set_models_dir(models_dir)` - function is used to get GraphQL API models dir path, 
+`graphqlapi.set_models_dir(models_dir)` - function is used to get GraphQL API models dir path, 
 
 where:
 
@@ -88,7 +88,7 @@ Example:
 
 ### get_models_dir()
 
-`get_models_dir()` - function is used to get GraphQL API models dir path, 
+`graphqlapi.get_models_dir()` - function is used to get GraphQL API models dir path, 
 
 Returns `models_dir` (`string`) - path to GraphQL API models.
 
@@ -103,7 +103,7 @@ Example:
 
 ### set_endpoint()
 
-`set_endpoint(endpoint)` - function is used to set endpoint in runtime.
+`graphqlapi.set_endpoint(endpoint)` - function is used to set endpoint in runtime.
 
 where:
 
@@ -119,7 +119,7 @@ Example:
 
 ### get_endpoint()
 
-`get_endpoint()` - function is used to get endpoint.
+`graphqlapi.get_endpoint()` - function is used to get endpoint.
 
 Returns:
 

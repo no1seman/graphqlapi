@@ -18,39 +18,40 @@
     - [list_mutations()](#list_mutations)
     - [add_space_query()](#add_space_query)
     - [add_space_mutation()](#add_space_mutation)
-    - [remove_operations_by_space_name](#remove_operations_by_space_name)
-    - [on_resolve](#on_resolve)
+    - [remove_operations_by_space_name()](#remove_operations_by_space_name)
+    - [on_resolve()](#on_resolve)
+    - [remove_on_resolve_triggers()](#remove_on_resolve_triggers)
 
-
+Submodule `operations.lua` - is a part of GraphQL API module provided functions to add/remove queries, mutations and it's prefixes as well as subsidiary functions to deal with GraphQL operations.
 ## Lua API
 
 ### stop()
 
-`stop()` - function to deinit `operations` submodule, it removes all queries, mutations and cleanup all internal module variables including trigger function that controls any space format changes. This behavior is needed to make possible hot-reload of all GraphQL API operations.
+`operations.stop()` - function to deinit `operations` submodule, it removes all queries, mutations and cleanup all internal module variables including trigger function that controls any space format changes. This behavior is needed to make possible hot-reload of all GraphQL API operations.
 
 ### remove_all()
 
-`remove_all()` - function to remove all queries, mutations and cleanup all internal module variables. Unlike `stop()` `remove_all()` doesn't remove space trigger function.
+`operations.remove_all()` - function to remove all queries, mutations and cleanup all internal module variables. Unlike `stop()` `remove_all()` doesn't remove space trigger function.
 
 ### get_queries()
 
-`get_queries()` - function to get all GraphQL API schema registered queries,
+`operations.get_queries()` - function to get all GraphQL API schema registered queries,
 
 returns:
 
-* `queries` (`table`) - map with all registered queries.
+* `queries` (`table`) - map with all registered queries. If query is prefixed it will be returned in the following format: "prefix.query_name".
 
 ### get_mutations()
 
-`get_mutations()` - function to get all GraphQL API schema registered mutations,
+`operations.get_mutations()` - function to get all GraphQL API schema registered mutations,
 
 returns:
 
-* `mutations` (`table`) - map with all GraphQL API schema registered mutations.
+* `mutations` (`table`) - map with all GraphQL API schema registered mutations. If mutation is prefixed it will be returned in the following format: "prefix.mutation_name".
 
 ### add_queries_prefix()
 
-`add_queries_prefix(prefix, doc)` - function to add queries prefix,
+`operations.add_queries_prefix(prefix, doc)` - function to add queries prefix,
 
 where:
 
@@ -67,7 +68,7 @@ Example:
 
 ### remove_query_prefix()
 
-`remove_query_prefix(prefix)` - function to remove queries prefix and all the underlying queries,
+`operations.remove_query_prefix(prefix)` - function to remove queries prefix and all the underlying queries,
 
 * `prefix` (`string`) - mandatory, queries prefix name to be removed.
 
@@ -79,7 +80,7 @@ Example:
 
 ### add_mutations_prefix()
 
-`add_mutations_prefix(prefix, doc)` - function to add mutations prefix,
+`operations.add_mutations_prefix(prefix, doc)` - function to add mutations prefix,
 
 where:
 
@@ -96,7 +97,7 @@ Example:
 
 ### remove_mutation_prefix()
 
-`add_mutations_prefix(prefix)` - function to remove mutations prefix and all the underlying queries,
+`operations.add_mutations_prefix(prefix)` - function to remove mutations prefix and all the underlying queries,
 
 * `prefix` (`string`) - mandatory, mutations prefix name to be removed.
 
@@ -108,7 +109,7 @@ Example:
 
 ### add_query()
 
-`add_query(opts)` - function to add GraphQL query, 
+`operations.add_query(opts)` - function to add GraphQL query, 
 
 where:
 
@@ -137,7 +138,7 @@ Example:
 
 ### remove_query()
 
-`remove_query(name, prefix)` - function is used to remove GraphQL query,
+`operations.remove_query(name, prefix)` - function is used to remove GraphQL query,
 
 where:
 
@@ -153,7 +154,7 @@ Example:
 
 ### list_queries()
 
-`list_queries()` - function is used to get list of registered queries,
+`operations.list_queries()` - function is used to get list of registered queries,
 
 returns: 
 
@@ -161,7 +162,7 @@ returns:
 
 ### add_mutation()
 
-`add_mutation(opts)` - function to add GraphQL mutation, 
+`operations.add_mutation(opts)` - function to add GraphQL mutation, 
 
 where:
 
@@ -191,7 +192,7 @@ Example:
 
 ### remove_mutation()
 
-`remove_mutation(name, prefix)` - function is used to remove GraphQL mutation,
+`operations.remove_mutation(name, prefix)` - function is used to remove GraphQL mutation,
 
 where:
 
@@ -207,7 +208,7 @@ Example:
 
 ### list_mutations()
 
-`list_mutations()` - function is used to get list of registered mutations,
+`operations.list_mutations()` - function is used to get list of registered mutations,
 
 returns: 
 
@@ -215,7 +216,7 @@ returns:
 
 ### add_space_query()
 
-`add_space_query(opts)` - function to add GraphQL space object type and space query based on provided space format. Query and related space GraphQL type (representation) can be flexibly configured by add_space_query() options,
+`operations.add_space_query(opts)` - function to add GraphQL space object type and space query based on provided space format. Query and related space GraphQL type (representation) can be flexibly configured by add_space_query() options,
 
 where:
 
@@ -223,7 +224,7 @@ where:
   * `type_name` (`string`) - optional, GraphQL type name related to specified space, if not provided space query related GraphQL type will be named exactly equal to space name;
   * `description` (`string`) - optional, any arbitrary text that describes space GraphQL type;
   * `space` (`string`) - mandatory, name of existing space;
-  * `fields` (`string`) - optional, table with list of space GraphQL type. It's possible to add any additional fields to query results that can be returned by callback function, as well as remove any unneeded space fields from query result. For example, if space has `bucket_id` field and request must not return this field then that field may be removed by the following: 
+  * `fields` (`string`) - optional, table with list of space GraphQL type. It's possible to add any additional fields to query results that can be returned by callback function, as well as remove any unneeded space fields from query result. For example, if space has `bucket_id` field and request must not return this field then that field may be removed by the following trick: 
   ```lua
     ...
     fields = { bucket_id = box.NULL }
@@ -267,7 +268,7 @@ Example:
 
 ### add_space_mutation()
 
-`add_space_mutation(opts)` - function to add GraphQL space object type and space mutation based on provided space format. Mutation and related space GraphQL type (representation) can be flexibly configured by add_space_mutation() options,
+`operations.add_space_mutation(opts)` - function to add GraphQL space object type and space mutation based on provided space format. Mutation and related space GraphQL type (representation) can be flexibly configured by add_space_mutation() options,
 
 where:
 
@@ -275,7 +276,7 @@ where:
   * `type_name` (`string`) - optional, GraphQL type name related to specified space, if not provided space mutation related GraphQL type will be named exactly equal to space name;
   * `description` (`string`) - optional, any arbitrary text that describes space GraphQL type;
   * `space` (`string`) - mandatory, name of existing space;
-  * `fields` (`string`) - optional, table with list of space GraphQL type. It's possible to add any additional fields to mutation results that can be returned by callback function, as well as remove any unneeded space fields from mutation result. For example, if space has `bucket_id` field and request must not return this field then that field may be removed by the following: 
+  * `fields` (`string`) - optional, table with list of space GraphQL type fields. It's possible to add any additional fields to mutation results that can be returned by callback function, as well as remove any unneeded space fields from mutation result. For example, if space has `bucket_id` field and request must not return this field then that field may be removed by the following trick: 
   ```lua
     ...
     fields = { bucket_id = box.NULL }
@@ -317,7 +318,64 @@ Example:
     })
 ```
 
-### remove_operations_by_space_name
+### remove_operations_by_space_name()
 
+`operations.remove_operations_by_space_name(space_name)` - function to remove GraphQL queries and mutations related to the space previously added by `add_space_query()` and `add_space_mutation()`,
 
-### on_resolve
+where:
+
+* `space_name` (`string`) - mandatory, name of existing space;
+
+### on_resolve()
+
+`operations.on_resolve(trigger_new, trigger_old)` - function to set or remove special triggers that will called on every GraphQL resolve. Trigger can help to solve the following cases:
+
+- log requests and it's arguments;
+- make some custom filtration of quests and its arguments;
+- deny of executing some requests if it's needed;
+
+where:
+
+* `trigger_new` (`function`) - optional, new function to be added to triggers chain set;
+* `trigger_old` (`function`) - optional, old function to be added to triggers chain set.
+
+Note: As both two arguments `on_resolve()` is optional, but one of them must be present to apply any changes (see examples below).
+
+Trigger function `trigger(operation_type, operation_name)` has two arguments:
+
+* `operation_type` (`string`) - can contain the following values: `query` or `mutation`
+* `operation_name` (`string`) - contains 
+
+and may return two values:
+
+* `ok` (`boolean`) - trigger status can return:
+  - nil or true - request will continue to execute as usual;
+  - false - request execution will be interrupted and will be return an error (second return value);
+* `err` (`any`) - an error object or any type that can be encoded to json to be able to return in http response.
+
+Example:
+
+```lua
+    local function log_request(operation_type, operation_name)
+        log.info("GraphQL %s: %s", operation_type, operation_name)
+    end
+
+    local function deny_mutations(operation_type, operation_name)
+        if operation_type:upper() == 'MUTATION' then
+          log.info("GraphQL %s: %s", operation_type, operation_name)
+          return false, errors.new('GraphQLAPIError', "Mutations temporarily prohibited")
+        end
+    end
+
+    -- set triggers
+    operations.on_resolve(log_request) -- start logging GraphQL requests
+    operations.on_resolve(deny_mutations) -- deny GraphQL mutation requests
+
+    -- remove one of the triggers
+    operations.on_resolve(nil, deny_mutations) -- remove deny GraphQL mutation requests trigger
+
+```
+
+### remove_on_resolve_triggers()
+
+`operations.remove_on_resolve_triggers()` - function to remove all GraphQL API triggers at once.

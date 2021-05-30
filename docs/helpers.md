@@ -16,13 +16,13 @@
     - [space_create_init()](#space_create_init)
     - [space_create_remove()](#space_create_remove)
 
-Module `helpers.lua` is used to flexibly add types, queries and mutations to GraphQL schema for all common operations with spaces and data: info, drop, truncate, create, update.
+Submodule `helpers.lua` is a part of GraphQL API module used to flexibly add types, queries and mutations to GraphQL schema for all common operations with spaces and data: info, drop, truncate, create, update.
 
 ## Lua API
 
 ### init()
 
-`init(opts)` - function is used to add all desired types, queries and mutations to GraphQL schema to make it possible to use these queries and mutations using GraphQL requests.
+`helpers.init(opts)` - function is used to add all desired types, queries and mutations to GraphQL schema to make it possible to use these queries and mutations using GraphQL requests.
 
 where:
 
@@ -77,15 +77,15 @@ helpers.init(helpers_opts)
 
 ### stop()
 
-`stop()` - function is used to deinit helpers, remove all types, queries and mutations from GraphQL schema created by functions of this particular module.
+`helpers.stop()` - function is used to deinit helpers, remove all types, queries and mutations from GraphQL schema created by functions of this particular module.
 
 ### update_lists()
 
-`update_lists()` - function is used to update space lists enums. Generally this function is called by internal purposes when database schema changes to apply these changes to GraphQL schema. It can be called from user routines to force update space lists enums for info, drop, truncate, create, update operations.
+`helpers.update_lists()` - function is used to update space lists enums. Generally this function is called by internal purposes when database schema changes to apply these changes to GraphQL schema. It can be called from user routines to force update space lists enums for info, drop, truncate, create, update operations.
 
 ### space_info_init()
 
-`space_info_init(include, exclude)` - function is used to add all desired types and space_info query to GraphQL schema to make it possible to request space_info with use of GraphQL requests,
+`helpers.space_info_init(include, exclude)` - function is used to add all desired types and space_info query to GraphQL schema to make it possible to request space_info with use of GraphQL requests,
 
 where:
 
@@ -101,11 +101,11 @@ helpers.space_info_init({'space_to_include'}, {'space_to_exclude'})
 
 ### space_info_remove()
 
-`space_info_remove()` - function is used to remove space_info helpers: all types and queries from GraphQL schema created by `helpers.space_info_init()` or `helpers.init()` functions.
+`helpers.space_info_remove()` - function is used to remove space_info helpers: all types and queries from GraphQL schema created by `helpers.space_info_init()` or `helpers.init()` functions.
 
 ### space_drop_init()
 
-`space_drop_init(include, exclude)` - function is used to add all desired types and space_drop mutation to GraphQL schema to make it possible to request space_drop with use of GraphQL requests,
+`helpers.space_drop_init(include, exclude)` - function is used to add all desired types and space_drop mutation to GraphQL schema to make it possible to request space_drop with use of GraphQL requests,
 
 where:
 
@@ -121,11 +121,11 @@ helpers.space_drop_init({'space_to_include'}, {'space_to_exclude'})
 
 ### space_drop_remove()
 
-`space_drop_remove()` - function is used to remove space_drop helpers: all types and queries from GraphQL schema created by `helpers.space_drop_init()` or `helpers.init()` functions.
+`helpers.space_drop_remove()` - function is used to remove space_drop helpers: all types and queries from GraphQL schema created by `helpers.space_drop_init()` or `helpers.init()` functions.
 
 ### space_truncate_init()
 
-`space_truncate_init(include, exclude)` - function is used to add all desired types and space_truncate mutation to GraphQL schema to make it possible to request space_truncate with use of GraphQL requests,
+`helpers.space_truncate_init(include, exclude)` - function is used to add all desired types and space_truncate mutation to GraphQL schema to make it possible to request space_truncate with use of GraphQL requests,
 
 where:
 
@@ -141,11 +141,11 @@ helpers.space_truncate_init({'space_to_include'}, {'space_to_exclude'})
 
 ### space_truncate_remove()
 
-`space_truncate_remove()` - function is used to remove space_truncate helpers: all types and queries from GraphQL schema created by `helpers.space_truncate_init()` or `helpers.init()` functions.
+`helpers.space_truncate_remove()` - function is used to remove space_truncate helpers: all types and queries from GraphQL schema created by `helpers.space_truncate_init()` or `helpers.init()` functions.
 
 ### space_update_init()
 
-`space_update_init(include, exclude)` - function is used to add all desired types and space_update mutation to GraphQL schema to make it possible to request space_update with use of GraphQL requests,
+`helpers.space_update_init(include, exclude)` - function is used to add all desired types and space_update mutation to GraphQL schema to make it possible to request space_update with use of GraphQL requests,
 
 where:
 
@@ -161,11 +161,11 @@ helpers.space_truncate_init({'space_to_include'}, {'space_to_exclude'})
 
 ### space_update_remove()
 
-`space_update_remove()` - function is used to remove space_update helpers: all types and queries from GraphQL schema created by `helpers.space_update_init()` or `helpers.init()` functions.
+`helpers.space_update_remove()` - function is used to remove space_update helpers: all types and queries from GraphQL schema created by `helpers.space_update_init()` or `helpers.init()` functions.
 
 ### space_create_init()
 
-`space_create_init(include, exclude)` - function is used to add all desired types and space_create mutation to GraphQL schema to make it possible to request space_create with use of GraphQL requests,
+`helpers.space_create_init(include, exclude)` - function is used to add all desired types and space_create mutation to GraphQL schema to make it possible to request space_create with use of GraphQL requests,
 
 where:
 
@@ -181,4 +181,4 @@ helpers.space_create_init({'space_to_include'}, {'space_to_exclude'})
 
 ### space_create_remove()
 
-`space_create_remove()` - function is used to remove space_create helpers: all types and queries from GraphQL schema created by `helpers.space_create_init()` or `helpers.init()` functions.
+`helpers.space_create_remove()` - function is used to remove space_create helpers: all types and queries from GraphQL schema created by `helpers.space_create_init()` or `helpers.init()` functions.

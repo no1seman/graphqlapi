@@ -352,12 +352,16 @@ local function list_mutations()
     return mutations
 end
 
+local function remove_on_resolve_triggers()
+    vars.on_resolve_triggers = nil
+end
+
 local function stop()
     vars.queries = nil
     vars.mutations = nil
     vars.space_query = nil
     vars.space_mutation = nil
-    vars.on_resolve_triggers = nil
+    remove_on_resolve_triggers()
     vars.schema_invalid = nil
 end
 
@@ -453,4 +457,5 @@ return {
 
     -- Resolve trigger
     on_resolve = on_resolve,
+    remove_on_resolve_triggers = remove_on_resolve_triggers,
 }

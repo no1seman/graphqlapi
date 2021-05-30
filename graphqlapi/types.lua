@@ -67,66 +67,25 @@ types.double = types.scalar({
     end,
 })
 
-function types.map(config)
-    local instance = {
-      __type = 'Scalar',
-      subtype = 'Map',
-      name = config.name,
-      description = 'Map is a dictionary with string keys and values of ' ..
-        'arbitrary but same among all values type',
-      serialize = function(value) return value end,
-      parseValue = function(value) return value end,
-      parseLiteral = function(_)
-        error('Literal parsing is implemented in util.coerceValue; ' ..
-          'we should not go here')
-      end,
-      values = config.values,
-    }
+-- function types.map(config)
+--     local instance = {
+--       __type = 'Scalar',
+--       name = config.name,
+--       description = 'Map is a dictionary with string keys and values of ' ..
+--         'arbitrary but same among all values type',
+--       serialize = function(value) return value end,
+--       parseValue = function(value) return value end,
+--       parseLiteral = function(_)
+--         error('Literal parsing is implemented in util.coerceValue; ' ..
+--           'we should not go here')
+--       end,
+--       values = config.values,
+--     }
 
-    instance.nonNull = types.nonNull(instance)
+--     instance.nonNull = types.nonNull(instance)
 
-    return instance
-end
-
-function types.inputMap(config)
-    local instance = {
-      __type = 'Scalar',
-      subtype = 'InputMap',
-      name = config.name,
-      serialize = function(value) return value end,
-      parseValue = function(value) return value end,
-      parseLiteral = function(_)
-        error('Literal parsing is implemented in util.coerceValue; ' ..
-          'we should not go here')
-      end,
-      values = config.values,
-    }
-
-    instance.nonNull = types.nonNull(instance)
-
-    return instance
-  end
-
-function types.inputUnion(config)
-    local instance = {
-        __type = 'Scalar',
-        subtype = 'InputUnion',
-        name = config.name,
-        types = config.types,
-        serialize = function(value) return value end,
-        parseValue = function(value) return value end,
-        parseLiteral = function(_)
-        error('Literal parsing is implemented in util.coerceValue; ' ..
-            'we should not go here')
-        end,
-        resolveType = config.resolveType,
-        resolveNodeType = config.resolveNodeType,
-    }
-
-    instance.nonNull = types.nonNull(instance)
-
-    return instance
-end
+--     return instance
+-- end
 
 types.mapper = {
     ['unsigned'] = types.long, -- OK
@@ -137,7 +96,7 @@ types.mapper = {
     ['boolean'] = types.boolean, -- OK
     ['varbinary'] = types.bare, -- ???
     ['array'] = types.list, -- OK
-    ['map'] = types.map, -- ???
+    ['map'] = types.bare, -- ???
     ['any'] = types.scalar, -- ???
     ['decimal'] = types.long, -- OK
     ['double'] = types.double, -- OK
