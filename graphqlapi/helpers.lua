@@ -79,18 +79,14 @@ vars:new('helpers',{
     },
 })
 
-local log = require('log')
-
 local function operations_prefixes()
     if vars.helpers.info.enabled then
         if not vars.prefix.queries then
-            log.info('add_queries_prefix')
-            operations.add_queries_prefix('spaces', 'Spaces queries')
+            operations.add_queries_prefix('spaces', nil, 'Spaces queries')
             vars.prefix.queries = true
         end
     else
         if vars.prefix.queries then
-            log.info('remove_query_prefix')
             operations.remove_query_prefix('spaces')
             vars.prefix.queries = false
         end
@@ -101,13 +97,11 @@ local function operations_prefixes()
        vars.helpers.update.enabled or
        vars.helpers.create.enabled then
         if not vars.prefix.mutations then
-            log.info('add_mutations_prefix')
-            operations.add_mutations_prefix('spaces', 'Spaces mutations')
+            operations.add_mutations_prefix('spaces', nil, 'Spaces mutations')
             vars.prefix.mutations = true
         end
     else
         if vars.prefix.mutations then
-            log.info('remove_mutation_prefix')
             operations.remove_mutation_prefix('spaces')
             vars.prefix.mutations = false
         end
@@ -278,8 +272,8 @@ local function space_types()
                 name = 'SpaceInfo',
                 description = 'Space info',
                 fields = {
-                    format = types.list(types.SpaceField),
-                    id = types.int,
+                    format = types.list(types.SpaceField).nonNull,
+                    id = types.int.nonNull,
                     name = types.string,
                     engine = types.SpaceEngine,
                     field_count = types.int,

@@ -36,7 +36,7 @@ local spaces = require('graphqlapi.spaces')
 local types = require('graphqlapi.types')
 local vars = require('graphqlapi.vars').new('graphqlapi.graphql')
 
-vars:new('graphql_schema', nil)
+vars:new('graphql_schema', {})
 vars:new('model', {})
 vars:new('models_dir', nil)
 vars:new('endpoint', nil)
@@ -48,24 +48,32 @@ local e_graphql_parse = errors.new_class('GraphQL parsing failed')
 local e_graphql_validate = errors.new_class('GraphQL validation failed')
 local e_graphql_execute = errors.new_class('GraphQL execution failed')
 
-local function get_schema()
-    if types.is_invalid() or operations.is_invalid() then
+local function get_schema(schema_name)
+    checks("?string")
+
+    if schema_name == nil then
+        schema_name = 'default'
+    end
+
+    vars.graphql_schema[schema_name] = vars.graphql_schema[schema_name] or {}
+
+    if types.is_invalid() or operations.is_invalid(schema_name) then
         vars.graphql_schema = nil
         types.reset_invalid()
         operations.reset_invalid()
     end
-    if vars.graphql_schema ~= nil then
-        return vars.graphql_schema
+
+    if vars.graphql_schema[schema_name] ~= nil then
+        return vars.graphql_schema[schema_name]
     end
 
     local queries = {}
-
-    for name, fun in pairs(operations.get_queries()) do
+    for name, fun in pairs(operations.get_queries(schema_name)) do
         queries[name] = fun
     end
 
     local mutations = {}
-    for name, fun in pairs(operations.get_mutations()) do
+    for name, fun in pairs(operations.get_mutations(schema_name)) do
         mutations[name] = fun
     end
 
@@ -75,8 +83,8 @@ local function get_schema()
         root.mutation = types.object {name = 'Mutation', fields=mutations}
     end
 
-    vars.graphql_schema = schema.create(root)
-    return vars.graphql_schema
+    vars.graphql_schema[schema_name] = schema.create(root)
+    return vars.graphql_schema[schema_name]
 end
 
 local function http_finalize(obj, status)
@@ -113,6 +121,14 @@ local function _execute_graphql(req)
     end
 
     local body = req:read_cached()
+
+    local schema_name = 'default'
+
+    if req.headers.schema ~= nil and type(req.headers.schema) == 'string' and req.headers.schema then
+        schema_name = req.headers.schema:lower() or 'default'
+    end
+
+    log.info('Schema name: ' .. schema_name)
 
     if body == nil or body == '' then
         return http_finalize({
@@ -166,7 +182,7 @@ local function _execute_graphql(req)
         }, 400)
     end
 
-    local schema_obj = get_schema()
+    local schema_obj = get_schema(schema_name)
     err = select(2,e_graphql_validate:pcall(validate.validate, schema_obj, ast))
 
     if err then

@@ -80,6 +80,7 @@ g.test_reload = function()
         ]]
 
         local response = http_client:post(url, query)
+        print(response.body)
         t.assert_items_equals(json.decode(response.body), { data = { test_data = {some_data1 = 'some_data1'} }})
         t.assert_equals(response.status, 200)
     end

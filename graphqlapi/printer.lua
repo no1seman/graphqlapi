@@ -1,6 +1,7 @@
+local utils = require('cartridge.utils')
+
 local log = require('log')
 local json = require('json')
-local utils = require('cartridge.utils')
 
 local json_cfg = {
     encode_use_tostring = true,

@@ -15,7 +15,7 @@ g.after_each = function()
     operations.remove_all()
 end
 
-g.test_add_remove_query = function()
+g.test_add_remove_query_default = function()
     operations.add_query({
         name = 'entity',
         doc = 'Get entity',
@@ -44,8 +44,38 @@ g.test_add_remove_query = function()
     t.assert_equals(operations.is_invalid(), false)
 end
 
-g.test_add_remove_query_with_prefix = function()
-    operations.add_queries_prefix('test', 'Simple prefix test')
+g.test_add_remove_query = function()
+    operations.add_query({
+        schema = 'test_schema',
+        name = 'entity',
+        doc = 'Get entity',
+        args = {
+            entity_id = types.long
+        },
+        kind = types.string,
+        callback = 'models.entity.entity_get'
+    })
+
+    t.assert_equals(type(operations.get_queries('test_schema')['entity']), 'table')
+    t.assert_equals(operations.get_queries('test_schema')['entity'].description, 'Get entity')
+    t.assert_equals(operations.is_invalid('test_schema'), true)
+
+    operations.reset_invalid('test_schema')
+    t.assert_equals(operations.is_invalid('test_schema'), false)
+
+    t.assert_items_equals(operations.list_queries('test_schema'), {'entity'})
+
+    operations.remove_query('entity', 'test_schema')
+
+    t.assert_equals(operations.get_queries('test_schema')['entity'], nil)
+
+    t.assert_equals(operations.is_invalid('test_schema'), true)
+    operations.reset_invalid('test_schema')
+    t.assert_equals(operations.is_invalid('test_schema'), false)
+end
+
+g.test_add_remove_query_with_prefix_default = function()
+    operations.add_queries_prefix('test', nil ,'Simple prefix test')
 
     t.assert_items_equals(operations.get_queries()['test'].resolve(), {})
 
@@ -95,7 +125,7 @@ g.test_add_remove_query_with_prefix = function()
 
     t.assert_items_equals(operations.list_queries(), {'test.entity_1', 'test.entity_2'})
 
-    operations.remove_query('entity_1', 'test')
+    operations.remove_query('entity_1', nil ,'test')
     t.assert_equals(type(operations.get_queries()['test'].kind.fields['entity_2']), 'table')
     t.assert_equals(operations.get_queries()['test'].kind.fields['entity_2'].description, 'Get entity 2')
     t.assert_equals(operations.is_invalid(), true)
@@ -109,7 +139,7 @@ g.test_add_remove_query_with_prefix = function()
     t.assert_equals(operations.is_invalid(), false)
 
     t.assert_error_msg_content_equals(
-        'No such query prefix test1',
+        'No such query prefix "test1"',
         operations.add_query,
         {
             prefix = 'test1',
@@ -124,7 +154,90 @@ g.test_add_remove_query_with_prefix = function()
     )
 end
 
-g.test_add_remove_mutation = function()
+g.test_add_remove_query_with_prefix = function()
+    operations.add_queries_prefix('test', 'test_schema' ,'Simple prefix test')
+
+    t.assert_items_equals(operations.get_queries('test_schema')['test'].resolve(), {})
+
+    t.assert_equals(type(operations.get_queries('test_schema')['test']), 'table')
+    t.assert_equals(operations.get_queries('test_schema')['test'].description, 'Simple prefix test')
+    t.assert_equals(operations.is_invalid('test_schema'), true)
+
+    operations.reset_invalid('test_schema')
+    t.assert_equals(operations.is_invalid('test_schema'), false)
+
+    operations.add_query({
+        schema = 'test_schema',
+        prefix = 'test',
+        name = 'entity_1',
+        doc = 'Get entity 1',
+        args = {
+            entity_id = types.long
+        },
+        kind = types.string,
+        callback = 'models.entity.entity_1_get'
+    })
+
+    t.assert_equals(type(operations.get_queries('test_schema')['test'].kind.fields['entity_1']), 'table')
+    t.assert_equals(operations.get_queries('test_schema')['test'].kind.fields['entity_1'].description, 'Get entity 1')
+    t.assert_equals(operations.is_invalid('test_schema'), true)
+
+    operations.reset_invalid('test_schema')
+    t.assert_equals(operations.is_invalid('test_schema'), false)
+
+    operations.add_query({
+        schema = 'test_schema',
+        prefix = 'test',
+        name = 'entity_2',
+        doc = 'Get entity 2',
+        args = {
+            entity_id = types.long
+        },
+        kind = types.string,
+        callback = 'models.entity.entity_2_get',
+    })
+
+    t.assert_equals(type(operations.get_queries('test_schema')['test'].kind.fields['entity_1']), 'table')
+    t.assert_equals(operations.get_queries('test_schema')['test'].kind.fields['entity_1'].description, 'Get entity 1')
+    t.assert_equals(type(operations.get_queries('test_schema')['test'].kind.fields['entity_2']), 'table')
+    t.assert_equals(operations.get_queries('test_schema')['test'].kind.fields['entity_2'].description, 'Get entity 2')
+    t.assert_equals(operations.is_invalid('test_schema'), true)
+    operations.reset_invalid('test_schema')
+    t.assert_equals(operations.is_invalid('test_schema'), false)
+
+    t.assert_items_equals(operations.list_queries('test_schema'), {'test.entity_1', 'test.entity_2'})
+
+    operations.remove_query('entity_1', 'test_schema', 'test')
+    t.assert_equals(type(operations.get_queries('test_schema')['test'].kind.fields['entity_2']), 'table')
+    t.assert_equals(operations.get_queries('test_schema')['test'].kind.fields['entity_2'].description, 'Get entity 2')
+    t.assert_equals(operations.is_invalid('test_schema'), true)
+    operations.reset_invalid('test_schema')
+    t.assert_equals(operations.is_invalid('test_schema'), false)
+
+    operations.remove_query_prefix('test', 'test_schema')
+    t.assert_equals(operations.get_queries('test_schema')['test'], nil)
+    t.assert_equals(operations.is_invalid('test_schema'), true)
+    operations.reset_invalid('test_schema')
+    t.assert_equals(operations.is_invalid('test_schema'), false)
+
+    t.assert_error_msg_content_equals(
+        'No such query prefix "test1"',
+        operations.add_query,
+        {
+            schema = 'test_schema',
+            prefix = 'test1',
+            name = 'entity_2',
+            doc = 'Get entity 2',
+            args = {
+                entity_id = types.long
+            },
+            kind = types.string,
+            callback = 'models.entity.entity_2_get',
+        }
+    )
+end
+
+g.test_add_remove_mutation_default = function()
     operations.add_mutation({
         name = 'entity',
         doc = 'Mutate entity',
@@ -151,8 +264,36 @@ g.test_add_remove_mutation = function()
     t.assert_equals(operations.is_invalid(), false)
 end
 
-g.test_add_remove_mutation_with_prefix = function()
-    operations.add_mutations_prefix('test', 'Simple prefix test')
+g.test_add_remove_mutation = function()
+    operations.add_mutation({
+        schema = 'test_schema',
+        name = 'entity',
+        doc = 'Mutate entity',
+        args = {
+            name = types.long,
+        },
+        kind = types.string,
+        callback = 'models.entity.entity_set'
+    })
+    t.assert_equals(type(operations.get_mutations('test_schema')['entity']), 'table')
+    t.assert_equals(operations.get_mutations('test_schema')['entity'].description, 'Mutate entity')
+    t.assert_equals(operations.is_invalid('test_schema'), true)
+
+    operations.reset_invalid('test_schema')
+    t.assert_equals(operations.is_invalid('test_schema'), false)
+
+    t.assert_items_equals(operations.list_mutations('test_schema'), {'entity'})
+
+    operations.remove_mutation('entity', 'test_schema')
+    t.assert_equals(operations.get_mutations('test_schema')['entity'], nil)
+
+    t.assert_equals(operations.is_invalid('test_schema'), true)
+    operations.reset_invalid('test_schema')
+    t.assert_equals(operations.is_invalid('test_schema'), false)
+end
+
+g.test_add_remove_mutation_with_prefix_default = function()
+    operations.add_mutations_prefix('test', nil, 'Simple prefix test')
 
     t.assert_equals(type(operations.get_mutations()['test']), 'table')
     t.assert_equals(operations.get_mutations()['test'].description, 'Simple prefix test')
@@ -200,7 +341,7 @@ g.test_add_remove_mutation_with_prefix = function()
 
     t.assert_items_equals(operations.list_mutations(), {'test.entity_1', 'test.entity_2'})
 
-    operations.remove_mutation('entity_1', 'test')
+    operations.remove_mutation('entity_1', nil, 'test')
     t.assert_equals(type(operations.get_mutations()['test'].kind.fields['entity_2']), 'table')
     t.assert_equals(operations.get_mutations()['test'].kind.fields['entity_2'].description, 'Mutate entity 2')
     t.assert_equals(operations.is_invalid(), true)
@@ -215,9 +356,102 @@ g.test_add_remove_mutation_with_prefix = function()
 
 
     t.assert_error_msg_content_equals(
-        'No such mutation prefix test1',
+        'No such mutation prefix "test1"',
         operations.add_mutation,
         {
+            prefix = 'test1',
+            name = 'entity_2',
+            doc = 'Mutate entity 2',
+            args = {
+                name = types.long,
+            },
+            kind = types.string,
+            callback = 'models.entity.entity_2_set'
+        }
+    )
+end
+
+g.test_add_remove_mutation_with_prefix = function()
+    operations.add_mutations_prefix('test', 'test_schema', 'Simple prefix test')
+
+    t.assert_equals(type(operations.get_mutations('test_schema')['test']), 'table')
+    t.assert_equals(operations.get_mutations('test_schema')['test'].description, 'Simple prefix test')
+    t.assert_equals(operations.get_mutations('test_schema')['test'].resolve(), {})
+    t.assert_equals(operations.is_invalid('test_schema'), true)
+
+    operations.reset_invalid('test_schema')
+    t.assert_equals(operations.is_invalid('test_schema'), false)
+
+    operations.add_mutation({
+        schema = 'test_schema',
+        prefix = 'test',
+        name = 'entity_1',
+        doc = 'Mutate entity 1',
+        args = {
+            name = types.long,
+        },
+        kind = types.string,
+        callback = 'models.entity.entity_1_set'
+    })
+
+    t.assert_equals(type(operations.get_mutations('test_schema')['test'].kind.fields['entity_1']), 'table')
+    t.assert_equals(
+        operations.get_mutations('test_schema')['test'].kind.fields['entity_1'].description,
+        'Mutate entity 1'
+    )
+    t.assert_equals(operations.is_invalid('test_schema'), true)
+    operations.reset_invalid('test_schema')
+    t.assert_equals(operations.is_invalid('test_schema'), false)
+
+    operations.add_mutation({
+        schema = 'test_schema',
+        prefix = 'test',
+        name = 'entity_2',
+        doc = 'Mutate entity 2',
+        args = {
+            name = types.long,
+        },
+        kind = types.string,
+        callback = 'models.entity.entity_2_set'
+    })
+
+    t.assert_equals(type(operations.get_mutations('test_schema')['test'].kind.fields['entity_1']), 'table')
+    t.assert_equals(
+        operations.get_mutations('test_schema')['test'].kind.fields['entity_1'].description,
+        'Mutate entity 1'
+    )
+    t.assert_equals(type(operations.get_mutations('test_schema')['test'].kind.fields['entity_2']), 'table')
+    t.assert_equals(
+        operations.get_mutations('test_schema')['test'].kind.fields['entity_2'].description,
+        'Mutate entity 2'
+    )
+    t.assert_equals(operations.is_invalid('test_schema'), true)
+    operations.reset_invalid('test_schema')
+    t.assert_equals(operations.is_invalid('test_schema'), false)
+
+    t.assert_items_equals(operations.list_mutations('test_schema'), {'test.entity_1', 'test.entity_2'})
+
+    operations.remove_mutation('entity_1', 'test_schema', 'test')
+    t.assert_equals(type(operations.get_mutations('test_schema')['test'].kind.fields['entity_2']), 'table')
+    t.assert_equals(
+        operations.get_mutations('test_schema')['test'].kind.fields['entity_2'].description,
+        'Mutate entity 2'
+    )
+    t.assert_equals(operations.is_invalid('test_schema'), true)
+    operations.reset_invalid('test_schema')
+    t.assert_equals(operations.is_invalid('test_schema'), false)
+
+    operations.remove_mutation_prefix('test', 'test_schema')
+    t.assert_equals(operations.get_mutations('test_schema')['test'], nil)
+    t.assert_equals(operations.is_invalid('test_schema'), true)
+    operations.reset_invalid('test_schema')
+    t.assert_equals(operations.is_invalid('test_schema'), false)
+
+    t.assert_error_msg_content_equals(
+        'No such mutation prefix "test1"',
+        operations.add_mutation,
+        {
+            schema = 'test_schema',
             prefix = 'test1',
             name = 'entity_2',
             doc = 'Mutate entity 2',
@@ -358,7 +592,7 @@ g.test_add_space_query = function()
 
     -- test add_space_query() with prefix
     space = test_helper.create_space()
-    operations.add_queries_prefix('test', 'Simple prefix test')
+    operations.add_queries_prefix('test', nil, 'Simple prefix test')
 
     operations.add_space_query({
         prefix = 'test',
@@ -432,7 +666,7 @@ g.test_add_space_mutation = function()
 
     -- test add_space_mutation() with prefix
     space = test_helper.create_space()
-    operations.add_mutations_prefix('test', 'Simple prefix test')
+    operations.add_mutations_prefix('test', nil, 'Simple prefix test')
     operations.add_space_mutation({
         prefix = 'test',
         space = 'entity',

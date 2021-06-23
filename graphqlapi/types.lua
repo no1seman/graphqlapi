@@ -2,6 +2,15 @@ local checks = require('checks')
 local errors = require('errors')
 local log = require('log')
 
+-- local json = require('json')
+
+-- local json_cfg = {
+--     encode_use_tostring = true,
+--     encode_deep_as_nil = true,
+--     encode_max_depth = 10,
+--     encode_invalid_as_nil = true,
+-- }
+
 local types = require('graphql.types')
 
 local cluster = require('graphqlapi.cluster')
@@ -109,10 +118,24 @@ local function space_fields(space)
     if not schema.spaces[space] then return nil end
     local fields = {}
     for _, field in ipairs(schema.spaces[space].format) do
-        if field.is_nullable then
-            fields[field.name] = types.mapper[field.type]
+        if field.comment ~= nil and field.comment ~= '' then
+            if field.is_nullable then
+                fields[field.name] = {
+                    kind = types.mapper[field.type],
+                    description = field.comment,
+                }
+            else
+                fields[field.name] = {
+                    kind = types.mapper[field.type].nonNull,
+                    description = field.comment,
+                }
+            end
         else
-            fields[field.name] = types.mapper[field.type].nonNull
+            if field.is_nullable then
+                fields[field.name] = types.mapper[field.type]
+            else
+                fields[field.name] = types.mapper[field.type].nonNull
+            end
         end
     end
     return fields

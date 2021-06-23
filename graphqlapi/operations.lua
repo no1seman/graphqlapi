@@ -6,22 +6,44 @@ local types = require('graphqlapi.types')
 local utils = require('graphqlapi.utils')
 local vars = require('graphqlapi.vars').new('graphqlapi.operations')
 
+-- local log = require('log')
+-- local json = require('json')
+
+-- local json_cfg = {
+--     encode_use_tostring = true,
+--     encode_deep_as_nil = true,
+--     encode_max_depth = 10,
+--     encode_invalid_as_nil = true,
+-- }
+
 vars:new('queries', {})
 vars:new('mutations', {})
 vars:new('on_resolve_triggers', {})
-vars:new('schema_invalid', nil)
+vars:new('schema_invalid', {})
 vars:new('space_query', {})
 vars:new('space_mutation', {})
 
 local QUERY_PREFIX = 'api_'
 local MUTATION_PREFIX = 'mutation_api_'
 
-local function is_invalid()
-    return vars.schema_invalid
+local function is_invalid(schema_name)
+    checks('?string')
+
+    if schema_name == nil then
+        schema_name = 'default'
+    end
+
+    return vars.schema_invalid[schema_name]
 end
 
-local function reset_invalid()
-    vars.schema_invalid = false
+local function reset_invalid(schema_name)
+    checks('?string')
+
+    if schema_name == nil then
+        schema_name = 'default'
+    end
+
+    vars.schema_invalid[schema_name] = false
 end
 
 local function funcall_wrap(fun_name, operation, field_name)
@@ -42,8 +64,14 @@ local function funcall_wrap(fun_name, operation, field_name)
     end
 end
 
-local function add_queries_prefix(prefix, doc)
-    checks("string", "?string")
+local function add_queries_prefix(prefix, schema_name, doc)
+    checks("string", "?string", "?string")
+
+    if schema_name == nil then
+        schema_name = 'default'
+    end
+
+    vars.queries[schema_name] = vars.queries[schema_name] or {}
 
     local kind = types.object{
         name = QUERY_PREFIX..prefix,
@@ -58,21 +86,33 @@ local function add_queries_prefix(prefix, doc)
         end,
         description = doc,
     }
-    vars.queries[prefix] = obj
-    vars.schema_invalid = true
+    vars.queries[schema_name][prefix] = obj
+    vars.schema_invalid[schema_name] = true
     return obj
 end
 
-local function remove_query_prefix(prefix)
-    checks('string')
+local function remove_query_prefix(prefix, schema_name)
+    checks('string', '?string')
+
+    if schema_name == nil then
+        schema_name = 'default'
+    end
+
     if vars.queries ~= nil and type(vars.queries) == 'table' then
-        vars.queries[prefix] = nil
-        vars.schema_invalid = true
+        vars.queries[schema_name] = vars.queries[schema_name] or {}
+        vars.queries[schema_name][prefix] = nil
+        vars.schema_invalid[schema_name] = true
     end
 end
 
-local function add_mutations_prefix(prefix, doc)
-    checks("string", "?string")
+local function add_mutations_prefix(prefix, schema_name, doc)
+    checks("string", "?string", "?string")
+
+    if schema_name == nil then
+        schema_name = 'default'
+    end
+
+    vars.mutations[schema_name] = vars.mutations[schema_name] or {}
 
     local kind = types.object({
         name = MUTATION_PREFIX..prefix,
@@ -87,21 +127,28 @@ local function add_mutations_prefix(prefix, doc)
         end,
         description = doc,
     }
-    vars.mutations[prefix] = obj
-    vars.schema_invalid = true
+    vars.mutations[schema_name][prefix] = obj
+    vars.schema_invalid[schema_name] = true
     return obj
 end
 
-local function remove_mutation_prefix(prefix)
-    checks('string')
-    if vars.mutations then
-        vars.mutations[prefix] = nil
-        vars.schema_invalid = true
+local function remove_mutation_prefix(prefix, schema_name)
+    checks('string', '?string')
+
+    if schema_name == nil then
+        schema_name = 'default'
+    end
+
+    if vars.mutations ~= nil and type(vars.mutations) == 'table' then
+        vars.mutations[schema_name] = vars.mutations[schema_name] or {}
+        vars.mutations[schema_name][prefix] = nil
+        vars.schema_invalid[schema_name] = true
     end
 end
 
 local function add_query(opts)
     checks({
+        schema = '?string',
         prefix = '?string',
         name = 'string',
         doc = '?string',
@@ -110,10 +157,17 @@ local function add_query(opts)
         callback = 'string',
     })
 
+    if opts.schema == nil then
+        opts.schema = 'default'
+    end
+
+    vars.queries[opts.schema] = vars.queries[opts.schema] or {}
+
     if opts.prefix then
-        local obj = vars.queries[opts.prefix]
+        local obj = vars.queries[opts.schema][opts.prefix]
+        print(obj)
         if obj == nil then
-            error('No such query prefix ' .. opts.prefix, 0)
+            error('No such query prefix "' .. opts.prefix..'"', 0)
         end
 
         local oldkind = obj.kind
@@ -132,7 +186,7 @@ local function add_query(opts)
             description = oldkind.description,
         }
     else
-        vars.queries[opts.name] = {
+        vars.queries[opts.schema][opts.name] = {
             kind = opts.kind,
             arguments = opts.args,
             resolve = funcall_wrap(opts.callback,
@@ -141,17 +195,24 @@ local function add_query(opts)
             description = opts.doc,
         }
     end
-    vars.schema_invalid = true
+    vars.schema_invalid[opts.schema] = true
 end
 
-local function remove_query(name, prefix)
-    checks('string', '?string')
-    if prefix == nil then
-        vars.queries[name] = nil
-    else
-        vars.queries[prefix].kind.fields[name] = nil
+local function remove_query(name, schema_name, prefix)
+    checks('string', '?string', '?string')
+
+    if schema_name == nil then
+        schema_name = 'default'
     end
-    vars.schema_invalid = true
+
+    vars.queries[schema_name] = vars.queries[schema_name] or {}
+
+    if prefix == nil then
+        vars.queries[schema_name][name] = nil
+    else
+        vars.queries[schema_name][prefix].kind.fields[name] = nil
+    end
+    vars.schema_invalid[schema_name] = true
 end
 
 local function is_query_prefix(query)
@@ -169,11 +230,20 @@ local function is_query_prefix(query)
     end
 end
 
-local function list_queries()
+local function list_queries(schema_name)
+    checks('?string')
+
     local queries = {}
-    for query in pairs(vars.queries) do
-        if is_query_prefix(vars.queries[query]) then
-            for prefixed_query in pairs(vars.queries[query].kind.fields) do
+
+    if schema_name == nil then
+        schema_name = 'default'
+    end
+
+    vars.queries[schema_name] = vars.queries[schema_name] or {}
+
+    for query in pairs(vars.queries[schema_name]) do
+        if is_query_prefix(vars.queries[schema_name][query]) then
+            for prefixed_query in pairs(vars.queries[schema_name][query].kind.fields) do
                 table.insert(queries, tostring(query)..'.'..tostring(prefixed_query))
             end
         else
@@ -185,6 +255,7 @@ end
 
 local function add_mutation(opts)
     checks({
+        schema = '?string',
         prefix = '?string',
         name = 'string',
         doc = '?string',
@@ -193,10 +264,16 @@ local function add_mutation(opts)
         callback = 'string',
     })
 
+    if opts.schema == nil then
+        opts.schema = 'default'
+    end
+
+    vars.mutations[opts.schema] = vars.mutations[opts.schema] or {}
+
     if opts.prefix then
-        local obj = vars.mutations[opts.prefix]
+        local obj = vars.mutations[opts.schema][opts.prefix]
         if obj == nil then
-            error('No such mutation prefix ' .. opts.prefix, 0)
+            error('No such mutation prefix "' .. opts.prefix..'"', 0)
         end
 
         local oldkind = obj.kind
@@ -215,7 +292,7 @@ local function add_mutation(opts)
             description = oldkind.description,
         }
     else
-        vars.mutations[opts.name] = {
+        vars.mutations[opts.schema][opts.name] = {
             kind = opts.kind,
             arguments = opts.args,
             resolve = funcall_wrap(opts.callback,
@@ -224,21 +301,29 @@ local function add_mutation(opts)
             description = opts.doc,
         }
     end
-    vars.schema_invalid = true
+    vars.schema_invalid[opts.schema] = true
 end
 
-local function remove_mutation(name, prefix)
-    checks('string', '?string')
-    if prefix == nil then
-        vars.mutations[name] = nil
-    else
-        vars.mutations[prefix].kind.fields[name] = nil
+local function remove_mutation(name, schema_name, prefix)
+    checks('string', '?string', '?string')
+
+    if schema_name == nil then
+        schema_name = 'default'
     end
-    vars.schema_invalid = true
+
+    vars.mutations[schema_name] = vars.mutations[schema_name] or {}
+
+    if prefix == nil then
+        vars.mutations[schema_name][name] = nil
+    else
+        vars.mutations[schema_name][prefix].kind.fields[name] = nil
+    end
+    vars.schema_invalid[schema_name] = true
 end
 
 local function add_space_query(opts)
     checks({
+        schema = '?string',
         type_name = '?string',
         description = '?string',
         space = 'string',
@@ -250,6 +335,12 @@ local function add_space_query(opts)
         kind = '?boolean',
         callback = 'string',
     })
+
+    if opts.schema == nil then
+        opts.schema = 'default'
+    end
+
+    vars.queries[opts.schema] = vars.queries[opts.schema] or {}
 
     if not cluster.is_space_exists(opts.space) then
         error(string.format("space '%s' doesn't exists", opts.space))
@@ -263,6 +354,7 @@ local function add_space_query(opts)
     })
 
     add_query({
+        schema = opts.schema,
         prefix = opts.prefix,
         name = opts.name or opts.space,
         doc = opts.doc,
@@ -282,6 +374,7 @@ end
 
 local function add_space_mutation(opts)
     checks({
+        schema = '?string',
         type_name = '?string',
         description = '?string',
         space = 'string',
@@ -306,6 +399,7 @@ local function add_space_mutation(opts)
     })
 
     add_mutation({
+        schema = opts.schema,
         prefix = opts.prefix,
         name = opts.name or opts.space,
         doc = opts.doc,
@@ -338,11 +432,20 @@ local function is_mutation_prefix(mutation)
     end
 end
 
-local function list_mutations()
+local function list_mutations(schema_name)
+    checks('?string')
+
     local mutations = {}
-    for mutation in pairs(vars.mutations) do
-        if is_mutation_prefix(vars.mutations[mutation]) then
-            for prefixed_mutation in pairs(vars.mutations[mutation].kind.fields) do
+
+    if schema_name == nil then
+        schema_name = 'default'
+    end
+
+    vars.mutations[schema_name] = vars.mutations[schema_name] or {}
+
+    for mutation in pairs(vars.mutations[schema_name]) do
+        if is_mutation_prefix(vars.mutations[schema_name][mutation]) then
+            for prefixed_mutation in pairs(vars.mutations[schema_name][mutation].kind.fields) do
                 table.insert(mutations, tostring(mutation)..'.'..tostring(prefixed_mutation))
             end
         else
@@ -365,12 +468,18 @@ local function stop()
     vars.schema_invalid = nil
 end
 
-local function remove_all()
-    vars.queries = nil
-    vars.mutations = nil
+local function remove_all(schema_name)
+    checks('?string')
+
+    if schema_name == nil then
+        schema_name = 'default'
+    end
+
+    vars.queries[schema_name] = {}
+    vars.mutations[schema_name] = {}
     vars.space_query = nil
     vars.space_mutation = nil
-    vars.schema_invalid = true
+    vars.schema_invalid[schema_name] = true
 end
 
 local function remove_operations_by_space_name(space_name)
@@ -380,7 +489,7 @@ local function remove_operations_by_space_name(space_name)
         for _, query_name in pairs(query_list) do
             local parts = query_name:split('.')
             if #parts == 2 then
-                remove_query(parts[2], parts[1])
+                remove_query(parts[2], nil, parts[1])
             else
                 remove_query(query_name)
             end
@@ -394,7 +503,7 @@ local function remove_operations_by_space_name(space_name)
         for _, mutation_name in pairs(mutation_list) do
             local parts = mutation_name:split('.')
             if #parts == 2 then
-                remove_mutation(parts[2], parts[1])
+                remove_mutation(parts[2], nil, parts[1])
             else
                 remove_mutation(mutation_name)
             end
@@ -414,12 +523,24 @@ local function on_resolve(trigger_new, trigger_old)
     return trigger_new
 end
 
-local function get_queries()
-    return vars.queries
+local function get_queries(schema_name)
+    checks('?string')
+
+    if schema_name == nil then
+        schema_name = 'default'
+    end
+
+    return vars.queries[schema_name] or {}
 end
 
-local function get_mutations()
-    return vars.mutations
+local function get_mutations(schema_name)
+    checks('?string')
+
+    if schema_name == nil then
+        schema_name = 'default'
+    end
+
+    return vars.mutations[schema_name] or {}
 end
 
 return {
