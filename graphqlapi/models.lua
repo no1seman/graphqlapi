@@ -10,9 +10,9 @@ vars:new('models', {})
 vars:new('loaded', {})
 vars:new('dir_name', nil)
 
-local e_model_load = errors.new_class('GraphQLAPI model load failed', { capture_stack = false })
-local e_model_assert = errors.new_class('GraphQLAPI model check failed', { capture_stack = false })
-local e_model_execute = errors.new_class('GraphQLAPI model execute failed', { capture_stack = false })
+local e_model_load = errors.new_class('GraphQLAPI model load failed', { capture_stack = true })
+local e_model_assert = errors.new_class('GraphQLAPI model check failed', { capture_stack = true })
+local e_model_execute = errors.new_class('GraphQLAPI model execute failed', { capture_stack = true })
 
 local function list_modules()
     local list = {}

@@ -1,6 +1,13 @@
 local log = require('log')
 local json = require('json')
 
+-- local json_cfg = {
+--     encode_use_tostring = true,
+--     encode_deep_as_nil = true,
+--     encode_max_depth = 3,
+--     encode_invalid_as_nil = true,
+-- }
+
 local fio = require('fio')
 local checks = require('checks')
 local errors = require('errors')
@@ -49,18 +56,18 @@ local e_graphql_validate = errors.new_class('GraphQL validation failed')
 local e_graphql_execute = errors.new_class('GraphQL execution failed')
 
 local function get_schema(schema_name)
-    checks("?string")
+    checks('?string')
 
-    if schema_name == nil then
-        schema_name = 'default'
+    if schema_name == nil or schema_name:lower() == 'default' then
+        schema_name = '__global__'
+    else
+        schema_name = schema_name:lower()
     end
 
-    vars.graphql_schema[schema_name] = vars.graphql_schema[schema_name] or {}
-
-    if types.is_invalid() or operations.is_invalid(schema_name) then
+    if types.is_invalid(schema_name) or operations.is_invalid(schema_name) then
         vars.graphql_schema = nil
-        types.reset_invalid()
-        operations.reset_invalid()
+        types.reset_invalid(schema_name)
+        operations.reset_invalid(schema_name)
     end
 
     if vars.graphql_schema[schema_name] ~= nil then
@@ -77,13 +84,16 @@ local function get_schema(schema_name)
         mutations[name] = fun
     end
 
-    local root = {query = types.object {name = 'Query', fields=queries}}
+    local root = {
+        query = types.object {name = 'Query', fields=queries},
+    }
 
     if next(mutations) then
         root.mutation = types.object {name = 'Mutation', fields=mutations}
     end
 
-    vars.graphql_schema[schema_name] = schema.create(root)
+    vars.graphql_schema[schema_name] = schema.create(root, schema_name)
+
     return vars.graphql_schema[schema_name]
 end
 
@@ -124,11 +134,11 @@ local function _execute_graphql(req)
 
     local schema_name = 'default'
 
-    if req.headers.schema ~= nil and type(req.headers.schema) == 'string' and req.headers.schema then
-        schema_name = req.headers.schema:lower() or 'default'
+    if req.headers.schema ~= nil and type(req.headers.schema) == 'string' then
+        schema_name = req.headers.schema:lower()
     end
 
-    log.info('Schema name: ' .. schema_name)
+    log.info('_execute_graphql> schema_name: '..schema_name)
 
     if body == nil or body == '' then
         return http_finalize({
@@ -143,13 +153,13 @@ local function _execute_graphql(req)
         }, 400)
     end
 
-    if parsed.query == nil or type(parsed.query) ~= "string" then
+    if parsed.query == nil or type(parsed.query) ~= 'string' then
         return http_finalize({
             errors = {{message = "Body should have 'query' field"}},
         }, 400)
     end
 
-    if parsed.operationName ~= nil and type(parsed.operationName) ~= "string" then
+    if parsed.operationName ~= nil and type(parsed.operationName) ~= 'string' then
         return http_finalize({
             errors = {{message = "'operationName' should be string"}},
         }, 400)
@@ -183,6 +193,7 @@ local function _execute_graphql(req)
     end
 
     local schema_obj = get_schema(schema_name)
+
     err = select(2,e_graphql_validate:pcall(validate.validate, schema_obj, ast))
 
     if err then

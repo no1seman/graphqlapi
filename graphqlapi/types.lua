@@ -7,7 +7,7 @@ local log = require('log')
 -- local json_cfg = {
 --     encode_use_tostring = true,
 --     encode_deep_as_nil = true,
---     encode_max_depth = 10,
+--     encode_max_depth = 3,
 --     encode_invalid_as_nil = true,
 -- }
 
@@ -18,7 +18,7 @@ local utils = require('graphqlapi.utils')
 local vars = require('graphqlapi.vars').new('graphqlapi.types')
 
 vars:new('space_type', {})
-vars:new('schema_invalid', nil)
+vars:new('schema_invalid', {})
 
 local e_graphqlapi = errors.new_class('GraphQL API error', { capture_stack = false })
 
@@ -141,33 +141,81 @@ local function space_fields(space)
     return fields
 end
 
-types.add = function(_type, type_name)
-    checks('table', '?string')
-    if type_name and type_name ~='' then
-        types[type_name] = _type
+types.add = function(_type, type_name, schema_name)
+    checks('table', '?string', '?string')
+
+    -- if schema_name == nil or schema_name == 'default' or schema_name == '__global__' then
+    --     schema_name = '__global__'
+    --     if type_name ~= nil and type_name ~='' then
+    --         types[type_name] = _type
+    --     else
+    --         types[_type.name] = _type
+    --     end
+    -- else
+    --     if type_name ~= nil and type_name ~='' then
+    --         types.get_env(schema_name)[type_name] = _type
+    --     else
+    --         types.get_env(schema_name)[_type.name] = _type
+    --     end
+    -- end
+
+    if schema_name == nil or schema_name:lower() == 'default' then
+        schema_name = '__global__'
     else
-        types[_type.name] = _type
+        schema_name = schema_name:lower()
     end
-    vars.schema_invalid = true
-end
 
-types.is_invalid = function()
-    return vars.schema_invalid
-end
-
-types.reset_invalid = function()
-    vars.schema_invalid = false
-end
-
-types.remove = function (type_name)
-    checks('string')
-
-    if not internal_types[type_name] then
-        types[type_name] = nil
-        vars.schema_invalid = true
-        return type_name
+    if type_name ~= nil and type_name ~='' then
+        types.get_env(schema_name)[type_name] = _type
     else
-        return nil, e_graphqlapi:new("can't remove internal type")
+        types.get_env(schema_name)[_type.name] = _type
+    end
+
+
+    vars.schema_invalid[schema_name] = true
+end
+
+types.is_invalid = function(schema_name)
+    checks('?string')
+
+    if schema_name == nil or schema_name:lower() == 'default' then
+        schema_name = '__global__'
+    else
+        schema_name = schema_name:lower()
+    end
+
+    return vars.schema_invalid[schema_name]
+end
+
+types.reset_invalid = function(schema_name)
+    checks('?string')
+
+    if schema_name == nil or schema_name:lower() == 'default' then
+        schema_name = '__global__'
+    else
+        schema_name = schema_name:lower()
+    end
+
+    vars.schema_invalid[schema_name] = false
+end
+
+types.remove = function (type_name, schema_name)
+    checks('string', '?string')
+
+    if schema_name == nil or schema_name:lower() == 'default' then
+        schema_name = '__global__'
+        if not internal_types[type_name] then
+            types[type_name] = nil
+            vars.schema_invalid[schema_name] = true
+            return type_name
+        else
+            return nil, e_graphqlapi:new("can't remove internal type")
+        end
+    else
+        schema_name = schema_name:lower()
+        types.get_env(schema_name)[type_name] = nil
+        vars.schema_invalid[schema_name] = true
+        return type_name
     end
 end
 
@@ -202,46 +250,62 @@ end
 
 types.add_space_object = function(opts)
     checks({
+        schema = '?string',
         name = 'string',
         description = '?string',
         space = 'string',
         fields = '?table',
     })
+
+    if opts.schema == nil or opts.schema:lower() == 'default' then
+        opts.schema = '__global__'
+    else
+        opts.schema = opts.schema:lower()
+    end
 
     if not cluster.is_space_exists(opts.space) then
         return nil, nil, e_graphqlapi:new(string.format("space '%s' doesn't exists", opts.space))
     end
 
     local new_type = types.object({
+        schema = opts.schema,
         name = opts.name,
         description = opts.description,
         fields = opts.fields and utils.merge_maps(space_fields(opts.space), opts.fields) or space_fields(opts.space)
     })
-    types.add(new_type, opts.name)
+    types.add(new_type, opts.name, opts.schema)
     vars.space_type[opts.space] = utils.merge_arrays(vars.space_type[opts.space] or {}, {opts.name})
-    return opts.name, new_type
+    return types(opts.schema)[opts.name]
 end
 
 types.add_space_input_object = function(opts)
     checks({
+        schema = '?string',
         name = 'string',
         description = '?string',
         space = 'string',
         fields = '?table',
     })
 
+    if opts.schema == nil or opts.schema:lower() == 'default' then
+        opts.schema = '__global__'
+    else
+        opts.schema = opts.schema:lower()
+    end
+
     if not cluster.is_space_exists(opts.space) then
         return nil, nil, e_graphqlapi:new(string.format("space '%s' doesn't exists", opts.space))
     end
 
     local new_type = types.inputObject({
+        schema = opts.schema,
         name = opts.name,
         description = opts.description,
         fields = opts.fields and utils.merge_maps(space_fields(opts.space), opts.fields) or space_fields(opts.space)
     })
-    types.add(new_type, opts.name)
+    types.add(new_type, opts.name, opts.schema)
     vars.space_type[opts.space] = utils.merge_arrays(vars.space_type[opts.space] or {}, {opts.name})
-    return opts.name, new_type
+    return types(opts.schema)[opts.name]
 end
 
 types.list_types = function()
@@ -261,4 +325,9 @@ end
 --     }))
 -- end
 
-return types
+return setmetatable(types, {
+    __call = function(_, schema_name)
+        return types.get_env(schema_name)
+    end
+})
+

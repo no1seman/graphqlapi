@@ -4,6 +4,8 @@ local operations = require('graphqlapi.operations')
 local types = require('graphqlapi.types')
 local utils = require('graphqlapi.utils')
 
+local DEFAULT_PREFIX = 'spaces'
+
 require('graphqlapi.spaceapi')
 local vars = require('graphqlapi.vars').new('graphqlapi.helpers')
 
@@ -79,15 +81,37 @@ vars:new('helpers',{
     },
 })
 
-local function operations_prefixes()
+local function operations_prefixes(opts)
+    checks({
+        schema = '?string',
+        prefix = '?string',
+    })
+
+    opts = opts or {}
+    opts.prefix = opts.prefix or DEFAULT_PREFIX
+
+    if opts.schema == nil or opts.schema:lower() == 'default' then
+        opts.schema = '__global__'
+    else
+        opts.schema = opts.schema:lower()
+    end
+
     if vars.helpers.info.enabled then
         if not vars.prefix.queries then
-            operations.add_queries_prefix('spaces', nil, 'Spaces queries')
+            operations.add_queries_prefix({
+                prefix = opts.prefix,
+                schema = opts.schema,
+                doc = 'Spaces queries',
+            })
             vars.prefix.queries = true
+            vars.prefix.schema = opts.schema
         end
     else
         if vars.prefix.queries then
-            operations.remove_query_prefix('spaces')
+            operations.remove_query_prefix({
+                prefix = opts.prefix,
+                schema = opts.schema,
+            })
             vars.prefix.queries = false
         end
     end
@@ -97,18 +121,34 @@ local function operations_prefixes()
        vars.helpers.update.enabled or
        vars.helpers.create.enabled then
         if not vars.prefix.mutations then
-            operations.add_mutations_prefix('spaces', nil, 'Spaces mutations')
+            operations.add_mutations_prefix({
+                prefix = opts.prefix,
+                schema = opts.schema,
+                doc = 'Spaces mutations',
+            })
             vars.prefix.mutations = true
+            vars.prefix.schema = opts.schema
         end
     else
         if vars.prefix.mutations then
-            operations.remove_mutation_prefix('spaces')
+            operations.remove_mutation_prefix({
+                prefix = opts.prefix,
+                schema = opts.schema,
+            })
             vars.prefix.mutations = false
         end
     end
 end
 
-local function space_types()
+local function space_types(schema_name)
+    checks('?string')
+
+    if schema_name == nil or schema_name:lower() == 'default' then
+        schema_name = '__global__'
+    else
+        schema_name = schema_name:lower()
+    end
+
     local type_list = {}
 
     for _, value in pairs(vars.helpers) do
@@ -118,7 +158,7 @@ local function space_types()
     end
 
     if utils.value_in('SpaceFieldType', type_list) then
-        if not types.SpaceFieldType then
+        if not types(schema_name).SpaceFieldType then
             types.add(types.enum({
                 name = 'SpaceFieldType',
                 description = 'Space field type enum',
@@ -135,14 +175,14 @@ local function space_types()
                     array = 'array',
                     scalar = 'scalar',
                 }
-            }), 'SpaceFieldType')
+            }), 'SpaceFieldType', schema_name)
         end
     else
-        types.remove('SpaceFieldType')
+        types.remove('SpaceFieldType', schema_name)
     end
 
     if utils.value_in('SpaceEngine', type_list) then
-        if not types.SpaceEngine then
+        if not types(schema_name).SpaceEngine then
             types.add(types.enum({
                 name = 'SpaceEngine',
                 description = 'Space engine',
@@ -153,14 +193,14 @@ local function space_types()
                     sysview = 'sysview',
                     service = 'service',
                 }
-            }), 'SpaceEngine')
+            }), 'SpaceEngine', schema_name)
         end
     else
-        types.remove('SpaceEngine')
+        types.remove('SpaceEngine', schema_name)
     end
 
     if utils.value_in('SpaceIndexType', type_list) then
-        if not types.SpaceIndexType then
+        if not types(schema_name).SpaceIndexType then
             types.add(types.enum({
                 name = 'SpaceIndexType',
                 description = 'Space index type',
@@ -170,58 +210,58 @@ local function space_types()
                     bitset = 'BITSET',
                     rtree = 'RTREE',
                 }
-            }), 'SpaceIndexType')
+            }), 'SpaceIndexType', schema_name)
         end
     else
-        types.remove('SpaceIndexType')
+        types.remove('SpaceIndexType', schema_name)
     end
 
     if utils.value_in('SpaceIndexDimension', type_list) then
-        if not types.SpaceIndexDimension then
+        if not types(schema_name).SpaceIndexDimension then
             types.add(types.enum({
                 name = 'SpaceIndexDimension',
                 description = 'Space index dimension',
                 values = {euclid = 'euclid', manhattan = 'manhattan'},
-            }), 'SpaceIndexDimension')
+            }), 'SpaceIndexDimension', schema_name)
         end
     else
-        types.remove('SpaceIndexDimension')
+        types.remove('SpaceIndexDimension', schema_name)
     end
 
     if utils.value_in('SpaceField', type_list) then
-        if not types.SpaceField then
+        if not types(schema_name).SpaceField then
             types.add(types.object({
                 name = 'SpaceField',
                 description = 'Space field',
                 fields = {
                     name = types.string,
-                    type = types.SpaceFieldType,
+                    type = types(schema_name).SpaceFieldType,
                     is_nullable = types.boolean,
                 }
-            }), 'SpaceField')
+            }), 'SpaceField', schema_name)
         end
     else
-        types.remove('SpaceField')
+        types.remove('SpaceField', schema_name)
     end
 
     if utils.value_in('SpaceIndexPart', type_list) then
-        if not types.SpaceIndexPart then
+        if not types(schema_name).SpaceIndexPart then
             types.add(types.object({
                 name = 'SpaceIndexPart',
                 description = 'Space index part',
                 fields = {
-                    type = types.SpaceFieldType,
+                    type = types(schema_name).SpaceFieldType,
                     fieldno = types.int,
                     is_nullable = types.boolean,
                 }
-            }), 'SpaceIndexPart')
+            }), 'SpaceIndexPart', schema_name)
         end
     else
-        types.remove('SpaceIndexPart')
+        types.remove('SpaceIndexPart', schema_name)
     end
 
     if utils.value_in('SpaceIndex', type_list) then
-        if not types.SpaceIndex then
+        if not types(schema_name).SpaceIndex then
             types.add(types.object({
                 name = 'SpaceIndex',
                 description = 'Space Index',
@@ -232,9 +272,9 @@ local function space_types()
                     unique = types.boolean,
                     hint = types.boolean,
                     if_not_exists = types.boolean,
-                    parts = types.list(types.SpaceIndexPart),
+                    parts = types.list(types(schema_name).SpaceIndexPart),
                     dimension = types.int,
-                    distance = types.SpaceIndexDimension,
+                    distance = types(schema_name).SpaceIndexDimension,
                     bloom_fpr = types.float,
                     page_size = types.int,
                     range_size = types.int,
@@ -243,14 +283,14 @@ local function space_types()
                     bsize = types.long,
                     len = types.long,
                 }
-            }), 'SpaceIndex')
+            }), 'SpaceIndex', schema_name)
         end
     else
-        types.remove('SpaceIndex')
+        types.remove('SpaceIndex', schema_name)
     end
 
     if utils.value_in('SpaceCkConstraint', type_list) then
-        if not types.SpaceCkConstraint then
+        if not types(schema_name).SpaceCkConstraint then
             types.add(types.object({
                 name = 'SpaceCkConstraint',
                 description = 'Space check constraint',
@@ -260,22 +300,22 @@ local function space_types()
                     space_id = types.int,
                     expr = types.string,
                 }
-            }), 'SpaceCkConstraint')
+            }), 'SpaceCkConstraint', schema_name)
         end
     else
-        types.remove('SpaceCkConstraint')
+        types.remove('SpaceCkConstraint', schema_name)
     end
 
     if utils.value_in('SpaceInfo', type_list) then
-        if not types.SpaceInfo then
+        if not types(schema_name).SpaceInfo then
             types.add(types.object({
                 name = 'SpaceInfo',
                 description = 'Space info',
                 fields = {
-                    format = types.list(types.SpaceField).nonNull,
+                    format = types.list(types(schema_name).SpaceField).nonNull,
                     id = types.int.nonNull,
                     name = types.string,
-                    engine = types.SpaceEngine,
+                    engine = types(schema_name).SpaceEngine,
                     field_count = types.int,
                     temporary = types.boolean,
                     is_local = types.boolean,
@@ -284,75 +324,75 @@ local function space_types()
                     full_bsize = types.long,
                     len = types.long,
                     user = types.string,
-                    index = types.list(types.SpaceIndex),
-                    ck_constraint = types.list(types.SpaceCkConstraint),
+                    index = types.list(types(schema_name).SpaceIndex),
+                    ck_constraint = types.list(types(schema_name).SpaceCkConstraint),
                 }
-            }), 'SpaceInfo')
+            }), 'SpaceInfo', schema_name)
         end
     else
-        types.remove('SpaceInfo')
+        types.remove('SpaceInfo', schema_name)
     end
 
     if utils.value_in('SpaceFieldInput', type_list) then
-        if not types.SpaceFieldInput then
+        if not types(schema_name).SpaceFieldInput then
             types.add(types.inputObject({
                 name = 'SpaceFieldInput',
                 description = 'Space field',
                 fields = {
                     name = types.string,
-                    type = types.SpaceFieldType,
+                    type = types(schema_name).SpaceFieldType,
                     is_nullable = types.boolean,
                 }
-            }), 'SpaceFieldInput')
+            }), 'SpaceFieldInput', schema_name)
         end
     else
-        types.remove('SpaceFieldInput')
+        types.remove('SpaceFieldInput', schema_name)
     end
 
     if utils.value_in('SpaceIndexPartInput', type_list) then
-        if not types.SpaceIndexPartInput then
+        if not types(schema_name).SpaceIndexPartInput then
             types.add(types.inputObject({
                 name = 'SpaceIndexPartInput',
                 description = 'Space index part',
                 fields = {
-                    type = types.SpaceFieldInput,
+                    type = types(schema_name).SpaceFieldInput,
                     fieldno = types.int,
                     is_nullable = types.boolean,
                 }
-            }), 'SpaceIndexPartInput')
+            }), 'SpaceIndexPartInput', schema_name)
         end
     else
-        types.remove('SpaceIndexPartInput')
+        types.remove('SpaceIndexPartInput', schema_name)
     end
 
     if utils.value_in('SpaceIndexInput', type_list) then
-        if not types.SpaceIndexInput then
+        if not types(schema_name).SpaceIndexInput then
         types.add(types.inputObject({
             name = 'SpaceIndexInput',
             description = 'Space Index',
             fields = {
                 name = types.string,
-                type = types.SpaceIndexType,
+                type = types(schema_name).SpaceIndexType,
                 id = types.int,
                 unique = types.boolean,
                 if_not_exists = types.boolean,
-                parts = types.list(types.SpaceIndexPartInput),
+                parts = types.list(types(schema_name).SpaceIndexPartInput),
                 dimension = types.int,
-                distance = types.SpaceIndexDimension,
+                distance = types(schema_name).SpaceIndexDimension,
                 bloom_fpr = types.float,
                 page_size = types.int,
                 range_size = types.int,
                 run_count_per_level = types.int,
                 run_size_ratio = types.float,
             }
-        }), 'SpaceIndexInput')
+        }), 'SpaceIndexInput', schema_name)
         end
     else
-        types.remove('SpaceIndexInput')
+        types.remove('SpaceIndexInput', schema_name)
     end
 
     if utils.value_in('SpaceCkConstraintInput', type_list) then
-        if not types.SpaceCkConstraintInput then
+        if not types(schema_name).SpaceCkConstraintInput then
         types.add(types.inputObject({
             name = 'SpaceCkConstraintInput',
             description = 'Space check constraint',
@@ -362,14 +402,14 @@ local function space_types()
                 space_id = types.int,
                 expr = types.string,
             }
-        }), 'SpaceCkConstraintInput')
+        }), 'SpaceCkConstraintInput', schema_name)
         end
     else
-        types.remove('SpaceCkConstraintInput')
+        types.remove('SpaceCkConstraintInput', schema_name)
     end
 
     if utils.value_in('SpaceTruncateResult', type_list) then
-        if not types.SpaceTruncateResult then
+        if not types(schema_name).SpaceTruncateResult then
             types.add(types.object({
                 name = 'SpaceTruncateResult',
                 description = 'Space Truncate Result',
@@ -378,34 +418,39 @@ local function space_types()
                     truncated_bsize = types.long,
                     name = types.string,
                 }
-            }), 'SpaceTruncateResult')
+            }), 'SpaceTruncateResult', schema_name)
         end
     else
-        types.remove('SpaceTruncateResult')
+        types.remove('SpaceTruncateResult', schema_name)
     end
 end
 
 -- space_info section
 local function space_info_query_remove()
-    operations.remove_query('space_info')
+    operations.remove_query({
+        name = 'space_info',
+        schema = vars.helpers.info.schema,
+        prefix = vars.helpers.info.prefix,
+    })
 end
 
 local function space_info_query()
     space_info_query_remove()
     operations.add_query({
-        prefix = 'spaces',
+        schema = vars.helpers.info.schema,
+        prefix = vars.helpers.info.prefix,
         name = 'space_info',
         doc = 'Get space(s) definition',
         args = {
-            name = types.list(types.SpaceInfoNames)
+            name = types.list(types(vars.helpers.info.schema).SpaceInfoNames),
         },
-        kind = types.list(types.SpaceInfo),
+        kind = types.list(types(vars.helpers.info.schema).SpaceInfo),
         callback = 'graphqlapi.spaceapi.space_info',
     })
 end
 
 local function space_info_list_remove()
-    types.remove('SpaceInfoNames')
+    types.remove('SpaceInfoNames', vars.helpers.info.schema)
 end
 
 local function space_info_list()
@@ -424,25 +469,44 @@ local function space_info_list()
     types.add(types.enum({
         name = 'SpaceInfoNames',
         description = 'Spaces info name list enum',
-        values = list_spaces
-    }), 'SpaceInfoNames')
+        values = list_spaces,
+    }), 'SpaceInfoNames', vars.helpers.info.schema)
 
     space_info_query()
 end
 
-local function space_info_init(include, exclude)
-    checks('?table', '?table')
-    include = include or {}
-    exclude = exclude or {}
-    assert(utils.is_string_array(include))
-    assert(utils.is_string_array(exclude))
+local function space_info_init(opts)
+    checks({
+        include = '?table',
+        exclude = '?table',
+        schema = '?string',
+        prefix = '?string',
+    })
 
+    opts = opts or {}
+
+    opts.include = opts.include or {}
+    opts.exclude = opts.exclude or {}
+    assert(utils.is_string_array(opts.include))
+    assert(utils.is_string_array(opts.exclude))
+
+    if opts.schema == nil or opts.schema:lower() == 'default' then
+        opts.schema = '__global__'
+    else
+        opts.schema = opts.schema:lower()
+    end
+
+    vars.helpers.info.schema = opts.schema
+    vars.helpers.info.prefix = opts.prefix or DEFAULT_PREFIX
     vars.helpers.info.enabled = true
-    space_types()
-    operations_prefixes()
+    space_types(opts.schema)
+    operations_prefixes({
+        schema = vars.helpers.info.schema,
+        prefix = vars.helpers.info.prefix,
+    })
 
-    vars.helpers.info.include = include
-    vars.helpers.info.exclude = exclude
+    vars.helpers.info.include = opts.include
+    vars.helpers.info.exclude = opts.exclude
     space_info_list()
 end
 
@@ -450,33 +514,43 @@ local function space_info_remove()
     space_info_query_remove()
     space_info_list_remove()
     vars.helpers.info.enabled = false
-    space_types()
-    operations_prefixes()
+    space_types(vars.helpers.info.schema)
+    operations_prefixes({
+        schema = vars.helpers.info.schema,
+        prefix = vars.helpers.info.prefix,
+    })
+    vars.helpers.info.schema = nil
+    vars.helpers.info.prefix = nil
     vars.helpers.info.include = nil
     vars.helpers.info.exclude = nil
 end
 
 -- space_drop section
 local function space_drop_mutation_remove()
-    operations.remove_mutation('space_drop')
+    operations.remove_mutation({
+        name = 'space_drop',
+        schema = vars.helpers.drop.schema,
+        prefix = vars.helpers.drop.prefix,
+    })
 end
 
 local function space_drop_mutation()
     space_drop_mutation_remove()
     operations.add_mutation({
-        prefix = 'spaces',
+        schema = vars.helpers.drop.schema,
+        prefix = vars.helpers.drop.prefix,
         name = 'space_drop',
         doc = 'Drop space',
         args = {
-            name = types.SpaceDropNames,
+            name = types(vars.helpers.drop.schema).SpaceDropNames,
         },
         kind = types.boolean,
-        callback = 'graphqlapi.spaceapi.space_drop'
+        callback = 'graphqlapi.spaceapi.space_drop',
     })
 end
 
 local function space_drop_list_remove()
-    types.remove('SpaceDropNames')
+    types.remove('SpaceDropNames', vars.helpers.drop.schema)
 end
 
 local function space_drop_list()
@@ -495,25 +569,44 @@ local function space_drop_list()
     types.add(types.enum({
         name = 'SpaceDropNames',
         description = 'Spaces drop name list enum',
-        values = list_spaces
-    }), 'SpaceDropNames')
+        values = list_spaces,
+    }), 'SpaceDropNames', vars.helpers.drop.schema)
 
     space_drop_mutation()
 end
 
-local function space_drop_init(include, exclude)
-    checks('?table', '?table')
-    include = include or {}
-    exclude = exclude or {}
-    assert(utils.is_string_array(include))
-    assert(utils.is_string_array(exclude))
+local function space_drop_init(opts)
+    checks({
+        include = '?table',
+        exclude = '?table',
+        schema = '?string',
+        prefix = '?string',
+    })
 
+    opts = opts or {}
+
+    opts.include = opts.include or {}
+    opts.exclude = opts.exclude or {}
+    assert(utils.is_string_array(opts.include))
+    assert(utils.is_string_array(opts.exclude))
+
+    if opts.schema == nil or opts.schema:lower() == 'default' then
+        opts.schema = '__global__'
+    else
+        opts.schema = opts.schema:lower()
+    end
+
+    vars.helpers.drop.schema = opts.schema
+    vars.helpers.drop.prefix = opts.prefix or DEFAULT_PREFIX
     vars.helpers.drop.enabled = true
-    space_types()
-    operations_prefixes()
+    space_types(opts.schema)
+    operations_prefixes({
+        schema = vars.helpers.drop.schema,
+        prefix = vars.helpers.drop.prefix,
+    })
 
-    vars.helpers.drop.include = include
-    vars.helpers.drop.exclude = exclude
+    vars.helpers.drop.include = opts.include
+    vars.helpers.drop.exclude = opts.exclude
 
     space_drop_list()
 end
@@ -522,33 +615,43 @@ local function space_drop_remove()
     space_drop_mutation_remove()
     space_drop_list_remove()
     vars.helpers.drop.enabled = false
-    space_types()
-    operations_prefixes()
-    vars.helpers.info.include = nil
-    vars.helpers.info.exclude = nil
+    space_types(vars.helpers.drop.schema)
+    operations_prefixes({
+        schema = vars.helpers.drop.schema,
+        prefix = vars.helpers.drop.prefix,
+    })
+    vars.helpers.drop.prefix = nil
+    vars.helpers.drop.schema = nil
+    vars.helpers.drop.include = nil
+    vars.helpers.drop.exclude = nil
 end
 
 -- space_truncate section
 local function space_truncate_mutation_remove()
-    operations.remove_mutation('space_truncate')
+    operations.remove_mutation({
+        name = 'space_truncate',
+        schema = vars.helpers.truncate.schema,
+        prefix = vars.helpers.truncate.prefix,
+    })
 end
 
 local function space_truncate_mutation()
     space_truncate_mutation_remove()
     operations.add_mutation({
-        prefix = 'spaces',
+        schema = vars.helpers.truncate.schema,
+        prefix = vars.helpers.truncate.prefix,
         name = 'space_truncate',
         doc = 'Truncate space',
         args = {
-            name = types.SpaceTruncateNames,
+            name = types(vars.helpers.truncate.schema).SpaceTruncateNames,
         },
-        kind = types.SpaceTruncateResult,
-        callback = 'graphqlapi.spaceapi.space_truncate'
+        kind = types(vars.helpers.truncate.schema).SpaceTruncateResult,
+        callback = 'graphqlapi.spaceapi.space_truncate',
     })
 end
 
 local function space_truncate_list_remove()
-    types.remove('SpaceTruncateNames')
+    types.remove('SpaceTruncateNames', vars.helpers.truncate.schema)
 end
 
 local function space_truncate_list()
@@ -567,25 +670,44 @@ local function space_truncate_list()
     types.add(types.enum({
         name = 'SpaceTruncateNames',
         description = 'Spaces truncate name list enum',
-        values = list_spaces
-    }), 'SpaceTruncateNames')
+        values = list_spaces,
+    }), 'SpaceTruncateNames', vars.helpers.truncate.schema)
 
     space_truncate_mutation()
 end
 
-local function space_truncate_init(include, exclude)
-    checks('?table', '?table')
-    include = include or {}
-    exclude = exclude or {}
-    assert(utils.is_string_array(include))
-    assert(utils.is_string_array(exclude))
+local function space_truncate_init(opts)
+    checks({
+        include = '?table',
+        exclude = '?table',
+        schema = '?string',
+        prefix = '?string',
+    })
 
+    opts = opts or {}
+
+    opts.include = opts.include or {}
+    opts.exclude = opts.exclude or {}
+    assert(utils.is_string_array(opts.include))
+    assert(utils.is_string_array(opts.exclude))
+
+    if opts.schema == nil or opts.schema:lower() == 'default' then
+        opts.schema = '__global__'
+    else
+        opts.schema = opts.schema:lower()
+    end
+
+    vars.helpers.truncate.schema = opts.schema
+    vars.helpers.truncate.prefix = opts.prefix or DEFAULT_PREFIX
     vars.helpers.truncate.enabled = true
-    space_types()
-    operations_prefixes()
+    space_types(opts.schema)
+    operations_prefixes({
+        schema = vars.helpers.truncate.schema,
+        prefix = vars.helpers.truncate.prefix,
+    })
 
-    vars.helpers.truncate.include = include
-    vars.helpers.truncate.exclude = exclude
+    vars.helpers.truncate.include = opts.include
+    vars.helpers.truncate.exclude = opts.exclude
 
     space_truncate_list()
 end
@@ -594,44 +716,54 @@ local function space_truncate_remove()
     space_truncate_mutation_remove()
     space_truncate_list_remove()
     vars.helpers.truncate.enabled = false
-    space_types()
-    operations_prefixes()
-    vars.helpers.info.include = nil
-    vars.helpers.info.exclude = nil
+    space_types(vars.helpers.truncate.schema)
+    operations_prefixes({
+        schema = vars.helpers.truncate.schema,
+        prefix = vars.helpers.truncate.prefix,
+    })
+    vars.helpers.truncate.prefix = nil
+    vars.helpers.truncate.schema = nil
+    vars.helpers.truncate.include = nil
+    vars.helpers.truncate.exclude = nil
 end
 
 -- space_update
 local function space_update_mutation_remove()
-    operations.remove_mutation('space_update')
+    operations.remove_mutation({
+        name = 'space_update',
+        schema = vars.helpers.update.schema,
+        prefix = vars.helpers.update.prefix,
+    })
 end
 
 local function space_update_mutation()
     space_update_mutation_remove()
     operations.add_mutation({
-        prefix = 'spaces',
+        schema = vars.helpers.update.schema,
+        prefix = vars.helpers.update.prefix,
         name = 'space_update',
         doc = 'Update existing space',
         args = {
-            format = types.list(types.SpaceFieldInput),
+            format = types.list(types(vars.helpers.update.schema).SpaceFieldInput),
             id = types.int,
-            name = types.SpaceUpdateNames,
-            engine = types.SpaceEngine,
+            name = types(vars.helpers.update.schema).SpaceUpdateNames,
+            engine = types(vars.helpers.update.schema).SpaceEngine,
             field_count = types.int,
             temporary = types.boolean,
             is_local = types.boolean,
             enabled = types.boolean,
             bsize = types.int,
             user = types.string,
-            index = types.list(types.SpaceIndexInput),
-            ck_constraint = types.list(types.SpaceCkConstraintInput)
+            index = types.list(types(vars.helpers.update.schema).SpaceIndexInput),
+            ck_constraint = types.list(types(vars.helpers.update.schema).SpaceCkConstraintInput),
         },
-        kind = types.SpaceInfo,
-        callback = 'graphqlapi.spaceapi.space_update'
+        kind = types(vars.helpers.update.schema).SpaceInfo,
+        callback = 'graphqlapi.spaceapi.space_update',
     })
 end
 
 local function space_update_list_remove()
-    types.remove('SpaceUpdateNames')
+    types.remove('SpaceUpdateNames', vars.helpers.update.schema)
 end
 
 local function space_update_list()
@@ -650,25 +782,44 @@ local function space_update_list()
     types.add(types.enum({
         name = 'SpaceUpdateNames',
         description = 'Spaces update name list enum',
-        values = list_spaces
-    }), 'SpaceUpdateNames')
+        values = list_spaces,
+    }), 'SpaceUpdateNames', vars.helpers.update.schema)
 
     space_update_mutation()
 end
 
-local function space_update_init(include, exclude)
-    checks('?table', '?table')
-    include = include or {}
-    exclude = exclude or {}
-    assert(utils.is_string_array(include))
-    assert(utils.is_string_array(exclude))
+local function space_update_init(opts)
+    checks({
+        include = '?table',
+        exclude = '?table',
+        schema = '?string',
+        prefix = '?string',
+    })
 
+    opts = opts or {}
+
+    opts.include = opts.include or {}
+    opts.exclude = opts.exclude or {}
+    assert(utils.is_string_array(opts.include))
+    assert(utils.is_string_array(opts.exclude))
+
+    if opts.schema == nil or opts.schema:lower() == 'default' then
+        opts.schema = '__global__'
+    else
+        opts.schema = opts.schema:lower()
+    end
+
+    vars.helpers.update.schema = opts.schema
+    vars.helpers.update.prefix = opts.prefix or DEFAULT_PREFIX
     vars.helpers.update.enabled = true
-    space_types()
-    operations_prefixes()
+    space_types(opts.schema)
+    operations_prefixes({
+        schema = vars.helpers.update.schema,
+        prefix = vars.helpers.update.prefix,
+    })
 
-    vars.helpers.update.include = include
-    vars.helpers.update.exclude = exclude
+    vars.helpers.update.include = opts.include
+    vars.helpers.update.exclude = opts.exclude
 
     space_update_list()
 end
@@ -677,46 +828,79 @@ local function space_update_remove()
     space_update_mutation_remove()
     space_update_list_remove()
     vars.helpers.update.enabled = false
-    space_types()
-    operations_prefixes()
-    vars.helpers.info.include = nil
-    vars.helpers.info.exclude = nil
+    space_types(vars.helpers.update.schema)
+    operations_prefixes({
+        schema = vars.helpers.update.schema,
+        prefix = vars.helpers.update.prefix,
+    })
+    vars.helpers.update.prefix = nil
+    vars.helpers.update.schema = nil
+    vars.helpers.update.include = nil
+    vars.helpers.update.exclude = nil
 end
 
 -- space_create section
-local function space_create_init()
+local function space_create_init(opts)
+    checks({
+        schema = '?string',
+        prefix = '?string',
+    })
+
+    opts = opts or {}
+
+    if opts.schema == nil or opts.schema:lower() == 'default' then
+        opts.schema = '__global__'
+    else
+        opts.schema = opts.schema:lower()
+    end
+
+    vars.helpers.create.schema = opts.schema
+    vars.helpers.create.prefix = opts.prefix or DEFAULT_PREFIX
     vars.helpers.create.enabled = true
-    space_types()
-    operations_prefixes()
+    space_types(vars.helpers.create.schema)
+    operations_prefixes({
+        schema = vars.helpers.create.schema,
+        prefix = vars.helpers.create.prefix,
+    })
 
     operations.add_mutation({
-        prefix = 'spaces',
+        schema = vars.helpers.create.schema,
+        prefix = vars.helpers.create.prefix,
         name = 'space_create',
         doc = 'Create new space',
         args = {
-            format = types.list(types.SpaceFieldInput),
+            format = types.list(types(vars.helpers.create.schema).SpaceFieldInput),
             id = types.int,
             name = types.string,
-            engine = types.SpaceEngine,
+            engine = types(vars.helpers.create.schema).SpaceEngine,
             field_count = types.int,
             temporary = types.boolean,
             is_local = types.boolean,
             enabled = types.boolean,
             bsize = types.int,
             user = types.string,
-            index = types.list(types.SpaceIndexInput),
-            ck_constraint = types.list(types.SpaceCkConstraintInput)
+            index = types.list(types(vars.helpers.create.schema).SpaceIndexInput),
+            ck_constraint = types.list(types(vars.helpers.create.schema).SpaceCkConstraintInput)
         },
-        kind = types.SpaceInfo,
+        kind = types(vars.helpers.create.schema).SpaceInfo,
         callback = 'graphqlapi.spaceapi.space_create'
     })
 end
 
 local function space_create_remove()
-    operations.remove_mutation('space_create')
+    operations.remove_mutation({
+        name = 'space_create',
+        schema = vars.helpers.create.schema,
+        prefix = vars.helpers.create.prefix,
+    })
     vars.helpers.create.enabled = false
-    space_types()
-    operations_prefixes()
+    space_types(vars.helpers.create.schema)
+    operations_prefixes({
+        schema = vars.helpers.create.schema,
+        prefix = vars.helpers.create.prefix,
+    })
+    vars.helpers.create.schema = nil
+    vars.helpers.create.prefix = nil
 end
 
 local function update_lists()
@@ -735,29 +919,68 @@ local function update_lists()
 end
 
 local function init(opts)
-    if not opts then
-        space_info_init()
-        space_drop_init()
-        space_truncate_init()
-        space_update_init()
-        space_create_init()
+    checks({
+        info = '?table',
+        drop = '?table',
+        truncate = '?table',
+        update = '?table',
+        create = '?table',
+        schema = '?string',
+        prefix = '?string',
+    })
+
+    opts = opts or {}
+
+    if opts.schema == nil or opts.schema:lower() == 'default' then
+        opts.schema = '__global__'
     else
-        opts = opts or {}
-        if opts.info and opts.info.enabled == true then
-            space_info_init(opts.info.include, opts.info.exclude)
-        end
-        if opts.drop and opts.drop.enabled == true then
-            space_drop_init(opts.drop.include, opts.drop.exclude)
-        end
-        if opts.truncate and opts.truncate.enabled == true then
-            space_truncate_init(opts.truncate.include, opts.truncate.exclude)
-        end
-        if opts.update and opts.update.enabled == true then
-            space_update_init(opts.update.include, opts.update.exclude)
-        end
-        if opts.create and opts.create.enabled == true then
-            space_create_init()
-        end
+        opts.schema = opts.schema:lower()
+    end
+
+    opts.prefix = opts.prefix or DEFAULT_PREFIX
+
+    if (opts.info and opts.info.enabled == true) or not opts.info then
+        opts.info = opts.info or {}
+        space_info_init({
+            include = opts.info.include,
+            exclude = opts.info.exclude,
+            schema = opts.schema,
+            prefix = opts.prefix,
+        })
+    end
+    if (opts.drop and opts.drop.enabled == true) or not opts.drop then
+        opts.drop = opts.drop or {}
+        space_drop_init({
+            include = opts.info.include,
+            exclude = opts.info.exclude,
+            schema = opts.schema,
+            prefix = opts.prefix,
+        })
+    end
+    if (opts.truncate and opts.truncate.enabled == true) or not opts.truncate then
+        opts.truncate = opts.truncate or {}
+        space_truncate_init({
+            include = opts.info.include,
+            exclude = opts.info.exclude,
+            schema = opts.schema,
+            prefix = opts.prefix,
+        })
+    end
+    if (opts.update and opts.update.enabled == true) or not opts.update then
+        opts.update = opts.update or {}
+        space_update_init({
+            include = opts.info.include,
+            exclude = opts.info.exclude,
+            schema = opts.schema,
+            prefix = opts.prefix,
+        })
+    end
+    if (opts.create and opts.create.enabled == true) or not opts.create then
+        opts.create = opts.create or {}
+        space_create_init({
+            schema = opts.schema,
+            prefix = opts.prefix,
+        })
     end
 end
 
