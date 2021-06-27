@@ -65,7 +65,7 @@ local function get_schema(schema_name)
         schema_name = schema_name:lower()
     end
 
-    if types.is_invalid(schema_name) or operations.is_invalid(schema_name) then
+    if types.is_invalid(schema_name) == true or operations.is_invalid(schema_name) == true then
         vars.graphql_schema = nil
         types.reset_invalid(schema_name)
         operations.reset_invalid(schema_name)

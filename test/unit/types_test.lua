@@ -4,7 +4,9 @@ local g = t.group('types')
 local test_helper = require('test.helper')
 local types = require('graphqlapi.types')
 
-g.before_each = function()
+local json = require('json')
+
+g.before_all = function()
     types.remove_all()
 end
 
@@ -13,6 +15,8 @@ g.after_each = function()
 end
 
 g.test_remove_all = function()
+    print('test_remove_all> types.schemas(): ' .. json.encode(types.schemas()))
+    print('test_remove_all> types.list_types(): '..json.encode(types.list_types()))
     t.assert_items_equals(types.list_types(), {})
     t.assert_items_equals(types.list_types('Spaces'), {})
     types.add(types.enum({
@@ -152,13 +156,6 @@ g.test_add_remove_space_input_object = function ()
     space:drop()
 end
 
-g.test_remove_internal_type = function()
-    local err = select(2, types.remove('list'))
-    t.assert_equals(err.err, 'can\'t remove internal type')
-    err = select(2, types.remove_recursive('list'))
-    t.assert_equals(err.err, 'can\'t remove internal type')
-end
-
 g.test_remove_types_by_space_name = function()
     local space = test_helper.create_space()
 
@@ -226,33 +223,33 @@ g.test_add_type = function()
     t.assert_equals(types()['SpaceIndexType'], nil)
 end
 
-g.test_remove_recursive = function()
-    types.add(types.enum({
-        name = 'SpaceEngine',
-        description = 'Space engine',
-        values = {
-            memtx = 'memtx',
-            vinyl = 'vinyl',
-            blackhole = 'blackhole',
-            sysview = 'sysview',
-            service = 'service'
-        }
-    }))
+-- g.test_remove_recursive = function()
+--     types.add(types.enum({
+--         name = 'SpaceEngine',
+--         description = 'Space engine',
+--         values = {
+--             memtx = 'memtx',
+--             vinyl = 'vinyl',
+--             blackhole = 'blackhole',
+--             sysview = 'sysview',
+--             service = 'service'
+--         }
+--     }))
 
-    t.assert_equals(type(types()['SpaceEngine']), 'table')
+--     t.assert_equals(type(types()['SpaceEngine']), 'table')
 
-    types.add(types.object({
-        name = 'SpaceInfo',
-        description = 'Space info',
-        fields = {
-            engine = types.SpaceEngine,
-        }
-    }))
+--     types.add(types.object({
+--         name = 'SpaceInfo',
+--         description = 'Space info',
+--         fields = {
+--             engine = types.SpaceEngine,
+--         }
+--     }))
 
-    t.assert_equals(type(types()['SpaceInfo']), 'table')
+--     t.assert_equals(type(types()['SpaceInfo']), 'table')
 
-    types.remove_recursive('SpaceEngine')
+--     types.remove_recursive('SpaceEngine')
 
-    t.assert_equals(types()['SpaceEngine'], nil)
-    --t.assert_equals(types['SpaceInfo'], nil)
-end
+--     t.assert_equals(types()['SpaceEngine'], nil)
+--     --t.assert_equals(types['SpaceInfo'], nil)
+-- end

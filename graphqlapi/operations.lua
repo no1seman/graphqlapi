@@ -53,10 +53,6 @@ end
 local function funcall_wrap(fun_name, operation_type, operation_schema, operation_prefix, operation_name)
     checks('string', 'string', 'string|nil', 'string|nil', 'string')
 
-    -- if operation_schema == '__global__' then
-    --     operation_schema = 'default'
-    -- end
-
     return function(...)
         for trigger, _ in pairs(vars.on_resolve_triggers) do
             local ok, err = trigger(operation_type, operation_schema, operation_prefix, operation_name, ...)
@@ -629,11 +625,20 @@ local function get_mutations(schema_name)
     return vars.mutations[schema_name] or {}
 end
 
+local function schemas()
+    local _schemas = {}
+    for schema_name in pairs(vars.schema_invalid) do
+        table.insert(_schemas, schema_name)
+    end
+    return _schemas
+end
+
 return {
     stop = stop,
     remove_all = remove_all,
     get_queries = get_queries,
     get_mutations = get_mutations,
+    schemas = schemas,
 
     -- Queries prefixes
     add_queries_prefix = add_queries_prefix,

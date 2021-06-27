@@ -22,46 +22,6 @@ vars:new('schema_invalid', {})
 
 local e_graphqlapi = errors.new_class('GraphQL API error', { capture_stack = false })
 
-local internal_types = {
-    add = true,
-    add_space_input_object = true,
-    add_space_object = true,
-    bare = true,
-    boolean = true,
-    directive = true,
-    double = true,
-    enum = true,
-    float = true,
-    get_env = true,
-    id = true,
-    include = true,
-    inputObject = true,
-    inputMap = true,
-    inputUnion = true,
-    int = true,
-    interface = true,
-    is_invalid = true,
-    list = true,
-    list_types = true,
-    long = true,
-    map = true,
-    mapper = true,
-    nonNull = true,
-    nullable = true,
-    object = true,
-    remove = true,
-    remove_all = true,
-    remove_types_by_space_name = true,
-    remove_recursive = true,
-    reset_invalid = true,
-    resolve = true,
-    scalar = true,
-    schemas = true,
-    skip = true,
-    string = true,
-    union = true,
-}
-
 types.double = types.scalar({
     name = 'Double',
     serialize = tonumber,
@@ -185,19 +145,12 @@ types.remove = function (type_name, schema_name)
 
     if schema_name == nil then
         schema_name = 'default'
-        if not internal_types[type_name] then
-            types(schema_name)[type_name] = nil
-            vars.schema_invalid[schema_name] = true
-            return type_name
-        else
-            return nil, e_graphqlapi:new("can't remove internal type")
-        end
     else
         schema_name = schema_name:lower()
-        types(schema_name)[type_name] = nil
-        vars.schema_invalid[schema_name] = true
-        return type_name
     end
+    types(schema_name)[type_name] = nil
+    vars.schema_invalid[schema_name] = true
+    return type_name
 end
 
 types.remove_recursive = function (type_name)
@@ -229,6 +182,7 @@ types.remove_all = function()
         end
     end
     vars.space_type = nil
+    vars.schema_invalid = {}
 end
 
 types.add_space_object = function(opts)
@@ -299,7 +253,7 @@ types.list_types = function(schema_name)
     else
         schema_name = schema_name:lower()
     end
-
+    print('types.list_types> schema_name: '..schema_name)
     local type_list = {}
     for _type in pairs(types(schema_name)) do
         table.insert(type_list, _type)
@@ -309,10 +263,7 @@ end
 
 types.schemas = function()
     local schemas = {}
-    for schema_name in pairs(vars.schema_invalid or {}) do
-        -- if schema_name == '__global__' then
-        --     schema_name = 'default'
-        -- end
+    for schema_name in pairs(vars.schema_invalid) do
         table.insert(schemas, schema_name)
     end
     return schemas
@@ -331,10 +282,9 @@ return setmetatable(types, {
     __call = function(_, schema_name)
         if schema_name == nil then
             schema_name = 'default'
+        else
+            schema_name = schema_name:lower()
         end
         return types.get_env(schema_name)
-    end,
-    __newindex = function()
-        error('types is read-only', 2)
     end
 })
