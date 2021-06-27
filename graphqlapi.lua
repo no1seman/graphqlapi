@@ -138,8 +138,6 @@ local function _execute_graphql(req)
         schema_name = req.headers.schema:lower()
     end
 
-    log.info('_execute_graphql> schema_name: '..schema_name)
-
     if body == nil or body == '' then
         return http_finalize({
             errors = {{message = "Expected a non-empty request body"}},

@@ -56,6 +56,7 @@ local internal_types = {
     reset_invalid = true,
     resolve = true,
     scalar = true,
+    schemas = true,
     skip = true,
     string = true,
     union = true,
@@ -185,7 +186,7 @@ types.remove = function (type_name, schema_name)
     if schema_name == nil or schema_name:lower() == 'default' then
         schema_name = '__global__'
         if not internal_types[type_name] then
-            types[type_name] = nil
+            types(schema_name)[type_name] = nil
             vars.schema_invalid[schema_name] = true
             return type_name
         else
@@ -193,7 +194,7 @@ types.remove = function (type_name, schema_name)
         end
     else
         schema_name = schema_name:lower()
-        types.get_env(schema_name)[type_name] = nil
+        types(schema_name)[type_name] = nil
         vars.schema_invalid[schema_name] = true
         return type_name
     end
@@ -222,8 +223,10 @@ types.remove_types_by_space_name = function(space_name)
 end
 
 types.remove_all = function()
-    for type_name in pairs(types) do
-        types.remove(type_name)
+    for schema in pairs(types.schemas()) do
+        for type_name in pairs(types(schema)) do
+            types.remove(type_name, schema)
+        end
     end
     vars.space_type = nil
 end
@@ -288,12 +291,31 @@ types.add_space_input_object = function(opts)
     return types(opts.schema)[opts.name]
 end
 
-types.list_types = function()
+types.list_types = function(schema_name)
+    checks('?string')
+
+    if schema_name == nil or schema_name:lower() == 'default' then
+        schema_name = '__global__'
+    else
+        schema_name = schema_name:lower()
+    end
+
     local type_list = {}
-    for _type in pairs(types) do
+    for _type in pairs(types(schema_name)) do
         table.insert(type_list, _type)
     end
     return type_list
+end
+
+types.schemas = function()
+    local schemas = {}
+    for schema_name in pairs(vars.schema_invalid or {}) do
+        if schema_name == '__global__' then
+            schema_name = 'default'
+        end
+        table.insert(schemas, schema_name)
+    end
+    return schemas
 end
 
 -- types.print = function(type_name, filename)
@@ -308,6 +330,8 @@ end
 return setmetatable(types, {
     __call = function(_, schema_name)
         return types.get_env(schema_name)
+    end,
+    __newindex = function()
+        error('types is read-only', 2)
     end
 })
-

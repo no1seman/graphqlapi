@@ -50,11 +50,11 @@ local function reset_invalid(schema_name)
     vars.schema_invalid[schema_name] = false
 end
 
-local function funcall_wrap(fun_name, operation_type, operation_name)
-    checks('string', 'string', 'string')
+local function funcall_wrap(fun_name, operation_type, operation_schema, operation_prefix, operation_name)
+    checks('string', 'string', 'string|nil', 'string|nil', 'string')
     return function(...)
         for trigger, _ in pairs(vars.on_resolve_triggers) do
-            local ok, err = trigger(operation_type, operation_name)
+            local ok, err = trigger(operation_type, operation_schema, operation_prefix, operation_name, ...)
             if ok == false then return nil, err end
         end
 
@@ -201,8 +201,12 @@ local function add_query(opts)
         oldkind.fields[opts.name] = {
             kind = opts.kind,
             arguments = opts.args,
-            resolve = funcall_wrap(opts.callback,
-                'query', opts.prefix .. '.' .. opts.name
+            resolve = funcall_wrap(
+                opts.callback,
+                'query',
+                opts.schema,
+                opts.prefix,
+                opts.name
             ),
             description = opts.doc,
         }
@@ -216,8 +220,12 @@ local function add_query(opts)
         vars.queries[opts.schema][opts.name] = {
             kind = opts.kind,
             arguments = opts.args,
-            resolve = funcall_wrap(opts.callback,
-                'query', opts.name
+            resolve = funcall_wrap(
+                opts.callback,
+                'query',
+                opts.schema,
+                opts.prefix,
+                opts.name
             ),
             description = opts.doc,
         }
@@ -317,8 +325,12 @@ local function add_mutation(opts)
         oldkind.fields[opts.name] = {
             kind = opts.kind,
             arguments = opts.args,
-            resolve = funcall_wrap(opts.callback,
-                'mutation', opts.prefix .. '.' .. opts.name
+            resolve = funcall_wrap(
+                opts.callback,
+                'mutation',
+                opts.schema,
+                opts.prefix,
+                opts.name
             ),
             description = opts.doc
         }
@@ -332,8 +344,12 @@ local function add_mutation(opts)
         vars.mutations[opts.schema][opts.name] = {
             kind = opts.kind,
             arguments = opts.args,
-            resolve = funcall_wrap(opts.callback,
-                'mutation', opts.name
+            resolve = funcall_wrap(
+                opts.callback,
+                'mutation',
+                opts.schema,
+                opts.prefix,
+                opts.name
             ),
             description = opts.doc,
         }
