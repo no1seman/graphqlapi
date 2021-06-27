@@ -141,23 +141,8 @@ local function space_fields(space)
     return fields
 end
 
-types.add = function(_type, type_name, schema_name)
-    checks('table', '?string', '?string')
-
-    -- if schema_name == nil or schema_name == 'default' or schema_name == '__global__' then
-    --     schema_name = '__global__'
-    --     if type_name ~= nil and type_name ~='' then
-    --         types[type_name] = _type
-    --     else
-    --         types[_type.name] = _type
-    --     end
-    -- else
-    --     if type_name ~= nil and type_name ~='' then
-    --         types.get_env(schema_name)[type_name] = _type
-    --     else
-    --         types.get_env(schema_name)[_type.name] = _type
-    --     end
-    -- end
+types.add = function(_type, schema_name)
+    checks('table', '?string')
 
     if schema_name == nil or schema_name:lower() == 'default' then
         schema_name = '__global__'
@@ -165,12 +150,7 @@ types.add = function(_type, type_name, schema_name)
         schema_name = schema_name:lower()
     end
 
-    if type_name ~= nil and type_name ~='' then
-        types.get_env(schema_name)[type_name] = _type
-    else
-        types.get_env(schema_name)[_type.name] = _type
-    end
-
+    types.get_env(schema_name)[_type.name] = _type
 
     vars.schema_invalid[schema_name] = true
 end
@@ -273,7 +253,7 @@ types.add_space_object = function(opts)
         description = opts.description,
         fields = opts.fields and utils.merge_maps(space_fields(opts.space), opts.fields) or space_fields(opts.space)
     })
-    types.add(new_type, opts.name, opts.schema)
+    types.add(new_type, opts.schema)
     vars.space_type[opts.space] = utils.merge_arrays(vars.space_type[opts.space] or {}, {opts.name})
     return types(opts.schema)[opts.name]
 end
@@ -303,7 +283,7 @@ types.add_space_input_object = function(opts)
         description = opts.description,
         fields = opts.fields and utils.merge_maps(space_fields(opts.space), opts.fields) or space_fields(opts.space)
     })
-    types.add(new_type, opts.name, opts.schema)
+    types.add(new_type, opts.schema)
     vars.space_type[opts.space] = utils.merge_arrays(vars.space_type[opts.space] or {}, {opts.name})
     return types(opts.schema)[opts.name]
 end

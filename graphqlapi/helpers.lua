@@ -175,7 +175,7 @@ local function space_types(schema_name)
                     array = 'array',
                     scalar = 'scalar',
                 }
-            }), 'SpaceFieldType', schema_name)
+            }), schema_name)
         end
     else
         types.remove('SpaceFieldType', schema_name)
@@ -193,7 +193,7 @@ local function space_types(schema_name)
                     sysview = 'sysview',
                     service = 'service',
                 }
-            }), 'SpaceEngine', schema_name)
+            }), schema_name)
         end
     else
         types.remove('SpaceEngine', schema_name)
@@ -210,7 +210,7 @@ local function space_types(schema_name)
                     bitset = 'BITSET',
                     rtree = 'RTREE',
                 }
-            }), 'SpaceIndexType', schema_name)
+            }), schema_name)
         end
     else
         types.remove('SpaceIndexType', schema_name)
@@ -222,7 +222,7 @@ local function space_types(schema_name)
                 name = 'SpaceIndexDimension',
                 description = 'Space index dimension',
                 values = {euclid = 'euclid', manhattan = 'manhattan'},
-            }), 'SpaceIndexDimension', schema_name)
+            }), schema_name)
         end
     else
         types.remove('SpaceIndexDimension', schema_name)
@@ -238,7 +238,7 @@ local function space_types(schema_name)
                     type = types(schema_name).SpaceFieldType,
                     is_nullable = types.boolean,
                 }
-            }), 'SpaceField', schema_name)
+            }), schema_name)
         end
     else
         types.remove('SpaceField', schema_name)
@@ -254,7 +254,7 @@ local function space_types(schema_name)
                     fieldno = types.int,
                     is_nullable = types.boolean,
                 }
-            }), 'SpaceIndexPart', schema_name)
+            }), schema_name)
         end
     else
         types.remove('SpaceIndexPart', schema_name)
@@ -283,7 +283,7 @@ local function space_types(schema_name)
                     bsize = types.long,
                     len = types.long,
                 }
-            }), 'SpaceIndex', schema_name)
+            }), schema_name)
         end
     else
         types.remove('SpaceIndex', schema_name)
@@ -300,7 +300,7 @@ local function space_types(schema_name)
                     space_id = types.int,
                     expr = types.string,
                 }
-            }), 'SpaceCkConstraint', schema_name)
+            }), schema_name)
         end
     else
         types.remove('SpaceCkConstraint', schema_name)
@@ -327,7 +327,7 @@ local function space_types(schema_name)
                     index = types.list(types(schema_name).SpaceIndex),
                     ck_constraint = types.list(types(schema_name).SpaceCkConstraint),
                 }
-            }), 'SpaceInfo', schema_name)
+            }), schema_name)
         end
     else
         types.remove('SpaceInfo', schema_name)
@@ -343,7 +343,7 @@ local function space_types(schema_name)
                     type = types(schema_name).SpaceFieldType,
                     is_nullable = types.boolean,
                 }
-            }), 'SpaceFieldInput', schema_name)
+            }), schema_name)
         end
     else
         types.remove('SpaceFieldInput', schema_name)
@@ -359,7 +359,7 @@ local function space_types(schema_name)
                     fieldno = types.int,
                     is_nullable = types.boolean,
                 }
-            }), 'SpaceIndexPartInput', schema_name)
+            }), schema_name)
         end
     else
         types.remove('SpaceIndexPartInput', schema_name)
@@ -385,7 +385,7 @@ local function space_types(schema_name)
                 run_count_per_level = types.int,
                 run_size_ratio = types.float,
             }
-        }), 'SpaceIndexInput', schema_name)
+        }), schema_name)
         end
     else
         types.remove('SpaceIndexInput', schema_name)
@@ -402,7 +402,7 @@ local function space_types(schema_name)
                 space_id = types.int,
                 expr = types.string,
             }
-        }), 'SpaceCkConstraintInput', schema_name)
+        }), schema_name)
         end
     else
         types.remove('SpaceCkConstraintInput', schema_name)
@@ -418,7 +418,7 @@ local function space_types(schema_name)
                     truncated_bsize = types.long,
                     name = types.string,
                 }
-            }), 'SpaceTruncateResult', schema_name)
+            }), schema_name)
         end
     else
         types.remove('SpaceTruncateResult', schema_name)
@@ -470,7 +470,7 @@ local function space_info_list()
         name = 'SpaceInfoNames',
         description = 'Spaces info name list enum',
         values = list_spaces,
-    }), 'SpaceInfoNames', vars.helpers.info.schema)
+    }), vars.helpers.info.schema)
 
     space_info_query()
 end
@@ -570,7 +570,7 @@ local function space_drop_list()
         name = 'SpaceDropNames',
         description = 'Spaces drop name list enum',
         values = list_spaces,
-    }), 'SpaceDropNames', vars.helpers.drop.schema)
+    }), vars.helpers.drop.schema)
 
     space_drop_mutation()
 end
@@ -671,7 +671,7 @@ local function space_truncate_list()
         name = 'SpaceTruncateNames',
         description = 'Spaces truncate name list enum',
         values = list_spaces,
-    }), 'SpaceTruncateNames', vars.helpers.truncate.schema)
+    }), vars.helpers.truncate.schema)
 
     space_truncate_mutation()
 end
@@ -783,7 +783,7 @@ local function space_update_list()
         name = 'SpaceUpdateNames',
         description = 'Spaces update name list enum',
         values = list_spaces,
-    }), 'SpaceUpdateNames', vars.helpers.update.schema)
+    }), vars.helpers.update.schema)
 
     space_update_mutation()
 end
