@@ -13,6 +13,17 @@ g.after_each = function()
 end
 
 g.test_remove_all = function()
+    -- types.add(types.enum({
+    --     name = 'SpaceIndexType',
+    --     description = 'Space index type',
+    --     values = {
+    --         tree = 'TREE',
+    --         hash = 'HASH',
+    --         bitset = 'BITSET',
+    --         rtree = 'RTREE'
+    --     }
+    -- }))
+
     types.remove_all()
     t.assert_items_equals(types.list_types(),
         {
@@ -49,6 +60,7 @@ g.test_remove_all = function()
             'reset_invalid',
             'resolve',
             'scalar',
+            'schemas',
             'skip',
             'string',
             'union',
@@ -72,8 +84,8 @@ g.test_add_remove_space_object = function ()
         space = 'entity',
     })
 
-    t.assert_equals(type(types['entity']), 'table')
-    t.assert_equals(types['entity'].description, 'Entity object')
+    t.assert_equals(type(types()['entity']), 'table')
+    t.assert_equals(types()['entity'].description, 'Entity object')
     t.assert_items_include(types.list_types(), {'entity'})
     t.assert_equals(types.is_invalid(), true)
     types.reset_invalid()
@@ -100,10 +112,10 @@ g.test_add_remove_space_object = function ()
 
     t.assert_items_include(types.list_types(), {'entity'})
 
-    t.assert_equals(type(types['entity'].fields.entity), 'table')
-    t.assert_equals(type(types['entity'].fields.instance_alias), 'table')
-    t.assert_equals(type(types['entity'].fields.entity_id), 'table')
-    t.assert_equals(types['entity'].fields.bucket_id, nil)
+    t.assert_equals(type(types()['entity'].fields.entity), 'table')
+    t.assert_equals(type(types()['entity'].fields.instance_alias), 'table')
+    t.assert_equals(type(types()['entity'].fields.entity_id), 'table')
+    t.assert_equals(types()['entity'].fields.bucket_id, nil)
 
     types.remove('entity')
     space:drop()
@@ -125,8 +137,8 @@ g.test_add_remove_space_input_object = function ()
         space = 'entity',
     })
 
-    t.assert_equals(type(types['input_entity']), 'table')
-    t.assert_equals(types['input_entity'].description, 'Entity input object')
+    t.assert_equals(type(types()['input_entity']), 'table')
+    t.assert_equals(types()['input_entity'].description, 'Entity input object')
     t.assert_items_include(types.list_types(), {'input_entity'})
     t.assert_equals(types.is_invalid(), true)
     types.reset_invalid()
@@ -152,10 +164,10 @@ g.test_add_remove_space_input_object = function ()
 
     t.assert_items_include(types.list_types(), {'entity'})
 
-    t.assert_equals(type(types['entity'].fields.entity), 'table')
-    t.assert_equals(type(types['entity'].fields.instance_alias), 'table')
-    t.assert_equals(type(types['entity'].fields.entity_id), 'table')
-    t.assert_equals(types['entity'].fields.bucket_id, nil)
+    t.assert_equals(type(types()['entity'].fields.entity), 'table')
+    t.assert_equals(type(types()['entity'].fields.instance_alias), 'table')
+    t.assert_equals(type(types()['entity'].fields.entity_id), 'table')
+    t.assert_equals(types()['entity'].fields.bucket_id, nil)
 
     types.remove('entity')
     space:drop()
@@ -187,14 +199,14 @@ g.test_remove_types_by_space_name = function()
         space = 'entity',
     })
 
-    t.assert_equals(type(types['input_entity']), 'table')
+    t.assert_equals(type(types()['input_entity']), 'table')
     t.assert_equals(types.is_invalid(), true)
     types.reset_invalid()
     t.assert_equals(types.is_invalid(), false)
 
     types.remove_types_by_space_name(space.name)
-    t.assert_equals(types['entity'], nil)
-    t.assert_equals(types['input_entity'], nil)
+    t.assert_equals(types()['entity'], nil)
+    t.assert_equals(types()['input_entity'], nil)
     t.assert_equals(types.is_invalid(), true)
     types.reset_invalid()
     t.assert_equals(types.is_invalid(), false)
@@ -211,12 +223,12 @@ g.test_add_type = function()
             bitset = 'BITSET',
             rtree = 'RTREE'
         }
-    }), 'SpaceIndexType')
+    }))
 
-    t.assert_equals(type(types['SpaceIndexType']), 'table')
+    t.assert_equals(type(types()['SpaceIndexType']), 'table')
 
     types.remove('SpaceIndexType')
-    t.assert_equals(types['SpaceIndexType'], nil)
+    t.assert_equals(types()['SpaceIndexType'], nil)
 
     types.add(types.enum({
         name = 'SpaceIndexType',
@@ -229,10 +241,10 @@ g.test_add_type = function()
         }
     }))
 
-    t.assert_equals(type(types['SpaceIndexType']), 'table')
+    t.assert_equals(type(types()['SpaceIndexType']), 'table')
 
     types.remove('SpaceIndexType')
-    t.assert_equals(types['SpaceIndexType'], nil)
+    t.assert_equals(types()['SpaceIndexType'], nil)
 end
 
 g.test_remove_recursive = function()
@@ -248,7 +260,7 @@ g.test_remove_recursive = function()
         }
     }))
 
-    t.assert_equals(type(types['SpaceEngine']), 'table')
+    t.assert_equals(type(types()['SpaceEngine']), 'table')
 
     types.add(types.object({
         name = 'SpaceInfo',
@@ -258,10 +270,10 @@ g.test_remove_recursive = function()
         }
     }))
 
-    t.assert_equals(type(types['SpaceInfo']), 'table')
+    t.assert_equals(type(types()['SpaceInfo']), 'table')
 
     types.remove_recursive('SpaceEngine')
 
-    t.assert_equals(types['SpaceEngine'], nil)
+    t.assert_equals(types()['SpaceEngine'], nil)
     --t.assert_equals(types['SpaceInfo'], nil)
 end

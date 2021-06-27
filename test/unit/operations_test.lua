@@ -35,7 +35,7 @@ g.test_add_remove_query_default = function()
 
     t.assert_items_equals(operations.list_queries(), {'entity'})
 
-    operations.remove_query('entity')
+    operations.remove_query({name = 'entity'})
 
     t.assert_equals(operations.get_queries()['entity'], nil)
 
@@ -65,7 +65,7 @@ g.test_add_remove_query = function()
 
     t.assert_items_equals(operations.list_queries('test_schema'), {'entity'})
 
-    operations.remove_query('entity', 'test_schema')
+    operations.remove_query({name = 'entity', schema = 'test_schema'})
 
     t.assert_equals(operations.get_queries('test_schema')['entity'], nil)
 
@@ -75,7 +75,10 @@ g.test_add_remove_query = function()
 end
 
 g.test_add_remove_query_with_prefix_default = function()
-    operations.add_queries_prefix('test', nil ,'Simple prefix test')
+    operations.add_queries_prefix({
+        prefix = 'test',
+        doc ='Simple prefix test'
+    })
 
     t.assert_items_equals(operations.get_queries()['test'].resolve(), {})
 
@@ -91,7 +94,7 @@ g.test_add_remove_query_with_prefix_default = function()
         name = 'entity_1',
         doc = 'Get entity 1',
         args = {
-            entity_id = types.long
+            entity_id = types.long,
         },
         kind = types.string,
         callback = 'models.entity.entity_1_get'
@@ -109,7 +112,7 @@ g.test_add_remove_query_with_prefix_default = function()
         name = 'entity_2',
         doc = 'Get entity 2',
         args = {
-            entity_id = types.long
+            entity_id = types.long,
         },
         kind = types.string,
         callback = 'models.entity.entity_2_get',
@@ -125,14 +128,17 @@ g.test_add_remove_query_with_prefix_default = function()
 
     t.assert_items_equals(operations.list_queries(), {'test.entity_1', 'test.entity_2'})
 
-    operations.remove_query('entity_1', nil ,'test')
+    operations.remove_query({
+        name = 'entity_1',
+        prefix = 'test',
+    })
     t.assert_equals(type(operations.get_queries()['test'].kind.fields['entity_2']), 'table')
     t.assert_equals(operations.get_queries()['test'].kind.fields['entity_2'].description, 'Get entity 2')
     t.assert_equals(operations.is_invalid(), true)
     operations.reset_invalid()
     t.assert_equals(operations.is_invalid(), false)
 
-    operations.remove_query_prefix('test')
+    operations.remove_query_prefix({prefix = 'test'})
     t.assert_equals(operations.get_queries()['test'], nil)
     t.assert_equals(operations.is_invalid(), true)
     operations.reset_invalid()
@@ -155,7 +161,11 @@ g.test_add_remove_query_with_prefix_default = function()
 end
 
 g.test_add_remove_query_with_prefix = function()
-    operations.add_queries_prefix('test', 'test_schema' ,'Simple prefix test')
+    operations.add_queries_prefix({
+        prefix = 'test',
+        schema = 'test_schema',
+        doc = 'Simple prefix test',
+    })
 
     t.assert_items_equals(operations.get_queries('test_schema')['test'].resolve(), {})
 
@@ -172,10 +182,10 @@ g.test_add_remove_query_with_prefix = function()
         name = 'entity_1',
         doc = 'Get entity 1',
         args = {
-            entity_id = types.long
+            entity_id = types.long,
         },
         kind = types.string,
-        callback = 'models.entity.entity_1_get'
+        callback = 'models.entity.entity_1_get',
     })
 
     t.assert_equals(type(operations.get_queries('test_schema')['test'].kind.fields['entity_1']), 'table')
@@ -191,7 +201,7 @@ g.test_add_remove_query_with_prefix = function()
         name = 'entity_2',
         doc = 'Get entity 2',
         args = {
-            entity_id = types.long
+            entity_id = types.long,
         },
         kind = types.string,
         callback = 'models.entity.entity_2_get',
@@ -207,14 +217,19 @@ g.test_add_remove_query_with_prefix = function()
 
     t.assert_items_equals(operations.list_queries('test_schema'), {'test.entity_1', 'test.entity_2'})
 
-    operations.remove_query('entity_1', 'test_schema', 'test')
+    operations.remove_query({
+        name = 'entity_1',
+        schema = 'test_schema',
+        prefix = 'test'
+    })
+
     t.assert_equals(type(operations.get_queries('test_schema')['test'].kind.fields['entity_2']), 'table')
     t.assert_equals(operations.get_queries('test_schema')['test'].kind.fields['entity_2'].description, 'Get entity 2')
     t.assert_equals(operations.is_invalid('test_schema'), true)
     operations.reset_invalid('test_schema')
     t.assert_equals(operations.is_invalid('test_schema'), false)
 
-    operations.remove_query_prefix('test', 'test_schema')
+    operations.remove_query_prefix({prefix = 'test', schema = 'test_schema'})
     t.assert_equals(operations.get_queries('test_schema')['test'], nil)
     t.assert_equals(operations.is_invalid('test_schema'), true)
     operations.reset_invalid('test_schema')
@@ -229,7 +244,7 @@ g.test_add_remove_query_with_prefix = function()
             name = 'entity_2',
             doc = 'Get entity 2',
             args = {
-                entity_id = types.long
+                entity_id = types.long,
             },
             kind = types.string,
             callback = 'models.entity.entity_2_get',
@@ -245,7 +260,7 @@ g.test_add_remove_mutation_default = function()
             name = types.long,
         },
         kind = types.string,
-        callback = 'models.entity.entity_set'
+        callback = 'models.entity.entity_set',
     })
     t.assert_equals(type(operations.get_mutations()['entity']), 'table')
     t.assert_equals(operations.get_mutations()['entity'].description, 'Mutate entity')
@@ -256,7 +271,7 @@ g.test_add_remove_mutation_default = function()
 
     t.assert_items_equals(operations.list_mutations(), {'entity'})
 
-    operations.remove_mutation('entity')
+    operations.remove_mutation({ name = 'entity' })
     t.assert_equals(operations.get_mutations()['entity'], nil)
 
     t.assert_equals(operations.is_invalid(), true)
@@ -273,7 +288,7 @@ g.test_add_remove_mutation = function()
             name = types.long,
         },
         kind = types.string,
-        callback = 'models.entity.entity_set'
+        callback = 'models.entity.entity_set',
     })
     t.assert_equals(type(operations.get_mutations('test_schema')['entity']), 'table')
     t.assert_equals(operations.get_mutations('test_schema')['entity'].description, 'Mutate entity')
@@ -284,7 +299,7 @@ g.test_add_remove_mutation = function()
 
     t.assert_items_equals(operations.list_mutations('test_schema'), {'entity'})
 
-    operations.remove_mutation('entity', 'test_schema')
+    operations.remove_mutation({name = 'entity', schema = 'test_schema'})
     t.assert_equals(operations.get_mutations('test_schema')['entity'], nil)
 
     t.assert_equals(operations.is_invalid('test_schema'), true)
@@ -293,7 +308,10 @@ g.test_add_remove_mutation = function()
 end
 
 g.test_add_remove_mutation_with_prefix_default = function()
-    operations.add_mutations_prefix('test', nil, 'Simple prefix test')
+    operations.add_mutations_prefix({
+        prefix = 'test',
+        doc = 'Simple prefix test',
+    })
 
     t.assert_equals(type(operations.get_mutations()['test']), 'table')
     t.assert_equals(operations.get_mutations()['test'].description, 'Simple prefix test')
@@ -311,7 +329,7 @@ g.test_add_remove_mutation_with_prefix_default = function()
             name = types.long,
         },
         kind = types.string,
-        callback = 'models.entity.entity_1_set'
+        callback = 'models.entity.entity_1_set',
     })
 
     t.assert_equals(type(operations.get_mutations()['test'].kind.fields['entity_1']), 'table')
@@ -328,7 +346,7 @@ g.test_add_remove_mutation_with_prefix_default = function()
             name = types.long,
         },
         kind = types.string,
-        callback = 'models.entity.entity_2_set'
+        callback = 'models.entity.entity_2_set',
     })
 
     t.assert_equals(type(operations.get_mutations()['test'].kind.fields['entity_1']), 'table')
@@ -341,14 +359,17 @@ g.test_add_remove_mutation_with_prefix_default = function()
 
     t.assert_items_equals(operations.list_mutations(), {'test.entity_1', 'test.entity_2'})
 
-    operations.remove_mutation('entity_1', nil, 'test')
+    operations.remove_mutation({
+        name = 'entity_1',
+        prefix = 'test',
+    })
     t.assert_equals(type(operations.get_mutations()['test'].kind.fields['entity_2']), 'table')
     t.assert_equals(operations.get_mutations()['test'].kind.fields['entity_2'].description, 'Mutate entity 2')
     t.assert_equals(operations.is_invalid(), true)
     operations.reset_invalid()
     t.assert_equals(operations.is_invalid(), false)
 
-    operations.remove_mutation_prefix('test')
+    operations.remove_mutation_prefix({prefix = 'test'})
     t.assert_equals(operations.get_mutations()['test'], nil)
     t.assert_equals(operations.is_invalid(), true)
     operations.reset_invalid()
@@ -366,13 +387,17 @@ g.test_add_remove_mutation_with_prefix_default = function()
                 name = types.long,
             },
             kind = types.string,
-            callback = 'models.entity.entity_2_set'
+            callback = 'models.entity.entity_2_set',
         }
     )
 end
 
 g.test_add_remove_mutation_with_prefix = function()
-    operations.add_mutations_prefix('test', 'test_schema', 'Simple prefix test')
+    operations.add_mutations_prefix({
+        prefix = 'test',
+        schema = 'test_schema',
+        doc = 'Simple prefix test',
+    })
 
     t.assert_equals(type(operations.get_mutations('test_schema')['test']), 'table')
     t.assert_equals(operations.get_mutations('test_schema')['test'].description, 'Simple prefix test')
@@ -391,7 +416,7 @@ g.test_add_remove_mutation_with_prefix = function()
             name = types.long,
         },
         kind = types.string,
-        callback = 'models.entity.entity_1_set'
+        callback = 'models.entity.entity_1_set',
     })
 
     t.assert_equals(type(operations.get_mutations('test_schema')['test'].kind.fields['entity_1']), 'table')
@@ -412,7 +437,7 @@ g.test_add_remove_mutation_with_prefix = function()
             name = types.long,
         },
         kind = types.string,
-        callback = 'models.entity.entity_2_set'
+        callback = 'models.entity.entity_2_set',
     })
 
     t.assert_equals(type(operations.get_mutations('test_schema')['test'].kind.fields['entity_1']), 'table')
@@ -431,7 +456,11 @@ g.test_add_remove_mutation_with_prefix = function()
 
     t.assert_items_equals(operations.list_mutations('test_schema'), {'test.entity_1', 'test.entity_2'})
 
-    operations.remove_mutation('entity_1', 'test_schema', 'test')
+    operations.remove_mutation({
+        name = 'entity_1',
+        schema = 'test_schema',
+        prefix = 'test',
+    })
     t.assert_equals(type(operations.get_mutations('test_schema')['test'].kind.fields['entity_2']), 'table')
     t.assert_equals(
         operations.get_mutations('test_schema')['test'].kind.fields['entity_2'].description,
@@ -441,7 +470,10 @@ g.test_add_remove_mutation_with_prefix = function()
     operations.reset_invalid('test_schema')
     t.assert_equals(operations.is_invalid('test_schema'), false)
 
-    operations.remove_mutation_prefix('test', 'test_schema')
+    operations.remove_mutation_prefix({
+        prefix = 'test',
+        schema = 'test_schema',
+    })
     t.assert_equals(operations.get_mutations('test_schema')['test'], nil)
     t.assert_equals(operations.is_invalid('test_schema'), true)
     operations.reset_invalid('test_schema')
@@ -459,7 +491,7 @@ g.test_add_remove_mutation_with_prefix = function()
                 name = types.long,
             },
             kind = types.string,
-            callback = 'models.entity.entity_2_set'
+            callback = 'models.entity.entity_2_set',
         }
     )
 end
@@ -523,21 +555,21 @@ g.test_on_resolve_trigger = function()
         name = 'entity',
         doc = 'Get entity',
         args = {
-            entity_id = types.long
+            entity_id = types.long,
         },
         kind = types.string,
-        callback = 'test.unit.operations_test.stub1'
+        callback = 'test.unit.operations_test.stub1',
     })
 
     local res = operations.get_queries()['entity'].resolve()
     t.assert_equals(res, "Operations test")
 
-    local on_resolve_trigger1 = function(operation, field_name)
-        error(operation ..' '.. field_name, 0)
+    local on_resolve_trigger1 = function(operation_type, operation_schema, operation_prefix, operation_name, ...)
+        error(operation_type ..' '.. tostring(operation_schema) ..' '..tostring(operation_prefix) ..' '.. operation_name, 0)
     end
 
     operations.on_resolve(on_resolve_trigger1, nil)
-    t.assert_error_msg_contains('query entity', operations.get_queries()['entity'].resolve)
+    t.assert_error_msg_contains('query default nil entity', operations.get_queries()['entity'].resolve)
 
     operations.stop()
 
@@ -545,10 +577,10 @@ g.test_on_resolve_trigger = function()
         name = 'entity',
         doc = 'Get entity',
         args = {
-            entity_id = types.long
+            entity_id = types.long,
         },
         kind = types.string,
-        callback = 'test.unit.operations_test.stub2'
+        callback = 'test.unit.operations_test.stub2',
     })
 
     local on_resolve_trigger2 = function(_, field_name)
@@ -571,9 +603,9 @@ g.test_add_space_query = function()
         space = 'entity',
         doc = 'Get entity',
         args = {
-            entity_id = types.int.nonNull
+            entity_id = types.int.nonNull,
         },
-        callback = "models.entity.entity_get"
+        callback = 'models.entity.entity_get',
     })
     t.assert_equals(type(operations.get_queries()['entity']), 'table')
     t.assert_equals(operations.get_queries()['entity'].description, 'Get entity')
@@ -592,16 +624,19 @@ g.test_add_space_query = function()
 
     -- test add_space_query() with prefix
     space = test_helper.create_space()
-    operations.add_queries_prefix('test', nil, 'Simple prefix test')
+    operations.add_queries_prefix({
+        prefix = 'test',
+        doc = 'Simple prefix test',
+    })
 
     operations.add_space_query({
         prefix = 'test',
         space = 'entity',
         doc = 'Get entity',
         args = {
-            entity_id = types.int.nonNull
+            entity_id = types.int.nonNull,
         },
-        callback = "models.entity.entity_get"
+        callback = 'models.entity.entity_get',
     })
 
     t.assert_equals(type(operations.get_queries()['test'].kind.fields['entity']), 'table')
@@ -617,7 +652,7 @@ g.test_add_space_query = function()
     t.assert_equals(operations.get_queries()['test'].kind.fields['entity'], nil)
     t.assert_equals(operations.is_invalid(), true)
 
-    operations.remove_query_prefix('test')
+    operations.remove_query_prefix({prefix = 'test'})
     t.assert_equals(operations.get_queries()['test'], nil)
 
     space:drop()
@@ -631,9 +666,9 @@ g.test_add_space_query = function()
             space = 'entity',
             doc = 'Get entity',
             args = {
-                entity_id = types.int.nonNull
+                entity_id = types.int.nonNull,
             },
-            callback = "models.entity.entity_get"
+            callback = 'models.entity.entity_get',
         }
     )
 end
@@ -666,15 +701,18 @@ g.test_add_space_mutation = function()
 
     -- test add_space_mutation() with prefix
     space = test_helper.create_space()
-    operations.add_mutations_prefix('test', nil, 'Simple prefix test')
+    operations.add_mutations_prefix({
+        prefix = 'test',
+        doc = 'Simple prefix test'
+    })
     operations.add_space_mutation({
         prefix = 'test',
         space = 'entity',
         doc = 'Mutate entity',
         args = {
-            entity_id = types.int.nonNull
+            entity_id = types.int.nonNull,
         },
-        callback = "models.entity.entity_set"
+        callback = 'models.entity.entity_set',
     })
 
     t.assert_equals(type(operations.get_mutations()['test'].kind.fields['entity']), 'table')
@@ -690,7 +728,7 @@ g.test_add_space_mutation = function()
     t.assert_equals(operations.get_mutations()['test'].kind.fields['entity'], nil)
     t.assert_equals(operations.is_invalid(), true)
 
-    operations.remove_mutation_prefix('test')
+    operations.remove_mutation_prefix({prefix = 'test'})
     t.assert_equals(operations.get_mutations()['test'], nil)
 
     space:drop()
@@ -704,9 +742,9 @@ g.test_add_space_mutation = function()
             space = 'entity',
             doc = 'Mutate entity',
             args = {
-                entity_id = types.int.nonNull
+                entity_id = types.int.nonNull,
             },
-            callback = "models.entity.entity_set"
+            callback = 'models.entity.entity_set',
         }
     )
 end

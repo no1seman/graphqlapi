@@ -52,6 +52,11 @@ end
 
 local function funcall_wrap(fun_name, operation_type, operation_schema, operation_prefix, operation_name)
     checks('string', 'string', 'string|nil', 'string|nil', 'string')
+
+    if operation_schema == '__global__' then
+        operation_schema = 'default'
+    end
+
     return function(...)
         for trigger, _ in pairs(vars.on_resolve_triggers) do
             local ok, err = trigger(operation_type, operation_schema, operation_prefix, operation_name, ...)
@@ -560,9 +565,12 @@ local function remove_operations_by_space_name(space_name)
         for _, query_name in pairs(query_list) do
             local parts = query_name:split('.')
             if #parts == 2 then
-                remove_query(parts[2], nil, parts[1])
+                remove_query({
+                    prefix = parts[1],
+                    name = parts[2],
+                })
             else
-                remove_query(query_name)
+                remove_query({name = query_name})
             end
         end
         vars.space_query[space_name] = nil
@@ -574,9 +582,12 @@ local function remove_operations_by_space_name(space_name)
         for _, mutation_name in pairs(mutation_list) do
             local parts = mutation_name:split('.')
             if #parts == 2 then
-                remove_mutation(parts[2], nil, parts[1])
+                remove_mutation({
+                    name = parts[2],
+                    prefix = parts[1]
+                })
             else
-                remove_mutation(mutation_name)
+                remove_mutation({name = mutation_name})
             end
         end
         vars.space_mutation[space_name] = nil

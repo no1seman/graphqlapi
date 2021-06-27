@@ -14,7 +14,7 @@ end
 
 local function assert_types_absent(types_list)
     for _, _type in ipairs(types_list) do
-        t.assert_equals(types[_type], nil)
+        t.assert_equals(types()[_type], nil)
     end
 end
 
@@ -31,12 +31,12 @@ local function assert_mutations_absent(mutations_list)
 end
 
 local function assert_enum_include(enum_name, space_list)
-    if not space_list or space_list == {} or not types[enum_name].values or types[enum_name].values == {} then
+    if not space_list or space_list == {} or not types()[enum_name].values or types()[enum_name].values == {} then
         return
     end
     for _, search_value in ipairs(space_list) do
         local found = false
-        for key in pairs(types[enum_name].values) do
+        for key in pairs(types()[enum_name].values) do
             if search_value == key then
                 found = true
             end
@@ -46,12 +46,12 @@ local function assert_enum_include(enum_name, space_list)
 end
 
 local function assert_enum_absent(enum_name, space_list)
-    if not space_list or space_list == {} or not types[enum_name].values or types[enum_name].values == {} then
+    if not space_list or space_list == {} or not types()[enum_name].values or types()[enum_name].values == {} then
         return
     end
     for _, search_value in ipairs(space_list) do
         local found = false
-        for key in pairs(types[enum_name].values) do
+        for key in pairs(types()[enum_name].values) do
             if search_value == key then
                 found = true
             end
@@ -99,10 +99,10 @@ g.test_init_stop = function()
     t.assert_items_include(types.list_types(), types_list)
     t.assert_items_equals(operations.list_queries(), queries_list)
     t.assert_items_equals(operations.list_mutations(), mutations_list)
-    t.assert_items_equals(types['SpaceInfoNames'].values, {})
-    t.assert_items_equals(types['SpaceDropNames'].values, {})
-    t.assert_items_equals(types['SpaceTruncateNames'].values, {})
-    t.assert_items_equals(types['SpaceUpdateNames'].values, {})
+    t.assert_items_equals(types().SpaceInfoNames.values, {})
+    t.assert_items_equals(types().SpaceDropNames.values, {})
+    t.assert_items_equals(types().SpaceTruncateNames.values, {})
+    t.assert_items_equals(types().SpaceUpdateNames.values, {})
     helpers.stop()
 
     assert_types_absent(types_list)
@@ -158,10 +158,10 @@ g.test_space_info = function()
     assert_types_absent(types_list)
     assert_queries_absent(queries_list)
 
-    helpers.space_info_init({'good_space'}, {'bad_space'})
-    t.assert_items_equals(types['SpaceInfoNames'].values, {})
+    helpers.space_info_init({include = {'good_space'}, exclude = {'bad_space'}})
+    t.assert_items_equals(types()['SpaceInfoNames'].values, {})
     local bad_space = create_space('bad_space')
-    t.assert_items_equals(types['SpaceInfoNames'].values, {})
+    t.assert_items_equals(types()['SpaceInfoNames'].values, {})
     local good_space = create_space('good_space')
     helpers.update_lists()
     assert_enum_include('SpaceInfoNames', {'good_space'})
@@ -171,7 +171,7 @@ g.test_space_info = function()
 
     good_space = create_space('good_space')
     bad_space = create_space('bad_space')
-    helpers.space_info_init({'good_space'}, {'bad_space'})
+    helpers.space_info_init({include = {'good_space'}, exclude = {'bad_space'}})
     assert_enum_include('SpaceInfoNames', {'good_space'})
     assert_enum_absent('SpaceInfoNames', {'bad_space'})
     good_space:drop()
@@ -205,10 +205,10 @@ g.test_space_drop = function()
     assert_types_absent(types_list)
     assert_mutations_absent(mutations_list)
 
-    helpers.space_drop_init({'good_space'}, {'bad_space'})
-    t.assert_items_equals(types['SpaceDropNames'].values, {})
+    helpers.space_drop_init({include = {'good_space'}, exclude = {'bad_space'}})
+    t.assert_items_equals(types()['SpaceDropNames'].values, {})
     local bad_space = create_space('bad_space')
-    t.assert_items_equals(types['SpaceDropNames'].values, {})
+    t.assert_items_equals(types()['SpaceDropNames'].values, {})
     local good_space = create_space('good_space')
     helpers.update_lists()
     assert_enum_include('SpaceDropNames', {'good_space'})
@@ -218,7 +218,7 @@ g.test_space_drop = function()
 
     good_space = create_space('good_space')
     bad_space = create_space('bad_space')
-    helpers.space_drop_init({'good_space'}, {'bad_space'})
+    helpers.space_drop_init({include = {'good_space'}, exclude = {'bad_space'}})
     assert_enum_include('SpaceDropNames', {'good_space'})
     assert_enum_absent('SpaceDropNames', {'bad_space'})
     good_space:drop()
@@ -242,10 +242,10 @@ g.test_space_truncate = function()
     assert_types_absent(types_list)
     assert_mutations_absent(mutations_list)
 
-    helpers.space_truncate_init({'good_space'}, {'bad_space'})
-    t.assert_items_equals(types['SpaceTruncateNames'].values, {})
+    helpers.space_truncate_init({include = {'good_space'}, exclude = {'bad_space'}})
+    t.assert_items_equals(types()['SpaceTruncateNames'].values, {})
     local bad_space = create_space('bad_space')
-    t.assert_items_equals(types['SpaceTruncateNames'].values, {})
+    t.assert_items_equals(types()['SpaceTruncateNames'].values, {})
     local good_space = create_space('good_space')
     helpers.update_lists()
     assert_enum_include('SpaceTruncateNames', {'good_space'})
@@ -255,7 +255,7 @@ g.test_space_truncate = function()
 
     good_space = create_space('good_space')
     bad_space = create_space('bad_space')
-    helpers.space_truncate_init({'good_space'}, {'bad_space'})
+    helpers.space_truncate_init({include = {'good_space'}, exclude = {'bad_space'}})
     assert_enum_include('SpaceTruncateNames', {'good_space'})
     assert_enum_absent('SpaceTruncateNames', {'bad_space'})
     good_space:drop()
@@ -292,10 +292,10 @@ g.test_space_update = function()
     assert_types_absent(types_list)
     assert_mutations_absent(mutations_list)
 
-    helpers.space_update_init({'good_space'}, {'bad_space'})
-    t.assert_items_equals(types['SpaceUpdateNames'].values, {})
+    helpers.space_update_init({include = {'good_space'}, exclude = {'bad_space'}})
+    t.assert_items_equals(types()['SpaceUpdateNames'].values, {})
     local bad_space = create_space('bad_space')
-    t.assert_items_equals(types['SpaceUpdateNames'].values, {})
+    t.assert_items_equals(types()['SpaceUpdateNames'].values, {})
     local good_space = create_space('good_space')
     helpers.update_lists()
     assert_enum_include('SpaceUpdateNames', {'good_space'})
@@ -305,7 +305,7 @@ g.test_space_update = function()
 
     good_space = create_space('good_space')
     bad_space = create_space('bad_space')
-    helpers.space_update_init({'good_space'}, {'bad_space'})
+    helpers.space_update_init({include = {'good_space'}, exclude = {'bad_space'}})
     assert_enum_include('SpaceUpdateNames', {'good_space'})
     assert_enum_absent('SpaceUpdateNames', {'bad_space'})
     good_space:drop()

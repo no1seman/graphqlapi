@@ -329,6 +329,9 @@ end
 
 return setmetatable(types, {
     __call = function(_, schema_name)
+        -- if schema_name == nil then
+        --     schema_name = 'default'
+        -- end
         return types.get_env(schema_name)
     end,
     __newindex = function()
