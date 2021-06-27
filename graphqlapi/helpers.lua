@@ -90,8 +90,8 @@ local function operations_prefixes(opts)
     opts = opts or {}
     opts.prefix = opts.prefix or DEFAULT_PREFIX
 
-    if opts.schema == nil or opts.schema:lower() == 'default' then
-        opts.schema = '__global__'
+    if opts.schema == nil then
+        opts.schema = 'default'
     else
         opts.schema = opts.schema:lower()
     end
@@ -143,8 +143,8 @@ end
 local function space_types(schema_name)
     checks('?string')
 
-    if schema_name == nil or schema_name:lower() == 'default' then
-        schema_name = '__global__'
+    if schema_name == nil then
+        schema_name = 'default'
     else
         schema_name = schema_name:lower()
     end
@@ -490,8 +490,8 @@ local function space_info_init(opts)
     assert(utils.is_string_array(opts.include))
     assert(utils.is_string_array(opts.exclude))
 
-    if opts.schema == nil or opts.schema:lower() == 'default' then
-        opts.schema = '__global__'
+    if opts.schema == nil then
+        opts.schema = 'default'
     else
         opts.schema = opts.schema:lower()
     end
@@ -590,8 +590,8 @@ local function space_drop_init(opts)
     assert(utils.is_string_array(opts.include))
     assert(utils.is_string_array(opts.exclude))
 
-    if opts.schema == nil or opts.schema:lower() == 'default' then
-        opts.schema = '__global__'
+    if opts.schema == nil then
+        opts.schema = 'default'
     else
         opts.schema = opts.schema:lower()
     end
@@ -691,8 +691,8 @@ local function space_truncate_init(opts)
     assert(utils.is_string_array(opts.include))
     assert(utils.is_string_array(opts.exclude))
 
-    if opts.schema == nil or opts.schema:lower() == 'default' then
-        opts.schema = '__global__'
+    if opts.schema == nil then
+        opts.schema = 'default'
     else
         opts.schema = opts.schema:lower()
     end
@@ -803,8 +803,8 @@ local function space_update_init(opts)
     assert(utils.is_string_array(opts.include))
     assert(utils.is_string_array(opts.exclude))
 
-    if opts.schema == nil or opts.schema:lower() == 'default' then
-        opts.schema = '__global__'
+    if opts.schema == nil then
+        opts.schema = 'default'
     else
         opts.schema = opts.schema:lower()
     end
@@ -848,8 +848,8 @@ local function space_create_init(opts)
 
     opts = opts or {}
 
-    if opts.schema == nil or opts.schema:lower() == 'default' then
-        opts.schema = '__global__'
+    if opts.schema == nil then
+        opts.schema = 'default'
     else
         opts.schema = opts.schema:lower()
     end
@@ -931,8 +931,8 @@ local function init(opts)
 
     opts = opts or {}
 
-    if opts.schema == nil or opts.schema:lower() == 'default' then
-        opts.schema = '__global__'
+    if opts.schema == nil then
+        opts.schema = 'default'
     else
         opts.schema = opts.schema:lower()
     end

@@ -13,59 +13,38 @@ g.after_each = function()
 end
 
 g.test_remove_all = function()
-    -- types.add(types.enum({
-    --     name = 'SpaceIndexType',
-    --     description = 'Space index type',
-    --     values = {
-    --         tree = 'TREE',
-    --         hash = 'HASH',
-    --         bitset = 'BITSET',
-    --         rtree = 'RTREE'
-    --     }
-    -- }))
+    t.assert_items_equals(types.list_types(), {})
+    t.assert_items_equals(types.list_types('Spaces'), {})
+    types.add(types.enum({
+        name = 'SpaceIndexType',
+        description = 'Space index type',
+        values = {
+            tree = 'TREE',
+            hash = 'HASH',
+            bitset = 'BITSET',
+            rtree = 'RTREE'
+        }
+    }))
+
+    types.add(types.enum({
+        name = 'SpaceIndexType',
+        description = 'Space index type',
+        values = {
+            tree = 'TREE',
+            hash = 'HASH',
+            bitset = 'BITSET',
+            rtree = 'RTREE'
+        }
+    }), 'Spaces')
+
+    t.assert_items_equals(types.schemas(), {'spaces', 'default'})
+
+    t.assert_items_equals(types.list_types(), {'SpaceIndexType'})
+    t.assert_items_equals(types.list_types('Spaces'), {'SpaceIndexType'})
 
     types.remove_all()
-    t.assert_items_equals(types.list_types(),
-        {
-            'add_space_input_object',
-            'add_space_object',
-            'add',
-            'bare',
-            'boolean',
-            'directive',
-            'double',
-            'enum',
-            'float',
-            'get_env',
-            'id',
-            'include',
-            'inputObject',
-            -- 'inputMap',
-            -- 'inputUnion',
-            'int',
-            'interface',
-            'is_invalid',
-            'list_types',
-            'list',
-            'long',
-            --'map',
-            'mapper',
-            'nonNull',
-            'nullable',
-            'object',
-            'remove_all',
-            'remove_types_by_space_name',
-            'remove_recursive',
-            'remove',
-            'reset_invalid',
-            'resolve',
-            'scalar',
-            'schemas',
-            'skip',
-            'string',
-            'union',
-        }
-    )
+    t.assert_items_equals(types.list_types(), {})
+    t.assert_items_equals(types.list_types('Spaces'), {})
 end
 
 g.test_add_remove_space_object = function ()

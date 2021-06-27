@@ -22,6 +22,7 @@ local DEFAULT_DIR_NAME = 'models'
 local DEFAULT_ENDPOINT = '/admin/graphql'
 
 for _, module in ipairs({
+    'graphqlapi.cluster',
     'graphqlapi.funcall',
     'graphqlapi.helpers',
     'graphqlapi.middleware',
@@ -58,8 +59,8 @@ local e_graphql_execute = errors.new_class('GraphQL execution failed')
 local function get_schema(schema_name)
     checks('?string')
 
-    if schema_name == nil or schema_name:lower() == 'default' then
-        schema_name = '__global__'
+    if schema_name == nil then
+        schema_name = 'default'
     else
         schema_name = schema_name:lower()
     end

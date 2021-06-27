@@ -564,8 +564,11 @@ g.test_on_resolve_trigger = function()
     local res = operations.get_queries()['entity'].resolve()
     t.assert_equals(res, "Operations test")
 
-    local on_resolve_trigger1 = function(operation_type, operation_schema, operation_prefix, operation_name, ...)
-        error(operation_type ..' '.. tostring(operation_schema) ..' '..tostring(operation_prefix) ..' '.. operation_name, 0)
+    local on_resolve_trigger1 = function(operation_type, operation_schema, operation_prefix, operation_name)
+        error(
+            operation_type ..' '.. tostring(operation_schema) ..' '..tostring(operation_prefix) ..' '.. operation_name,
+            0
+        )
     end
 
     operations.on_resolve(on_resolve_trigger1, nil)

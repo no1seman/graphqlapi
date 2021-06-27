@@ -145,8 +145,8 @@ end
 types.add = function(_type, schema_name)
     checks('table', '?string')
 
-    if schema_name == nil or schema_name:lower() == 'default' then
-        schema_name = '__global__'
+    if schema_name == nil then
+        schema_name = 'default'
     else
         schema_name = schema_name:lower()
     end
@@ -159,8 +159,8 @@ end
 types.is_invalid = function(schema_name)
     checks('?string')
 
-    if schema_name == nil or schema_name:lower() == 'default' then
-        schema_name = '__global__'
+    if schema_name == nil then
+        schema_name = 'default'
     else
         schema_name = schema_name:lower()
     end
@@ -171,8 +171,8 @@ end
 types.reset_invalid = function(schema_name)
     checks('?string')
 
-    if schema_name == nil or schema_name:lower() == 'default' then
-        schema_name = '__global__'
+    if schema_name == nil then
+        schema_name = 'default'
     else
         schema_name = schema_name:lower()
     end
@@ -183,8 +183,8 @@ end
 types.remove = function (type_name, schema_name)
     checks('string', '?string')
 
-    if schema_name == nil or schema_name:lower() == 'default' then
-        schema_name = '__global__'
+    if schema_name == nil then
+        schema_name = 'default'
         if not internal_types[type_name] then
             types(schema_name)[type_name] = nil
             vars.schema_invalid[schema_name] = true
@@ -223,7 +223,7 @@ types.remove_types_by_space_name = function(space_name)
 end
 
 types.remove_all = function()
-    for schema in pairs(types.schemas()) do
+    for _, schema in pairs(types.schemas()) do
         for type_name in pairs(types(schema)) do
             types.remove(type_name, schema)
         end
@@ -240,8 +240,8 @@ types.add_space_object = function(opts)
         fields = '?table',
     })
 
-    if opts.schema == nil or opts.schema:lower() == 'default' then
-        opts.schema = '__global__'
+    if opts.schema == nil then
+        opts.schema = 'default'
     else
         opts.schema = opts.schema:lower()
     end
@@ -270,8 +270,8 @@ types.add_space_input_object = function(opts)
         fields = '?table',
     })
 
-    if opts.schema == nil or opts.schema:lower() == 'default' then
-        opts.schema = '__global__'
+    if opts.schema == nil then
+        opts.schema = 'default'
     else
         opts.schema = opts.schema:lower()
     end
@@ -294,8 +294,8 @@ end
 types.list_types = function(schema_name)
     checks('?string')
 
-    if schema_name == nil or schema_name:lower() == 'default' then
-        schema_name = '__global__'
+    if schema_name == nil then
+        schema_name = 'default'
     else
         schema_name = schema_name:lower()
     end
@@ -310,9 +310,9 @@ end
 types.schemas = function()
     local schemas = {}
     for schema_name in pairs(vars.schema_invalid or {}) do
-        if schema_name == '__global__' then
-            schema_name = 'default'
-        end
+        -- if schema_name == '__global__' then
+        --     schema_name = 'default'
+        -- end
         table.insert(schemas, schema_name)
     end
     return schemas
@@ -329,9 +329,9 @@ end
 
 return setmetatable(types, {
     __call = function(_, schema_name)
-        -- if schema_name == nil then
-        --     schema_name = 'default'
-        -- end
+        if schema_name == nil then
+            schema_name = 'default'
+        end
         return types.get_env(schema_name)
     end,
     __newindex = function()

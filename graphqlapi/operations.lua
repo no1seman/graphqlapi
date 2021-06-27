@@ -29,8 +29,8 @@ local MUTATION_PREFIX = 'mutation_api_'
 local function is_invalid(schema_name)
     checks('?string')
 
-    if schema_name == nil or schema_name:lower() == 'default' then
-        schema_name = '__global__'
+    if schema_name == nil then
+        schema_name = 'default'
     else
         schema_name = schema_name:lower()
     end
@@ -41,8 +41,8 @@ end
 local function reset_invalid(schema_name)
     checks('?string')
 
-    if schema_name == nil or schema_name:lower() == 'default' then
-        schema_name = '__global__'
+    if schema_name == nil then
+        schema_name = 'default'
     else
         schema_name = schema_name:lower()
     end
@@ -53,9 +53,9 @@ end
 local function funcall_wrap(fun_name, operation_type, operation_schema, operation_prefix, operation_name)
     checks('string', 'string', 'string|nil', 'string|nil', 'string')
 
-    if operation_schema == '__global__' then
-        operation_schema = 'default'
-    end
+    -- if operation_schema == '__global__' then
+    --     operation_schema = 'default'
+    -- end
 
     return function(...)
         for trigger, _ in pairs(vars.on_resolve_triggers) do
@@ -80,8 +80,8 @@ local function add_queries_prefix(opts)
         doc = '?string'
     })
 
-    if opts.schema == nil or opts.schema:lower() == 'default' then
-        opts.schema = '__global__'
+    if opts.schema == nil then
+        opts.schema = 'default'
     else
         opts.schema = opts.schema:lower()
     end
@@ -112,8 +112,8 @@ local function remove_query_prefix(opts)
         schema = '?string'
     })
 
-    if opts.schema == nil or opts.schema:lower() == 'default' then
-        opts.schema = '__global__'
+    if opts.schema == nil then
+        opts.schema = 'default'
     else
         opts.schema = opts.schema:lower()
     end
@@ -132,8 +132,8 @@ local function add_mutations_prefix(opts)
         doc = '?string'
     })
 
-    if opts.schema == nil or opts.schema:lower() == 'default' then
-        opts.schema = '__global__'
+    if opts.schema == nil then
+        opts.schema = 'default'
     else
         opts.schema = opts.schema:lower()
     end
@@ -164,8 +164,8 @@ local function remove_mutation_prefix(opts)
         schema = '?string'
     })
 
-    if opts.schema == nil or opts.schema:lower() == 'default' then
-        opts.schema = '__global__'
+    if opts.schema == nil then
+        opts.schema = 'default'
     else
         opts.schema = opts.schema:lower()
     end
@@ -188,8 +188,8 @@ local function add_query(opts)
         callback = 'string',
     })
 
-    if opts.schema == nil or opts.schema:lower() == 'default' then
-        opts.schema = '__global__'
+    if opts.schema == nil then
+        opts.schema = 'default'
     else
         opts.schema = opts.schema:lower()
     end
@@ -245,8 +245,8 @@ local function remove_query(opts)
         prefix = '?string',
     })
 
-    if opts.schema == nil or opts.schema:lower() == 'default' then
-        opts.schema = '__global__'
+    if opts.schema == nil then
+        opts.schema = 'default'
     else
         opts.schema = opts.schema:lower()
     end
@@ -281,8 +281,8 @@ local function list_queries(schema_name)
 
     local queries = {}
 
-    if schema_name == nil or schema_name:lower() == 'default' then
-        schema_name = '__global__'
+    if schema_name == nil then
+        schema_name = 'default'
     else
         schema_name = schema_name:lower()
     end
@@ -312,8 +312,8 @@ local function add_mutation(opts)
         callback = 'string',
     })
 
-    if opts.schema == nil or opts.schema:lower() == 'default' then
-        opts.schema = '__global__'
+    if opts.schema == nil then
+        opts.schema = 'default'
     else
         opts.schema = opts.schema:lower()
     end
@@ -369,8 +369,8 @@ local function remove_mutation(opts)
         prefix = '?string'
     })
 
-    if opts.schema == nil or opts.schema:lower() == 'default' then
-        opts.schema = '__global__'
+    if opts.schema == nil then
+        opts.schema = 'default'
     else
         opts.schema = opts.schema:lower()
     end
@@ -400,8 +400,8 @@ local function add_space_query(opts)
         callback = 'string',
     })
 
-    if opts.schema == nil or opts.schema:lower() == 'default' then
-        opts.schema = '__global__'
+    if opts.schema == nil then
+        opts.schema = 'default'
     else
         opts.schema = opts.schema:lower()
     end
@@ -509,8 +509,8 @@ local function list_mutations(schema_name)
 
     local mutations = {}
 
-    if schema_name == nil or schema_name:lower() == 'default' then
-        schema_name = '__global__'
+    if schema_name == nil then
+        schema_name = 'default'
     else
         schema_name = schema_name:lower()
     end
@@ -545,8 +545,8 @@ end
 local function remove_all(schema_name)
     checks('?string')
 
-    if schema_name == nil or schema_name:lower() == 'default' then
-        schema_name = '__global__'
+    if schema_name == nil then
+        schema_name = 'default'
     else
         schema_name = schema_name:lower()
     end
@@ -608,8 +608,8 @@ end
 local function get_queries(schema_name)
     checks('?string')
 
-    if schema_name == nil or schema_name:lower() == 'default' then
-        schema_name = '__global__'
+    if schema_name == nil then
+        schema_name = 'default'
     else
         schema_name = schema_name:lower()
     end
@@ -620,8 +620,8 @@ end
 local function get_mutations(schema_name)
     checks('?string')
 
-    if schema_name == nil or schema_name:lower() == 'default' then
-        schema_name = '__global__'
+    if schema_name == nil then
+        schema_name = 'default'
     else
         schema_name = schema_name:lower()
     end
