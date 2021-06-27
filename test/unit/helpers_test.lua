@@ -6,11 +6,11 @@ local helpers = require('graphqlapi.helpers')
 local operations = require('graphqlapi.operations')
 local types = require('graphqlapi.types')
 
-g.after_each = function()
+g.after_each(function()
     operations.remove_all()
     types.remove_all()
     helpers.stop()
-end
+end)
 
 local function assert_types_absent(types_list)
     for _, _type in ipairs(types_list) do

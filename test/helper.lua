@@ -21,9 +21,9 @@ end
 
 helper.create_space = function()
     local format = {
-        { name = 'bucket_id', type = 'unsigned', is_nullable = false },
-        { name = 'entity_id', type = 'string', is_nullable = false },
-        { name = 'entity', type = 'string', is_nullable = true },
+        { name = 'bucket_id', type = 'unsigned', is_nullable = false, comment = 'Sharding key' },
+        { name = 'entity_id', type = 'string', is_nullable = false, comment = 'Entity ID' },
+        { name = 'entity', type = 'string', is_nullable = true, comment = 'Entity value' },
     }
 
     local space = box.space['entity']

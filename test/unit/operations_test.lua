@@ -5,30 +5,31 @@ local test_helper = require('test.helper')
 local operations = require('graphqlapi.operations')
 local types = require('graphqlapi.types')
 
-g.before_each = function()
+g.before_each(function()
     types.remove_all()
     operations.remove_all()
-end
+end)
 
-g.after_each = function()
+g.after_each(function()
     types.remove_all()
     operations.remove_all()
-end
+end)
 
 g.test_add_remove_query_default = function()
     operations.add_query({
         name = 'entity',
         doc = 'Get entity',
         args = {
-            entity_id = types.long
+            entity_id = types.long,
         },
         kind = types.string,
-        callback = 'models.entity.entity_get'
+        callback = 'models.entity.entity_get',
     })
 
     t.assert_equals(type(operations.get_queries()['entity']), 'table')
     t.assert_equals(operations.get_queries()['entity'].description, 'Get entity')
     t.assert_equals(operations.is_invalid(), true)
+    t.assert_items_equals(operations.schemas(), {'default'})
 
     operations.reset_invalid()
     t.assert_equals(operations.is_invalid(), false)
@@ -50,10 +51,10 @@ g.test_add_remove_query = function()
         name = 'entity',
         doc = 'Get entity',
         args = {
-            entity_id = types.long
+            entity_id = types.long,
         },
         kind = types.string,
-        callback = 'models.entity.entity_get'
+        callback = 'models.entity.entity_get',
     })
 
     t.assert_equals(type(operations.get_queries('test_schema')['entity']), 'table')
@@ -77,7 +78,7 @@ end
 g.test_add_remove_query_with_prefix_default = function()
     operations.add_queries_prefix({
         prefix = 'test',
-        doc ='Simple prefix test'
+        doc = 'Simple prefix test',
     })
 
     t.assert_items_equals(operations.get_queries()['test'].resolve(), {})
@@ -97,7 +98,7 @@ g.test_add_remove_query_with_prefix_default = function()
             entity_id = types.long,
         },
         kind = types.string,
-        callback = 'models.entity.entity_1_get'
+        callback = 'models.entity.entity_1_get',
     })
 
     t.assert_equals(type(operations.get_queries()['test'].kind.fields['entity_1']), 'table')
@@ -152,7 +153,7 @@ g.test_add_remove_query_with_prefix_default = function()
             name = 'entity_2',
             doc = 'Get entity 2',
             args = {
-                entity_id = types.long
+                entity_id = types.long,
             },
             kind = types.string,
             callback = 'models.entity.entity_2_get',
@@ -220,7 +221,7 @@ g.test_add_remove_query_with_prefix = function()
     operations.remove_query({
         name = 'entity_1',
         schema = 'test_schema',
-        prefix = 'test'
+        prefix = 'test',
     })
 
     t.assert_equals(type(operations.get_queries('test_schema')['test'].kind.fields['entity_2']), 'table')

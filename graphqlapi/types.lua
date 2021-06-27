@@ -253,7 +253,7 @@ types.list_types = function(schema_name)
     else
         schema_name = schema_name:lower()
     end
-    print('types.list_types> schema_name: '..schema_name)
+
     local type_list = {}
     for _type in pairs(types(schema_name)) do
         table.insert(type_list, _type)

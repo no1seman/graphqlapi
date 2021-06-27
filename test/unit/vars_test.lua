@@ -6,8 +6,8 @@ require('test.helper')
 g.test_vars = function()
     local vars = require('graphqlapi.vars').new('vars_test')
 
-    vars:new('test_nil', nil)
     vars:new('test_not_nil', 'not_nil')
+    vars:new('test_nil', nil)
 
     t.assert_equals(vars.test_nil, nil)
     t.assert_equals(vars.test_not_nil, 'not_nil')
@@ -15,6 +15,8 @@ g.test_vars = function()
     t.assert_equals(vars.test_nil, {})
     vars.test_nil = nil
     t.assert_equals(vars.test_nil, nil)
+    vars.test_not_nil = nil
+    t.assert_equals(vars.test_not_nil, 'not_nil')
 
     require('graphqlapi.vars').stop()
     t.assert_equals(_G._graphqlapi_defaults, nil)

@@ -90,11 +90,11 @@ local function operations_prefixes(opts)
     opts = opts or {}
     opts.prefix = opts.prefix or DEFAULT_PREFIX
 
-    if opts.schema == nil then
-        opts.schema = 'default'
-    else
-        opts.schema = opts.schema:lower()
-    end
+    -- if opts.schema == nil then
+    --     opts.schema = 'default'
+    -- else
+    --     opts.schema = opts.schema:lower()
+    -- end
 
     if vars.helpers.info.enabled then
         if not vars.prefix.queries then
@@ -143,11 +143,11 @@ end
 local function space_types(schema_name)
     checks('?string')
 
-    if schema_name == nil then
-        schema_name = 'default'
-    else
-        schema_name = schema_name:lower()
-    end
+    -- if schema_name == nil then
+    --     schema_name = 'default'
+    -- else
+    --     schema_name = schema_name:lower()
+    -- end
 
     local type_list = {}
 
@@ -883,7 +883,7 @@ local function space_create_init(opts)
             ck_constraint = types.list(types(vars.helpers.create.schema).SpaceCkConstraintInput)
         },
         kind = types(vars.helpers.create.schema).SpaceInfo,
-        callback = 'graphqlapi.spaceapi.space_create'
+        callback = 'graphqlapi.spaceapi.space_create',
     })
 end
 

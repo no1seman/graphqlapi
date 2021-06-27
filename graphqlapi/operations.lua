@@ -73,7 +73,7 @@ local function add_queries_prefix(opts)
     checks({
         prefix = 'string',
         schema = '?string',
-        doc = '?string'
+        doc = '?string',
     })
 
     if opts.schema == nil then
@@ -105,7 +105,7 @@ end
 local function remove_query_prefix(opts)
     checks({
         prefix = 'string',
-        schema = '?string'
+        schema = '?string',
     })
 
     if opts.schema == nil then
@@ -125,7 +125,7 @@ local function add_mutations_prefix(opts)
     checks({
         prefix = 'string',
         schema = '?string',
-        doc = '?string'
+        doc = '?string',
     })
 
     if opts.schema == nil then
@@ -157,7 +157,7 @@ end
 local function remove_mutation_prefix(opts)
     checks({
         prefix = 'string',
-        schema = '?string'
+        schema = '?string',
     })
 
     if opts.schema == nil then
@@ -362,7 +362,7 @@ local function remove_mutation(opts)
     checks({
         name = 'string',
         schema = '?string',
-        prefix = '?string'
+        prefix = '?string',
     })
 
     if opts.schema == nil then
@@ -538,20 +538,20 @@ local function stop()
     vars.schema_invalid = nil
 end
 
-local function remove_all(schema_name)
-    checks('?string')
+local function remove_all()
+    -- checks('?string')
 
-    if schema_name == nil then
-        schema_name = 'default'
-    else
-        schema_name = schema_name:lower()
-    end
+    -- if schema_name == nil then
+    --     schema_name = 'default'
+    -- else
+    --     schema_name = schema_name:lower()
+    -- end
 
-    vars.queries[schema_name] = {}
-    vars.mutations[schema_name] = {}
+    vars.queries = {}
+    vars.mutations = {}
     vars.space_query = nil
     vars.space_mutation = nil
-    vars.schema_invalid[schema_name] = true
+    vars.schema_invalid = {}
 end
 
 local function remove_operations_by_space_name(space_name)

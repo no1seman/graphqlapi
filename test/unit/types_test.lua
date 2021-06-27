@@ -6,17 +6,15 @@ local types = require('graphqlapi.types')
 
 local json = require('json')
 
-g.before_all = function()
+g.before_all(function()
     types.remove_all()
-end
+end)
 
-g.after_each = function()
+g.after_each(function()
     types.remove_all()
-end
+end)
 
 g.test_remove_all = function()
-    print('test_remove_all> types.schemas(): ' .. json.encode(types.schemas()))
-    print('test_remove_all> types.list_types(): '..json.encode(types.list_types()))
     t.assert_items_equals(types.list_types(), {})
     t.assert_items_equals(types.list_types('Spaces'), {})
     types.add(types.enum({
