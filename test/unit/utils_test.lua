@@ -49,6 +49,56 @@ g.test_merge_maps = function()
 
     res = utils.merge_maps({a = 'a', b = 'b1', c = 'c2'}, {b = 'b2', c = 'c1', d = 'd'})
     t.assert_items_equals(res, {a = 'a', b = 'b2', c = 'c1', d = 'd'})
+
+    res = utils.merge_maps(
+        {},
+        {
+            ['space1'] = {name = 'space1', schema = 'default', prefix = 'spaces'},
+        }
+    )
+    t.assert_items_equals(res, {
+        space1 = {name = "space1", prefix = "spaces", schema = "default"},
+    })
+
+    res = utils.merge_maps(
+        {
+            ['space1'] = {name = 'space1', schema = 'default', prefix = 'spaces'},
+        },
+        {
+            ['space1'] = {name = 'space1', schema = 'default', prefix = 'spaces'},
+        }
+    )
+    t.assert_items_equals(res, {
+        space1 = {name = "space1", prefix = "spaces", schema = "default"},
+    })
+
+    res = utils.merge_maps(
+        {
+            ['space1'] = {name = 'space1', schema = 'default', prefix = 'spaces'},
+        },
+        {
+            ['space2'] = {name = 'space2', schema = 'default', prefix = 'spaces'},
+        }
+    )
+    t.assert_items_equals(res, {
+        space1 = {name = "space1", prefix = "spaces", schema = "default"},
+        space2 = {name = "space2", prefix = "spaces", schema = "default"},
+    })
+
+    res = utils.merge_maps(
+        {
+            ['space1'] = {name = 'space1', schema = 'default', prefix = 'spaces'},
+            ['space2'] = {name = 'space2', schema = 'default', prefix = 'spaces'},
+        },
+        {
+            ['space2'] = {name = 'space2', schema = 'default', prefix = 'spaces'},
+            ['space1'] = {name = 'space1', schema = 'default', prefix = 'spaces'},
+        }
+    )
+    t.assert_items_equals(res, {
+        space1 = {name = "space1", prefix = "spaces", schema = "default"},
+        space2 = {name = "space2", prefix = "spaces", schema = "default"},
+    })
 end
 
 g.test_merge_arrays = function()
