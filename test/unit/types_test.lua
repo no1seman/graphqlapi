@@ -4,7 +4,7 @@ local g = t.group('types')
 local test_helper = require('test.helper')
 local types = require('graphqlapi.types')
 
-local json = require('json')
+--local json = require('json')
 
 g.before_all(function()
     types.remove_all()

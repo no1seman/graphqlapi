@@ -15,7 +15,7 @@ g.after_each(function()
     operations.remove_all()
 end)
 
-g.test_add_remove_query_default = function()
+g.test_add_remove_query_default_schema_no_prefix = function()
     operations.add_query({
         name = 'entity',
         doc = 'Get entity',
@@ -45,37 +45,7 @@ g.test_add_remove_query_default = function()
     t.assert_equals(operations.is_invalid(), false)
 end
 
-g.test_add_remove_query = function()
-    operations.add_query({
-        schema = 'test_schema',
-        name = 'entity',
-        doc = 'Get entity',
-        args = {
-            entity_id = types.long,
-        },
-        kind = types.string,
-        callback = 'models.entity.entity_get',
-    })
-
-    t.assert_equals(type(operations.get_queries('test_schema')['entity']), 'table')
-    t.assert_equals(operations.get_queries('test_schema')['entity'].description, 'Get entity')
-    t.assert_equals(operations.is_invalid('test_schema'), true)
-
-    operations.reset_invalid('test_schema')
-    t.assert_equals(operations.is_invalid('test_schema'), false)
-
-    t.assert_items_equals(operations.list_queries('test_schema'), {'entity'})
-
-    operations.remove_query({name = 'entity', schema = 'test_schema'})
-
-    t.assert_equals(operations.get_queries('test_schema')['entity'], nil)
-
-    t.assert_equals(operations.is_invalid('test_schema'), true)
-    operations.reset_invalid('test_schema')
-    t.assert_equals(operations.is_invalid('test_schema'), false)
-end
-
-g.test_add_remove_query_with_prefix_default = function()
+g.test_add_remove_query_default_schema_with_prefix = function()
     operations.add_queries_prefix({
         prefix = 'test',
         doc = 'Simple prefix test',
@@ -161,7 +131,37 @@ g.test_add_remove_query_with_prefix_default = function()
     )
 end
 
-g.test_add_remove_query_with_prefix = function()
+g.test_add_remove_query_custom_schema_no_prefix = function()
+    operations.add_query({
+        schema = 'test_schema',
+        name = 'entity',
+        doc = 'Get entity',
+        args = {
+            entity_id = types.long,
+        },
+        kind = types.string,
+        callback = 'models.entity.entity_get',
+    })
+
+    t.assert_equals(type(operations.get_queries('test_schema')['entity']), 'table')
+    t.assert_equals(operations.get_queries('test_schema')['entity'].description, 'Get entity')
+    t.assert_equals(operations.is_invalid('test_schema'), true)
+
+    operations.reset_invalid('test_schema')
+    t.assert_equals(operations.is_invalid('test_schema'), false)
+
+    t.assert_items_equals(operations.list_queries('test_schema'), {'entity'})
+
+    operations.remove_query({name = 'entity', schema = 'test_schema'})
+
+    t.assert_equals(operations.get_queries('test_schema')['entity'], nil)
+
+    t.assert_equals(operations.is_invalid('test_schema'), true)
+    operations.reset_invalid('test_schema')
+    t.assert_equals(operations.is_invalid('test_schema'), false)
+end
+
+g.test_add_remove_query_custom_schema_with_prefix = function()
     operations.add_queries_prefix({
         prefix = 'test',
         schema = 'test_schema',
@@ -253,7 +253,7 @@ g.test_add_remove_query_with_prefix = function()
     )
 end
 
-g.test_add_remove_mutation_default = function()
+g.test_add_remove_mutation_default_schema_no_prefix = function()
     operations.add_mutation({
         name = 'entity',
         doc = 'Mutate entity',
@@ -280,35 +280,7 @@ g.test_add_remove_mutation_default = function()
     t.assert_equals(operations.is_invalid(), false)
 end
 
-g.test_add_remove_mutation = function()
-    operations.add_mutation({
-        schema = 'test_schema',
-        name = 'entity',
-        doc = 'Mutate entity',
-        args = {
-            name = types.long,
-        },
-        kind = types.string,
-        callback = 'models.entity.entity_set',
-    })
-    t.assert_equals(type(operations.get_mutations('test_schema')['entity']), 'table')
-    t.assert_equals(operations.get_mutations('test_schema')['entity'].description, 'Mutate entity')
-    t.assert_equals(operations.is_invalid('test_schema'), true)
-
-    operations.reset_invalid('test_schema')
-    t.assert_equals(operations.is_invalid('test_schema'), false)
-
-    t.assert_items_equals(operations.list_mutations('test_schema'), {'entity'})
-
-    operations.remove_mutation({name = 'entity', schema = 'test_schema'})
-    t.assert_equals(operations.get_mutations('test_schema')['entity'], nil)
-
-    t.assert_equals(operations.is_invalid('test_schema'), true)
-    operations.reset_invalid('test_schema')
-    t.assert_equals(operations.is_invalid('test_schema'), false)
-end
-
-g.test_add_remove_mutation_with_prefix_default = function()
+g.test_add_remove_mutation_default_schema_with_prefix = function()
     operations.add_mutations_prefix({
         prefix = 'test',
         doc = 'Simple prefix test',
@@ -393,7 +365,35 @@ g.test_add_remove_mutation_with_prefix_default = function()
     )
 end
 
-g.test_add_remove_mutation_with_prefix = function()
+g.test_add_remove_mutation_custom_schema_no_prefix = function()
+    operations.add_mutation({
+        schema = 'test_schema',
+        name = 'entity',
+        doc = 'Mutate entity',
+        args = {
+            name = types.long,
+        },
+        kind = types.string,
+        callback = 'models.entity.entity_set',
+    })
+    t.assert_equals(type(operations.get_mutations('test_schema')['entity']), 'table')
+    t.assert_equals(operations.get_mutations('test_schema')['entity'].description, 'Mutate entity')
+    t.assert_equals(operations.is_invalid('test_schema'), true)
+
+    operations.reset_invalid('test_schema')
+    t.assert_equals(operations.is_invalid('test_schema'), false)
+
+    t.assert_items_equals(operations.list_mutations('test_schema'), {'entity'})
+
+    operations.remove_mutation({name = 'entity', schema = 'test_schema'})
+    t.assert_equals(operations.get_mutations('test_schema')['entity'], nil)
+
+    t.assert_equals(operations.is_invalid('test_schema'), true)
+    operations.reset_invalid('test_schema')
+    t.assert_equals(operations.is_invalid('test_schema'), false)
+end
+
+g.test_add_remove_mutation_custom_schema_with_prefix = function()
     operations.add_mutations_prefix({
         prefix = 'test',
         schema = 'test_schema',
@@ -497,8 +497,350 @@ g.test_add_remove_mutation_with_prefix = function()
     )
 end
 
-g.test_operations_safety = function()
+g.test_add_remove_space_query_default_schema_no_prefix = function()
+    local space = test_helper.create_space()
+
+        operations.add_space_query({
+            space = 'entity',
+            doc = 'Get entity',
+            args = {
+                entity_id = types.int.nonNull,
+            },
+            callback = 'models.entity.entity_get',
+        })
+
+        t.assert_equals(type(operations.get_queries()['entity']), 'table')
+        t.assert_equals(operations.get_queries()['entity'].description, 'Get entity')
+        t.assert_equals(operations.is_invalid(), true)
+        operations.reset_invalid()
+        t.assert_equals(operations.is_invalid(), false)
+        t.assert_items_equals(operations.list_queries(), {'entity'})
+
+        operations.remove_space_query({
+            space = 'entity'
+        })
+        t.assert_equals(operations.is_invalid(), true)
+        operations.reset_invalid()
+
+        t.assert_items_equals(operations.list_queries(), {})
+
+    space:drop()
+
+    t.assert_error_msg_contains(
+        'space \'entity\' doesn\'t exists',
+        operations.add_space_query,
+        {
+            prefix = 'test',
+            space = 'entity',
+            doc = 'Get entity',
+            args = {
+                entity_id = types.int.nonNull,
+            },
+            callback = 'models.entity.entity_get',
+        }
+    )
+end
+
+g.test_add_remove_space_query_default_schema_with_prefix = function()
+    local space = test_helper.create_space()
+
+    operations.add_queries_prefix({
+        prefix = 'test',
+        doc = 'Simple prefix test',
+    })
+
+    operations.add_space_query({
+        prefix = 'test',
+        space = 'entity',
+        doc = 'Get entity',
+        args = {
+            entity_id = types.int.nonNull,
+        },
+        callback = 'models.entity.entity_get',
+    })
+
+    t.assert_equals(type(operations.get_queries()['test'].kind.fields['entity']), 'table')
+    t.assert_equals(operations.get_queries()['test'].kind.fields['entity'].description, 'Get entity')
+    t.assert_equals(operations.is_invalid(), true)
+    operations.reset_invalid()
+    t.assert_equals(operations.is_invalid(), false)
+    t.assert_items_equals(operations.list_queries(), {'test.entity'})
+
+    operations.remove_space_query({
+        space = 'entity'
+    })
+    t.assert_equals(operations.is_invalid(), true)
+    operations.reset_invalid()
+    t.assert_equals(operations.is_invalid(), false)
+
+    t.assert_items_equals(operations.list_queries(), {})
+
+    operations.remove_query_prefix({prefix = 'test'})
+
+    space:drop()
+end
+
+g.test_add_remove_space_query_custom_schema_no_prefix = function()
+    local space = test_helper.create_space()
+
+    operations.add_space_query({
+        schema = 'test_schema',
+        space = 'entity',
+        doc = 'Get entity',
+        args = {
+            entity_id = types.int.nonNull,
+        },
+        callback = 'models.entity.entity_get',
+    })
+
+    t.assert_equals(type(operations.get_queries('test_schema')['entity']), 'table')
+    t.assert_equals(operations.get_queries('test_schema')['entity'].description, 'Get entity')
+    t.assert_equals(operations.is_invalid('test_schema'), true)
+    operations.reset_invalid('test_schema')
+    t.assert_equals(operations.is_invalid('test_schema'), false)
+    t.assert_items_equals(operations.list_queries('test_schema'), {'entity'})
+
+    operations.remove_space_query({
+        schema = 'test_schema',
+        space = 'entity'
+    })
+    t.assert_equals(operations.is_invalid('test_schema'), true)
+    operations.reset_invalid('test_schema')
+    t.assert_equals(operations.is_invalid('test_schema'), false)
+
+    t.assert_items_equals(operations.list_queries('test_schema'), {})
+
+    space:drop()
+end
+
+g.test_add_remove_space_query_custom_schema_with_prefix = function()
+    local space = test_helper.create_space()
+
+    operations.add_queries_prefix({
+        prefix = 'test',
+        schema = 'test_schema',
+        doc = 'Simple prefix test',
+    })
+
+    operations.add_space_query({
+        prefix = 'test',
+        schema = 'test_schema',
+        space = 'entity',
+        doc = 'Get entity',
+        args = {
+            entity_id = types.int.nonNull,
+        },
+        callback = 'models.entity.entity_get',
+    })
+
+    t.assert_equals(type(operations.get_queries('test_schema')['test'].kind.fields['entity']), 'table')
+    t.assert_equals(operations.get_queries('test_schema')['test'].kind.fields['entity'].description, 'Get entity')
+    t.assert_equals(operations.is_invalid('test_schema'), true)
+    operations.reset_invalid('test_schema')
+    t.assert_equals(operations.is_invalid('test_schema'), false)
+    t.assert_items_equals(operations.list_queries('test_schema'), {'test.entity'})
+
+    operations.remove_space_query({
+        schema = 'test_schema',
+        space = 'entity'
+    })
+
+    t.assert_items_equals(operations.list_queries('test_schema'), {})
+
+    t.assert_equals(operations.is_invalid('test_schema'), true)
+    operations.reset_invalid('test_schema')
+    t.assert_equals(operations.is_invalid('test_schema'), false)
+
+    operations.remove_query_prefix({
+        schema = 'test_schema',
+        prefix = 'test',
+    })
+
+    space:drop()
+end
+
+g.test_add_remove_space_mutation_default_schema_no_prefix = function()
+    local space = test_helper.create_space()
+
+    operations.add_space_mutation({
+        space = 'entity',
+        doc = 'Mutate entity',
+        args = {
+            entity_id = types.int.nonNull
+        },
+        callback = "models.entity.entity_set"
+    })
+    t.assert_equals(type(operations.get_mutations()['entity']), 'table')
+    t.assert_equals(operations.get_mutations()['entity'].description, 'Mutate entity')
+    t.assert_equals(operations.is_invalid(), true)
+    operations.reset_invalid()
+    t.assert_equals(operations.is_invalid(), false)
+    t.assert_items_equals(operations.list_mutations(), {'entity'})
+
+    operations.remove_space_mutation({
+        space = 'entity'
+    })
+
+    t.assert_equals(operations.is_invalid(), true)
+    operations.reset_invalid()
+
+    t.assert_items_equals(operations.list_mutations(), {})
+
+    space:drop()
+
+    -- test add_space_mutation() with unexisting space
+    t.assert_error_msg_contains(
+        'space \'entity\' doesn\'t exists',
+        operations.add_space_mutation,
+        {
+            prefix = 'test',
+            space = 'entity',
+            doc = 'Mutate entity',
+            args = {
+                entity_id = types.int.nonNull,
+            },
+            callback = 'models.entity.entity_set',
+        }
+    )
+end
+
+g.test_add_remove_space_mutation_default_schema_with_prefix = function()
+    local space = test_helper.create_space()
+
+    operations.add_mutations_prefix({
+        prefix = 'test',
+        doc = 'Simple prefix test'
+    })
+
+    operations.add_space_mutation({
+        prefix = 'test',
+        space = 'entity',
+        doc = 'Mutate entity',
+        args = {
+            entity_id = types.int.nonNull,
+        },
+        callback = 'models.entity.entity_set',
+    })
+
+    t.assert_equals(type(operations.get_mutations()['test'].kind.fields['entity']), 'table')
+    t.assert_equals(operations.get_mutations()['test'].kind.fields['entity'].description, 'Mutate entity')
+    t.assert_equals(operations.is_invalid(), true)
+    operations.reset_invalid()
+    t.assert_equals(operations.is_invalid(), false)
+    t.assert_items_equals(operations.list_mutations(), {'test.entity'})
+
+    operations.remove_space_mutation({
+        space = 'entity'
+    })
+
+    t.assert_equals(operations.is_invalid(), true)
+    operations.reset_invalid()
+    t.assert_equals(operations.is_invalid(), false)
+
+    t.assert_items_equals(operations.list_mutations(), {})
+
+    operations.remove_mutation_prefix({prefix = 'test'})
+
+    space:drop()
+end
+
+g.test_add_remove_space_mutation_custom_schema_no_prefix = function()
+    local space = test_helper.create_space()
+
+    operations.add_space_mutation({
+        schema = 'test_schema',
+        space = 'entity',
+        doc = 'Mutate entity',
+        args = {
+            entity_id = types.int.nonNull
+        },
+        callback = "models.entity.entity_set"
+    })
+    t.assert_equals(type(operations.get_mutations('test_schema')['entity']), 'table')
+    t.assert_equals(operations.get_mutations('test_schema')['entity'].description, 'Mutate entity')
+    t.assert_equals(operations.is_invalid('test_schema'), true)
+    operations.reset_invalid('test_schema')
+    t.assert_equals(operations.is_invalid('test_schema'), false)
+    t.assert_items_equals(operations.list_mutations('test_schema'), {'entity'})
+
+    operations.remove_space_mutation({
+        schema = 'test_schema',
+        space = 'entity'
+    })
+
+    t.assert_equals(operations.is_invalid('test_schema'), true)
+    operations.reset_invalid('test_schema')
+
+    t.assert_items_equals(operations.list_mutations('test_schema'), {})
+
+    space:drop()
+end
+
+g.test_add_remove_space_mutation_custom_schema_with_prefix = function()
+    local space = test_helper.create_space()
+
+    operations.add_mutations_prefix({
+        prefix = 'test',
+        schema = 'test_schema',
+        doc = 'Simple prefix test',
+    })
+
+    operations.add_space_mutation({
+        prefix = 'test',
+        schema = 'test_schema',
+        space = 'entity',
+        doc = 'Mutate entity',
+        args = {
+            entity_id = types.int.nonNull
+        },
+        callback = "models.entity.entity_set"
+    })
+    t.assert_equals(type(operations.get_mutations('test_schema')['test'].kind.fields['entity']), 'table')
+    t.assert_equals(operations.get_mutations('test_schema')['test'].kind.fields['entity'].description, 'Mutate entity')
+    t.assert_equals(operations.is_invalid('test_schema'), true)
+    operations.reset_invalid('test_schema')
+    t.assert_equals(operations.is_invalid('test_schema'), false)
+    t.assert_items_equals(operations.list_mutations('test_schema'), {'test.entity'})
+
+    operations.remove_space_mutation({
+        schema = 'test_schema',
+        space = 'entity'
+    })
+
+    t.assert_items_equals(operations.list_mutations('test_schema'), {})
+
+    t.assert_equals(operations.is_invalid('test_schema'), true)
+    operations.reset_invalid('test_schema')
+    t.assert_equals(operations.is_invalid('test_schema'), false)
+
+    operations.remove_mutation_prefix({
+        schema = 'test_schema',
+        prefix = 'test',
+    })
+
+    space:drop()
+end
+
+g.test_operations_remove_all = function()
     operations.add_query({
+        name = 'entity',
+        doc = 'Get entity',
+        args = {
+            entity_id = types.long,
+        },
+        kind = types.string,
+        callback = 'models.entity.entity_get',
+    })
+
+    t.assert_items_equals(operations.list_queries(), {'entity'})
+
+    operations.add_queries_prefix({
+        prefix = 'test',
+        doc = 'Simple prefix test',
+    })
+
+    operations.add_query({
+        prefix = 'test',
         name = 'entity',
         doc = 'Get entity',
         args = {
@@ -507,6 +849,41 @@ g.test_operations_safety = function()
         kind = types.string,
         callback = 'models.entity.entity_get'
     })
+
+    t.assert_items_equals(operations.list_queries(), {'entity', 'test.entity'})
+
+    operations.add_query({
+        schema = 'test_schema',
+        name = 'entity',
+        doc = 'Get entity',
+        args = {
+            entity_id = types.long
+        },
+        kind = types.string,
+        callback = 'models.entity.entity_get'
+    })
+
+    t.assert_items_equals(operations.list_queries('test_schema'), {'entity'})
+
+    operations.add_queries_prefix({
+        schema = 'test_schema',
+        prefix = 'test',
+        doc = 'Simple prefix test',
+    })
+
+    operations.add_query({
+        schema = 'test_schema',
+        prefix = 'test',
+        name = 'entity',
+        doc = 'Get entity',
+        args = {
+            entity_id = types.long
+        },
+        kind = types.string,
+        callback = 'models.entity.entity_get'
+    })
+
+    t.assert_items_equals(operations.list_queries('test_schema'), {'entity', 'test.entity'})
 
     operations.add_mutation({
         name = 'entity',
@@ -518,21 +895,88 @@ g.test_operations_safety = function()
         callback = 'models.entity.entity_set'
     })
 
+    t.assert_items_equals(operations.list_mutations(), {'entity'})
+
+    operations.add_mutations_prefix({
+        prefix = 'test',
+        doc = 'Simple prefix test',
+    })
+
+    operations.add_mutation({
+        prefix = 'test',
+        name = 'entity',
+        doc = 'Mutate entity',
+        args = {
+            name = types.long,
+        },
+        kind = types.string,
+        callback = 'models.entity.entity_set'
+    })
+
+    t.assert_items_equals(operations.list_mutations(), {'entity', 'test.entity'})
+
+    operations.add_mutation({
+        schema = 'test_schema',
+        name = 'entity',
+        doc = 'Mutate entity',
+        args = {
+            name = types.long,
+        },
+        kind = types.string,
+        callback = 'models.entity.entity_set'
+    })
+
+    t.assert_items_equals(operations.list_mutations('test_schema'), {'entity'})
+
+    operations.add_mutations_prefix({
+        schema = 'test_schema',
+        prefix = 'test',
+        doc = 'Simple prefix test',
+    })
+
+    operations.add_mutation({
+        schema = 'test_schema',
+        name = 'entity',
+        prefix = 'test',
+        doc = 'Mutate entity',
+        args = {
+            name = types.long,
+        },
+        kind = types.string,
+        callback = 'models.entity.entity_set'
+    })
+
+    t.assert_items_equals(operations.list_mutations('test_schema'), {'entity', 'test.entity'})
+
     operations.remove_all()
     t.assert_items_equals(operations.get_queries(), {})
     t.assert_items_equals(operations.get_mutations(), {})
     t.assert_items_equals(operations.list_queries(), {})
     t.assert_items_equals(operations.list_mutations(), {})
+    t.assert_items_equals(operations.get_queries('test_schema'), {})
+    t.assert_items_equals(operations.get_mutations('test_schema'), {})
+    t.assert_items_equals(operations.list_queries('test_schema'), {})
+    t.assert_items_equals(operations.list_mutations('test_schema'), {})
+end
 
+g.test_operations_stop = function()
     operations.add_query({
         name = 'entity',
         doc = 'Get entity',
         args = {
-            entity_id = types.long
+            entity_id = types.long,
         },
         kind = types.string,
-        callback = 'models.entity.entity_get'
+        callback = 'models.entity.entity_get',
     })
+
+    t.assert_equals(type(operations.get_queries()['entity']), 'table')
+    t.assert_equals(operations.get_queries()['entity'].description, 'Get entity')
+    t.assert_equals(operations.is_invalid(), true)
+    t.assert_items_equals(operations.schemas(), {'default'})
+
+    operations.reset_invalid()
+    t.assert_equals(operations.is_invalid(), false)
 
     operations.add_mutation({
         name = 'entity',
@@ -600,9 +1044,9 @@ g.test_on_resolve_trigger = function()
 
 end
 
-g.test_add_space_query = function()
-    -- test add_space_query() without prefix
+g.test_remove_operations_by_space_name = function()
     local space = test_helper.create_space()
+
     operations.add_space_query({
         space = 'entity',
         doc = 'Get entity',
@@ -611,23 +1055,9 @@ g.test_add_space_query = function()
         },
         callback = 'models.entity.entity_get',
     })
-    t.assert_equals(type(operations.get_queries()['entity']), 'table')
-    t.assert_equals(operations.get_queries()['entity'].description, 'Get entity')
-    t.assert_equals(operations.is_invalid(), true)
-
-    operations.reset_invalid()
-    t.assert_equals(operations.is_invalid(), false)
 
     t.assert_items_equals(operations.list_queries(), {'entity'})
 
-    operations.remove_operations_by_space_name('entity')
-    t.assert_equals(operations.is_invalid(), true)
-
-    t.assert_equals(operations.get_queries()['entity'], nil)
-    space:drop()
-
-    -- test add_space_query() with prefix
-    space = test_helper.create_space()
     operations.add_queries_prefix({
         prefix = 'test',
         doc = 'Simple prefix test',
@@ -643,43 +1073,39 @@ g.test_add_space_query = function()
         callback = 'models.entity.entity_get',
     })
 
-    t.assert_equals(type(operations.get_queries()['test'].kind.fields['entity']), 'table')
-    t.assert_equals(operations.get_queries()['test'].kind.fields['entity'].description, 'Get entity')
-    t.assert_equals(operations.is_invalid(), true)
+    t.assert_items_equals(operations.list_queries(), {'entity', 'test.entity'})
 
-    operations.reset_invalid()
-    t.assert_equals(operations.is_invalid(), false)
+    operations.add_space_query({
+        schema = 'test_schema',
+        space = 'entity',
+        doc = 'Get entity',
+        args = {
+            entity_id = types.int.nonNull,
+        },
+        callback = 'models.entity.entity_get',
+    })
 
-    t.assert_items_equals(operations.list_queries(), {'test.entity'})
+    t.assert_items_equals(operations.list_queries('test_schema'), {'entity'})
 
-    operations.remove_operations_by_space_name('entity')
-    t.assert_equals(operations.get_queries()['test'].kind.fields['entity'], nil)
-    t.assert_equals(operations.is_invalid(), true)
+    operations.add_queries_prefix({
+        prefix = 'test',
+        schema = 'test_schema',
+        doc = 'Simple prefix test',
+    })
 
-    operations.remove_query_prefix({prefix = 'test'})
-    t.assert_equals(operations.get_queries()['test'], nil)
+    operations.add_space_query({
+        prefix = 'test',
+        schema = 'test_schema',
+        space = 'entity',
+        doc = 'Get entity',
+        args = {
+            entity_id = types.int.nonNull,
+        },
+        callback = 'models.entity.entity_get',
+    })
 
-    space:drop()
+    t.assert_items_equals(operations.list_queries('test_schema'), {'entity', 'test.entity'})
 
-    -- test add_space_query() with unexisting space
-    t.assert_error_msg_contains(
-        'space \'entity\' doesn\'t exists',
-        operations.add_space_query,
-        {
-            prefix = 'test',
-            space = 'entity',
-            doc = 'Get entity',
-            args = {
-                entity_id = types.int.nonNull,
-            },
-            callback = 'models.entity.entity_get',
-        }
-    )
-end
-
-g.test_add_space_mutation = function()
-    -- test add_space_mutation() without prefix
-    local space = test_helper.create_space()
     operations.add_space_mutation({
         space = 'entity',
         doc = 'Mutate entity',
@@ -688,27 +1114,14 @@ g.test_add_space_mutation = function()
         },
         callback = "models.entity.entity_set"
     })
-    t.assert_equals(type(operations.get_mutations()['entity']), 'table')
-    t.assert_equals(operations.get_mutations()['entity'].description, 'Mutate entity')
-    t.assert_equals(operations.is_invalid(), true)
-
-    operations.reset_invalid()
-    t.assert_equals(operations.is_invalid(), false)
 
     t.assert_items_equals(operations.list_mutations(), {'entity'})
 
-    operations.remove_operations_by_space_name('entity')
-    t.assert_equals(operations.get_mutations()['entity'], nil)
-    t.assert_equals(operations.is_invalid(), true)
-
-    space:drop()
-
-    -- test add_space_mutation() with prefix
-    space = test_helper.create_space()
     operations.add_mutations_prefix({
         prefix = 'test',
         doc = 'Simple prefix test'
     })
+
     operations.add_space_mutation({
         prefix = 'test',
         space = 'entity',
@@ -719,39 +1132,48 @@ g.test_add_space_mutation = function()
         callback = 'models.entity.entity_set',
     })
 
-    t.assert_equals(type(operations.get_mutations()['test'].kind.fields['entity']), 'table')
-    t.assert_equals(operations.get_mutations()['test'].kind.fields['entity'].description, 'Mutate entity')
-    t.assert_equals(operations.is_invalid(), true)
+    t.assert_items_equals(operations.list_mutations(), {'entity', 'test.entity'})
 
-    operations.reset_invalid()
-    t.assert_equals(operations.is_invalid(), false)
+    operations.add_space_mutation({
+        schema = 'test_schema',
+        space = 'entity',
+        doc = 'Mutate entity',
+        args = {
+            entity_id = types.int.nonNull
+        },
+        callback = "models.entity.entity_set"
+    })
 
-    t.assert_items_equals(operations.list_mutations(), {'test.entity'})
+    t.assert_items_equals(operations.list_mutations('test_schema'), {'entity'})
+
+    operations.add_mutations_prefix({
+        prefix = 'test',
+        schema = 'test_schema',
+        doc = 'Simple prefix test',
+    })
+
+    operations.add_space_mutation({
+        prefix = 'test',
+        schema = 'test_schema',
+        space = 'entity',
+        doc = 'Mutate entity',
+        args = {
+            entity_id = types.int.nonNull
+        },
+        callback = "models.entity.entity_set"
+    })
+
+    t.assert_items_equals(operations.list_mutations('test_schema'), {'entity', 'test.entity'})
 
     operations.remove_operations_by_space_name('entity')
-    t.assert_equals(operations.get_mutations()['test'].kind.fields['entity'], nil)
-    t.assert_equals(operations.is_invalid(), true)
-
-    operations.remove_mutation_prefix({prefix = 'test'})
-    t.assert_equals(operations.get_mutations()['test'], nil)
+    t.assert_items_equals(operations.list_queries(), {})
+    t.assert_items_equals(operations.list_mutations(), {})
+    t.assert_items_equals(operations.list_queries('test_schema'), {})
+    t.assert_items_equals(operations.list_mutations('test_schema'), {})
 
     space:drop()
-
-    -- test add_space_mutation() with unexisting space
-    t.assert_error_msg_contains(
-        'space \'entity\' doesn\'t exists',
-        operations.add_space_mutation,
-        {
-            prefix = 'test',
-            space = 'entity',
-            doc = 'Mutate entity',
-            args = {
-                entity_id = types.int.nonNull,
-            },
-            callback = 'models.entity.entity_set',
-        }
-    )
 end
+
 
 local function stub1()
     return 'Operations test'

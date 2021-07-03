@@ -7,7 +7,7 @@ local utils = require('graphqlapi.utils')
 local vars = require('graphqlapi.vars').new('graphqlapi.operations')
 
 -- local log = require('log')
--- local json = require('json')
+local json = require('json')
 
 -- local json_cfg = {
 --     encode_use_tostring = true,
@@ -20,6 +20,7 @@ vars:new('queries', {})
 vars:new('mutations', {})
 vars:new('on_resolve_triggers', {})
 vars:new('schema_invalid', {})
+
 vars:new('space_query', {})
 vars:new('space_mutation', {})
 
@@ -116,7 +117,18 @@ local function remove_query_prefix(opts)
 
     if vars.queries ~= nil and type(vars.queries) == 'table' then
         vars.queries[opts.schema] = vars.queries[opts.schema] or {}
+        -- Remove all queries with removed prefix
         vars.queries[opts.schema][opts.prefix] = nil
+        -- Cleanup vars.space_query with removed prefix
+        for space in pairs(vars.space_query) do
+            for index, query in pairs(vars.space_query[space]) do
+                if query.schema == opts.schema and
+                   query.prefix == opts.prefix then
+                    table.remove(vars.space_query[space], index)
+                end
+            end
+        end
+
         vars.schema_invalid[opts.schema] = true
     end
 end
@@ -168,7 +180,17 @@ local function remove_mutation_prefix(opts)
 
     if vars.mutations ~= nil and type(vars.mutations) == 'table' then
         vars.mutations[opts.schema] = vars.mutations[opts.schema] or {}
+        -- Remove all mutations with removed prefix
         vars.mutations[opts.schema][opts.prefix] = nil
+        -- Cleanup vars.space_mutation with removed prefix
+        for space in pairs(vars.space_mutation) do
+            for index, mutation in pairs(vars.space_mutation[space]) do
+                if mutation.schema == opts.schema and
+                   mutation.prefix == opts.prefix then
+                    table.remove(vars.space_mutation[space], index)
+                end
+            end
+        end
         vars.schema_invalid[opts.schema] = true
     end
 end
@@ -254,6 +276,17 @@ local function remove_query(opts)
     else
         vars.queries[opts.schema][opts.prefix].kind.fields[opts.name] = nil
     end
+
+    for space in pairs(vars.space_query) do
+        for index, query in pairs(vars.space_query[space]) do
+            if query.schema == opts.schema and
+               query.prefix == opts.prefix and
+               query.name == opts.name then
+                table.remove(vars.space_query[space], index)
+            end
+        end
+    end
+
     vars.schema_invalid[opts.schema] = true
 end
 
@@ -378,6 +411,17 @@ local function remove_mutation(opts)
     else
         vars.mutations[opts.schema][opts.prefix].kind.fields[opts.name] = nil
     end
+
+    for space in pairs(vars.space_mutation) do
+        for index, mutation in pairs(vars.space_mutation[space]) do
+            if mutation.schema == opts.schema and
+               mutation.prefix == opts.prefix and
+               mutation.name == opts.name then
+                table.remove(vars.space_mutation[space], index)
+            end
+        end
+    end
+
     vars.schema_invalid[opts.schema] = true
 end
 
@@ -408,9 +452,11 @@ local function add_space_query(opts)
         error(string.format("space '%s' doesn't exists", opts.space))
     end
 
-   types.add_space_object({
+    local type_name = opts.type_name or opts.space
+
+    types.add_space_object({
         schema = opts.schema,
-        name = opts.type_name or opts.space,
+        name = type_name,
         description = opts.description,
         space = opts.space,
         fields = opts.fields
@@ -424,17 +470,56 @@ local function add_space_query(opts)
         name = name,
         doc = opts.doc,
         args = opts.args,
-        kind = opts.kind or types(opts.schema)[name] and types.list(types(opts.schema)[name]),
+        kind = opts.kind or types(opts.schema)[type_name] and types.list(types(opts.schema)[type_name]),
         callback = opts.callback,
     })
 
-    local query_name
-    if opts.prefix and opts.prefix ~= '' then
-        query_name = opts.prefix..'.' .. (opts.name or opts.space)
+    vars.space_query[opts.space] = utils.merge_arrays(
+        vars.space_query[opts.space] or {},
+        {
+            {
+                name = name,
+                schema = opts.schema,
+                prefix = opts.prefix,
+                type_name = opts.type_name,
+            }
+        }
+    )
+end
+
+local function remove_space_query(opts)
+    checks({
+        schema = '?string',
+        prefix = '?string',
+        space = 'string',
+        name = '?string',
+    })
+
+    if opts.schema == nil then
+        opts.schema = 'default'
     else
-        query_name = (opts.name or opts.space)
+        opts.schema = opts.schema:lower()
     end
-    vars.space_query[opts.space] = utils.merge_arrays(vars.space_query[opts.space] or {}, {query_name})
+
+    -- TODO: remove space related type ?
+
+    if opts.name == nil then
+        for _, query in pairs(vars.space_query[opts.space]) do
+            if query.schema == opts.schema then
+                remove_query({
+                    name = query.name,
+                    schema = opts.schema,
+                    prefix = query.prefix,
+                })
+            end
+        end
+    else
+        remove_query({
+            name = opts.name,
+            schema = opts.schema,
+            prefix = opts.prefix,
+        })
+    end
 end
 
 local function add_space_mutation(opts)
@@ -456,9 +541,17 @@ local function add_space_mutation(opts)
         error(string.format("space '%s' doesn't exists", opts.space))
     end
 
+    if opts.schema == nil then
+        opts.schema = 'default'
+    else
+        opts.schema = opts.schema:lower()
+    end
+
+    local type_name = opts.type_name or opts.space
+
     types.add_space_input_object({
         schema = opts.schema,
-        name = opts.type_name or opts.space,
+        name = type_name,
         description = opts.description,
         space = opts.space,
         fields = opts.fields
@@ -472,17 +565,56 @@ local function add_space_mutation(opts)
         name = name,
         doc = opts.doc,
         args = opts.args,
-        kind = opts.kind or types(opts.schema)[name] and types.list(types(opts.schema)[name]),
+        kind = opts.kind or types(opts.schema)[type_name] and types.list(types(opts.schema)[type_name]),
         callback = opts.callback,
     })
 
-    local mutation_name
-    if opts.prefix and opts.prefix ~= '' then
-        mutation_name = opts.prefix..'.' .. (opts.name or opts.space)
+    vars.space_mutation[opts.space] = utils.merge_arrays(
+        vars.space_mutation[opts.space] or {},
+        {
+            {
+                name = name,
+                schema = opts.schema,
+                prefix = opts.prefix,
+                type_name = type_name,
+            }
+        }
+    )
+end
+
+local function remove_space_mutation(opts)
+    checks({
+        schema = '?string',
+        prefix = '?string',
+        space = 'string',
+        name = '?string',
+    })
+
+    if opts.schema == nil then
+        opts.schema = 'default'
     else
-        mutation_name = (opts.name or opts.space)
+        opts.schema = opts.schema:lower()
     end
-    vars.space_mutation[opts.space] = utils.merge_arrays(vars.space_mutation[opts.space] or {}, {mutation_name})
+
+    -- TODO: remove space related type ?
+
+    if opts.name == nil then
+        for _, mutation in pairs(vars.space_mutation[opts.space]) do
+            if mutation.schema == opts.schema then
+                remove_mutation({
+                    name = mutation.name,
+                    schema = opts.schema,
+                    prefix = mutation.prefix,
+                })
+            end
+        end
+    else
+        remove_mutation({
+            name = opts.name,
+            schema = opts.schema,
+            prefix = opts.prefix,
+        })
+    end
 end
 
 local function is_mutation_prefix(mutation)
@@ -538,56 +670,78 @@ local function stop()
     vars.schema_invalid = nil
 end
 
-local function remove_all()
-    -- checks('?string')
+local function remove_all(opts)
+    checks({
+        schema = '?string',
+    })
 
-    -- if schema_name == nil then
-    --     schema_name = 'default'
-    -- else
-    --     schema_name = schema_name:lower()
-    -- end
+    if opts ~= nil then
+        if opts.schema == nil then
+            opts.schema = 'default'
+        else
+            opts.schema = opts.schema:lower()
+        end
+        vars.queries[opts.schema] = nil
+        vars.mutations[opts.schema] = nil
 
-    vars.queries = {}
-    vars.mutations = {}
-    vars.space_query = nil
-    vars.space_mutation = nil
-    vars.schema_invalid = {}
+        -- vars.space_query[opts.schema] = nil
+        for space in pairs(vars.space_query) do
+            for index, query in pairs(vars.space_query[space]) do
+                if query.schema == opts.schema then
+                    table.remove(vars.space_query[space], index)
+                end
+            end
+        end
+
+        -- vars.space_mutation[opts.schema] = nil
+        for space in pairs(vars.space_mutation) do
+            for index, mutation in pairs(vars.space_mutation[space]) do
+                if mutation.schema == opts.schema then
+                    table.remove(vars.space_mutation[space], index)
+                end
+            end
+        end
+
+
+        vars.schema_invalid[opts.schema] = nil
+    else
+        vars.queries = nil
+        vars.mutations = nil
+        vars.space_query = nil
+        vars.space_mutation = nil
+        vars.schema_invalid = nil
+    end
 end
 
 local function remove_operations_by_space_name(space_name)
+    checks('string')
+
     -- Cleanup queries related to space
-    local query_list = vars.space_query[space_name]
-    if query_list and type(query_list) == 'table' then
-        for _, query_name in pairs(query_list) do
-            local parts = query_name:split('.')
-            if #parts == 2 then
-                remove_query({
-                    prefix = parts[1],
-                    name = parts[2],
-                })
-            else
-                remove_query({name = query_name})
-            end
-        end
-        vars.space_query[space_name] = nil
+    local queries_to_remove = table.copy(vars.space_query[space_name])
+    for _, query in pairs(queries_to_remove) do
+        print('deleting query: '.. json.encode(query))
+        remove_query({
+            name = query.name,
+            schema = query.schema,
+            prefix = query.prefix,
+        })
+        print('queries after: '.. json.encode(vars.space_query[space_name]))
     end
+    vars.space_query[space_name] = nil
 
     -- Cleanup mutations related to space
-    local mutation_list = vars.space_mutation[space_name]
-    if mutation_list and type(mutation_list) == 'table' then
-        for _, mutation_name in pairs(mutation_list) do
-            local parts = mutation_name:split('.')
-            if #parts == 2 then
-                remove_mutation({
-                    name = parts[2],
-                    prefix = parts[1]
-                })
-            else
-                remove_mutation({name = mutation_name})
-            end
-        end
-        vars.space_mutation[space_name] = nil
+
+    local mutations_to_remove = table.copy(vars.space_mutation[space_name])
+    for _, mutation in pairs(mutations_to_remove) do
+        print('deleting mutation: '.. json.encode(mutation))
+        remove_mutation({
+            name = mutation.name,
+            schema = mutation.schema,
+            prefix = mutation.prefix,
+        })
+        print('mutations after: '.. json.encode(vars.space_mutation[space_name]))
     end
+    vars.space_mutation[space_name] = nil
 end
 
 local function on_resolve(trigger_new, trigger_old)
@@ -648,7 +802,7 @@ return {
     add_mutations_prefix = add_mutations_prefix,
     remove_mutation_prefix = remove_mutation_prefix,
 
-    -- Callbacks
+    -- Queries
     add_query = add_query,
     remove_query = remove_query,
     list_queries = list_queries,
@@ -658,9 +812,11 @@ return {
     remove_mutation = remove_mutation,
     list_mutations = list_mutations,
 
-    -- Spaces
+    -- Spaces queries and mutations
     add_space_query = add_space_query,
+    remove_space_query = remove_space_query,
     add_space_mutation = add_space_mutation,
+    remove_space_mutation = remove_space_mutation,
     remove_operations_by_space_name = remove_operations_by_space_name,
 
     -- Schema invalidation flag
