@@ -205,17 +205,19 @@ end
 types.remove_types_by_space_name = function(space_name)
     checks('string')
 
-    for _, _type in pairs(vars.space_type[space_name]) do
-        if _type.schema == nil then
-            _type.schema = defaults.DEFAULT_SCHEMA_NAME
-        else
-            _type.schema = _type.schema:lower()
-        end
+    if vars.space_type[space_name] ~= nil then
+        for _, _type in pairs(vars.space_type[space_name]) do
+            if _type.schema == nil then
+                _type.schema = defaults.DEFAULT_SCHEMA_NAME
+            else
+                _type.schema = _type.schema:lower()
+            end
 
-        types(_type.schema)[_type.name] = nil
-        vars.schema_invalid[_type.schema] = true
+            types(_type.schema)[_type.name] = nil
+            vars.schema_invalid[_type.schema] = true
+        end
+        vars.space_type[space_name] = nil
     end
-    vars.space_type[space_name] = nil
 end
 
 types.remove_all = function(opts)

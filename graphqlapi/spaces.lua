@@ -2,6 +2,7 @@ local checks = require('checks')
 local errors = require('errors')
 local fiber = require('fiber')
 local log = require('log')
+local string = require('string')
 
 local defaults = require('graphqlapi.defaults')
 local helpers = require('graphqlapi.helpers')
@@ -23,7 +24,11 @@ local function updater_init()
             local ok, err = e_space_update_fiber:pcall(function()
                 local message = channel:get()
 
-                if message ~= nil and message.space and message.space.name then
+                if message ~= nil and
+                   message.space and
+                   message.space.name and
+                   message.space.id > box.schema.SYSTEM_ID_MAX and
+                   not string.startswith(message.space.name, '_') then
                     if message.op == 'DELETE' then
                         helpers.update()
                         models.remove_model_by_space_name(message.space.name)
