@@ -7,16 +7,6 @@ local types = require('graphqlapi.types')
 local utils = require('graphqlapi.utils')
 local vars = require('graphqlapi.vars').new('graphqlapi.operations')
 
--- local log = require('log')
-local json = require('json')
-
--- local json_cfg = {
---     encode_use_tostring = true,
---     encode_deep_as_nil = true,
---     encode_max_depth = 10,
---     encode_invalid_as_nil = true,
--- }
-
 vars:new('queries', {})
 vars:new('mutations', {})
 vars:new('on_resolve_triggers', {})
@@ -119,7 +109,8 @@ local function remove_query_prefix(opts)
         vars.queries[opts.schema][opts.prefix] = nil
         -- Cleanup vars.space_query with removed prefix
         for space in pairs(vars.space_query) do
-            for index, query in pairs(vars.space_query[space]) do
+            local space_queries = table.copy(vars.space_query[space])
+            for index, query in pairs(space_queries) do
                 if query.schema == opts.schema and
                    query.prefix == opts.prefix then
                     table.remove(vars.space_query[space], index)
@@ -182,7 +173,8 @@ local function remove_mutation_prefix(opts)
         vars.mutations[opts.schema][opts.prefix] = nil
         -- Cleanup vars.space_mutation with removed prefix
         for space in pairs(vars.space_mutation) do
-            for index, mutation in pairs(vars.space_mutation[space]) do
+            local space_mutations = table.copy(vars.space_mutation[space])
+            for index, mutation in pairs(space_mutations) do
                 if mutation.schema == opts.schema and
                    mutation.prefix == opts.prefix then
                     table.remove(vars.space_mutation[space], index)
@@ -276,7 +268,8 @@ local function remove_query(opts)
     end
 
     for space in pairs(vars.space_query) do
-        for index, query in pairs(vars.space_query[space]) do
+        local space_queries = table.copy(vars.space_query[space])
+        for index, query in pairs(space_queries) do
             if query.schema == opts.schema and
                query.prefix == opts.prefix and
                query.name == opts.name then
@@ -411,7 +404,8 @@ local function remove_mutation(opts)
     end
 
     for space in pairs(vars.space_mutation) do
-        for index, mutation in pairs(vars.space_mutation[space]) do
+        local space_mutations = table.copy(vars.space_mutation[space])
+        for index, mutation in pairs(space_mutations) do
             if mutation.schema == opts.schema and
                mutation.prefix == opts.prefix and
                mutation.name == opts.name then
@@ -493,25 +487,34 @@ local function remove_space_query(opts)
         name = '?string',
     })
 
-    if opts.schema == nil then
-        opts.schema = defaults.DEFAULT_SCHEMA_NAME
-    else
-        opts.schema = opts.schema:lower()
-    end
-
     -- TODO: remove space related type ?
 
     if opts.name == nil then
-        for _, query in pairs(vars.space_query[opts.space]) do
-            if query.schema == opts.schema then
-                remove_query({
-                    name = query.name,
-                    schema = opts.schema,
-                    prefix = query.prefix,
-                })
+        local space_queries = table.copy(vars.space_query[opts.space])
+        for index, query in pairs(space_queries) do
+            if query.schema == nil then
+                query.schema = defaults.DEFAULT_SCHEMA_NAME
+            else
+                query.schema = query.schema:lower()
             end
+
+            vars.queries[query.schema] = vars.queries[query.schema] or {}
+
+            if query.prefix == nil then
+                vars.queries[query.schema][query.name] = nil
+            else
+                vars.queries[query.schema][query.prefix].kind.fields[query.name] = nil
+            end
+            table.remove(vars.space_query[opts.space], index)
+            vars.schema_invalid[query.schema] = true
         end
     else
+        if opts.schema == nil then
+            opts.schema = defaults.DEFAULT_SCHEMA_NAME
+        else
+            opts.schema = opts.schema:lower()
+        end
+
         remove_query({
             name = opts.name,
             schema = opts.schema,
@@ -588,25 +591,34 @@ local function remove_space_mutation(opts)
         name = '?string',
     })
 
-    if opts.schema == nil then
-        opts.schema = defaults.DEFAULT_SCHEMA_NAME
-    else
-        opts.schema = opts.schema:lower()
-    end
-
     -- TODO: remove space related type ?
 
     if opts.name == nil then
-        for _, mutation in pairs(vars.space_mutation[opts.space]) do
-            if mutation.schema == opts.schema then
-                remove_mutation({
-                    name = mutation.name,
-                    schema = opts.schema,
-                    prefix = mutation.prefix,
-                })
+        local space_queries = table.copy(vars.space_mutation[opts.space])
+        for index, mutation in pairs(space_queries) do
+            if mutation.schema == nil then
+                mutation.schema = defaults.DEFAULT_SCHEMA_NAME
+            else
+                mutation.schema = mutation.schema:lower()
             end
+
+            vars.mutations[mutation.schema] = vars.mutations[mutation.schema] or {}
+
+            if mutation.prefix == nil then
+                vars.mutations[mutation.schema][mutation.name] = nil
+            else
+                vars.mutations[mutation.schema][mutation.prefix].kind.fields[mutation.name] = nil
+            end
+            table.remove(vars.space_mutation[opts.space], index)
+            vars.schema_invalid[mutation.schema] = true
         end
     else
+        if opts.schema == nil then
+            opts.schema = defaults.DEFAULT_SCHEMA_NAME
+        else
+            opts.schema = opts.schema:lower()
+        end
+
         remove_mutation({
             name = opts.name,
             schema = opts.schema,
@@ -679,28 +691,11 @@ local function remove_all(opts)
         else
             opts.schema = opts.schema:lower()
         end
+
         vars.queries[opts.schema] = nil
+        vars.space_query[opts.schema] = nil
         vars.mutations[opts.schema] = nil
-
-        -- vars.space_query[opts.schema] = nil
-        for space in pairs(vars.space_query) do
-            for index, query in pairs(vars.space_query[space]) do
-                if query.schema == opts.schema then
-                    table.remove(vars.space_query[space], index)
-                end
-            end
-        end
-
-        -- vars.space_mutation[opts.schema] = nil
-        for space in pairs(vars.space_mutation) do
-            for index, mutation in pairs(vars.space_mutation[space]) do
-                if mutation.schema == opts.schema then
-                    table.remove(vars.space_mutation[space], index)
-                end
-            end
-        end
-
-
+        vars.space_mutation[opts.schema] = nil
         vars.schema_invalid[opts.schema] = nil
     else
         vars.queries = nil
@@ -715,29 +710,44 @@ local function remove_operations_by_space_name(space_name)
     checks('string')
 
     -- Cleanup queries related to space
-    local queries_to_remove = table.copy(vars.space_query[space_name])
-    for _, query in pairs(queries_to_remove) do
-        print('deleting query: '.. json.encode(query))
-        remove_query({
-            name = query.name,
-            schema = query.schema,
-            prefix = query.prefix,
-        })
-        print('queries after: '.. json.encode(vars.space_query[space_name]))
+    for _, query in pairs(vars.space_query[space_name]) do
+        if query.schema == nil then
+            query.schema = defaults.DEFAULT_SCHEMA_NAME
+        else
+            query.schema = query.schema:lower()
+        end
+
+        vars.queries[query.schema] = vars.queries[query.schema] or {}
+
+        if query.prefix == nil then
+            vars.queries[query.schema][query.name] = nil
+        else
+            vars.queries[query.schema][query.prefix].kind.fields[query.name] = nil
+        end
+
+        vars.schema_invalid[query.schema] = true
     end
+
     vars.space_query[space_name] = nil
 
     -- Cleanup mutations related to space
+    for _, mutation in pairs(vars.space_mutation[space_name]) do
+        if mutation.schema == nil then
+            mutation.schema = defaults.DEFAULT_SCHEMA_NAME
+        else
+            mutation.schema = mutation.schema:lower()
+        end
 
-    local mutations_to_remove = table.copy(vars.space_mutation[space_name])
-    for _, mutation in pairs(mutations_to_remove) do
-        print('deleting mutation: '.. json.encode(mutation))
-        remove_mutation({
-            name = mutation.name,
-            schema = mutation.schema,
-            prefix = mutation.prefix,
-        })
-        print('mutations after: '.. json.encode(vars.space_mutation[space_name]))
+        vars.mutations[mutation.schema] = vars.mutations[mutation.schema] or {}
+
+        if mutation.prefix == nil then
+            vars.mutations[mutation.schema][mutation.name] = nil
+        else
+            vars.mutations[mutation.schema][mutation.prefix].kind.fields[mutation.name] = nil
+        end
+
+        vars.schema_invalid[mutation.schema] = true
+
     end
     vars.space_mutation[space_name] = nil
 end
