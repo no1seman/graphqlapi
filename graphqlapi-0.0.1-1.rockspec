@@ -26,6 +26,7 @@ build = {
         ['graphqlapi.cluster'] = 'graphqlapi/cluster.lua',
         ['graphqlapi.defaults'] = 'graphqlapi/defaults.lua',
         ['graphqlapi.funcall'] = 'graphqlapi/funcall.lua',
+        ['graphqlapi.helpers'] = 'graphqlapi/helpers.lua',
         ['graphqlapi.helpers.data'] = 'graphqlapi/helpers/data.lua',
         ['graphqlapi.helpers.schema'] = 'graphqlapi/helpers/schema.lua',
         ['graphqlapi.helpers.spaceapi'] = 'graphqlapi/helpers/spaceapi.lua',
