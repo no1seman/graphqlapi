@@ -25,12 +25,12 @@ local function updater_init()
 
                 if message ~= nil and message.space and message.space.name then
                     if message.op == 'DELETE' then
-                        helpers.update_lists()
+                        helpers.update()
                         models.remove_model_by_space_name(message.space.name)
                         types.remove_types_by_space_name(message.space.name)
                         operations.remove_operations_by_space_name(message.space.name)
                     else
-                        helpers.update_lists()
+                        helpers.update()
                         models.update_space_models(message.space.name)
                     end
                 end

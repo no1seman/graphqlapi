@@ -5,7 +5,7 @@ local fiber = require('fiber')
 
 local test_helper = require('test.helper')
 local spaces = require('graphqlapi.spaces')
-local helpers = require('graphqlapi.helpers')
+local helpers = require('graphqlapi.helpers.spaces')
 
 local triggers_number = function()
     return #box.space._space:on_replace()

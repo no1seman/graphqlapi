@@ -1,4 +1,4 @@
-local helpers = require('graphqlapi.helpers')
+local helpers = require('graphqlapi.helpers.spaces')
 
 local function model()
     helpers.init()

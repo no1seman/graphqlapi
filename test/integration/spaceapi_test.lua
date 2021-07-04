@@ -32,7 +32,7 @@ g.test_space_info = function()
     -- check space_info with empty cluster
     do
         space_info, space_info_err = router.net_box:eval(
-            [[ return require('graphqlapi.spaceapi').space_info(nil, {name = {...}}) ]],
+            [[ return require('graphqlapi.helpers.spaceapi').space_info(nil, {name = {...}}) ]],
             {}
         )
         t.assert_equals(space_info, nil)
@@ -42,7 +42,7 @@ g.test_space_info = function()
     -- check space_info with non-existing space on router
     do
         space_info, space_info_err = router.net_box:eval(
-            [[ return require('graphqlapi.spaceapi').space_info(nil, {name = {...}}) ]],
+            [[ return require('graphqlapi.helpers.spaceapi').space_info(nil, {name = {...}}) ]],
             {'entity'}
         )
         t.assert_equals(space_info, nil)
@@ -63,7 +63,7 @@ g.test_space_info = function()
     -- check space_info with list of existing spaces
     do
         space_info, space_info_err = router.net_box:eval(
-            [[ return require('graphqlapi.spaceapi').space_info(nil, {name = {...}}) ]],
+            [[ return require('graphqlapi.helpers.spaceapi').space_info(nil, {name = {...}}) ]],
             {'entity'}
         )
         t.assert_items_equals(space_info, helper.sample_data(2))
@@ -73,7 +73,7 @@ g.test_space_info = function()
     -- check space_info with wildcard list of spaces
     do
         space_info, space_info_err = router.net_box:eval(
-            [[ return require('graphqlapi.spaceapi').space_info(nil, {name = {...}}) ]],
+            [[ return require('graphqlapi.helpers.spaceapi').space_info(nil, {name = {...}}) ]],
             {}
         )
         t.assert_items_equals(space_info, helper.sample_data(2))
@@ -86,7 +86,7 @@ g.test_space_info = function()
             [[ box.space['entity']:drop()]])
 
         space_info, space_info_err = router.net_box:eval(
-            [[ return require('graphqlapi.spaceapi').space_info(nil, {name = {...}}) ]],
+            [[ return require('graphqlapi.helpers.spaceapi').space_info(nil, {name = {...}}) ]],
             {'entity'}
         )
         t.assert_equals(space_info, helper.sample_data(1))
@@ -98,7 +98,7 @@ g.test_space_info = function()
         g.cluster:server('storage-1-master'):stop()
         g.cluster:server('storage-1-replica'):stop()
         space_info, space_info_err = router.net_box:eval(
-            [[ return require('graphqlapi.spaceapi').space_info(nil, {name = {...}}) ]],
+            [[ return require('graphqlapi.helpers.spaceapi').space_info(nil, {name = {...}}) ]],
             {'entity'}
         )
         t.assert_items_equals(space_info, helper.sample_data(1))
@@ -113,7 +113,7 @@ g.test_space_drop = function()
     -- check space_drop with non-existing space on router
     do
         space_drop, space_drop_err = router.net_box:eval(
-            [[ return require('graphqlapi.spaceapi').space_drop(nil, {name = ...}) ]],
+            [[ return require('graphqlapi.helpers.spaceapi').space_drop(nil, {name = ...}) ]],
             {'entity'}
         )
         t.assert_equals(space_drop, false)
@@ -124,7 +124,7 @@ g.test_space_drop = function()
     do
         helper.create_test_space(g.cluster, 'entity')
         space_drop, space_drop_err = router.net_box:eval(
-            [[ return require('graphqlapi.spaceapi').space_drop(nil, {name = ...}) ]],
+            [[ return require('graphqlapi.helpers.spaceapi').space_drop(nil, {name = ...}) ]],
             {'entity'}
         )
         t.assert_equals(space_drop, true)
@@ -136,7 +136,7 @@ g.test_space_drop = function()
         helper.create_test_space(g.cluster, 'entity')
         g.cluster:server('storage-1-master').net_box:eval([[ box.space['entity']:drop()]])
         space_drop, space_drop_err = router.net_box:eval(
-            [[ return require('graphqlapi.spaceapi').space_drop(nil, {name = ...}) ]],
+            [[ return require('graphqlapi.helpers.spaceapi').space_drop(nil, {name = ...}) ]],
             {'entity'}
         )
         t.assert_equals(space_drop, true)
@@ -149,7 +149,7 @@ g.test_space_drop = function()
         g.cluster:server('storage-1-master'):stop()
         g.cluster:server('storage-1-replica'):stop()
         space_drop, space_drop_err = router.net_box:eval(
-            [[ return require('graphqlapi.spaceapi').space_drop(nil, {name = ...}) ]],
+            [[ return require('graphqlapi.helpers.spaceapi').space_drop(nil, {name = ...}) ]],
             {'entity'}
         )
 
@@ -165,7 +165,7 @@ g.test_space_truncate = function()
     -- check space_truncate with non-existing space on router
     do
         space_truncate, space_truncate_err = router.net_box:eval(
-            [[ return require('graphqlapi.spaceapi').space_truncate(nil, {name = ...}) ]],
+            [[ return require('graphqlapi.helpers.spaceapi').space_truncate(nil, {name = ...}) ]],
             {'entity'}
         )
         t.assert_equals(space_truncate, nil)
@@ -176,7 +176,7 @@ g.test_space_truncate = function()
     do
         helper.create_test_space(g.cluster, 'entity')
         space_truncate, space_truncate_err = router.net_box:eval(
-            [[ return require('graphqlapi.spaceapi').space_truncate(nil, {name = ...}) ]],
+            [[ return require('graphqlapi.helpers.spaceapi').space_truncate(nil, {name = ...}) ]],
             {'entity'}
         )
         t.assert_items_equals(space_truncate, { truncated_bsize = 0, truncated_len = 0, name = "entity" })
@@ -194,7 +194,7 @@ g.test_space_truncate = function()
             { bucket_id= 30000, entity_id = '002', entity = 'entity_2', entity_value = 2 }
         )
         space_truncate, space_truncate_err = router.net_box:eval(
-            [[ return require('graphqlapi.spaceapi').space_truncate(nil, {name = ...}) ]],
+            [[ return require('graphqlapi.helpers.spaceapi').space_truncate(nil, {name = ...}) ]],
             {'entity'}
         )
         t.assert_items_equals(space_truncate, { truncated_bsize = 294946, truncated_len = 2, name = "entity" })
@@ -213,7 +213,7 @@ g.test_space_truncate = function()
         )
         g.cluster:server('storage-1-master').net_box:eval([[ box.space['entity']:drop()]])
         space_truncate, space_truncate_err = router.net_box:eval(
-            [[ return require('graphqlapi.spaceapi').space_truncate(nil, {name = ...}) ]],
+            [[ return require('graphqlapi.helpers.spaceapi').space_truncate(nil, {name = ...}) ]],
             {'entity'}
         )
         t.assert_equals(space_truncate, { truncated_bsize = 147472, truncated_len = 1, name = "entity" })
@@ -233,7 +233,7 @@ g.test_space_truncate = function()
         g.cluster:server('storage-1-master'):stop()
         g.cluster:server('storage-1-replica'):stop()
         space_truncate, space_truncate_err = router.net_box:eval(
-            [[ return require('graphqlapi.spaceapi').space_truncate(nil, {name = ...}) ]],
+            [[ return require('graphqlapi.helpers.spaceapi').space_truncate(nil, {name = ...}) ]],
             {'entity'}
         )
         t.assert_items_equals(space_truncate, { truncated_bsize = 147472, truncated_len = 1, name = "entity" })

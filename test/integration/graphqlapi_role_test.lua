@@ -41,7 +41,7 @@ g.test_roles_reload = function()
     helper.create_test_space(g.cluster, 'entity')
 
     local space_info, space_info_err = router.net_box:eval(
-        [[ return require('graphqlapi.spaceapi').space_info(nil, {name = {...}}) ]],
+        [[ return require('graphqlapi.helpers.spaceapi').space_info(nil, {name = {...}}) ]],
         {'entity'}
     )
 
@@ -51,7 +51,7 @@ g.test_roles_reload = function()
     for _ = 1, 10 do
         router.net_box:eval([[ return require('cartridge').reload_roles() ]])
         space_info, space_info_err = router.net_box:eval(
-            [[ return require('graphqlapi.spaceapi').space_info(nil, {name = {...}}) ]],
+            [[ return require('graphqlapi.helpers.spaceapi').space_info(nil, {name = {...}}) ]],
             {'entity'}
         )
 
