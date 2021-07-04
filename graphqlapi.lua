@@ -18,11 +18,10 @@ local schema = require('graphql.schema')
 local validate = require('graphql.validate')
 
 local VERSION = '0.0.1-1'
-local DEFAULT_DIR_NAME = 'models'
-local DEFAULT_ENDPOINT = '/admin/graphql'
 
 for _, module in ipairs({
     'graphqlapi.cluster',
+    'graphqlapi.defaults',
     'graphqlapi.funcall',
     'graphqlapi.helpers',
     'graphqlapi.middleware',
@@ -37,6 +36,7 @@ for _, module in ipairs({
     package.loaded[module] = nil
 end
 
+local defaults = require('graphqlapi.defaults')
 local helpers = require('graphqlapi.helpers')
 local models = require('graphqlapi.models')
 local operations = require('graphqlapi.operations')
@@ -60,7 +60,7 @@ local function get_schema(schema_name)
     checks('?string')
 
     if schema_name == nil then
-        schema_name = 'default'
+        schema_name = defaults.DEFAULT_SCHEMA_NAME
     else
         schema_name = schema_name:lower()
     end
@@ -133,7 +133,7 @@ local function _execute_graphql(req)
 
     local body = req:read_cached()
 
-    local schema_name = 'default'
+    local schema_name = defaults.DEFAULT_SCHEMA_NAME
 
     if req.headers.schema ~= nil and type(req.headers.schema) == 'string' then
         schema_name = req.headers.schema:lower()
@@ -307,8 +307,8 @@ local function init(httpd, middleware, endpoint, models_dir, opts)
     end
 
     vars.auth_middleware = middleware
-    endpoint = endpoint or DEFAULT_ENDPOINT
-    vars.models_dir = models_dir or DEFAULT_DIR_NAME
+    endpoint = endpoint or defaults.DEFAULT_ENDPOINT
+    vars.models_dir = models_dir or defaults.DEFAULT_MODELS_DIR
 
     local ok, err = _init()
     if not ok then

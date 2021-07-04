@@ -3,6 +3,7 @@ local errors = require('errors')
 local fiber = require('fiber')
 local log = require('log')
 
+local defaults = require('graphqlapi.defaults')
 local helpers = require('graphqlapi.helpers')
 local models = require('graphqlapi.models')
 local operations = require('graphqlapi.operations')
@@ -11,12 +12,10 @@ local vars = require('graphqlapi.vars').new('graphqlapi.spaces')
 
 local e_space_update_fiber = errors.new_class('space updater fiber error')
 
-local CHANNEL_CAPACITY = 100
-
 vars:new('updater', nil)
 
 local function updater_init()
-    local channel = fiber.channel(CHANNEL_CAPACITY)
+    local channel = fiber.channel(defaults.CHANNEL_CAPACITY)
     local updater_fiber = fiber.create(function()
         fiber.self():name('gql_updater', {truncate = true})
         while true do

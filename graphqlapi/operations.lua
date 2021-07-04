@@ -1,6 +1,7 @@
 local checks = require('checks')
 
 local cluster = require('graphqlapi.cluster')
+local defaults = require('graphqlapi.defaults')
 local funcall = require('graphqlapi.funcall')
 local types = require('graphqlapi.types')
 local utils = require('graphqlapi.utils')
@@ -24,14 +25,11 @@ vars:new('schema_invalid', {})
 vars:new('space_query', {})
 vars:new('space_mutation', {})
 
-local QUERY_PREFIX = 'api_'
-local MUTATION_PREFIX = 'mutation_api_'
-
 local function is_invalid(schema_name)
     checks('?string')
 
     if schema_name == nil then
-        schema_name = 'default'
+        schema_name = defaults.DEFAULT_SCHEMA_NAME
     else
         schema_name = schema_name:lower()
     end
@@ -43,7 +41,7 @@ local function reset_invalid(schema_name)
     checks('?string')
 
     if schema_name == nil then
-        schema_name = 'default'
+        schema_name = defaults.DEFAULT_SCHEMA_NAME
     else
         schema_name = schema_name:lower()
     end
@@ -78,7 +76,7 @@ local function add_queries_prefix(opts)
     })
 
     if opts.schema == nil then
-        opts.schema = 'default'
+        opts.schema = defaults.DEFAULT_SCHEMA_NAME
     else
         opts.schema = opts.schema:lower()
     end
@@ -86,7 +84,7 @@ local function add_queries_prefix(opts)
     vars.queries[opts.schema] = vars.queries[opts.schema] or {}
 
     local kind = types.object{
-        name = QUERY_PREFIX..opts.prefix,
+        name = defaults.QUERY_PREFIX..opts.prefix,
         fields = {},
         description = opts.doc,
     }
@@ -110,7 +108,7 @@ local function remove_query_prefix(opts)
     })
 
     if opts.schema == nil then
-        opts.schema = 'default'
+        opts.schema = defaults.DEFAULT_SCHEMA_NAME
     else
         opts.schema = opts.schema:lower()
     end
@@ -141,7 +139,7 @@ local function add_mutations_prefix(opts)
     })
 
     if opts.schema == nil then
-        opts.schema = 'default'
+        opts.schema = defaults.DEFAULT_SCHEMA_NAME
     else
         opts.schema = opts.schema:lower()
     end
@@ -149,7 +147,7 @@ local function add_mutations_prefix(opts)
     vars.mutations[opts.schema] = vars.mutations[opts.schema] or {}
 
     local kind = types.object({
-        name = MUTATION_PREFIX..opts.prefix,
+        name = defaults.MUTATION_PREFIX..opts.prefix,
         fields = {},
         description = opts.doc,
     })
@@ -173,7 +171,7 @@ local function remove_mutation_prefix(opts)
     })
 
     if opts.schema == nil then
-        opts.schema = 'default'
+        opts.schema = defaults.DEFAULT_SCHEMA_NAME
     else
         opts.schema = opts.schema:lower()
     end
@@ -207,7 +205,7 @@ local function add_query(opts)
     })
 
     if opts.schema == nil then
-        opts.schema = 'default'
+        opts.schema = defaults.DEFAULT_SCHEMA_NAME
     else
         opts.schema = opts.schema:lower()
     end
@@ -264,7 +262,7 @@ local function remove_query(opts)
     })
 
     if opts.schema == nil then
-        opts.schema = 'default'
+        opts.schema = defaults.DEFAULT_SCHEMA_NAME
     else
         opts.schema = opts.schema:lower()
     end
@@ -296,7 +294,7 @@ local function is_query_prefix(query)
        query.kind and
        type(query.kind) == 'table' and
        query.kind.__type == 'Object' and
-       query.kind.name:sub(1, #QUERY_PREFIX) == QUERY_PREFIX and
+       query.kind.name:sub(1, #defaults.QUERY_PREFIX) == defaults.QUERY_PREFIX and
        query.kind.fields and
        type(query.kind.fields) == 'table' then
         return true
@@ -311,7 +309,7 @@ local function list_queries(schema_name)
     local queries = {}
 
     if schema_name == nil then
-        schema_name = 'default'
+        schema_name = defaults.DEFAULT_SCHEMA_NAME
     else
         schema_name = schema_name:lower()
     end
@@ -342,7 +340,7 @@ local function add_mutation(opts)
     })
 
     if opts.schema == nil then
-        opts.schema = 'default'
+        opts.schema = defaults.DEFAULT_SCHEMA_NAME
     else
         opts.schema = opts.schema:lower()
     end
@@ -399,7 +397,7 @@ local function remove_mutation(opts)
     })
 
     if opts.schema == nil then
-        opts.schema = 'default'
+        opts.schema = defaults.DEFAULT_SCHEMA_NAME
     else
         opts.schema = opts.schema:lower()
     end
@@ -441,7 +439,7 @@ local function add_space_query(opts)
     })
 
     if opts.schema == nil then
-        opts.schema = 'default'
+        opts.schema = defaults.DEFAULT_SCHEMA_NAME
     else
         opts.schema = opts.schema:lower()
     end
@@ -496,7 +494,7 @@ local function remove_space_query(opts)
     })
 
     if opts.schema == nil then
-        opts.schema = 'default'
+        opts.schema = defaults.DEFAULT_SCHEMA_NAME
     else
         opts.schema = opts.schema:lower()
     end
@@ -542,7 +540,7 @@ local function add_space_mutation(opts)
     end
 
     if opts.schema == nil then
-        opts.schema = 'default'
+        opts.schema = defaults.DEFAULT_SCHEMA_NAME
     else
         opts.schema = opts.schema:lower()
     end
@@ -591,7 +589,7 @@ local function remove_space_mutation(opts)
     })
 
     if opts.schema == nil then
-        opts.schema = 'default'
+        opts.schema = defaults.DEFAULT_SCHEMA_NAME
     else
         opts.schema = opts.schema:lower()
     end
@@ -623,7 +621,7 @@ local function is_mutation_prefix(mutation)
        mutation.kind and
        type(mutation.kind) == 'table' and
        mutation.kind.__type == 'Object' and
-       mutation.kind.name:sub(1, #MUTATION_PREFIX) == MUTATION_PREFIX and
+       mutation.kind.name:sub(1, #defaults.MUTATION_PREFIX) == defaults.MUTATION_PREFIX and
        mutation.kind.fields and
        type (mutation.kind.fields) then
         return true
@@ -638,7 +636,7 @@ local function list_mutations(schema_name)
     local mutations = {}
 
     if schema_name == nil then
-        schema_name = 'default'
+        schema_name = defaults.DEFAULT_SCHEMA_NAME
     else
         schema_name = schema_name:lower()
     end
@@ -677,7 +675,7 @@ local function remove_all(opts)
 
     if opts ~= nil then
         if opts.schema == nil then
-            opts.schema = 'default'
+            opts.schema = defaults.DEFAULT_SCHEMA_NAME
         else
             opts.schema = opts.schema:lower()
         end
@@ -759,7 +757,7 @@ local function get_queries(schema_name)
     checks('?string')
 
     if schema_name == nil then
-        schema_name = 'default'
+        schema_name = defaults.DEFAULT_SCHEMA_NAME
     else
         schema_name = schema_name:lower()
     end
@@ -771,7 +769,7 @@ local function get_mutations(schema_name)
     checks('?string')
 
     if schema_name == nil then
-        schema_name = 'default'
+        schema_name = defaults.DEFAULT_SCHEMA_NAME
     else
         schema_name = schema_name:lower()
     end

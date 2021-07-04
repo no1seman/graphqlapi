@@ -4,9 +4,9 @@ local fiber = require('fiber')
 local json = require('json')
 
 local cluster = require('graphqlapi.cluster')
+local defaults = require('graphqlapi.defaults')
 local utils = require('graphqlapi.utils')
 
-local NET_BOX_CONNECTION_TIMEOUT = 1
 local e_space_api = errors.new_class('spaceAPI error', { capture_stack = false })
 
 local function check_spaces(spaces)
@@ -86,7 +86,7 @@ local function _get_spaces_size(spaces)
                         fiber.yield()
                     end
                     return counters, err
-                ]], {spaces}, {timeout = NET_BOX_CONNECTION_TIMEOUT})
+                ]], {spaces}, {timeout = defaults.NET_BOX_CONNECTION_TIMEOUT})
             end)
 
             if ok then
@@ -257,7 +257,7 @@ local function space_drop(_, args)
                         log.error('%s', space_drop_error)
                         return nil, space_drop_error
                     end
-                ]], {space}, {timeout = NET_BOX_CONNECTION_TIMEOUT})
+                ]], {space}, {timeout = defaults.NET_BOX_CONNECTION_TIMEOUT})
             end)
 
             if not ok then
@@ -352,7 +352,7 @@ local function space_truncate(_, args)
                         return nil, space_truncate_error
                     end
 
-                ]], {space}, {timeout = NET_BOX_CONNECTION_TIMEOUT})
+                ]], {space}, {timeout = defaults.NET_BOX_CONNECTION_TIMEOUT})
             end)
 
             if not ok then
@@ -471,5 +471,4 @@ return {
     space_drop = space_drop,
     space_truncate = space_truncate,
     --space_create = space_create,
-    NET_BOX_CONNECTION_TIMEOUT = NET_BOX_CONNECTION_TIMEOUT,
 }

@@ -11,9 +11,10 @@ local log = require('log')
 --     encode_invalid_as_nil = true,
 -- }
 
-local types = require('graphql.types')
+local types = table.copy(require('graphql.types'))
 
 local cluster = require('graphqlapi.cluster')
+local defaults = require('graphqlapi.defaults')
 local utils = require('graphqlapi.utils')
 local vars = require('graphqlapi.vars').new('graphqlapi.types')
 
@@ -106,7 +107,7 @@ types.add = function(_type, schema_name)
     checks('table', '?string')
 
     if schema_name == nil then
-        schema_name = 'default'
+        schema_name = defaults.DEFAULT_SCHEMA_NAME
     else
         schema_name = schema_name:lower()
     end
@@ -120,7 +121,7 @@ types.is_invalid = function(schema_name)
     checks('?string')
 
     if schema_name == nil then
-        schema_name = 'default'
+        schema_name = defaults.DEFAULT_SCHEMA_NAME
     else
         schema_name = schema_name:lower()
     end
@@ -132,7 +133,7 @@ types.reset_invalid = function(schema_name)
     checks('?string')
 
     if schema_name == nil then
-        schema_name = 'default'
+        schema_name = defaults.DEFAULT_SCHEMA_NAME
     else
         schema_name = schema_name:lower()
     end
@@ -144,7 +145,7 @@ types.remove = function (type_name, schema_name)
     checks('string', '?string')
 
     if schema_name == nil then
-        schema_name = 'default'
+        schema_name = defaults.DEFAULT_SCHEMA_NAME
     else
         schema_name = schema_name:lower()
     end
@@ -195,7 +196,7 @@ types.add_space_object = function(opts)
     })
 
     if opts.schema == nil then
-        opts.schema = 'default'
+        opts.schema = defaults.DEFAULT_SCHEMA_NAME
     else
         opts.schema = opts.schema:lower()
     end
@@ -225,7 +226,7 @@ types.add_space_input_object = function(opts)
     })
 
     if opts.schema == nil then
-        opts.schema = 'default'
+        opts.schema = defaults.DEFAULT_SCHEMA_NAME
     else
         opts.schema = opts.schema:lower()
     end
@@ -249,7 +250,7 @@ types.list_types = function(schema_name)
     checks('?string')
 
     if schema_name == nil then
-        schema_name = 'default'
+        schema_name = defaults.DEFAULT_SCHEMA_NAME
     else
         schema_name = schema_name:lower()
     end
@@ -281,7 +282,7 @@ end
 return setmetatable(types, {
     __call = function(_, schema_name)
         if schema_name == nil then
-            schema_name = 'default'
+            schema_name = defaults.DEFAULT_SCHEMA_NAME
         else
             schema_name = schema_name:lower()
         end

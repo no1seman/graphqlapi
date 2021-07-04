@@ -1,10 +1,9 @@
 local checks = require('checks')
 local cluster = require('graphqlapi.cluster')
+local defaults = require('graphqlapi.defaults')
 local operations = require('graphqlapi.operations')
 local types = require('graphqlapi.types')
 local utils = require('graphqlapi.utils')
-
-local DEFAULT_PREFIX = 'spaces'
 
 require('graphqlapi.spaceapi')
 local vars = require('graphqlapi.vars').new('graphqlapi.helpers')
@@ -88,10 +87,10 @@ local function operations_prefixes(opts)
     })
 
     opts = opts or {}
-    opts.prefix = opts.prefix or DEFAULT_PREFIX
+    opts.prefix = opts.prefix or defaults.SPACES_HELPER_PREFIX
 
     -- if opts.schema == nil then
-    --     opts.schema = 'default'
+    --     opts.schema = defaults.DEFAULT_SCHEMA_NAME
     -- else
     --     opts.schema = opts.schema:lower()
     -- end
@@ -144,7 +143,7 @@ local function space_types(schema_name)
     checks('?string')
 
     -- if schema_name == nil then
-    --     schema_name = 'default'
+    --     schema_name = defaults.DEFAULT_SCHEMA_NAME
     -- else
     --     schema_name = schema_name:lower()
     -- end
@@ -491,13 +490,13 @@ local function space_info_init(opts)
     assert(utils.is_string_array(opts.exclude))
 
     if opts.schema == nil then
-        opts.schema = 'default'
+        opts.schema = defaults.DEFAULT_SCHEMA_NAME
     else
         opts.schema = opts.schema:lower()
     end
 
     vars.helpers.info.schema = opts.schema
-    vars.helpers.info.prefix = opts.prefix or DEFAULT_PREFIX
+    vars.helpers.info.prefix = opts.prefix or defaults.SPACES_HELPER_PREFIX
     vars.helpers.info.enabled = true
     space_types(opts.schema)
     operations_prefixes({
@@ -591,13 +590,13 @@ local function space_drop_init(opts)
     assert(utils.is_string_array(opts.exclude))
 
     if opts.schema == nil then
-        opts.schema = 'default'
+        opts.schema = defaults.DEFAULT_SCHEMA_NAME
     else
         opts.schema = opts.schema:lower()
     end
 
     vars.helpers.drop.schema = opts.schema
-    vars.helpers.drop.prefix = opts.prefix or DEFAULT_PREFIX
+    vars.helpers.drop.prefix = opts.prefix or defaults.SPACES_HELPER_PREFIX
     vars.helpers.drop.enabled = true
     space_types(opts.schema)
     operations_prefixes({
@@ -692,13 +691,13 @@ local function space_truncate_init(opts)
     assert(utils.is_string_array(opts.exclude))
 
     if opts.schema == nil then
-        opts.schema = 'default'
+        opts.schema = defaults.DEFAULT_SCHEMA_NAME
     else
         opts.schema = opts.schema:lower()
     end
 
     vars.helpers.truncate.schema = opts.schema
-    vars.helpers.truncate.prefix = opts.prefix or DEFAULT_PREFIX
+    vars.helpers.truncate.prefix = opts.prefix or defaults.SPACES_HELPER_PREFIX
     vars.helpers.truncate.enabled = true
     space_types(opts.schema)
     operations_prefixes({
@@ -804,13 +803,13 @@ local function space_update_init(opts)
     assert(utils.is_string_array(opts.exclude))
 
     if opts.schema == nil then
-        opts.schema = 'default'
+        opts.schema = defaults.DEFAULT_SCHEMA_NAME
     else
         opts.schema = opts.schema:lower()
     end
 
     vars.helpers.update.schema = opts.schema
-    vars.helpers.update.prefix = opts.prefix or DEFAULT_PREFIX
+    vars.helpers.update.prefix = opts.prefix or defaults.SPACES_HELPER_PREFIX
     vars.helpers.update.enabled = true
     space_types(opts.schema)
     operations_prefixes({
@@ -849,13 +848,13 @@ local function space_create_init(opts)
     opts = opts or {}
 
     if opts.schema == nil then
-        opts.schema = 'default'
+        opts.schema = defaults.DEFAULT_SCHEMA_NAME
     else
         opts.schema = opts.schema:lower()
     end
 
     vars.helpers.create.schema = opts.schema
-    vars.helpers.create.prefix = opts.prefix or DEFAULT_PREFIX
+    vars.helpers.create.prefix = opts.prefix or defaults.SPACES_HELPER_PREFIX
     vars.helpers.create.enabled = true
     space_types(vars.helpers.create.schema)
     operations_prefixes({
@@ -932,12 +931,12 @@ local function init(opts)
     opts = opts or {}
 
     if opts.schema == nil then
-        opts.schema = 'default'
+        opts.schema = defaults.DEFAULT_SCHEMA_NAME
     else
         opts.schema = opts.schema:lower()
     end
 
-    opts.prefix = opts.prefix or DEFAULT_PREFIX
+    opts.prefix = opts.prefix or defaults.SPACES_HELPER_PREFIX
 
     if (opts.info and opts.info.enabled == true) or not opts.info then
         opts.info = opts.info or {}
