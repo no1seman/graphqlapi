@@ -1,15 +1,15 @@
 local checks = require('checks')
 
-if rawget(_G, "_graphqlapi_defaults") == nil then
+if rawget(_G, '_graphqlapi_defaults') == nil then
     _G._graphqlapi_defaults = {}
 end
 
-if rawget(_G, "_graphqlapi_values") == nil then
+if rawget(_G, '_graphqlapi_values') == nil then
     _G._graphqlapi_values = {}
 end
 
 local function new_var(self, name, default_value)
-    checks("vars", 'string', "?")
+    checks('vars', 'string', '?')
 
     local defaults = _G._graphqlapi_defaults
 
@@ -21,7 +21,7 @@ local function new_var(self, name, default_value)
 end
 
 local function set_var(self, name, value)
-    checks("vars", 'string', "?")
+    checks('vars', 'string', '?')
 
     local vars = _G._graphqlapi_values
 
@@ -35,7 +35,7 @@ local function set_var(self, name, value)
 end
 
 local function get_var(self, name)
-    checks("vars", 'string')
+    checks('vars', 'string')
 
     local vars = _G._graphqlapi_values
 

@@ -2,15 +2,6 @@ local checks = require('checks')
 local errors = require('errors')
 local log = require('log')
 
--- local json = require('json')
-
--- local json_cfg = {
---     encode_use_tostring = true,
---     encode_deep_as_nil = true,
---     encode_max_depth = 3,
---     encode_invalid_as_nil = true,
--- }
-
 local types = table.copy(require('graphql.types'))
 
 local cluster = require('graphqlapi.cluster')
@@ -150,6 +141,16 @@ types.remove = function (type_name, schema_name)
         schema_name = schema_name:lower()
     end
     types(schema_name)[type_name] = nil
+
+    for space in pairs(vars.space_type) do
+        local space_types = table.copy(vars.space_type[space])
+        for index, _type in pairs(space_types) do
+            if _type.schema == schema_name and _type.name == type_name then
+                table.remove(vars.space_type[space], index)
+            end
+        end
+    end
+
     vars.schema_invalid[schema_name] = true
     return type_name
 end
@@ -166,24 +167,92 @@ types.remove_recursive = function (type_name)
 
 end
 
-types.remove_types_by_space_name = function(space_name)
-    local type_list = vars.space_type[space_name]
-    if type_list and type(type_list) == 'table' then
-        for _, type_name in pairs(type_list) do
-            types.remove(type_name)
+types.get_non_leaf_types = function(t, type_list)
+    type_list = type_list or {}
+    if t.__type == 'NonNull' then
+        types.get_non_leaf_types(t.ofType, type_list)
+    elseif t.__type == 'List' then
+        types.get_non_leaf_types(t.ofType, type_list)
+    elseif t.__type == 'Enum' then
+        table.insert(type_list, t.name)
+    elseif t.__type == 'Object' then
+        table.insert(type_list, t.name)
+        for _,v in pairs(t.fields) do
+            types.get_non_leaf_types(v.kind, type_list)
+            types.get_non_leaf_types(v.arguments, type_list)
         end
-        vars.space_type[space_name] = nil
+    elseif t.__type == 'InputObject' then
+        table.insert(type_list, t.name)
+        for _,v in pairs(t.fields) do
+            types.get_non_leaf_types(v.kind, type_list)
+            types.get_non_leaf_types(v.arguments, type_list)
+        end
+    elseif t.__type == 'Interface' then
+        table.insert(type_list, t.name)
+        for _,v in pairs(t.fields) do
+            types.get_non_leaf_types(v.kind, type_list)
+            types.get_non_leaf_types(v.arguments, type_list)
+        end
+    elseif t.__type == 'Union' then
+        table.insert(type_list, t.name)
+        for _,v in pairs(t.types) do
+            types.get_non_leaf_types(v, type_list)
+        end
     end
+    return type_list
 end
 
-types.remove_all = function()
-    for _, schema in pairs(types.schemas()) do
-        for type_name in pairs(types(schema)) do
-            types.remove(type_name, schema)
+types.remove_types_by_space_name = function(space_name)
+    checks('string')
+
+    for _, _type in pairs(vars.space_type[space_name]) do
+        if _type.schema == nil then
+            _type.schema = defaults.DEFAULT_SCHEMA_NAME
+        else
+            _type.schema = _type.schema:lower()
         end
+
+        types(_type.schema)[_type.name] = nil
+        vars.schema_invalid[_type.schema] = true
     end
-    vars.space_type = nil
-    vars.schema_invalid = {}
+    vars.space_type[space_name] = nil
+end
+
+types.remove_all = function(opts)
+    checks({
+        schema = '?string',
+    })
+
+    if opts ~= nil then
+        if opts.schema == nil then
+            opts.schema = defaults.DEFAULT_SCHEMA_NAME
+        else
+            opts.schema = opts.schema:lower()
+        end
+
+        for type_name in pairs(types(opts.schema)) do
+            types.remove(type_name, opts.schema)
+        end
+
+        for space in pairs(vars.space_type) do
+            local space_types = table.copy(vars.space_type[space])
+            for index, _type in pairs(space_types) do
+                if _type.schema == opts.schema then
+                    table.remove(vars.space_type[space], index)
+                end
+            end
+        end
+
+        vars.schema_invalid[opts.schema] = nil
+    else
+        for _, schema in pairs(types.schemas()) do
+            for type_name in pairs(types(schema)) do
+                types.remove(type_name, schema)
+            end
+        end
+        vars.space_type = nil
+        vars.schema_invalid = nil
+    end
 end
 
 types.add_space_object = function(opts)
@@ -205,14 +274,22 @@ types.add_space_object = function(opts)
         return nil, nil, e_graphqlapi:new(string.format("space '%s' doesn't exists", opts.space))
     end
 
-    local new_type = types.object({
+    types.add(types.object({
         schema = opts.schema,
         name = opts.name,
         description = opts.description,
-        fields = opts.fields and utils.merge_maps(space_fields(opts.space), opts.fields) or space_fields(opts.space)
-    })
-    types.add(new_type, opts.schema)
-    vars.space_type[opts.space] = utils.merge_arrays(vars.space_type[opts.space] or {}, {opts.name})
+        fields = opts.fields and utils.merge_maps(space_fields(opts.space), opts.fields) or space_fields(opts.space),
+    }), opts.schema)
+
+    vars.space_type[opts.space] = utils.merge_arrays(
+        vars.space_type[opts.space] or {},
+        {
+            {
+                name = opts.name,
+                schema = opts.schema,
+            }
+        }
+    )
     return types(opts.schema)[opts.name]
 end
 
@@ -235,14 +312,22 @@ types.add_space_input_object = function(opts)
         return nil, nil, e_graphqlapi:new(string.format("space '%s' doesn't exists", opts.space))
     end
 
-    local new_type = types.inputObject({
+    types.add(types.inputObject({
         schema = opts.schema,
         name = opts.name,
         description = opts.description,
-        fields = opts.fields and utils.merge_maps(space_fields(opts.space), opts.fields) or space_fields(opts.space)
-    })
-    types.add(new_type, opts.schema)
-    vars.space_type[opts.space] = utils.merge_arrays(vars.space_type[opts.space] or {}, {opts.name})
+        fields = opts.fields and utils.merge_maps(space_fields(opts.space), opts.fields) or space_fields(opts.space),
+    }), opts.schema)
+
+    vars.space_type[opts.space] = utils.merge_arrays(
+        vars.space_type[opts.space] or {},
+        {
+            {
+                name = opts.name,
+                schema = opts.schema,
+            }
+        }
+    )
     return types(opts.schema)[opts.name]
 end
 
@@ -269,15 +354,6 @@ types.schemas = function()
     end
     return schemas
 end
-
--- types.print = function(type_name, filename)
---     require('cartridge.utils').file_write(filename, require('json').encode(types[type_name], {
---         encode_use_tostring = true,
---         encode_deep_as_nil = true,
---         encode_max_depth = 5,
---         encode_invalid_as_nil = true,
---     }))
--- end
 
 return setmetatable(types, {
     __call = function(_, schema_name)

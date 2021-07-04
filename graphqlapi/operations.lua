@@ -264,7 +264,11 @@ local function remove_query(opts)
     if opts.prefix == nil then
         vars.queries[opts.schema][opts.name] = nil
     else
-        vars.queries[opts.schema][opts.prefix].kind.fields[opts.name] = nil
+        if vars.queries[opts.schema][opts.prefix] and
+           vars.queries[opts.schema][opts.prefix].kind and
+           vars.queries[opts.schema][opts.prefix].kind.fields then
+            vars.queries[opts.schema][opts.prefix].kind.fields[opts.name] = nil
+        end
     end
 
     for space in pairs(vars.space_query) do
@@ -400,7 +404,11 @@ local function remove_mutation(opts)
     if opts.prefix == nil then
         vars.mutations[opts.schema][opts.name] = nil
     else
-        vars.mutations[opts.schema][opts.prefix].kind.fields[opts.name] = nil
+        if vars.mutations[opts.schema][opts.prefix] and
+           vars.mutations[opts.schema][opts.prefix].kind and
+           vars.mutations[opts.schema][opts.prefix].kind.fields then
+            vars.mutations[opts.schema][opts.prefix].kind.fields[opts.name] = nil
+        end
     end
 
     for space in pairs(vars.space_mutation) do
@@ -503,7 +511,11 @@ local function remove_space_query(opts)
             if query.prefix == nil then
                 vars.queries[query.schema][query.name] = nil
             else
-                vars.queries[query.schema][query.prefix].kind.fields[query.name] = nil
+                if vars.queries[query.schema][query.prefix] and
+                   vars.queries[query.schema][query.prefix].kind and
+                   vars.queries[query.schema][query.prefix].kind.fields then
+                    vars.queries[query.schema][query.prefix].kind.fields[query.name] = nil
+                end
             end
             table.remove(vars.space_query[opts.space], index)
             vars.schema_invalid[query.schema] = true
@@ -607,7 +619,11 @@ local function remove_space_mutation(opts)
             if mutation.prefix == nil then
                 vars.mutations[mutation.schema][mutation.name] = nil
             else
-                vars.mutations[mutation.schema][mutation.prefix].kind.fields[mutation.name] = nil
+                if vars.mutations[mutation.schema][mutation.prefix] and
+                   vars.mutations[mutation.schema][mutation.prefix].kind and
+                   vars.mutations[mutation.schema][mutation.prefix].kind.fields then
+                    vars.mutations[mutation.schema][mutation.prefix].kind.fields[mutation.name] = nil
+                end
             end
             table.remove(vars.space_mutation[opts.space], index)
             vars.schema_invalid[mutation.schema] = true
@@ -693,9 +709,27 @@ local function remove_all(opts)
         end
 
         vars.queries[opts.schema] = nil
-        vars.space_query[opts.schema] = nil
+
+        for space in pairs(vars.space_query) do
+            local space_queries = table.copy(vars.space_query[space])
+            for index, query in pairs(space_queries) do
+                if query.schema == opts.schema then
+                    table.remove(vars.space_query[space], index)
+                end
+            end
+        end
+
         vars.mutations[opts.schema] = nil
-        vars.space_mutation[opts.schema] = nil
+
+        for space in pairs(vars.space_mutation) do
+            local space_mutations = table.copy(vars.space_mutation[space])
+            for index, mutation in pairs(space_mutations) do
+                if mutation.schema == opts.schema then
+                    table.remove(vars.space_mutation[space], index)
+                end
+            end
+        end
+
         vars.schema_invalid[opts.schema] = nil
     else
         vars.queries = nil
@@ -722,7 +756,11 @@ local function remove_operations_by_space_name(space_name)
         if query.prefix == nil then
             vars.queries[query.schema][query.name] = nil
         else
-            vars.queries[query.schema][query.prefix].kind.fields[query.name] = nil
+            if vars.queries[query.schema][query.prefix] and
+               vars.queries[query.schema][query.prefix].kind and
+               vars.queries[query.schema][query.prefix].kind.fields then
+                vars.queries[query.schema][query.prefix].kind.fields[query.name] = nil
+            end
         end
 
         vars.schema_invalid[query.schema] = true
@@ -743,7 +781,11 @@ local function remove_operations_by_space_name(space_name)
         if mutation.prefix == nil then
             vars.mutations[mutation.schema][mutation.name] = nil
         else
-            vars.mutations[mutation.schema][mutation.prefix].kind.fields[mutation.name] = nil
+            if vars.mutations[mutation.schema] and
+               vars.mutations[mutation.schema][mutation.prefix].kind and
+               vars.mutations[mutation.schema][mutation.prefix].kind.fields then
+                vars.mutations[mutation.schema][mutation.prefix].kind.fields[mutation.name] = nil
+            end
         end
 
         vars.schema_invalid[mutation.schema] = true

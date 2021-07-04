@@ -4,8 +4,6 @@ local g = t.group('types')
 local test_helper = require('test.helper')
 local types = require('graphqlapi.types')
 
---local json = require('json')
-
 g.before_all(function()
     types.remove_all()
 end)
@@ -178,7 +176,7 @@ g.test_remove_types_by_space_name = function()
     types.reset_invalid()
     t.assert_equals(types.is_invalid(), false)
 
-    types.remove_types_by_space_name(space.name)
+    types.remove_types_by_space_name('entity')
     t.assert_equals(types()['entity'], nil)
     t.assert_equals(types()['input_entity'], nil)
     t.assert_equals(types.is_invalid(), true)
