@@ -744,7 +744,7 @@ local function remove_operations_by_space_name(space_name)
     checks('string')
 
     -- Cleanup queries related to space
-    for _, query in pairs(vars.space_query[space_name]) do
+    for _, query in pairs(vars.space_query[space_name] or {}) do
         if query.schema == nil then
             query.schema = defaults.DEFAULT_SCHEMA_NAME
         else
@@ -769,7 +769,7 @@ local function remove_operations_by_space_name(space_name)
     vars.space_query[space_name] = nil
 
     -- Cleanup mutations related to space
-    for _, mutation in pairs(vars.space_mutation[space_name]) do
+    for _, mutation in pairs(vars.space_mutation[space_name] or {}) do
         if mutation.schema == nil then
             mutation.schema = defaults.DEFAULT_SCHEMA_NAME
         else
