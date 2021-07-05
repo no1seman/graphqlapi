@@ -114,6 +114,10 @@ end
 local function apply_model(model)
     local _, err = e_model_execute:pcall(model.model)
     if err ~= nil then
+        if string.gsub(err.err, "space '", "' doesn't exists") ~= nil then
+            err.file = nil
+            err.stack = nil
+        end
         log.error("GraphQLAPI model '%s' not applied: %s", model.filename or 'unknown', err)
         return nil, err
     else
