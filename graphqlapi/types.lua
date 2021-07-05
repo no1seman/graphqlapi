@@ -144,7 +144,7 @@ types.remove = function (type_name, schema_name)
 
     for space in pairs(vars.space_type) do
         local space_types = table.copy(vars.space_type[space])
-        for index, _type in pairs(space_types) do
+        for index, _type in pairs(space_types or {}) do
             if _type.schema == schema_name and _type.name == type_name then
                 table.remove(vars.space_type[space], index)
             end
@@ -238,7 +238,7 @@ types.remove_all = function(opts)
 
         for space in pairs(vars.space_type) do
             local space_types = table.copy(vars.space_type[space])
-            for index, _type in pairs(space_types) do
+            for index, _type in pairs(space_types or {}) do
                 if _type.schema == opts.schema then
                     table.remove(vars.space_type[space], index)
                 end

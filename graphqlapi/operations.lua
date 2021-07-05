@@ -103,23 +103,21 @@ local function remove_query_prefix(opts)
         opts.schema = opts.schema:lower()
     end
 
-    if vars.queries ~= nil and type(vars.queries) == 'table' then
-        vars.queries[opts.schema] = vars.queries[opts.schema] or {}
-        -- Remove all queries with removed prefix
-        vars.queries[opts.schema][opts.prefix] = nil
-        -- Cleanup vars.space_query with removed prefix
-        for space in pairs(vars.space_query) do
-            local space_queries = table.copy(vars.space_query[space])
-            for index, query in pairs(space_queries) do
-                if query.schema == opts.schema and
-                   query.prefix == opts.prefix then
-                    table.remove(vars.space_query[space], index)
-                end
+    vars.queries[opts.schema] = vars.queries[opts.schema] or {}
+    -- Remove all queries with removed prefix
+    vars.queries[opts.schema][opts.prefix] = nil
+    -- Cleanup vars.space_query with removed prefix
+    for space in pairs(vars.space_query) do
+        local space_queries = table.copy(vars.space_query[space])
+        for index, query in pairs(space_queries or {}) do
+            if query.schema == opts.schema and
+                query.prefix == opts.prefix then
+                table.remove(vars.space_query[space], index)
             end
         end
-
-        vars.schema_invalid[opts.schema] = true
     end
+
+    vars.schema_invalid[opts.schema] = true
 end
 
 local function add_mutations_prefix(opts)
@@ -167,22 +165,20 @@ local function remove_mutation_prefix(opts)
         opts.schema = opts.schema:lower()
     end
 
-    if vars.mutations ~= nil and type(vars.mutations) == 'table' then
-        vars.mutations[opts.schema] = vars.mutations[opts.schema] or {}
-        -- Remove all mutations with removed prefix
-        vars.mutations[opts.schema][opts.prefix] = nil
-        -- Cleanup vars.space_mutation with removed prefix
-        for space in pairs(vars.space_mutation) do
-            local space_mutations = table.copy(vars.space_mutation[space])
-            for index, mutation in pairs(space_mutations) do
-                if mutation.schema == opts.schema and
-                   mutation.prefix == opts.prefix then
-                    table.remove(vars.space_mutation[space], index)
-                end
+    vars.mutations[opts.schema] = vars.mutations[opts.schema] or {}
+    -- Remove all mutations with removed prefix
+    vars.mutations[opts.schema][opts.prefix] = nil
+    -- Cleanup vars.space_mutation with removed prefix
+    for space in pairs(vars.space_mutation) do
+        local space_mutations = table.copy(vars.space_mutation[space])
+        for index, mutation in pairs(space_mutations or {}) do
+            if mutation.schema == opts.schema and
+                mutation.prefix == opts.prefix then
+                table.remove(vars.space_mutation[space], index)
             end
         end
-        vars.schema_invalid[opts.schema] = true
     end
+    vars.schema_invalid[opts.schema] = true
 end
 
 local function add_query(opts)
@@ -273,7 +269,7 @@ local function remove_query(opts)
 
     for space in pairs(vars.space_query) do
         local space_queries = table.copy(vars.space_query[space])
-        for index, query in pairs(space_queries) do
+        for index, query in pairs(space_queries or {}) do
             if query.schema == opts.schema and
                query.prefix == opts.prefix and
                query.name == opts.name then
@@ -315,7 +311,7 @@ local function list_queries(schema_name)
 
     for query in pairs(vars.queries[schema_name]) do
         if is_query_prefix(vars.queries[schema_name][query]) then
-            for prefixed_query in pairs(vars.queries[schema_name][query].kind.fields) do
+            for prefixed_query in pairs(vars.queries[schema_name][query].kind.fields or {}) do
                 table.insert(queries, tostring(query)..'.'..tostring(prefixed_query))
             end
         else
@@ -413,7 +409,7 @@ local function remove_mutation(opts)
 
     for space in pairs(vars.space_mutation) do
         local space_mutations = table.copy(vars.space_mutation[space])
-        for index, mutation in pairs(space_mutations) do
+        for index, mutation in pairs(space_mutations or {}) do
             if mutation.schema == opts.schema and
                mutation.prefix == opts.prefix and
                mutation.name == opts.name then
@@ -499,7 +495,7 @@ local function remove_space_query(opts)
 
     if opts.name == nil then
         local space_queries = table.copy(vars.space_query[opts.space])
-        for index, query in pairs(space_queries) do
+        for index, query in pairs(space_queries or {}) do
             if query.schema == nil then
                 query.schema = defaults.DEFAULT_SCHEMA_NAME
             else
@@ -607,7 +603,7 @@ local function remove_space_mutation(opts)
 
     if opts.name == nil then
         local space_queries = table.copy(vars.space_mutation[opts.space])
-        for index, mutation in pairs(space_queries) do
+        for index, mutation in pairs(space_queries or {}) do
             if mutation.schema == nil then
                 mutation.schema = defaults.DEFAULT_SCHEMA_NAME
             else
@@ -650,6 +646,7 @@ local function is_mutation_prefix(mutation)
        type(mutation.kind) == 'table' and
        mutation.kind.__type == 'Object' and
        mutation.kind.name:sub(1, #defaults.MUTATION_PREFIX) == defaults.MUTATION_PREFIX and
+       mutation.kind and
        mutation.kind.fields and
        type (mutation.kind.fields) then
         return true
@@ -673,7 +670,7 @@ local function list_mutations(schema_name)
 
     for mutation in pairs(vars.mutations[schema_name]) do
         if is_mutation_prefix(vars.mutations[schema_name][mutation]) then
-            for prefixed_mutation in pairs(vars.mutations[schema_name][mutation].kind.fields) do
+            for prefixed_mutation in pairs(vars.mutations[schema_name][mutation].kind.fields or {}) do
                 table.insert(mutations, tostring(mutation)..'.'..tostring(prefixed_mutation))
             end
         else
@@ -712,7 +709,7 @@ local function remove_all(opts)
 
         for space in pairs(vars.space_query) do
             local space_queries = table.copy(vars.space_query[space])
-            for index, query in pairs(space_queries) do
+            for index, query in pairs(space_queries or {}) do
                 if query.schema == opts.schema then
                     table.remove(vars.space_query[space], index)
                 end
@@ -723,7 +720,7 @@ local function remove_all(opts)
 
         for space in pairs(vars.space_mutation) do
             local space_mutations = table.copy(vars.space_mutation[space])
-            for index, mutation in pairs(space_mutations) do
+            for index, mutation in pairs(space_mutations or {}) do
                 if mutation.schema == opts.schema then
                     table.remove(vars.space_mutation[space], index)
                 end
