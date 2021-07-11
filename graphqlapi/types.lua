@@ -2,6 +2,15 @@ local checks = require('checks')
 local errors = require('errors')
 local log = require('log')
 
+-- local json = require('json')
+
+-- local json_cfg = {
+--     encode_use_tostring = true,
+--     encode_deep_as_nil = true,
+--     encode_max_depth = 4,
+--     encode_invalid_as_nil = true
+-- }
+
 local types = table.copy(require('graphql.types'))
 
 local cluster = require('graphqlapi.cluster')
@@ -63,6 +72,16 @@ types.mapper = {
     ['decimal'] = types.long, -- OK
     ['double'] = types.double, -- OK
     ['uuid'] = types.id, -- OK
+}
+
+local default_scalars = {
+    'Int',
+    'Long',
+    'Float',
+    'String',
+    'Boolean',
+    'ID',
+    'Double',
 }
 
 local function space_fields(space)
@@ -157,49 +176,142 @@ end
 
 types.remove_recursive = function (type_name)
     checks('string')
-    log.debug('Removing type: %s', type_name)
+    log.info('Removing type: %s', type_name)
 
-    local ok, err = types.remove(type_name)
-    if not ok then
-        return ok, err
-    end
+    types.remove(type_name)
+
     -- TODO: remove callbacks, mutations and other types that is used by removed type
 
+    for _, schema in pairs(types.schemas()) do
+        for _type_name in pairs(types(schema)) do
+            if utils.value_in(type_name, types.get_non_leaf_types(types(schema)[_type_name])) then
+                types.remove_recursive(_type_name)
+            end
+        end
+    end
 end
 
 types.get_non_leaf_types = function(t, type_list)
-    type_list = type_list or {}
-    if t.__type == 'NonNull' then
-        types.get_non_leaf_types(t.ofType, type_list)
+    if not t or type(t) ~= 'table' or t == {} then return {} end
+    local root
+    if type_list == nil then
+        type_list = {}
+        root = true
+    end
+    -- if node is a custom Scalar add it to list of non-leafs only if its not a root name
+    if t.__type == 'Scalar' then
+        if not root and t.name and not utils.value_in(t.name, default_scalars) then
+            table.insert(type_list, t.name)
+        end
+    -- if node is NonNull then process node's child
+    elseif t.__type == 'NonNull' then
+        types.get_non_leaf_types(t.ofType or {}, type_list)
+    -- if node is List then process node's child
     elseif t.__type == 'List' then
-        types.get_non_leaf_types(t.ofType, type_list)
+        types.get_non_leaf_types(t.ofType or {}, type_list)
+    -- if node is Enum then process node's child
     elseif t.__type == 'Enum' then
-        table.insert(type_list, t.name)
+        if not root and t.name then
+            table.insert(type_list, t.name)
+        end
+    -- if node is Object process its kind, fields, arguments and interfaces
     elseif t.__type == 'Object' then
-        table.insert(type_list, t.name)
-        for _,v in pairs(t.fields) do
-            types.get_non_leaf_types(v.kind, type_list)
-            types.get_non_leaf_types(v.arguments, type_list)
+        -- if Object is query prefix simply run over all its fields
+        if t.name and t.name:sub(1, #defaults.QUERY_PREFIX) == defaults.QUERY_PREFIX then
+            for _, f in pairs(t.fields or {}) do
+                types.get_non_leaf_types(f.kind or {}, type_list)
+                for _, a in pairs(f.arguments or {}) do
+                    types.get_non_leaf_types(a, type_list)
+                end
+                for _, i in pairs(f.interfaces or {}) do
+                    types.get_non_leaf_types(i, type_list)
+                end
+            end
+        -- if Object is mutation prefix simply run over all its fields
+        elseif t.name and t.name:sub(1, #defaults.MUTATION_PREFIX) == defaults.MUTATION_PREFIX then
+            for _, f in pairs(t.fields or {}) do
+                types.get_non_leaf_types(f.kind or {}, type_list)
+                for _, a in pairs(f.arguments or {}) do
+                    types.get_non_leaf_types(a, type_list)
+                end
+                for _, i in pairs(f.interfaces or {}) do
+                    types.get_non_leaf_types(i, type_list)
+                end
+            end
+        -- process ordinary Object
+        else
+            if not root and t.name then
+                table.insert(type_list, t.name)
+            end
+            for _, f in pairs(t.fields or {}) do
+                types.get_non_leaf_types(f.kind or {}, type_list)
+                for _, a in pairs(f.arguments or {}) do
+                    types.get_non_leaf_types(a, type_list)
+                end
+            end
+            for _, a in pairs(t.arguments or {}) do
+                types.get_non_leaf_types(a, type_list)
+            end
+            for _, i in pairs(t.interfaces or {}) do
+                types.get_non_leaf_types(i, type_list)
+            end
         end
+    -- if node is Object process its kind, fields, arguments and interfaces
     elseif t.__type == 'InputObject' then
-        table.insert(type_list, t.name)
-        for _,v in pairs(t.fields) do
-            types.get_non_leaf_types(v.kind, type_list)
-            types.get_non_leaf_types(v.arguments, type_list)
+        if not root and t.name then
+            table.insert(type_list, t.name)
         end
+        for _, f in pairs(t.fields or {}) do
+            types.get_non_leaf_types(f.kind or {}, type_list)
+            for _, a in pairs(f.arguments or {}) do
+                types.get_non_leaf_types(a, type_list)
+            end
+        end
+        for _, a in pairs(t.arguments or {}) do
+            types.get_non_leaf_types(a, type_list)
+        end
+        for _, i in pairs(t.interfaces or {}) do
+            types.get_non_leaf_types(i, type_list)
+        end
+    -- if node is Interface process its kind, fields, arguments and interfaces
     elseif t.__type == 'Interface' then
-        table.insert(type_list, t.name)
-        for _,v in pairs(t.fields) do
-            types.get_non_leaf_types(v.kind, type_list)
-            types.get_non_leaf_types(v.arguments, type_list)
+        if not root and t.name then
+            table.insert(type_list, t.name)
         end
+        for _, f in pairs(t.fields or {}) do
+            types.get_non_leaf_types(f.kind or {}, type_list)
+            for _, a in pairs(f.arguments or {}) do
+                types.get_non_leaf_types(a, type_list)
+            end
+        end
+    -- if node is Union process its kind, fields, arguments and interfaces
     elseif t.__type == 'Union' then
-        table.insert(type_list, t.name)
-        for _,v in pairs(t.types) do
+        if not root and t.name then
+            table.insert(type_list, t.name)
+        end
+        for _, v in pairs(t.types or {}) do
             types.get_non_leaf_types(v, type_list)
         end
+    -- if root t is query or mutation prefix itself process all items
+    elseif t.kind and t.resolve and root then
+        types.get_non_leaf_types(t.kind, type_list)
+        for _, a in pairs(t.arguments or {}) do
+            types.get_non_leaf_types(a, type_list)
+        end
+        for _, i in pairs(t.interfaces or {}) do
+            types.get_non_leaf_types(i, type_list)
+        end
+    -- if root t is schema queries or mutations process all prefixes
+    elseif root then
+        for _, v in pairs(t) do
+            types.get_non_leaf_types(v.kind, type_list)
+        end
     end
-    return type_list
+    if root then
+        return utils.dedup_array(type_list)
+    else
+        return type_list
+    end
 end
 
 types.remove_types_by_space_name = function(space_name)

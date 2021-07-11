@@ -82,6 +82,33 @@ local function is_string_array(data)
     return #data > 0 and next(data, #data) == nil
 end
 
+local function dedup_array(tbl)
+    if not tbl or type(tbl) ~= 'table' then
+        return {}
+    end
+    local kv = {}
+    for i = #tbl, 1, -1 do
+        local str = tbl[i]
+        if not kv[str] then
+            kv[str] = true
+        else
+            table.remove(tbl, i)
+        end
+    end
+
+    return tbl
+end
+
+local function is_map(tbl)
+    if type(tbl) ~= 'table' then
+        return false
+    end
+
+    local key, _ = next(tbl)
+
+    return type(key) == 'string'
+end
+
 return {
     value_in = value_in,
     diff_maps = diff_maps,
@@ -90,4 +117,6 @@ return {
     merge_arrays = merge_arrays,
     concat_arrays = concat_arrays,
     is_string_array = is_string_array,
+    dedup_array = dedup_array,
+    is_map = is_map,
 }

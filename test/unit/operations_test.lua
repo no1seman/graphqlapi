@@ -590,6 +590,23 @@ g.test_add_remove_space_query_default_schema_with_prefix = function()
 
     operations.remove_space_query({
         space = 'entity',
+        prefix = 'test',
+    })
+
+    t.assert_items_equals(operations.list_queries(), {})
+
+    operations.add_space_query({
+        prefix = 'test',
+        space = 'entity',
+        doc = 'Get entity',
+        args = {
+            entity_id = types.int.nonNull,
+        },
+        callback = 'models.entity.entity_get',
+    })
+
+    operations.remove_space_query({
+        space = 'entity',
         name = 'entity',
         prefix = 'test',
     })
@@ -761,6 +778,23 @@ g.test_add_remove_space_mutation_default_schema_with_prefix = function()
         prefix = 'test',
         doc = 'Simple prefix test',
     })
+
+    operations.add_space_mutation({
+        prefix = 'test',
+        space = 'entity',
+        doc = 'Mutate entity',
+        args = {
+            entity_id = types.int.nonNull,
+        },
+        callback = 'models.entity.entity_set',
+    })
+
+    operations.remove_space_mutation({
+        prefix = 'test',
+        space = 'entity',
+    })
+
+    t.assert_items_equals(operations.list_mutations(), {})
 
     operations.add_space_mutation({
         prefix = 'test',
@@ -1004,6 +1038,35 @@ g.test_operations_remove_all = function()
     t.assert_items_equals(operations.get_mutations('test_schema'), {})
     t.assert_items_equals(operations.list_queries('test_schema'), {})
     t.assert_items_equals(operations.list_mutations('test_schema'), {})
+
+    local space = test_helper.create_space()
+
+    operations.add_space_query({
+        space = 'entity',
+        doc = 'Get entity',
+        args = {
+            entity_id = types.int.nonNull,
+        },
+        callback = 'models.entity.entity_get',
+    })
+
+    operations.add_space_mutation({
+        space = 'entity',
+        doc = 'Mutate entity',
+        args = {
+            entity_id = types.int.nonNull,
+        },
+        callback = 'models.entity.entity_set',
+    })
+
+    operations.remove_all({schema = box.NULL})
+
+    t.assert_items_equals(operations.get_queries(), {})
+    t.assert_items_equals(operations.get_mutations(), {})
+    t.assert_items_equals(operations.list_queries(), {})
+    t.assert_items_equals(operations.list_mutations(), {})
+
+    space:drop()
 end
 
 g.test_operations_stop = function()

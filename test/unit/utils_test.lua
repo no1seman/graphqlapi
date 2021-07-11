@@ -52,33 +52,23 @@ g.test_merge_maps = function()
 
     res = utils.merge_maps(
         {},
-        {
-            ['space1'] = {name = 'space1', schema = 'default', prefix = 'spaces'},
-        }
+        {['space1'] = {name = 'space1', schema = 'default', prefix = 'spaces'},}
     )
     t.assert_items_equals(res, {
         space1 = {name = "space1", prefix = "spaces", schema = "default"},
     })
 
     res = utils.merge_maps(
-        {
-            ['space1'] = {name = 'space1', schema = 'default', prefix = 'spaces'},
-        },
-        {
-            ['space1'] = {name = 'space1', schema = 'default', prefix = 'spaces'},
-        }
+        {['space1'] = {name = 'space1', schema = 'default', prefix = 'spaces'},},
+        {['space1'] = {name = 'space1', schema = 'default', prefix = 'spaces'},}
     )
     t.assert_items_equals(res, {
         space1 = {name = "space1", prefix = "spaces", schema = "default"},
     })
 
     res = utils.merge_maps(
-        {
-            ['space1'] = {name = 'space1', schema = 'default', prefix = 'spaces'},
-        },
-        {
-            ['space2'] = {name = 'space2', schema = 'default', prefix = 'spaces'},
-        }
+        {['space1'] = {name = 'space1', schema = 'default', prefix = 'spaces'},},
+        {['space2'] = {name = 'space2', schema = 'default', prefix = 'spaces'},}
     )
     t.assert_items_equals(res, {
         space1 = {name = "space1", prefix = "spaces", schema = "default"},
@@ -141,4 +131,24 @@ g.test_is_string_array = function()
     t.assert_equals(utils.is_string_array({1, 'a'}), false)
     t.assert_equals(utils.is_string_array({'a', {'b'}}), false)
     t.assert_equals(utils.is_string_array({'a', 'b'}), true)
+end
+
+g.test_dedup_array = function ()
+    t.assert_equals(utils.dedup_array(nil), {})
+    t.assert_equals(utils.dedup_array({}), {})
+    t.assert_equals(utils.dedup_array({'1'}), {'1'})
+    t.assert_equals(utils.dedup_array({'1', '2'}), {'1', '2'})
+    t.assert_equals(utils.dedup_array({'1', '2', '1'}), {'2', '1'})
+    t.assert_equals(utils.dedup_array({'1', '2', '1', '2'}), {'1', '2'})
+    t.assert_equals(utils.dedup_array({'1', '2', '1', '2', '1'}), {'2', '1'})
+end
+
+g.test_is_map = function()
+    t.assert_equals(utils.is_map(nil), false)
+    t.assert_equals(utils.is_map({'1'}), false)
+    t.assert_equals(utils.is_map({'1', '2', '3'}), false)
+    t.assert_equals(utils.is_map({['1'] = 1, ['2'] = 2, 3}), false)
+    t.assert_equals(utils.is_map({0, ['1'] = 1, ['2'] = 2}), false)
+    t.assert_equals(utils.is_map({['1'] = 1, ['2'] = 2, ['3'] = 3}), true)
+    t.assert_equals(utils.is_map({['1'] = {1}, ['2'] = {2}, ['3'] = {3}}), true)
 end
