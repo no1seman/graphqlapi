@@ -9,6 +9,8 @@ local defaults = {
     NET_BOX_CONNECTION_TIMEOUT = 1,
     -- default channel capacity for change space messages
     CHANNEL_CAPACITY = 100,
+    -- default channel timeout in seconds
+    CHANNEL_TIMEOUT = 10,
     -- default name prefix for prefixed queries
     QUERY_PREFIX = 'api_',
     -- default name prefix for prefixed mutations

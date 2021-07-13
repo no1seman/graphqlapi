@@ -22,7 +22,7 @@ local function updater_init()
         while true do
             fiber.testcancel()
             local ok, err = e_space_update_fiber:pcall(function()
-                local message = channel:get()
+                local message = channel:get(defaults.CHANNEL_TIMEOUT)
 
                 if message ~= nil and
                    message.space and
