@@ -615,10 +615,25 @@ g.test_remove_recursive = function()
     t.assert_equals(type(types()['SpaceInfo']), 'table')
 
     local removed = types.remove_recursive('SpaceEngine')
-
     t.assert_items_equals(removed, {default = { 'SpaceEngine', 'SpaceInfo'}})
-    --print(json.encode(removed))
-    --error()
+    t.assert_equals(types()['SpaceEngine'], nil)
+    t.assert_equals(types()['SpaceInfo'], nil)
+
+    spaces_helpers.stop()
+    spaces_helpers.init()
+
+    local defaults = require('graphqlapi.defaults')
+
+    local temp = defaults.REMOVE_RECURSIVE_MAX_DEPTH
+    defaults.REMOVE_RECURSIVE_MAX_DEPTH = 2
+
+    t.assert_equals(defaults.REMOVE_RECURSIVE_MAX_DEPTH, 2)
+
+    removed = types.remove_recursive('SpaceEngine')
+
+    defaults.REMOVE_RECURSIVE_MAX_DEPTH = temp
+
+    t.assert_items_equals(removed, {default = { 'SpaceEngine', "SpaceInfo"}})
 
     t.assert_equals(types()['SpaceEngine'], nil)
     t.assert_equals(types()['SpaceInfo'], nil)

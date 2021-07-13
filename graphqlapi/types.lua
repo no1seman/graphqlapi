@@ -1,6 +1,6 @@
 local checks = require('checks')
 local errors = require('errors')
--- local log = require('log')
+local log = require('log')
 
 -- local json = require('json')
 
@@ -22,6 +22,7 @@ vars:new('space_type', {})
 vars:new('schema_invalid', {})
 
 local e_graphqlapi = errors.new_class('GraphQL API error', { capture_stack = false })
+local e_max_depth = errors.new_class('Recursive remove', { capture_stack = true })
 
 types.double = types.scalar({
     name = 'Double',
@@ -174,12 +175,22 @@ types.remove = function (type_name, schema_name)
     return type_name
 end
 
-types.get_non_leaf_types = function(t, type_list)
+types.get_non_leaf_types = function(t, type_list, depth)
     if not t or type(t) ~= 'table' or t == {} then return {} end
     local root
+    if depth == nil then
+        depth = 1
+    else
+        depth = depth + 1
+    end
     if type_list == nil then
         type_list = {}
         root = true
+    end
+    if depth > defaults.REMOVE_RECURSIVE_MAX_DEPTH then
+        local err = e_max_depth:new('Too high nest level')
+        log.error('%s', err)
+        return type_list
     end
     -- if node is a custom Scalar add it to list of non-leafs only if its not a root name
     if t.__type == 'Scalar' then
@@ -188,10 +199,10 @@ types.get_non_leaf_types = function(t, type_list)
         end
     -- if node is NonNull then process node's child
     elseif t.__type == 'NonNull' then
-        types.get_non_leaf_types(t.ofType or {}, type_list)
+        types.get_non_leaf_types(t.ofType or {}, type_list, depth)
     -- if node is List then process node's child
     elseif t.__type == 'List' then
-        types.get_non_leaf_types(t.ofType or {}, type_list)
+        types.get_non_leaf_types(t.ofType or {}, type_list, depth)
     -- if node is Enum then process node's child
     elseif t.__type == 'Enum' then
         if not root and t.name then
@@ -202,23 +213,23 @@ types.get_non_leaf_types = function(t, type_list)
         -- if Object is query prefix simply run over all its fields
         if t.name and t.name:sub(1, #defaults.QUERY_PREFIX) == defaults.QUERY_PREFIX then
             for _, f in pairs(t.fields or {}) do
-                types.get_non_leaf_types(f.kind or {}, type_list)
+                types.get_non_leaf_types(f.kind or {}, type_list, depth)
                 for _, a in pairs(f.arguments or {}) do
-                    types.get_non_leaf_types(a, type_list)
+                    types.get_non_leaf_types(a, type_list, depth)
                 end
                 for _, i in pairs(f.interfaces or {}) do
-                    types.get_non_leaf_types(i, type_list)
+                    types.get_non_leaf_types(i, type_list, depth)
                 end
             end
         -- if Object is mutation prefix simply run over all its fields
         elseif t.name and t.name:sub(1, #defaults.MUTATION_PREFIX) == defaults.MUTATION_PREFIX then
             for _, f in pairs(t.fields or {}) do
-                types.get_non_leaf_types(f.kind or {}, type_list)
+                types.get_non_leaf_types(f.kind or {}, type_list, depth)
                 for _, a in pairs(f.arguments or {}) do
-                    types.get_non_leaf_types(a, type_list)
+                    types.get_non_leaf_types(a, type_list, depth)
                 end
                 for _, i in pairs(f.interfaces or {}) do
-                    types.get_non_leaf_types(i, type_list)
+                    types.get_non_leaf_types(i, type_list, depth)
                 end
             end
         -- process ordinary Object
@@ -227,16 +238,16 @@ types.get_non_leaf_types = function(t, type_list)
                 table.insert(type_list, t.name)
             end
             for _, f in pairs(t.fields or {}) do
-                types.get_non_leaf_types(f.kind or {}, type_list)
+                types.get_non_leaf_types(f.kind or {}, type_list, depth)
                 for _, a in pairs(f.arguments or {}) do
-                    types.get_non_leaf_types(a, type_list)
+                    types.get_non_leaf_types(a, type_list, depth)
                 end
             end
             for _, a in pairs(t.arguments or {}) do
-                types.get_non_leaf_types(a, type_list)
+                types.get_non_leaf_types(a, type_list, depth)
             end
             for _, i in pairs(t.interfaces or {}) do
-                types.get_non_leaf_types(i, type_list)
+                types.get_non_leaf_types(i, type_list, depth)
             end
         end
     -- if node is Object process its kind, fields, arguments and interfaces
@@ -245,16 +256,16 @@ types.get_non_leaf_types = function(t, type_list)
             table.insert(type_list, t.name)
         end
         for _, f in pairs(t.fields or {}) do
-            types.get_non_leaf_types(f.kind or {}, type_list)
+            types.get_non_leaf_types(f.kind or {}, type_list, depth)
             for _, a in pairs(f.arguments or {}) do
-                types.get_non_leaf_types(a, type_list)
+                types.get_non_leaf_types(a, type_list, depth)
             end
         end
         for _, a in pairs(t.arguments or {}) do
-            types.get_non_leaf_types(a, type_list)
+            types.get_non_leaf_types(a, type_list, depth)
         end
         for _, i in pairs(t.interfaces or {}) do
-            types.get_non_leaf_types(i, type_list)
+            types.get_non_leaf_types(i, type_list, depth)
         end
     -- if node is Interface process its kind, fields, arguments and interfaces
     elseif t.__type == 'Interface' then
@@ -262,9 +273,9 @@ types.get_non_leaf_types = function(t, type_list)
             table.insert(type_list, t.name)
         end
         for _, f in pairs(t.fields or {}) do
-            types.get_non_leaf_types(f.kind or {}, type_list)
+            types.get_non_leaf_types(f.kind or {}, type_list, depth)
             for _, a in pairs(f.arguments or {}) do
-                types.get_non_leaf_types(a, type_list)
+                types.get_non_leaf_types(a, type_list, depth)
             end
         end
     -- if node is Union process its kind, fields, arguments and interfaces
@@ -273,21 +284,21 @@ types.get_non_leaf_types = function(t, type_list)
             table.insert(type_list, t.name)
         end
         for _, v in pairs(t.types or {}) do
-            types.get_non_leaf_types(v, type_list)
+            types.get_non_leaf_types(v, type_list, depth)
         end
     -- if root t is query or mutation prefix itself process all items
     elseif t.kind and t.resolve and root then
-        types.get_non_leaf_types(t.kind, type_list)
+        types.get_non_leaf_types(t.kind, type_list, depth)
         for _, a in pairs(t.arguments or {}) do
-            types.get_non_leaf_types(a, type_list)
+            types.get_non_leaf_types(a, type_list, depth)
         end
         for _, i in pairs(t.interfaces or {}) do
-            types.get_non_leaf_types(i, type_list)
+            types.get_non_leaf_types(i, type_list, depth)
         end
     -- if root t is schema queries or mutations process all prefixes
     elseif root then
         for _, v in pairs(t) do
-            types.get_non_leaf_types(v.kind, type_list)
+            types.get_non_leaf_types(v.kind, type_list, depth)
         end
     end
     if root then
@@ -320,22 +331,25 @@ types.remove_recursive = function (type_name, opts)
                 removed_types[schema] = removed_types[schema] or {}
                 table.insert(removed_types[schema], type_name)
                 vars.schema_invalid[schema] = true
-            end
 
-            for _type_name in pairs(types(schema)) do
-                local dependent_types = types.get_non_leaf_types(types(schema)[_type_name])
-                if dependent_types and dependent_types ~= {} then
-                    if utils.value_in(type_name, dependent_types) then
-                        local recursively_removed = types.remove_recursive(_type_name, { schema = schema })
-                        removed_types[schema] = removed_types[schema] or {}
-                        removed_types[schema] = utils.merge_arrays(removed_types[schema], recursively_removed[schema])
-                        vars.schema_invalid[schema] = true
+                for _, _type_name in pairs(types.list_types(schema)) do
+                    local dependent_types = types.get_non_leaf_types(types(schema)[_type_name])
+                    if dependent_types ~= nil and dependent_types ~= {} then
+                        if utils.value_in(type_name, dependent_types) then
+                            local recursively_removed = types.remove_recursive(_type_name, { schema = schema })
+                            removed_types[schema] = removed_types[schema] or {}
+                            removed_types[schema] = utils.merge_arrays(
+                                removed_types[schema],
+                                recursively_removed[schema]
+                            )
+                            vars.schema_invalid[schema] = true
+                        end
                     end
                 end
+
             end
         end
     end
-
     return removed_types
 end
 
