@@ -477,7 +477,7 @@ local function add_space_query(opts)
                 name = name,
                 schema = opts.schema,
                 prefix = opts.prefix,
-                type_name = opts.type_name,
+                type_name = type_name,
             }
         }
     )
@@ -491,9 +491,8 @@ local function remove_space_query(opts)
         name = '?string',
     })
 
-    -- TODO: remove space related type ?
-
     if opts.name == nil then
+        local removed_types = {}
         local space_queries = table.copy(vars.space_query[opts.space])
         for index, query in pairs(space_queries or {}) do
             if query.schema == nil then
@@ -501,6 +500,13 @@ local function remove_space_query(opts)
             else
                 query.schema = query.schema:lower()
             end
+
+            removed_types[query.schema] = removed_types[query.schema] or {}
+            local recursively_removed = types.remove_recursive(query.type_name, { schema = query.schema})
+            removed_types[query.schema] = utils.merge_arrays(
+                removed_types[query.schema],
+                recursively_removed[query.schema]
+            )
 
             vars.queries[query.schema] = vars.queries[query.schema] or {}
 
@@ -602,6 +608,7 @@ local function remove_space_mutation(opts)
     -- TODO: remove space related type ?
 
     if opts.name == nil then
+        local removed_types = {}
         local space_queries = table.copy(vars.space_mutation[opts.space])
         for index, mutation in pairs(space_queries or {}) do
             if mutation.schema == nil then
@@ -609,6 +616,13 @@ local function remove_space_mutation(opts)
             else
                 mutation.schema = mutation.schema:lower()
             end
+
+            removed_types[mutation.schema] = removed_types[mutation.schema] or {}
+            local recursively_removed = types.remove_recursive(mutation.type_name, { schema = mutation.schema})
+            removed_types[mutation.schema] = utils.merge_arrays(
+                removed_types[mutation.schema],
+                recursively_removed[mutation.schema]
+            )
 
             vars.mutations[mutation.schema] = vars.mutations[mutation.schema] or {}
 

@@ -565,52 +565,6 @@ end
 g.test_remove_recursive = function()
     spaces_helpers.init()
 
-    -- print('type list before: ' .. json.encode(types.list_types()))
-
-
-    -- local type_name = 'SpaceEngine'
-
-    -- for _, schema in pairs(operations.schemas()) do
-    --     print('Schema: ' .. schema)
-    --     print('Queries:')
-    --     local queries = operations.list_queries(schema)
-    --     for _, query in pairs(queries) do
-    --         print(query..':')
-    --         local parts = query:split('.')
-    --         if #parts > 1 then
-    --             print(json.encode(
-    --                  types.get_non_leaf_types(operations.get_queries()[parts[1]].kind.fields[parts[2]])))
-    --         else
-    --             print(json.encode(types.get_non_leaf_types(operations.get_queries()[parts[1]])))
-    --         end
-    --     end
-
-    --     print('\nMutations:')
-    --     local mutations = operations.list_mutations(schema)
-    --     for _, mutation in pairs(mutations) do
-    --         print(mutation..':')
-    --         local parts = mutation:split('.')
-    --         if #parts > 1 then
-    --             print(json.encode(
-    --                  types.get_non_leaf_types(operations.get_mutations()[parts[1]].kind.fields[parts[2]])))
-    --         else
-    --             print(json.encode(types.get_non_leaf_types(operations.get_mutations()[parts[1]])))
-    --         end
-    --     end
-    -- end
-
-    -- print('\nTypes:')
-    -- for _, schema in pairs(types.schemas()) do
-    --     print('Schema: ' .. schema)
-    --     local _types = types.list_types(schema)
-    --     for _, _type in pairs(_types) do
-    --         print(_type..':')
-    --         print(json.encode(types.get_non_leaf_types(types(schema)[_type])))
-    --     end
-    -- end
-
-    -- error()
-
     t.assert_equals(type(types()['SpaceEngine']), 'table')
     t.assert_equals(type(types()['SpaceInfo']), 'table')
 
