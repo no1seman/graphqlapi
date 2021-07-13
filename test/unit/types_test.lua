@@ -579,7 +579,7 @@ g.test_remove_recursive = function()
     local defaults = require('graphqlapi.defaults')
 
     local temp = defaults.REMOVE_RECURSIVE_MAX_DEPTH
-    defaults.REMOVE_RECURSIVE_MAX_DEPTH = 2
+    defaults.REMOVE_RECURSIVE_MAX_DEPTH = 1
 
     t.assert_equals(defaults.REMOVE_RECURSIVE_MAX_DEPTH, 2)
 
