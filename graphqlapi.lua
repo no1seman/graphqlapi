@@ -62,12 +62,6 @@ local e_graphql_execute = errors.new_class('GraphQL execution failed')
 local function get_schema(schema_name)
     checks('?string')
 
-    if schema_name == nil then
-        schema_name = defaults.DEFAULT_SCHEMA_NAME
-    else
-        schema_name = schema_name:lower()
-    end
-
     if types.is_invalid(schema_name) == true or operations.is_invalid(schema_name) == true then
         vars.graphql_schema = nil
         types.reset_invalid(schema_name)
