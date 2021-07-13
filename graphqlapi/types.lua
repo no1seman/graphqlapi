@@ -1,6 +1,6 @@
 local checks = require('checks')
 local errors = require('errors')
-local log = require('log')
+-- local log = require('log')
 
 -- local json = require('json')
 
@@ -174,23 +174,6 @@ types.remove = function (type_name, schema_name)
     return type_name
 end
 
-types.remove_recursive = function (type_name)
-    checks('string')
-    log.info('Removing type: %s', type_name)
-
-    types.remove(type_name)
-
-    -- TODO: remove callbacks, mutations and other types that is used by removed type
-
-    for _, schema in pairs(types.schemas()) do
-        for _type_name in pairs(types(schema)) do
-            if utils.value_in(type_name, types.get_non_leaf_types(types(schema)[_type_name])) then
-                types.remove_recursive(_type_name)
-            end
-        end
-    end
-end
-
 types.get_non_leaf_types = function(t, type_list)
     if not t or type(t) ~= 'table' or t == {} then return {} end
     local root
@@ -314,28 +297,78 @@ types.get_non_leaf_types = function(t, type_list)
     end
 end
 
+types.remove_recursive = function (type_name, opts)
+    checks('string', { schema = '?string', })
+
+    local removed_types = {}
+
+    if opts ~= nil then
+        if opts.schema == nil then
+            opts.schema = defaults.DEFAULT_SCHEMA_NAME
+        else
+            opts.schema = opts.schema:lower()
+        end
+
+        types.remove(type_name, opts.schema)
+        removed_types[opts.schema] = removed_types[opts.schema] or {}
+        table.insert(removed_types[opts.schema], type_name)
+        vars.schema_invalid[opts.schema] = true
+    else
+        for _, schema in pairs(types.schemas()) do
+            if types(schema)[type_name] then
+                types.remove(type_name, schema)
+                removed_types[schema] = removed_types[schema] or {}
+                table.insert(removed_types[schema], type_name)
+                vars.schema_invalid[schema] = true
+            end
+
+            for _type_name in pairs(types(schema)) do
+                local dependent_types = types.get_non_leaf_types(types(schema)[_type_name])
+                if dependent_types and dependent_types ~= {} then
+                    if utils.value_in(type_name, dependent_types) then
+                        local recursively_removed = types.remove_recursive(_type_name, { schema = schema })
+                        removed_types[schema] = removed_types[schema] or {}
+                        removed_types[schema] = utils.merge_arrays(removed_types[schema], recursively_removed[schema])
+                        vars.schema_invalid[schema] = true
+                    end
+                end
+            end
+        end
+    end
+
+    return removed_types
+end
+
 types.remove_types_by_space_name = function(space_name)
     checks('string')
 
+    local removed_types = {}
+
     if vars.space_type[space_name] ~= nil then
-        for _, _type in pairs(vars.space_type[space_name]) do
+        local space_type = table.copy(vars.space_type[space_name])
+        for _, _type in pairs(space_type) do
             if _type.schema == nil then
                 _type.schema = defaults.DEFAULT_SCHEMA_NAME
             else
                 _type.schema = _type.schema:lower()
             end
+            removed_types[_type.schema] = removed_types[_type.schema] or {}
+            local recursively_removed = types.remove_recursive(_type.name, { schema = _type.schema })
+            removed_types[_type.schema] = utils.merge_arrays(
+                removed_types[_type.schema],
+                recursively_removed[_type.schema]
+            )
 
-            types(_type.schema)[_type.name] = nil
             vars.schema_invalid[_type.schema] = true
         end
         vars.space_type[space_name] = nil
     end
+
+    return removed_types
 end
 
 types.remove_all = function(opts)
-    checks({
-        schema = '?string',
-    })
+    checks({ schema = '?string', })
 
     if opts ~= nil then
         if opts.schema == nil then

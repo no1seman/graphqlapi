@@ -6,7 +6,7 @@ local types = require('graphqlapi.types')
 local spaces_helpers = require('graphqlapi.helpers.spaces')
 local operations = require('graphqlapi.operations')
 
-local json = require('json')
+--local json = require('json')
 
 -- local json_cfg = {
 --     encode_use_tostring = true,
@@ -75,7 +75,7 @@ g.test_remove_all = function()
             tree = 'TREE',
             hash = 'HASH',
             bitset = 'BITSET',
-            rtree = 'RTREE'
+            rtree = 'RTREE',
         }
     }), 'Spaces')
 
@@ -89,6 +89,17 @@ g.test_remove_all = function()
 
     types.remove_all({schema = 'Spaces'})
     t.assert_items_equals(types.list_types('Spaces'), {})
+
+    local space = test_helper.create_space()
+
+    types.add_space_object({
+        space = 'entity',
+        name = 'entity',
+    })
+
+    types.remove_all({schema = 'default'})
+
+    space:drop()
 end
 
 g.test_add_remove_space_object = function ()
@@ -237,7 +248,7 @@ g.test_add_type = function()
             tree = 'TREE',
             hash = 'HASH',
             bitset = 'BITSET',
-            rtree = 'RTREE'
+            rtree = 'RTREE',
         }
     }))
 
@@ -253,7 +264,7 @@ g.test_add_type = function()
             tree = 'TREE',
             hash = 'HASH',
             bitset = 'BITSET',
-            rtree = 'RTREE'
+            rtree = 'RTREE',
         }
     }))
 
@@ -265,12 +276,27 @@ end
 
 
 g.test_get_non_leaf_types = function()
+    local custom_scalar = types.scalar({
+        name = 'CustomInt',
+        description = "The `CustomInt` scalar type represents non-fractional signed whole numeric values. " ..
+                      "Int can represent values from -(2^31) to 2^31 - 1, inclusive.",
+        serialize = function(value)
+            return value
+        end,
+        parseLiteral = function(node)
+            return node.value
+        end,
+        isValueOfTheType = function(_)
+            return true
+        end,
+      })
+
     local dogCommand = types.enum({
         name = 'DogCommand',
         values = {
             SIT = true,
             DOWN = true,
-            HEEL = true
+            HEEL = true,
         }
     })
     t.assert_items_equals(types.get_non_leaf_types(dogCommand), {})
@@ -279,16 +305,17 @@ g.test_get_non_leaf_types = function()
         name = 'Pet',
         fields = {
             name = types.string.nonNull,
-            nickname = types.int,
+            nickname = custom_scalar,
             command = dogCommand,
         }
     })
 
-    t.assert_items_equals(types.get_non_leaf_types(pet), {'DogCommand'})
+    t.assert_items_equals(types.get_non_leaf_types(pet), {'DogCommand', 'CustomInt'})
 
     local dog = types.object({
         name = 'Dog',
         interfaces = { pet },
+        arguments = { dogCommand },
         fields = {
             name = types.string,
             nickname = types.string,
@@ -296,17 +323,18 @@ g.test_get_non_leaf_types = function()
             doesKnowCommand = {
                 kind = types.boolean.nonNull,
                 arguments = {
-                    dogCommand = dogCommand.nonNull
+                    dogCommand = dogCommand.nonNull,
                 }
             },
             isHouseTrained = {
                 kind = types.boolean.nonNull,
                 arguments = {
-                    atOtherHomes = types.boolean
+                    atOtherHomes = types.boolean,
                 }
             },
             complicatedField = {
                 kind = types.boolean,
+                interfaces = {pet},
                 arguments = {
                     complicatedArgument = types.inputObject({
                         name = 'complicated',
@@ -317,10 +345,11 @@ g.test_get_non_leaf_types = function()
                                 name = 'alsoComplicated',
                                 fields = {
                                     x = types.string,
-                                    y = types.integer
+                                    y = types.integer,
                                 }
                             })
-                        }
+                        },
+                        interfaces = {pet},
                     })
                 }
             }
@@ -332,7 +361,8 @@ g.test_get_non_leaf_types = function()
         'Pet',
         'DogCommand',
         'complicated',
-        'alsoComplicated'
+        'alsoComplicated',
+        'CustomInt',
     })
 
     local sentient = types.interface({
@@ -349,7 +379,8 @@ g.test_get_non_leaf_types = function()
         'Dog',
         'DogCommand',
         'complicated',
-        'alsoComplicated'
+        'alsoComplicated',
+        'CustomInt',
     })
 
     local alien = types.object({
@@ -357,14 +388,14 @@ g.test_get_non_leaf_types = function()
         interfaces = sentient,
         fields = {
             name = types.string.nonNull,
-            homePlanet = types.string
+            homePlanet = types.string,
         }
     })
 
     local human = types.object({
         name = 'Human',
         fields = {
-            name = types.string.nonNull
+            name = types.string.nonNull,
         }
     })
 
@@ -373,23 +404,23 @@ g.test_get_non_leaf_types = function()
         fields = {
             name = types.string.nonNull,
             nickname = types.string,
-            meowVolume = types.int
+            meowVolume = types.int,
         }
     })
 
     local catOrDog = types.union({
         name = 'CatOrDog',
-        types = { cat, dog }
+        types = { cat, dog, }
     })
 
     local dogOrHuman = types.union({
         name = 'DogOrHuman',
-        types = { dog, human }
+        types = { dog, human, }
     })
 
     local humanOrAlien = types.union({
         name = 'HumanOrAlien',
-        types = { human, alien }
+        types = { human, alien, }
     })
 
     local query = types.object({
@@ -399,7 +430,7 @@ g.test_get_non_leaf_types = function()
                 kind = dog,
                 args = {
                     name = {
-                        kind = types.string
+                        kind = types.string,
                     }
                 }
             },
@@ -425,6 +456,7 @@ g.test_get_non_leaf_types = function()
         'HumanOrAlien',
         'Human',
         'Alien',
+        'CustomInt',
     })
 
     spaces_helpers.init()
@@ -533,51 +565,63 @@ end
 g.test_remove_recursive = function()
     spaces_helpers.init()
 
-    --print('type list before: ' .. json.encode(types.list_types()))
+    -- print('type list before: ' .. json.encode(types.list_types()))
 
 
-    --local type_name = 'SpaceEngine'
+    -- local type_name = 'SpaceEngine'
 
-    for _, schema in pairs(operations.schemas()) do
-        print('Schema: ' .. schema)
-        print('Queries:')
-        local queries = operations.list_queries(schema)
-        for _, query in pairs(queries) do
-            print(query..':')
-            local parts = query:split('.')
-            if #parts > 1 then
-                print(json.encode(
-                     types.get_non_leaf_types(operations.get_queries()[parts[1]].kind.fields[parts[2]])))
-            else
-                print(json.encode(types.get_non_leaf_types(operations.get_queries()[parts[1]])))
-            end
-        end
+    -- for _, schema in pairs(operations.schemas()) do
+    --     print('Schema: ' .. schema)
+    --     print('Queries:')
+    --     local queries = operations.list_queries(schema)
+    --     for _, query in pairs(queries) do
+    --         print(query..':')
+    --         local parts = query:split('.')
+    --         if #parts > 1 then
+    --             print(json.encode(
+    --                  types.get_non_leaf_types(operations.get_queries()[parts[1]].kind.fields[parts[2]])))
+    --         else
+    --             print(json.encode(types.get_non_leaf_types(operations.get_queries()[parts[1]])))
+    --         end
+    --     end
 
-        print('\nMutations:')
-        local mutations = operations.list_mutations(schema)
-        for _, mutation in pairs(mutations) do
-            print(mutation..':')
-            local parts = mutation:split('.')
-            if #parts > 1 then
-                print(json.encode(
-                     types.get_non_leaf_types(operations.get_mutations()[parts[1]].kind.fields[parts[2]])))
-            else
-                print(json.encode(types.get_non_leaf_types(operations.get_mutations()[parts[1]])))
-            end
-        end
-    end
+    --     print('\nMutations:')
+    --     local mutations = operations.list_mutations(schema)
+    --     for _, mutation in pairs(mutations) do
+    --         print(mutation..':')
+    --         local parts = mutation:split('.')
+    --         if #parts > 1 then
+    --             print(json.encode(
+    --                  types.get_non_leaf_types(operations.get_mutations()[parts[1]].kind.fields[parts[2]])))
+    --         else
+    --             print(json.encode(types.get_non_leaf_types(operations.get_mutations()[parts[1]])))
+    --         end
+    --     end
+    -- end
 
-    print('\nTypes:')
-    for _, schema in pairs(types.schemas()) do
-        print('Schema: ' .. schema)
-        local _types = types.list_types(schema)
-        for _, _type in pairs(_types) do
-            print(_type..':')
-            print(json.encode(types.get_non_leaf_types(types(schema)[_type])))
-        end
-    end
+    -- print('\nTypes:')
+    -- for _, schema in pairs(types.schemas()) do
+    --     print('Schema: ' .. schema)
+    --     local _types = types.list_types(schema)
+    --     for _, _type in pairs(_types) do
+    --         print(_type..':')
+    --         print(json.encode(types.get_non_leaf_types(types(schema)[_type])))
+    --     end
+    -- end
 
+    -- error()
+
+    t.assert_equals(type(types()['SpaceEngine']), 'table')
+    t.assert_equals(type(types()['SpaceInfo']), 'table')
+
+    local removed = types.remove_recursive('SpaceEngine')
+
+    t.assert_items_equals(removed, {default = { 'SpaceEngine', 'SpaceInfo'}})
+    --print(json.encode(removed))
     --error()
-    --t.assert_equals(types()['SpaceEngine'], nil)
-    --t.assert_equals(types['SpaceInfo'], nil)
+
+    t.assert_equals(types()['SpaceEngine'], nil)
+    t.assert_equals(types()['SpaceInfo'], nil)
+
+    spaces_helpers.stop()
 end
