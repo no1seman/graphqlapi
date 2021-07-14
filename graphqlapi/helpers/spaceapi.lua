@@ -7,7 +7,7 @@ local cluster = require('graphqlapi.cluster')
 local defaults = require('graphqlapi.defaults')
 local utils = require('graphqlapi.utils')
 
-local e_space_api = errors.new_class('spaceAPI error', { capture_stack = false })
+local e_space_api = errors.new_class('spaceAPI error', { capture_stack = false, })
 
 local function check_spaces(spaces)
     local schema = cluster.get_schema()
@@ -46,7 +46,7 @@ local function _get_spaces_size(spaces)
                     local counters = {}
                     local err = {}
 
-                    local e_space_api = errors.new_class('spaceAPI error', { capture_stack = false })
+                    local e_space_api = errors.new_class('spaceAPI error', { capture_stack = false, })
 
                     for _, space_name in pairs(spaces) do
                         local space = box.space[space_name]
@@ -232,7 +232,7 @@ local function space_drop(_, args)
                 return master.conn:eval([[
                     local log = require('log')
                     local errors = require('errors')
-                    local e_space_api = errors.new_class('spaceAPI error', { capture_stack = false })
+                    local e_space_api = errors.new_class('spaceAPI error', { capture_stack = false, })
 
                     local space_name = ...
                     local space = box.space[space_name]
@@ -310,7 +310,7 @@ local function space_truncate(_, args)
                 return master.conn:eval([[
                     local log = require('log')
                     local errors = require('errors')
-                    local e_space_api = errors.new_class('spaceAPI error', { capture_stack = false })
+                    local e_space_api = errors.new_class('spaceAPI error', { capture_stack = false, })
 
                     local get_sizes = function(space)
                         local len = space:len() or 0

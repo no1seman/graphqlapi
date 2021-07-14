@@ -9,8 +9,8 @@ require('graphqlapi.helpers.spaceapi')
 local vars = require('graphqlapi.vars').new('graphqlapi.helpers')
 
 vars:new('prefix', {
-    queries = false,
-    mutations = false,
+    queries = {},
+    mutations = {},
 })
 
 vars:new('helpers',{
@@ -82,36 +82,38 @@ vars:new('helpers',{
 
 local function operations_prefixes(opts)
     checks({
-        schema = '?string',
+        schema = 'string',
         prefix = '?string',
     })
 
     opts = opts or {}
-    opts.prefix = opts.prefix or defaults.SPACES_HELPER_PREFIX
+    if not opts.prefix then return end
 
-    -- if opts.schema == nil then
-    --     opts.schema = defaults.DEFAULT_SCHEMA_NAME
-    -- else
-    --     opts.schema = opts.schema:lower()
-    -- end
+    if opts.schema == nil then
+        opts.schema = defaults.DEFAULT_SCHEMA_NAME
+    else
+        opts.schema = opts.schema:lower()
+    end
+
+    vars.prefix[opts.schema] = vars.prefix[opts.schema] or {}
 
     if vars.helpers.info.enabled then
-        if not vars.prefix.queries then
+        if not vars.prefix[opts.schema].queries then
             operations.add_queries_prefix({
                 prefix = opts.prefix,
                 schema = opts.schema,
                 doc = 'Spaces queries',
             })
-            vars.prefix.queries = true
-            vars.prefix.schema = opts.schema
+            vars.prefix[opts.schema].queries = true
+            vars.prefix[opts.schema].schema = opts.schema
         end
     else
-        if vars.prefix.queries then
+        if vars.prefix[opts.schema].queries then
             operations.remove_query_prefix({
                 prefix = opts.prefix,
                 schema = opts.schema,
             })
-            vars.prefix.queries = false
+            vars.prefix[opts.schema].queries = false
         end
     end
 
@@ -119,22 +121,22 @@ local function operations_prefixes(opts)
        vars.helpers.truncate.enabled or
        vars.helpers.update.enabled or
        vars.helpers.create.enabled then
-        if not vars.prefix.mutations then
+        if not vars.prefix[opts.schema].mutations then
             operations.add_mutations_prefix({
                 prefix = opts.prefix,
                 schema = opts.schema,
                 doc = 'Spaces mutations',
             })
-            vars.prefix.mutations = true
-            vars.prefix.schema = opts.schema
+            vars.prefix[opts.schema].mutations = true
+            vars.prefix[opts.schema].schema = opts.schema
         end
     else
-        if vars.prefix.mutations then
+        if vars.prefix[opts.schema].mutations then
             operations.remove_mutation_prefix({
                 prefix = opts.prefix,
                 schema = opts.schema,
             })
-            vars.prefix.mutations = false
+            vars.prefix[opts.schema].mutations = false
         end
     end
 end
@@ -496,7 +498,7 @@ local function space_info_init(opts)
     end
 
     vars.helpers.info.schema = opts.schema
-    vars.helpers.info.prefix = opts.prefix or defaults.SPACES_HELPER_PREFIX
+    vars.helpers.info.prefix = opts.prefix
     vars.helpers.info.enabled = true
     space_types(opts.schema)
     operations_prefixes({
@@ -596,7 +598,7 @@ local function space_drop_init(opts)
     end
 
     vars.helpers.drop.schema = opts.schema
-    vars.helpers.drop.prefix = opts.prefix or defaults.SPACES_HELPER_PREFIX
+    vars.helpers.drop.prefix = opts.prefix
     vars.helpers.drop.enabled = true
     space_types(opts.schema)
     operations_prefixes({
@@ -697,7 +699,7 @@ local function space_truncate_init(opts)
     end
 
     vars.helpers.truncate.schema = opts.schema
-    vars.helpers.truncate.prefix = opts.prefix or defaults.SPACES_HELPER_PREFIX
+    vars.helpers.truncate.prefix = opts.prefix
     vars.helpers.truncate.enabled = true
     space_types(opts.schema)
     operations_prefixes({
@@ -809,7 +811,7 @@ local function space_update_init(opts)
     end
 
     vars.helpers.update.schema = opts.schema
-    vars.helpers.update.prefix = opts.prefix or defaults.SPACES_HELPER_PREFIX
+    vars.helpers.update.prefix = opts.prefix
     vars.helpers.update.enabled = true
     space_types(opts.schema)
     operations_prefixes({
@@ -854,7 +856,7 @@ local function space_create_init(opts)
     end
 
     vars.helpers.create.schema = opts.schema
-    vars.helpers.create.prefix = opts.prefix or defaults.SPACES_HELPER_PREFIX
+    vars.helpers.create.prefix = opts.prefix
     vars.helpers.create.enabled = true
     space_types(vars.helpers.create.schema)
     operations_prefixes({
@@ -936,7 +938,7 @@ local function init(opts)
         opts.schema = opts.schema:lower()
     end
 
-    opts.prefix = opts.prefix or defaults.SPACES_HELPER_PREFIX
+    opts.prefix = opts.prefix
 
     if (opts.info and opts.info.enabled == true) or not opts.info then
         opts.info = opts.info or {}

@@ -1,5 +1,5 @@
 local t = require('luatest')
-local g = t.group('helpers')
+local g = t.group('spaces_helpers')
 
 require('test.helper')
 local helpers = require('graphqlapi.helpers.spaces')
@@ -85,13 +85,13 @@ g.test_init_stop = function()
         'SpaceTruncateNames',
         'SpaceUpdateNames',
     }
-    local queries_list = {'spaces.space_info'}
+    local queries_list = {'space_info'}
     local mutations_list =
     {
-        'spaces.space_drop',
-        'spaces.space_truncate',
-        'spaces.space_update',
-        'spaces.space_create',
+        'space_drop',
+        'space_truncate',
+        'space_update',
+        'space_create',
     }
 
     helpers.init()
@@ -149,7 +149,7 @@ g.test_space_info = function()
         'SpaceInfoNames',
     }
 
-    local queries_list = {'spaces.space_info'}
+    local queries_list = {'space_info'}
 
     helpers.space_info_init()
     t.assert_items_include(types.list_types(), types_list)
@@ -195,7 +195,7 @@ g.test_space_drop = function()
         'SpaceInfo',
     }
 
-    local mutations_list = {'spaces.space_drop'}
+    local mutations_list = {'space_drop'}
 
     helpers.space_drop_init()
     t.assert_items_include(types.list_types(), types_list)
@@ -233,7 +233,7 @@ g.test_space_truncate = function()
         'SpaceTruncateResult',
     }
 
-    local mutations_list = {'spaces.space_truncate'}
+    local mutations_list = {'space_truncate'}
 
     helpers.space_truncate_init()
     t.assert_items_include(types.list_types(), types_list)
@@ -283,7 +283,7 @@ g.test_space_update = function()
         'SpaceUpdateNames',
     }
 
-    local mutations_list = {'spaces.space_update'}
+    local mutations_list = {'space_update'}
 
     helpers.space_update_init()
     t.assert_items_include(types.list_types(), types_list)
@@ -331,7 +331,7 @@ g.test_space_create = function()
         'SpaceInfo',
     }
 
-    local mutations_list = {'spaces.space_create'}
+    local mutations_list = {'space_create'}
 
     helpers.space_create_init()
     t.assert_items_include(types.list_types(), types_list)

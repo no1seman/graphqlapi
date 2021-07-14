@@ -55,6 +55,8 @@ end
 
 g.test_updater_init = function()
     spaces.init()
+
+    local temp = helpers.update_lists
     helpers.update_lists = nil
     local space = test_helper.create_space()
 
@@ -67,6 +69,9 @@ g.test_updater_init = function()
 
     t.assert_equals(fiber_name, 'gql_updater')
 
+    helpers.update_lists = temp
+
     space:drop()
     spaces.stop()
+
 end

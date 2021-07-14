@@ -6,7 +6,7 @@ local errors = require('errors')
 local pool = require('cartridge.pool')
 local vshard = require('vshard')
 
-local e_space_api = errors.new_class('spaceAPI error', { capture_stack = false })
+local e_space_api = errors.new_class('spaceAPI error', { capture_stack = false, })
 
 local function get_alias_by_uuid(conn)
     checks('table')
@@ -25,7 +25,7 @@ local function get_servers()
         local replicaset_uuid = server.replicaset.uuid or '00000000-0000-0000-0000-000000000000'
         local alias = server.alias or 'unknown'
         if conn then
-            table.insert(servers, {replicaset_uuid = replicaset_uuid, alias = alias, conn = conn})
+            table.insert(servers, { replicaset_uuid = replicaset_uuid, alias = alias, conn = conn, })
         else
             connect_errors = connect_errors or {}
             table.insert(connect_errors,  e_space_api:new('instance \'%s\' error: %s', alias, err))
@@ -42,7 +42,7 @@ local function get_masters()
         local replicaset_uuid = replicaset.uuid or '00000000-0000-0000-0000-000000000000'
         local alias = replicaset.active_master.alias or 'unknown'
         if conn then
-            table.insert(servers, {replicaset_uuid = replicaset_uuid, alias = alias, conn = conn})
+            table.insert(servers, { replicaset_uuid = replicaset_uuid, alias = alias, conn = conn, })
         else
             connect_errors = connect_errors or {}
             table.insert(connect_errors,  e_space_api:new('instance \'%s\' error: %s', alias, err))
@@ -57,7 +57,7 @@ local function get_storages_masters()
         local conn = replicaset.master.conn
         local replicaset_uuid = uuid or '00000000-0000-0000-0000-000000000000'
         local alias = get_alias_by_uuid(conn)
-        table.insert(servers, {replicaset_uuid = replicaset_uuid, alias = alias, conn = replicaset.master.conn})
+        table.insert(servers, { replicaset_uuid = replicaset_uuid, alias = alias, conn = replicaset.master.conn, })
     end
     return servers
 end

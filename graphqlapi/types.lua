@@ -21,8 +21,8 @@ local vars = require('graphqlapi.vars').new('graphqlapi.types')
 vars:new('space_type', {})
 vars:new('schema_invalid', {})
 
-local e_graphqlapi = errors.new_class('GraphQL API error', { capture_stack = false })
-local e_max_depth = errors.new_class('Recursive remove', { capture_stack = true })
+local e_graphqlapi = errors.new_class('GraphQL API error', { capture_stack = false, })
+local e_max_depth = errors.new_class('Recursive remove', { capture_stack = true, })
 
 types.double = types.scalar({
     name = 'Double',

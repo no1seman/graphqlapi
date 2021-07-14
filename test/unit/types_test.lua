@@ -459,7 +459,7 @@ g.test_get_non_leaf_types = function()
         'CustomInt',
     })
 
-    spaces_helpers.init()
+    spaces_helpers.init({prefix = 'spaces'})
 
     t.assert_items_include(types.get_non_leaf_types(types()['SpaceInfo']),
     {
