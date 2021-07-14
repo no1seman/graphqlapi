@@ -86,6 +86,7 @@ g.test_reload = function()
 
     check()
     graphqlapi.reload()
+    t.assert_equals(rawget(_G, '__GRAPHQLAPI_MODELS_DIR'), 'test/models/suite1')
     check()
 
     graphqlapi.stop()

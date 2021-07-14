@@ -304,8 +304,12 @@ local function init(httpd, middleware, endpoint, models_dir, opts)
     end
 
     vars.auth_middleware = middleware
+    endpoint = endpoint or rawget(_G, '__GRAPHQLAPI_ENDPOINT')
     endpoint = endpoint or defaults.DEFAULT_ENDPOINT
+    rawset(_G, '__GRAPHQLAPI_ENDPOINT', vars.endpoint)
+    models_dir = models_dir or rawget(_G, '__GRAPHQLAPI_MODELS_DIR')
     vars.models_dir = models_dir or defaults.DEFAULT_MODELS_DIR
+    rawset(_G, '__GRAPHQLAPI_MODELS_DIR', vars.models_dir)
 
     local ok, err = _init()
     if not ok then
@@ -351,6 +355,7 @@ local function set_models_dir(models_dir)
     checks('string')
     if fio.path.is_dir(fio.pathjoin(package.searchroot(), models_dir)) then
         vars.models_dir = models_dir
+        rawset(_G, '__GRAPHQLAPI_MODELS_DIR', models_dir)
         reload()
     end
 end
