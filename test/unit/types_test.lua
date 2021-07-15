@@ -6,7 +6,7 @@ local types = require('graphqlapi.types')
 local spaces_helpers = require('graphqlapi.helpers.spaces')
 local operations = require('graphqlapi.operations')
 
---local json = require('json')
+-- local json = require('json')
 
 -- local json_cfg = {
 --     encode_use_tostring = true,
@@ -459,7 +459,7 @@ g.test_get_non_leaf_types = function()
         'CustomInt',
     })
 
-    spaces_helpers.init({prefix = 'spaces'})
+    spaces_helpers.init()
 
     t.assert_items_include(types.get_non_leaf_types(types()['SpaceInfo']),
     {
@@ -519,16 +519,6 @@ g.test_get_non_leaf_types = function()
         space_queries_types
     )
 
-    t.assert_items_equals(
-        types.get_non_leaf_types(operations.get_queries()['spaces']),
-        space_queries_types
-    )
-
-    t.assert_items_equals(
-        types.get_non_leaf_types(operations.get_queries()['spaces'].kind.fields['space_info']),
-        space_queries_types
-    )
-
     local space_mutations_types = {
         'SpaceTruncateResult',
         'SpaceTruncateNames',
@@ -554,9 +544,28 @@ g.test_get_non_leaf_types = function()
         space_mutations_types
     )
 
+    spaces_helpers.stop()
+
+    spaces_helpers.init({prefix = 'spaces'})
+
+    t.assert_items_equals(
+        types.get_non_leaf_types(operations.get_queries()['spaces']),
+        space_queries_types
+    )
+
+    t.assert_items_equals(
+        types.get_non_leaf_types(operations.get_queries()['spaces'].kind.fields['space_info']),
+        space_queries_types
+    )
+
     t.assert_items_equals(
         types.get_non_leaf_types(operations.get_mutations()['spaces']),
         space_mutations_types
+    )
+
+    t.assert_items_equals(
+        types.get_non_leaf_types(operations.get_mutations()['spaces'].kind.fields['space_truncate']),
+        {'SpaceTruncateResult', 'SpaceTruncateNames'}
     )
 
     spaces_helpers.stop()

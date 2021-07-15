@@ -192,7 +192,7 @@ types.get_non_leaf_types = function(t, type_list, depth)
         log.error('%s', err)
         return type_list
     end
-    -- if node is a custom Scalar add it to list of non-leafs only if its not a root name
+    -- if node is a custom Scalar add it to list of non-leafs only if its not a root
     if t.__type == 'Scalar' then
         if not root and t.name and not utils.value_in(t.name, default_scalars) then
             table.insert(type_list, t.name)
@@ -200,10 +200,10 @@ types.get_non_leaf_types = function(t, type_list, depth)
     -- if node is NonNull then process node's child
     elseif t.__type == 'NonNull' then
         types.get_non_leaf_types(t.ofType or {}, type_list, depth)
-    -- if node is List then process node's child
+    -- if node is List then process node's children
     elseif t.__type == 'List' then
         types.get_non_leaf_types(t.ofType or {}, type_list, depth)
-    -- if node is Enum then process node's child
+    -- if node is Enum then simply add to list of non-leafs
     elseif t.__type == 'Enum' then
         if not root and t.name then
             table.insert(type_list, t.name)
@@ -242,6 +242,9 @@ types.get_non_leaf_types = function(t, type_list, depth)
                 for _, a in pairs(f.arguments or {}) do
                     types.get_non_leaf_types(a, type_list, depth)
                 end
+                for _, i in pairs(f.interfaces or {}) do
+                    types.get_non_leaf_types(i, type_list, depth)
+                end
             end
             for _, a in pairs(t.arguments or {}) do
                 types.get_non_leaf_types(a, type_list, depth)
@@ -259,6 +262,9 @@ types.get_non_leaf_types = function(t, type_list, depth)
             types.get_non_leaf_types(f.kind or {}, type_list, depth)
             for _, a in pairs(f.arguments or {}) do
                 types.get_non_leaf_types(a, type_list, depth)
+            end
+            for _, i in pairs(f.interfaces or {}) do
+                types.get_non_leaf_types(i, type_list, depth)
             end
         end
         for _, a in pairs(t.arguments or {}) do
@@ -278,7 +284,7 @@ types.get_non_leaf_types = function(t, type_list, depth)
                 types.get_non_leaf_types(a, type_list, depth)
             end
         end
-    -- if node is Union process its kind, fields, arguments and interfaces
+    -- if node is Union process its children
     elseif t.__type == 'Union' then
         if not root and t.name then
             table.insert(type_list, t.name)
@@ -299,12 +305,16 @@ types.get_non_leaf_types = function(t, type_list, depth)
     elseif root then
         for _, v in pairs(t) do
             types.get_non_leaf_types(v.kind, type_list, depth)
+            for _, a in pairs(v.arguments or {}) do
+                types.get_non_leaf_types(a, type_list, depth)
+            end
+            for _, i in pairs(v.interfaces or {}) do
+                types.get_non_leaf_types(i, type_list, depth)
+            end
         end
     end
     if root then
         return utils.dedup_array(type_list)
-    else
-        return type_list
     end
 end
 
