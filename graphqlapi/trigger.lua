@@ -30,15 +30,12 @@ local function updater_init()
                    message.space.id > box.schema.SYSTEM_ID_MAX and
                    not string.startswith(message.space.name, '_') then
                     if message.op == 'DELETE' then
-                        print('DELETE space: "'..message.space.name..'"')
                         helpers.update()
                         models.remove_model_by_space_name(message.space.name)
                         types.remove_types_by_space_name(message.space.name)
                         operations.remove_operations_by_space_name(message.space.name)
                     else
-                        print('CREATE or UPDATE space: "'..message.space.name..'"')
                         helpers.update()
-                        print(types.is_invalid('spaces'))
                         models.update_space_models(message.space.name)
                     end
                 end
