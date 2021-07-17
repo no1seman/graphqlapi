@@ -1,13 +1,6 @@
 local log = require('log')
 local json = require('json')
 
--- local json_cfg = {
---     encode_use_tostring = true,
---     encode_deep_as_nil = true,
---     encode_max_depth = 3,
---     encode_invalid_as_nil = true,
--- }
-
 local fio = require('fio')
 local checks = require('checks')
 local errors = require('errors')
@@ -31,7 +24,7 @@ for _, module in ipairs({
     'graphqlapi.middleware',
     'graphqlapi.models',
     'graphqlapi.operations',
-    'graphqlapi.spaces',
+    'graphqlapi.trigger',
     'graphqlapi.types',
     'graphqlapi.utils',
     'graphqlapi.vars',
@@ -43,7 +36,7 @@ local defaults = require('graphqlapi.defaults')
 local helpers = require('graphqlapi.helpers')
 local models = require('graphqlapi.models')
 local operations = require('graphqlapi.operations')
-local spaces = require('graphqlapi.spaces')
+local spaces = require('graphqlapi.trigger')
 local types = require('graphqlapi.types')
 local vars = require('graphqlapi.vars').new('graphqlapi.graphql')
 
@@ -63,7 +56,7 @@ local function get_schema(schema_name)
     checks('?string')
 
     if types.is_invalid(schema_name) == true or operations.is_invalid(schema_name) == true then
-        vars.graphql_schema = nil
+        vars.graphql_schema[schema_name] = nil
         types.reset_invalid(schema_name)
         operations.reset_invalid(schema_name)
     end

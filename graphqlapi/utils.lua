@@ -1,3 +1,5 @@
+local defaults = require('graphqlapi.defaults')
+
 local function value_in(val, arr)
     if not arr or arr == {} then return false end
     for i, elem in ipairs(arr) do
@@ -109,6 +111,15 @@ local function is_map(tbl)
     return type(key) == 'string'
 end
 
+local function coerce_schema(schema)
+    if schema == nil then
+        schema = defaults.DEFAULT_SCHEMA_NAME
+    else
+        schema = schema:lower()
+    end
+    return schema
+end
+
 return {
     value_in = value_in,
     diff_maps = diff_maps,
@@ -119,4 +130,5 @@ return {
     is_string_array = is_string_array,
     dedup_array = dedup_array,
     is_map = is_map,
+    coerce_schema = coerce_schema,
 }

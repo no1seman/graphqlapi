@@ -117,52 +117,32 @@ end
 types.add = function(_type, schema_name)
     checks('table', '?string')
 
-    if schema_name == nil then
-        schema_name = defaults.DEFAULT_SCHEMA_NAME
-    else
-        schema_name = schema_name:lower()
-    end
-
+    schema_name = utils.coerce_schema(schema_name)
     types.get_env(schema_name)[_type.name] = _type
-
     vars.schema_invalid[schema_name] = true
 end
 
 types.is_invalid = function(schema_name)
     checks('?string')
 
-    if schema_name == nil then
-        schema_name = defaults.DEFAULT_SCHEMA_NAME
-    else
-        schema_name = schema_name:lower()
-    end
-
+    schema_name = utils.coerce_schema(schema_name)
     return vars.schema_invalid[schema_name]
 end
 
 types.reset_invalid = function(schema_name)
     checks('?string')
 
-    if schema_name == nil then
-        schema_name = defaults.DEFAULT_SCHEMA_NAME
-    else
-        schema_name = schema_name:lower()
-    end
-
+    schema_name = utils.coerce_schema(schema_name)
     vars.schema_invalid[schema_name] = false
 end
 
 types.remove = function (type_name, schema_name)
     checks('string', '?string')
 
-    if schema_name == nil then
-        schema_name = defaults.DEFAULT_SCHEMA_NAME
-    else
-        schema_name = schema_name:lower()
-    end
+    schema_name = utils.coerce_schema(schema_name)
     types(schema_name)[type_name] = nil
 
-    for space in pairs(vars.space_type) do
+    for space in pairs(vars.space_type or {}) do
         local space_types = table.copy(vars.space_type[space])
         for index, _type in pairs(space_types or {}) do
             if _type.schema == schema_name and _type.name == type_name then
@@ -324,12 +304,7 @@ types.remove_recursive = function (type_name, opts)
     local removed_types = {}
 
     if opts ~= nil then
-        if opts.schema == nil then
-            opts.schema = defaults.DEFAULT_SCHEMA_NAME
-        else
-            opts.schema = opts.schema:lower()
-        end
-
+        opts.schema = utils.coerce_schema(opts.schema)
         types.remove(type_name, opts.schema)
         removed_types[opts.schema] = removed_types[opts.schema] or {}
         table.insert(removed_types[opts.schema], type_name)
@@ -371,11 +346,7 @@ types.remove_types_by_space_name = function(space_name)
     if vars.space_type[space_name] ~= nil then
         local space_type = table.copy(vars.space_type[space_name])
         for _, _type in pairs(space_type) do
-            if _type.schema == nil then
-                _type.schema = defaults.DEFAULT_SCHEMA_NAME
-            else
-                _type.schema = _type.schema:lower()
-            end
+            _type.schema = utils.coerce_schema(_type.schema)
             removed_types[_type.schema] = removed_types[_type.schema] or {}
             local recursively_removed = types.remove_recursive(_type.name, { schema = _type.schema })
             removed_types[_type.schema] = utils.merge_arrays(
@@ -395,12 +366,7 @@ types.remove_all = function(opts)
     checks({ schema = '?string', })
 
     if opts ~= nil then
-        if opts.schema == nil then
-            opts.schema = defaults.DEFAULT_SCHEMA_NAME
-        else
-            opts.schema = opts.schema:lower()
-        end
-
+        opts.schema = utils.coerce_schema(opts.schema)
         for type_name in pairs(types(opts.schema)) do
             types.remove(type_name, opts.schema)
         end
@@ -435,11 +401,7 @@ types.add_space_object = function(opts)
         fields = '?table',
     })
 
-    if opts.schema == nil then
-        opts.schema = defaults.DEFAULT_SCHEMA_NAME
-    else
-        opts.schema = opts.schema:lower()
-    end
+    opts.schema = utils.coerce_schema(opts.schema)
 
     if not cluster.is_space_exists(opts.space) then
         return nil, nil, e_graphqlapi:new(string.format("space '%s' doesn't exists", opts.space))
@@ -473,11 +435,7 @@ types.add_space_input_object = function(opts)
         fields = '?table',
     })
 
-    if opts.schema == nil then
-        opts.schema = defaults.DEFAULT_SCHEMA_NAME
-    else
-        opts.schema = opts.schema:lower()
-    end
+    opts.schema = utils.coerce_schema(opts.schema)
 
     if not cluster.is_space_exists(opts.space) then
         return nil, nil, e_graphqlapi:new(string.format("space '%s' doesn't exists", opts.space))
@@ -505,12 +463,7 @@ end
 types.list_types = function(schema_name)
     checks('?string')
 
-    if schema_name == nil then
-        schema_name = defaults.DEFAULT_SCHEMA_NAME
-    else
-        schema_name = schema_name:lower()
-    end
-
+    schema_name = utils.coerce_schema(schema_name)
     local type_list = {}
     for _type in pairs(types(schema_name)) do
         table.insert(type_list, _type)
@@ -528,11 +481,7 @@ end
 
 return setmetatable(types, {
     __call = function(_, schema_name)
-        if schema_name == nil then
-            schema_name = defaults.DEFAULT_SCHEMA_NAME
-        else
-            schema_name = schema_name:lower()
-        end
+        schema_name = utils.coerce_schema(schema_name)
         return types.get_env(schema_name)
     end
 })

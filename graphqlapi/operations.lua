@@ -18,24 +18,14 @@ vars:new('space_mutation', {})
 local function is_invalid(schema_name)
     checks('?string')
 
-    if schema_name == nil then
-        schema_name = defaults.DEFAULT_SCHEMA_NAME
-    else
-        schema_name = schema_name:lower()
-    end
-
+    schema_name = utils.coerce_schema(schema_name)
     return vars.schema_invalid[schema_name]
 end
 
 local function reset_invalid(schema_name)
     checks('?string')
 
-    if schema_name == nil then
-        schema_name = defaults.DEFAULT_SCHEMA_NAME
-    else
-        schema_name = schema_name:lower()
-    end
-
+    schema_name = utils.coerce_schema(schema_name)
     vars.schema_invalid[schema_name] = false
 end
 
@@ -65,12 +55,7 @@ local function add_queries_prefix(opts)
         doc = '?string',
     })
 
-    if opts.schema == nil then
-        opts.schema = defaults.DEFAULT_SCHEMA_NAME
-    else
-        opts.schema = opts.schema:lower()
-    end
-
+    opts.schema = utils.coerce_schema(opts.schema)
     vars.queries[opts.schema] = vars.queries[opts.schema] or {}
 
     local kind = types.object{
@@ -97,12 +82,7 @@ local function remove_query_prefix(opts)
         schema = '?string',
     })
 
-    if opts.schema == nil then
-        opts.schema = defaults.DEFAULT_SCHEMA_NAME
-    else
-        opts.schema = opts.schema:lower()
-    end
-
+    opts.schema = utils.coerce_schema(opts.schema)
     vars.queries[opts.schema] = vars.queries[opts.schema] or {}
     -- Remove all queries with removed prefix
     vars.queries[opts.schema][opts.prefix] = nil
@@ -127,12 +107,7 @@ local function add_mutations_prefix(opts)
         doc = '?string',
     })
 
-    if opts.schema == nil then
-        opts.schema = defaults.DEFAULT_SCHEMA_NAME
-    else
-        opts.schema = opts.schema:lower()
-    end
-
+    opts.schema = utils.coerce_schema(opts.schema)
     vars.mutations[opts.schema] = vars.mutations[opts.schema] or {}
 
     local kind = types.object({
@@ -159,12 +134,7 @@ local function remove_mutation_prefix(opts)
         schema = '?string',
     })
 
-    if opts.schema == nil then
-        opts.schema = defaults.DEFAULT_SCHEMA_NAME
-    else
-        opts.schema = opts.schema:lower()
-    end
-
+    opts.schema = utils.coerce_schema(opts.schema)
     vars.mutations[opts.schema] = vars.mutations[opts.schema] or {}
     -- Remove all mutations with removed prefix
     vars.mutations[opts.schema][opts.prefix] = nil
@@ -192,12 +162,7 @@ local function add_query(opts)
         callback = 'string',
     })
 
-    if opts.schema == nil then
-        opts.schema = defaults.DEFAULT_SCHEMA_NAME
-    else
-        opts.schema = opts.schema:lower()
-    end
-
+    opts.schema = utils.coerce_schema(opts.schema)
     vars.queries[opts.schema] = vars.queries[opts.schema] or {}
 
     if opts.prefix then
@@ -249,12 +214,7 @@ local function remove_query(opts)
         prefix = '?string',
     })
 
-    if opts.schema == nil then
-        opts.schema = defaults.DEFAULT_SCHEMA_NAME
-    else
-        opts.schema = opts.schema:lower()
-    end
-
+    opts.schema = utils.coerce_schema(opts.schema)
     vars.queries[opts.schema] = vars.queries[opts.schema] or {}
 
     if opts.prefix == nil then
@@ -301,12 +261,7 @@ local function list_queries(schema_name)
 
     local queries = {}
 
-    if schema_name == nil then
-        schema_name = defaults.DEFAULT_SCHEMA_NAME
-    else
-        schema_name = schema_name:lower()
-    end
-
+    schema_name = utils.coerce_schema(schema_name)
     vars.queries[schema_name] = vars.queries[schema_name] or {}
 
     for query in pairs(vars.queries[schema_name]) do
@@ -332,12 +287,7 @@ local function add_mutation(opts)
         callback = 'string',
     })
 
-    if opts.schema == nil then
-        opts.schema = defaults.DEFAULT_SCHEMA_NAME
-    else
-        opts.schema = opts.schema:lower()
-    end
-
+    opts.schema = utils.coerce_schema(opts.schema)
     vars.mutations[opts.schema] = vars.mutations[opts.schema] or {}
 
     if opts.prefix then
@@ -389,12 +339,7 @@ local function remove_mutation(opts)
         prefix = '?string',
     })
 
-    if opts.schema == nil then
-        opts.schema = defaults.DEFAULT_SCHEMA_NAME
-    else
-        opts.schema = opts.schema:lower()
-    end
-
+    opts.schema = utils.coerce_schema(opts.schema)
     vars.mutations[opts.schema] = vars.mutations[opts.schema] or {}
 
     if opts.prefix == nil then
@@ -436,12 +381,7 @@ local function add_space_query(opts)
         callback = 'string',
     })
 
-    if opts.schema == nil then
-        opts.schema = defaults.DEFAULT_SCHEMA_NAME
-    else
-        opts.schema = opts.schema:lower()
-    end
-
+    opts.schema = utils.coerce_schema(opts.schema)
     vars.queries[opts.schema] = vars.queries[opts.schema] or {}
 
     if not cluster.is_space_exists(opts.space) then
@@ -495,12 +435,7 @@ local function remove_space_query(opts)
         local removed_types = {}
         local space_queries = table.copy(vars.space_query[opts.space])
         for index, query in pairs(space_queries or {}) do
-            if query.schema == nil then
-                query.schema = defaults.DEFAULT_SCHEMA_NAME
-            else
-                query.schema = query.schema:lower()
-            end
-
+            query.schema = utils.coerce_schema(query.schema)
             removed_types[query.schema] = removed_types[query.schema] or {}
             local recursively_removed = types.remove_recursive(query.type_name, { schema = query.schema})
             removed_types[query.schema] = utils.merge_arrays(
@@ -523,12 +458,7 @@ local function remove_space_query(opts)
             vars.schema_invalid[query.schema] = true
         end
     else
-        if opts.schema == nil then
-            opts.schema = defaults.DEFAULT_SCHEMA_NAME
-        else
-            opts.schema = opts.schema:lower()
-        end
-
+        opts.schema = utils.coerce_schema(opts.schema)
         remove_query({
             name = opts.name,
             schema = opts.schema,
@@ -556,12 +486,7 @@ local function add_space_mutation(opts)
         error(string.format("space '%s' doesn't exists", opts.space))
     end
 
-    if opts.schema == nil then
-        opts.schema = defaults.DEFAULT_SCHEMA_NAME
-    else
-        opts.schema = opts.schema:lower()
-    end
-
+    opts.schema = utils.coerce_schema(opts.schema)
     local type_name = opts.type_name or opts.space
 
     types.add_space_input_object({
@@ -611,12 +536,7 @@ local function remove_space_mutation(opts)
         local removed_types = {}
         local space_queries = table.copy(vars.space_mutation[opts.space])
         for index, mutation in pairs(space_queries or {}) do
-            if mutation.schema == nil then
-                mutation.schema = defaults.DEFAULT_SCHEMA_NAME
-            else
-                mutation.schema = mutation.schema:lower()
-            end
-
+            mutation.schema = utils.coerce_schema(mutation.schema)
             removed_types[mutation.schema] = removed_types[mutation.schema] or {}
             local recursively_removed = types.remove_recursive(mutation.type_name, { schema = mutation.schema})
             removed_types[mutation.schema] = utils.merge_arrays(
@@ -639,12 +559,7 @@ local function remove_space_mutation(opts)
             vars.schema_invalid[mutation.schema] = true
         end
     else
-        if opts.schema == nil then
-            opts.schema = defaults.DEFAULT_SCHEMA_NAME
-        else
-            opts.schema = opts.schema:lower()
-        end
-
+        opts.schema = utils.coerce_schema(opts.schema)
         remove_mutation({
             name = opts.name,
             schema = opts.schema,
@@ -673,13 +588,7 @@ local function list_mutations(schema_name)
     checks('?string')
 
     local mutations = {}
-
-    if schema_name == nil then
-        schema_name = defaults.DEFAULT_SCHEMA_NAME
-    else
-        schema_name = schema_name:lower()
-    end
-
+    schema_name = utils.coerce_schema(schema_name)
     vars.mutations[schema_name] = vars.mutations[schema_name] or {}
 
     for mutation in pairs(vars.mutations[schema_name]) do
@@ -713,12 +622,7 @@ local function remove_all(opts)
     })
 
     if opts ~= nil then
-        if opts.schema == nil then
-            opts.schema = defaults.DEFAULT_SCHEMA_NAME
-        else
-            opts.schema = opts.schema:lower()
-        end
-
+        opts.schema = utils.coerce_schema(opts.schema)
         vars.queries[opts.schema] = nil
 
         for space in pairs(vars.space_query) do
@@ -756,12 +660,7 @@ local function remove_operations_by_space_name(space_name)
 
     -- Cleanup queries related to space
     for _, query in pairs(vars.space_query[space_name] or {}) do
-        if query.schema == nil then
-            query.schema = defaults.DEFAULT_SCHEMA_NAME
-        else
-            query.schema = query.schema:lower()
-        end
-
+        query.schema = utils.coerce_schema(query.schema)
         vars.queries[query.schema] = vars.queries[query.schema] or {}
 
         if query.prefix == nil then
@@ -781,12 +680,7 @@ local function remove_operations_by_space_name(space_name)
 
     -- Cleanup mutations related to space
     for _, mutation in pairs(vars.space_mutation[space_name] or {}) do
-        if mutation.schema == nil then
-            mutation.schema = defaults.DEFAULT_SCHEMA_NAME
-        else
-            mutation.schema = mutation.schema:lower()
-        end
-
+        mutation.schema = utils.coerce_schema(mutation.schema)
         vars.mutations[mutation.schema] = vars.mutations[mutation.schema] or {}
 
         if mutation.prefix == nil then
@@ -819,24 +713,14 @@ end
 local function get_queries(schema_name)
     checks('?string')
 
-    if schema_name == nil then
-        schema_name = defaults.DEFAULT_SCHEMA_NAME
-    else
-        schema_name = schema_name:lower()
-    end
-
+    schema_name = utils.coerce_schema(schema_name)
     return vars.queries[schema_name] or {}
 end
 
 local function get_mutations(schema_name)
     checks('?string')
 
-    if schema_name == nil then
-        schema_name = defaults.DEFAULT_SCHEMA_NAME
-    else
-        schema_name = schema_name:lower()
-    end
-
+    schema_name = utils.coerce_schema(schema_name)
     return vars.mutations[schema_name] or {}
 end
 
